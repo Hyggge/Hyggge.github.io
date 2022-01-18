@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag (contains Google-Analytics、Baidu-Tongji)-->
+<head>
+  <!-- Google Analytics -->
+  
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-xxxxxx-xx"></script>
+    <script type="text/javascript">
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-xxxxxx-xx');
+    </script>
+  
+
+  <!-- Baidu Tongji -->
+  
+    <script type="text/javascript">
+      // Originial
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  <!-- Baidu Push -->
+  
+    <script>
+      (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+      })();
+    </script>
+  
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  <meta name="google-site-verification" content="lxDfCplOZbIzjhG34NuQBgu2gdyRlAtMB4utP5AgEBc"/>
+  <meta name="baidu-site-verification" content="PpzM9WxOJU"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="It&#39;s a broad stage"/>
+  <meta name="keyword" content="Hyggge, BUAA, Undergraduate, CS, Photograph"/>
+  <link rel="shortcut icon" href="/img/avatar/head.jpg"/>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
+
+  
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/beantech.min.css"/>
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css"/>
+    <link rel="stylesheet" href="/css/widget.css"/>
+    <link rel="stylesheet" href="/css/rocket.css"/>
+    <link rel="stylesheet" href="/css/signature.css"/>
+    <link rel="stylesheet" href="/css/catalog.css"/>
+    <link rel="stylesheet" href="/css/livemylife.css"/>
+
+    
+      <!-- wave start -->
+      <link rel="stylesheet" href="/css/wave.css"/>
+      <!-- wave end -->
+    
+
+    
+      <!-- top start (article top hot config) -->
+      <link rel="stylesheet" href="/css/top.css"/>
+      <!-- top end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/scroll.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+      <!-- viewer start (Picture preview) -->
+      <link rel="stylesheet" href="/css/viewer.min.css"/>
+      <!-- viewer end -->
+    
+
+    
+      <!-- Search start -->
+      <link rel="stylesheet" href="/css/search.css"/>
+      <!-- Search end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/themecolor.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+
+    
+      <!-- gitalk start -->
+      <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"> -->
+      <link rel="stylesheet" href="/css/gitalk.css"/>
+      <!-- gitalk end -->
+    
+  
+
+  <!-- Custom Fonts -->
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+  <!-- Hux change font-awesome CDN to qiniu -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Hux Delete, sad but pending in China <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> <link
+  href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/ css'> -->
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
+
+  <!-- ga & ba script hoook -->
+  <link rel="canonical" href="http://example.com/2022/12/15/CO_P7_MIPS微系统（异常中断）/">
+  <title>
+    
+      CO_P7_MIPS微系统（异常中断） - either thin | or die
+    
+  </title>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+
+	<body ontouchstart="" class="body--light body--dark">
+
+
+		<!-- ThemeColor -->
+		
+		<!-- ThemeColor -->
+<style type="text/css">
+  .body--light {
+    --light-mode: none;
+    --dark-mode: block;
+  }
+  .body--dark {
+    --light-mode: block;
+    --dark-mode: none;
+  }
+  i.mdui-icon.material-icons.light-mode {
+    display: var(--light-mode);
+  }
+  i.mdui-icon.material-icons.dark-mode {
+    display: var(--dark-mode);
+  }
+</style>
+<div class="toggle" onclick="document.body.classList.toggle('body--dark')">
+  <i class="mdui-icon material-icons light-mode"></i>
+  <i class="mdui-icon material-icons dark-mode"></i>
+</div>
+<script>
+  //getCookieValue
+  function getCookieValue(a) {
+    var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b
+      ? b.pop()
+      : '';
+  }
+  let themeMode = 'dark';
+  if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
+    let dbody = document.body.classList;
+    themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
+  }
+
+  //setCookieValue
+  var toggleBtn = document.querySelector(".toggle");
+  toggleBtn.addEventListener("click", function () {
+    var e = document.body.classList.contains("body--dark");
+    var cookieString = e
+      ? "dark"
+      : "light";
+    var exp = new Date();
+    exp.setTime(exp.getTime() + 3 * 24 * 60 * 60 * 1000); //3天过期
+    document.cookie = "sb-color-mode=" + cookieString + ";expires=" + exp.toGMTString() + ";path=/";
+  });
+</script>
+
+		
+
+		<!-- Gitter -->
+		
+		<!-- Gitter -->
+<!-- Docs:https://gitter.im/?utm_source=left-menu-logo -->
+<script>
+  ((window.gitter = {}).chat = {}).options = {
+    room: 'your-community/your-room'
+  };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+		
+
+		<!-- Navigation (contains search)-->
+		<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hyyyge&#39;s Blog</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <!-- Known Issue, found by Hux: <nav>'s height woule be hold on by its content. so, when navbar scale out, the <nav> will cover tags. also mask any touch event of tags, unfortunately. -->
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/">HOME</a>
+          </li>
+
+          
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+
+          
+          <li>
+            <a class="popup-trigger">
+              <span class="search-icon"></span>SEARCH</a>
+          </li>
+          
+
+          <!-- LangSelect -->
+          
+        </ul>
+      </div>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+<!-- progress -->
+<div id="progress">
+  <div class="line" style="width: 0%;"></div>
+</div>
+
+<script>
+  // Drop Bootstarp low-performance Navbar Use customize navbar with high-quality material design animation in high-perf jank-free CSS3 implementation
+  var $body = document.body;
+  var $toggle = document.querySelector('.navbar-toggle');
+  var $navbar = document.querySelector('#huxblog_navbar');
+  var $collapse = document.querySelector('.navbar-collapse');
+
+  $toggle.addEventListener('click', handleMagic)
+
+  function handleMagic(e) {
+    if ($navbar.className.indexOf('in') > 0) {
+      // CLOSE
+      $navbar.className = " ";
+      // wait until animation end.
+      setTimeout(function() {
+        // prevent frequently toggle
+        if ($navbar.className.indexOf('in') < 0) {
+          $collapse.style.height = "0px"
+        }
+      }, 400)
+    } else {
+      // OPEN
+      $collapse.style.height = "auto"
+      $navbar.className += " in";
+    }
+  }
+</script>
+
+
+		<!-- Post Header (contains intro-header、signature、wordcount、busuanzi、waveoverlay) -->
+		<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+
+  <style type="text/css">
+    .body--light {
+      /* intro-header */
+      --intro-header-background-image-url-home: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_china.jpg');
+    }
+    .body--dark {
+      --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_china.jpg');
+    }
+
+    header.intro-header {
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_china.jpg'); */
+      
+    }
+
+    
+      #signature {/*signature*/
+        background-image: url('/img/signature/vincent-white.png');
+      }
+    
+  </style>
+
+
+
+
+
+<header class="intro-header">
+  <!-- Signature -->
+  <div id="signature">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
+              
+            </div>
+            <h1>CO_P7_MIPS微系统（异常中断）</h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-12-15
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">18</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">3.8k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- waveoverlay start -->
+  <div class="preview-overlay">
+    <svg class="preview-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+      </defs>
+      <g class="preview-parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill=var(--gentle-wave1)></use>
+        <use xlink:href="#gentle-wave" x="48" y="3" fill=var(--gentle-wave2)></use>
+        <use xlink:href="#gentle-wave" x="48" y="5" fill=var(--gentle-wave3)></use>
+        <use xlink:href="#gentle-wave" x="48" y="7" fill=var(--gentle-wave)></use>
+      </g>
+    </svg>
+  </div>
+  <!-- waveoverlay end -->
+  
+
+</header>
+
+
+
+		<!-- Main Content (Post contains
+	Pager、
+	tip、
+	socialshare、
+	gitalk、gitment、disqus-comment、
+	Catalog、
+	Sidebar、
+	Featured-Tags、
+	Friends Blog、
+	anchorjs、
+	) -->
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h2 id="mips微系统设计方案"><a class="markdownIt-Anchor" href="#mips微系统设计方案"></a> MIPS微系统设计方案</h2>
+<h3 id="设计概述"><a class="markdownIt-Anchor" href="#设计概述"></a> 设计概述</h3>
+<p>​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将P6设计的CPU单独封装成一个模块，然后再设计Bridge、Timer0、Timer1三个外设，和CPU处于同一层次上。此外我们还需要在CPU的M流水级设计一个CP0模块用于中断异常处理。结构层次如下所示——</p>
+<p><img src="%E5%BE%AE%E7%B3%BB%E7%BB%9F.png" alt="" /></p>
+<h3 id="实现指令说明"><a class="markdownIt-Anchor" href="#实现指令说明"></a> 实现指令说明</h3>
+<p>我们将本CPU实现的指令分为以下几类：</p>
+<ul>
+<li>
+<p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor, slt, sltu</p>
+</li>
+<li>
+<p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti, sltiu</p>
+</li>
+<li>
+<p><strong>shift</strong>: sll, sra, srl</p>
+</li>
+<li>
+<p><strong>shiftv</strong>: sllv, srav, srlv</p>
+</li>
+<li>
+<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
+</li>
+<li>
+<p><strong>store</strong>: sw, sh, sb</p>
+</li>
+<li>
+<p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p>
+</li>
+<li>
+<p><strong>J类</strong>：j, jal, jr, jalr</p>
+</li>
+<li>
+<p><strong>特殊</strong>：lui</p>
+</li>
+<li>
+<p><strong>md类</strong>：mult, multu, div, divu</p>
+</li>
+<li>
+<p><strong>mf类</strong>：mfhi, mflo</p>
+</li>
+<li>
+<p><strong>mt类</strong>：mthi, mtlo</p>
+</li>
+<li>
+<p><strong>CP0相关指令</strong>：mfc0，mtc0</p>
+</li>
+<li>
+<p><strong>异常中断返回：</strong> eret</p>
+</li>
+</ul>
+<h2 id="工程模块定义"><a class="markdownIt-Anchor" href="#工程模块定义"></a> 工程模块定义</h2>
+<p>该部分我们不再介绍P6中已经实现的模块，只介绍新增模块CPU（封装P6CPU），CP0，Bridge，TC（用于实例化Timer1，Timer0）。但是原有模块需要根据异常处理的实现需要进行微调。</p>
+<h3 id="cpu模块"><a class="markdownIt-Anchor" href="#cpu模块"></a> CPU模块</h3>
+<p>该模块用于封装P6中的已经设计好的CPU（包括新模块CP0）</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号</td>
+</tr>
+<tr>
+<td>inter_out</td>
+<td>I</td>
+<td>1</td>
+<td>外部输入的中断信号</td>
+</tr>
+<tr>
+<td>inter_T0</td>
+<td>I</td>
+<td>1</td>
+<td>Timer0产生的中断信号</td>
+</tr>
+<tr>
+<td>inter_T1</td>
+<td>I</td>
+<td>1</td>
+<td>Timer1产生的中断信号</td>
+</tr>
+<tr>
+<td>i_inst_rdata</td>
+<td>I</td>
+<td>32</td>
+<td>i_inst_addr队形的32位指令</td>
+</tr>
+<tr>
+<td>m_data_addr</td>
+<td>I</td>
+<td>32</td>
+<td>m_data_addr 对应的 32 位数据</td>
+</tr>
+<tr>
+<td>i_inst_addr</td>
+<td>O</td>
+<td>32</td>
+<td>需要进行取指操作的流水级 PC（一般为 F 级）</td>
+</tr>
+<tr>
+<td>m_data_addr</td>
+<td>O</td>
+<td>32</td>
+<td>数据存储器待写入地址</td>
+</tr>
+<tr>
+<td>m_data_wdata</td>
+<td>O</td>
+<td>32</td>
+<td>数据存储器待写入数据</td>
+</tr>
+<tr>
+<td>m_data_byteen</td>
+<td>O</td>
+<td>4</td>
+<td>字节使能信号（相当于之前的MenWrite信号）</td>
+</tr>
+<tr>
+<td>m_inst_addr</td>
+<td>O</td>
+<td>32</td>
+<td>M级PC</td>
+</tr>
+<tr>
+<td>w_grf_we</td>
+<td>O</td>
+<td>1</td>
+<td>grf 写使能信号</td>
+</tr>
+<tr>
+<td>w_grf_addr</td>
+<td>O</td>
+<td>5</td>
+<td>grf 中待写入寄存器编号</td>
+</tr>
+<tr>
+<td>w_grf_wdata</td>
+<td>O</td>
+<td>32</td>
+<td>grf 中待写入数据</td>
+</tr>
+<tr>
+<td>w_inst_addr</td>
+<td>O</td>
+<td>32</td>
+<td>W 级 PC</td>
+</tr>
+<tr>
+<td>spj_7f20</td>
+<td>O</td>
+<td>32</td>
+<td>响应外部中断的标记寄存器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cp0模块"><a class="markdownIt-Anchor" href="#cp0模块"></a> CP0模块</h3>
+<p>该模块位于CPU模块中，主要用于获取外部中断信息和内部异常信息，进行判断后输出异常/中断请求。同时该模块中设有四个寄存器——SR，Cause，EPC和PRIP。</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+<th>产生来源和机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+<td></td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+<td></td>
+</tr>
+<tr>
+<td>A1</td>
+<td>I</td>
+<td>5</td>
+<td>读 CP0 寄存器编号</td>
+<td>执行 <code>mfc0</code> 指令时产生</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>I</td>
+<td>5</td>
+<td>写 CP0 寄存器编号</td>
+<td>执行 <code>mtc0</code> 指令时产生</td>
+</tr>
+<tr>
+<td>D_in</td>
+<td>I</td>
+<td>32</td>
+<td>CP0 寄存器的写入数据</td>
+<td>执行 <code>mtc0</code> 指令时产生</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>中断/异常时的 PC(M级pc)</td>
+<td></td>
+</tr>
+<tr>
+<td>ExcCode_in</td>
+<td>I</td>
+<td>5</td>
+<td>中断/异常的类型</td>
+<td>异常功能部件</td>
+</tr>
+<tr>
+<td>BD_in</td>
+<td>I</td>
+<td>1</td>
+<td>分支延迟槽指令标志</td>
+<td>M_BD输入</td>
+</tr>
+<tr>
+<td>HWInt</td>
+<td>I</td>
+<td>6([7:2])</td>
+<td>6 个设备中断</td>
+<td>外部设备</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>CP0 寄存器写使能</td>
+<td>执行 <code>mtc0</code> 指令时产生</td>
+</tr>
+<tr>
+<td>EXLClr</td>
+<td>I</td>
+<td>1</td>
+<td>置 0 SR 的EXL 位</td>
+<td>Eret_M控制信号输入</td>
+</tr>
+<tr>
+<td>req</td>
+<td>O</td>
+<td>1</td>
+<td>异常/中断请求</td>
+<td>由 CP0 模块确认响应异常/中断</td>
+</tr>
+<tr>
+<td>EPC_out</td>
+<td>O</td>
+<td>32</td>
+<td>EXC 寄存器输出</td>
+<td>CP0 模块中的EPC寄存器</td>
+</tr>
+<tr>
+<td>D_out</td>
+<td>O</td>
+<td>32</td>
+<td>CP0 寄存器的输出数据</td>
+<td>执行 <code>mfc0</code> 指令时产生</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bridge模块"><a class="markdownIt-Anchor" href="#bridge模块"></a> Bridge模块</h3>
+<p>该模块为系统桥，实际上是区分地址的组合逻辑模块，用于CPU和DM、Timer1、Timer0之间的的数据交换。</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A_in</td>
+<td>I</td>
+<td>32</td>
+<td>写入/读取的外设单元的地址</td>
+</tr>
+<tr>
+<td>WD_in</td>
+<td>I</td>
+<td>32</td>
+<td>写入外设单元的数据</td>
+</tr>
+<tr>
+<td>byteen</td>
+<td>I</td>
+<td>4</td>
+<td>写入外设单元的使能</td>
+</tr>
+<tr>
+<td>DM_RD</td>
+<td>I</td>
+<td>32</td>
+<td>DM读取值的输入</td>
+</tr>
+<tr>
+<td>T1_RD</td>
+<td>I</td>
+<td>32</td>
+<td>Timer1读取值的输入</td>
+</tr>
+<tr>
+<td>T0_RD</td>
+<td>I</td>
+<td>32</td>
+<td>Timer0读取值的输入</td>
+</tr>
+<tr>
+<td>A_out</td>
+<td>O</td>
+<td>32</td>
+<td>写入/读取的外设单元的地址</td>
+</tr>
+<tr>
+<td>WD_out</td>
+<td>O</td>
+<td>32</td>
+<td>写入外设单元的数据</td>
+</tr>
+<tr>
+<td>RD_out</td>
+<td>O</td>
+<td>32</td>
+<td>外设单元的读取值输出</td>
+</tr>
+<tr>
+<td>DM_WE</td>
+<td>O</td>
+<td>4</td>
+<td>DM写入使能</td>
+</tr>
+<tr>
+<td>T1_WE</td>
+<td>O</td>
+<td>1</td>
+<td>Timer1写入使能</td>
+</tr>
+<tr>
+<td>T0_WE</td>
+<td>O</td>
+<td>1</td>
+<td>Timer2写入使能</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tc模块"><a class="markdownIt-Anchor" href="#tc模块"></a> TC模块</h3>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+</tr>
+<tr>
+<td>addr</td>
+<td>I</td>
+<td>30（[31:2]）</td>
+<td>Timer写入地址</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>Timer写入使能</td>
+</tr>
+<tr>
+<td>Din</td>
+<td>I</td>
+<td>32</td>
+<td>Timer写入数据</td>
+</tr>
+<tr>
+<td>Dout</td>
+<td>O</td>
+<td>32</td>
+<td>Timer读取数据</td>
+</tr>
+<tr>
+<td>IRQ</td>
+<td>O</td>
+<td>1</td>
+<td>中断请求</td>
+</tr>
+</tbody>
+</table>
+<h2 id="重要机制实现方法"><a class="markdownIt-Anchor" href="#重要机制实现方法"></a> 重要机制实现方法</h2>
+<h3 id="cp0响应机制"><a class="markdownIt-Anchor" href="#cp0响应机制"></a> CP0响应机制</h3>
+<p>CP0是检测异常和中断的重要部件，异常和中断通过以下接口传入——</p>
+<p>1<strong>中断信息</strong>通过**HWInt[7:2]**接口进入，其中HWInt[2]连接Timer0的终端请求，HWInt[3]连接Timer1的终端请求，HWInt[4]连接外部的中断请求。</p>
+<p>2.<strong>异常信息</strong>通过<strong>ExcCode_in</strong>和<strong>BD_in</strong>两个接口传入，ExcCode_in传入的是异常代码（ADEL，ADES，RI，OV），BD_in传入的是延迟槽指令标志（有效则表示当前指令为延迟槽指令）。</p>
+<p>检测到中断或者异常时，CP0会进行判断并响应，决定是否将req(<strong>CP0向CPU发出的中断请求</strong>)置1。判断逻辑如下——</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> inter_req  = (|(HWInt &amp; IM)) &amp; IE &amp; (!EXL);<span class="comment">//中断有效判断</span></span><br><span class="line"><span class="keyword">wire</span> exc_req    = (ExcCode_in != <span class="number">5&#x27;d0</span>) &amp; (!EXL);<span class="comment">//异常有效判断</span></span><br><span class="line"><span class="keyword">assign</span> req      = inter_req | exc_req;<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>当req有效，CP0还需要完成以下任务——</p>
+<ul>
+<li>EXL置1</li>
+<li>将M级PC存入EPC（延迟槽指令中存入EPC-4）</li>
+<li>如果当前响应中断，ExcCode寄存器写入0；若响应异常，ExcCode寄存器写入外部传入的异常代码ExcCode_in</li>
+<li>BD寄存器写入外部传入的BD_in信号</li>
+</ul>
+<p>代码如下——</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">       <span class="keyword">if</span>(reset) <span class="keyword">begin</span></span><br><span class="line">       <span class="comment">//………………………………………………………… </span></span><br><span class="line">       <span class="keyword">end</span>   </span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span>(req) <span class="keyword">begin</span></span><br><span class="line">           EXL &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">           EPC &lt;= BD_in ? (pc - <span class="number">32&#x27;d4</span>) : pc; </span><br><span class="line">           ExcCode &lt;= inter_req ? <span class="number">5&#x27;d0</span> : ExcCode_in;</span><br><span class="line">           BD &lt;= BD_in;</span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line">    	<span class="comment">//…………………………………………</span></span><br></pre></td></tr></table></figure>
+<p>此外，无论是否发出中断请求，在每一周期均需要将HWInt[6:2]写入Cause寄存器中的的IP域</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">       <span class="keyword">if</span>(reset) <span class="keyword">begin</span></span><br><span class="line">      		<span class="comment">//………………………………………………………… </span></span><br><span class="line">       <span class="keyword">end</span>   </span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">           IP &lt;= HWInt;</span><br><span class="line">           <span class="comment">//…………………………………………………………</span></span><br><span class="line">       <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="系统桥设计"><a class="markdownIt-Anchor" href="#系统桥设计"></a> 系统桥设计</h3>
+<p>系统桥其实是充当一个“交换机”的角色，将CPU传来的地址写入相应的外设（DM、Timer0、Timer1），只需要组合逻辑便可实现。代码如下——</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assign</span> A_out  = A_in;   </span><br><span class="line"><span class="keyword">assign</span> WD_out = WD_in;</span><br><span class="line"><span class="keyword">assign</span> DM_WE  = (A_in &gt;= <span class="number">32&#x27;h0</span>    &amp;&amp; A_in &lt;= <span class="number">32&#x27;h2fff</span>) ? byteen  : <span class="number">4&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span> T0_WE  = (A_in &gt;= <span class="number">32&#x27;h7f00</span> &amp;&amp; A_in &lt;= <span class="number">32&#x27;h7f0b</span>) ? &amp;byteen : <span class="number">1&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span> T1_WE  = (A_in &gt;= <span class="number">32&#x27;h7f10</span> &amp;&amp; A_in &lt;= <span class="number">32&#x27;h7f1b</span>) ? &amp;byteen : <span class="number">1&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span> RD_out = (A_in &gt;= <span class="number">32&#x27;h0</span>    &amp;&amp; A_in &lt;= <span class="number">32&#x27;h2fff</span>) ? DM_RD   :</span><br><span class="line">                (A_in &gt;= <span class="number">32&#x27;h7f00</span> &amp;&amp; A_in &lt;= <span class="number">32&#x27;h7f0b</span>) ? T0_RD   :</span><br><span class="line">                (A_in &gt;= <span class="number">32&#x27;h7f10</span> &amp;&amp; A_in &lt;= <span class="number">32&#x27;h7f1b</span>) ? T1_RD   :</span><br><span class="line">                                                         <span class="number">32&#x27;d0</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="异常识别"><a class="markdownIt-Anchor" href="#异常识别"></a> 异常识别</h3>
+<p>P7中我们考虑的异常情况有以下几种——</p>
+<ul>
+<li>
+<p>F级异常：</p>
+<ul>
+<li>PC地址没有字对齐（AdEL）</li>
+<li>PC地址超过0x3000 ~ 0x6ffc（AdEL）</li>
+</ul>
+</li>
+<li>
+<p>D级异常：</p>
+<ul>
+<li>未知的指令码（RI）</li>
+</ul>
+</li>
+<li>
+<p>E级异常：</p>
+<ul>
+<li>addi、add、sub计算溢出（Ov）</li>
+<li>load类指令计算地址时加法溢出（AdEL）</li>
+<li>store类指令计算地址时加法溢出（AdES）</li>
+</ul>
+</li>
+<li>
+<p>M级异常：</p>
+<ul>
+<li>lw取数地址未 4 字节对齐（AdEL）</li>
+<li>lh、lhu取数地址未与 2 字节对齐（AdEL）</li>
+<li>lh、lhu、lb、lbu取 Timer 寄存器的值（AdEL）</li>
+<li>load型指令取数地址超出 DM、Timer0、Timer1 的范围（AdEL）</li>
+<li>sw存数地址未 4 字节对齐（AdES）</li>
+<li>sh存数地址未 2 字节对齐（AdES）</li>
+<li>sh、sb存 Timer 寄存器的值（AdES）</li>
+<li>sw向计时器的 Count 寄存器存值（AdES）</li>
+<li>store型指令存数地址超出 DM、Timer0、Timer1 的范围（AdES）</li>
+</ul>
+</li>
+</ul>
+<p>针对以上列出的异常情况，我们在每一个流水级对异常进行检测。由于教程提出了以下要求——</p>
+<ul>
+<li>
+<p>发生取指异常后视为 <code>nop</code> 直至提交到 CP0。</p>
+</li>
+<li>
+<p>发生 <code>RI</code> 异常后视为 <code>nop</code> 直至提交到 CP0。</p>
+</li>
+<li>
+<p><code>load</code> 与 <code>store</code> 类算址溢出按照 <code>AdEL</code> 与 <code>AdES</code> 处理。</p>
+</li>
+</ul>
+<p>因此不会出现<strong>一个指令在多级出现异常</strong>的情况。如果某个流水级出现了新的异常，我们将这个异常流水到下一级即可，而不是流水上一级传来的异常；如果这个流水级没有出现新的异常，则将上一级传来的异常继续流水给下一级即可。代码如下——</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//F级异常检测</span></span><br><span class="line"><span class="keyword">assign</span> F_ExcCode = (F_pc[<span class="number">1</span>:<span class="number">0</span>] != <span class="number">2&#x27;b00</span> || F_pc &lt; <span class="number">32&#x27;h3000</span> || F_pc &gt; <span class="number">32&#x27;h6ffc</span>) ? <span class="meta">`ADEL : 5&#x27;d0;</span></span><br><span class="line"><span class="comment">//D级异常检测（Invalid_D有效表示当前指令非法）</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">4</span>:<span class="number">0</span>] D_ExcCode_fixed = (Invalid_D) ? <span class="meta">`RI : D_ExcCode;  </span></span><br><span class="line"><span class="comment">//E级异常检测（IsAriOv_E表示当前指令是addi、add、sub中的一种，E_overflow表示ALU出现溢出）</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">4</span>:<span class="number">0</span>] E_ExcCode_fixed =    (E_overflow &amp;&amp; (LSOp_E == <span class="meta">`LS_LW || LSOp_E == `LS_LH || LSOp_E == `LS_LHU || LSOp_E == `LS_LB || LSOp_E == `LS_LBU)) ? `ADEL :</span></span><br><span class="line">                                    (E_overflow &amp;&amp; (LSOp_E == <span class="meta">`LS_SW || LSOp_E == `LS_SH || LSOp_E == `LS_SB))                                           ? `ADES :</span></span><br><span class="line">                                    (E_overflow &amp;&amp; IsAriOv_E)     </span><br><span class="line"><span class="comment">//M级异常检测 </span></span><br><span class="line"><span class="keyword">wire</span> lhlb_tag   = (LSOp_M == <span class="meta">`LS_LH || LSOp_M == `LS_LHU || LSOp_M == `LS_LB || LSOp_M == `LS_LBU);</span></span><br><span class="line"><span class="keyword">wire</span> load_tag   = (LSOp_M == <span class="meta">`LS_LH || LSOp_M == `LS_LHU || LSOp_M == `LS_LB || LSOp_M == `LS_LBU || LSOp_M == `LS_LW);</span></span><br><span class="line"><span class="keyword">wire</span> store_tag  = (LSOp_M == <span class="meta">`LS_SW || LSOp_M == `LS_SH  || LSOp_M == `LS_SB );</span></span><br><span class="line"><span class="keyword">wire</span> timer_addr = (M_AO &gt;= <span class="number">32&#x27;h7f00</span> &amp;&amp; M_AO &lt;= <span class="number">32&#x27;h7f0b</span>) || (M_AO &gt;= <span class="number">32&#x27;h7f10</span> &amp;&amp; M_AO &lt;= <span class="number">32&#x27;h7f1b</span>);</span><br><span class="line"><span class="keyword">wire</span> DM_addr    = ((M_AO &gt;= <span class="number">32&#x27;h0</span> &amp;&amp; M_AO &lt;= <span class="number">32&#x27;h2fff</span>));</span><br><span class="line"><span class="comment">//Excption</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">4</span>:<span class="number">0</span>] M_ExcCode_fixed  =   ((LSOp_M == <span class="meta">`LS_LW) &amp;&amp; (M_AO[1:0] != 2&#x27;b0))                    ? `ADEL :</span></span><br><span class="line">                                ((LSOp_M == <span class="meta">`LS_LH || LSOp_M == `LS_LHU) &amp;&amp; (M_AO[0] != 1&#x27;b0)) ? `ADEL :</span></span><br><span class="line">                                (lhlb_tag &amp;&amp; timer_addr)                                       ? <span class="meta">`ADEL :</span></span><br><span class="line">                                (load_tag &amp;&amp; !timer_addr &amp;&amp; !DM_addr)                          ? <span class="meta">`ADEL :</span></span><br><span class="line">                                ((LSOp_M == <span class="meta">`LS_SW) &amp;&amp; (M_AO[1:0] != 2&#x27;b0))                    ? `ADES :</span></span><br><span class="line">                                ((LSOp_M == <span class="meta">`LS_SH) &amp;&amp; (M_AO[0] != 1&#x27;b0))                      ? `ADES :</span></span><br><span class="line">                                ((LSOp_M == <span class="meta">`LS_SH || LSOp_M == `LS_SB) &amp;&amp; timer_addr)         ? `ADES :</span></span><br><span class="line">                                ((LSOp_M == <span class="meta">`LS_SW) &amp;&amp; timer_addr &amp;&amp; (M_AO[3:0] == 4&#x27;h8))      ? `ADES :</span></span><br><span class="line">                                (store_tag &amp;&amp; !timer_addr &amp;&amp; !DM_addr)                         ? <span class="meta">`ADES :</span></span><br><span class="line">                                                                                                 M_ExcCode;</span><br><span class="line">           </span><br></pre></td></tr></table></figure>
+<h2 id="测试方案"><a class="markdownIt-Anchor" href="#测试方案"></a> 测试方案</h2>
+<h3 id="handler设计"><a class="markdownIt-Anchor" href="#handler设计"></a> handler设计</h3>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">.ktext</span> <span class="number">0</span>x4180</span><br><span class="line"></span><br><span class="line"><span class="number">_</span>main_handler:</span><br><span class="line">	mfc0 	$k0, $<span class="number">13</span></span><br><span class="line">	mfc0 	$k1, $<span class="number">14</span></span><br><span class="line">	ori 	$k1, $<span class="number">0</span>, <span class="number">0</span>x007c</span><br><span class="line">	<span class="keyword">and</span>	$k0, $k1, $k0</span><br><span class="line">	beq 	$<span class="number">0</span>, $k0, <span class="number">_</span><span class="keyword">return</span></span><br><span class="line">	nop</span><br><span class="line">	mfc0	$k0, $<span class="number">14</span></span><br><span class="line">	addu	$k0, $k0, <span class="number">4</span></span><br><span class="line">	mtc0	$k0, $<span class="number">14</span></span><br><span class="line">	j	<span class="number">_</span><span class="keyword">return</span> </span><br><span class="line">	nop</span><br><span class="line">	</span><br><span class="line"><span class="number">_</span><span class="keyword">return</span>:</span><br><span class="line">	eret</span><br></pre></td></tr></table></figure>
+<h3 id="测试数据样例"><a class="markdownIt-Anchor" href="#测试数据样例"></a> 测试数据样例</h3>
+<ul>
+<li>
+<p><strong>MIPS机器码样例</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">text</span><br><span class="line">la	$ra, pos_1</span><br><span class="line">addi	$ra, $ra, <span class="number">1</span></span><br><span class="line">jr	$ra</span><br><span class="line">ori	$s0, $<span class="number">0</span>, <span class="number">100</span></span><br><span class="line">ori	$s0, $<span class="number">0</span>, <span class="number">200</span> #invalid</span><br><span class="line">pos_1: </span><br><span class="line">addi	$s1, $s0, <span class="number">20</span> #invalid</span><br><span class="line">addi	$s1, $s0, <span class="number">50</span> </span><br><span class="line">     	             #F_exc_AdEL</span><br><span class="line"></span><br><span class="line">nop                  #you can change it <span class="number">0</span>xf000000f</span><br><span class="line">li	$t0, <span class="number">13</span></span><br><span class="line">mfc0	$t0, $t1     #D_exc_RI</span><br><span class="line"></span><br><span class="line">lui	$s2, <span class="number">0</span>x7fff</span><br><span class="line">lui	$s3, <span class="number">0</span>x7fff</span><br><span class="line">add	$s4, $s2, $s3</span><br><span class="line">    #E_exc_Ov_add</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s2, $s3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">lui	$s2, <span class="number">0</span>x7fff</span><br><span class="line">addi	$s3, $s2, <span class="number">0</span>x7fffffff  </span><br><span class="line">    #E_exc_Ov_addi</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s2, $s3</span><br><span class="line"></span><br><span class="line">lui	$s2, <span class="number">0</span>x7fff</span><br><span class="line">lui	$s3, <span class="number">0</span>x8fff</span><br><span class="line">sub	$s4, $s3, $s2</span><br><span class="line">    #E_exc_Ov_sub</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s2, $s3</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x12345678</span><br><span class="line">sw	$s0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">lw	$s1, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">lw	$s2, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s2, $s3</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x8fffffff</span><br><span class="line">sw	$s0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">lh	$s1, <span class="number">1</span>($<span class="number">0</span>)</span><br><span class="line">lh	$s2, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s2, $s3</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x80000000</span><br><span class="line">sw	$s0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$s1, <span class="number">1</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$s2, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x7f00</span><br><span class="line">li	$s1, <span class="number">10</span></span><br><span class="line">sw	$s1, <span class="number">0</span>($s0)</span><br><span class="line">lh	$s2, <span class="number">0</span>($s0)</span><br><span class="line">lw	$s3, <span class="number">0</span>($s0)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x7010</span><br><span class="line">li	$s1, <span class="number">10</span></span><br><span class="line">sw	$s1, <span class="number">0</span>($s0)</span><br><span class="line">li	$s0, <span class="number">0</span>x2800</span><br><span class="line">sw	$s1, <span class="number">0</span>($s0)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x12ab34cd</span><br><span class="line">sw	$s0, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s0, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>xabcd</span><br><span class="line">sh	$s0, <span class="number">1</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s0, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x7f10</span><br><span class="line">li	$s1, <span class="number">10</span></span><br><span class="line">sh	$s1, <span class="number">0</span>($s0)</span><br><span class="line">sw	$s1, <span class="number">0</span>($s0)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x7f10</span><br><span class="line">li	$s1, <span class="number">10</span></span><br><span class="line">sw	$s1, <span class="number">8</span>($s0)</span><br><span class="line">    #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>x8ff0</span><br><span class="line">li	$s1, <span class="number">100</span></span><br><span class="line">sh	$s1, <span class="number">0</span>($s0)</span><br><span class="line">sh	$s1, <span class="number">0</span>($s0)</span><br><span class="line">   #D_exc_AdEL</span><br><span class="line"><span class="keyword">and</span>	$<span class="number">5</span>, $s1, $s2</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>testbench样例</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="meta-keyword">timescale</span> 1ns/1ps</span></span><br><span class="line"><span class="meta">`<span class="meta-keyword">include</span> &quot;mips.v&quot;</span></span><br><span class="line"><span class="keyword">module</span> mips_txt_int;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">reg</span> clk;</span><br><span class="line">	<span class="keyword">reg</span> reset;</span><br><span class="line">	<span class="keyword">reg</span> interrupt;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] macroscopic_pc;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] i_inst_addr;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] i_inst_rdata;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] m_data_addr;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] m_data_rdata;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] m_data_wdata;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">3</span> :<span class="number">0</span>] m_data_byteen;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] m_inst_addr;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span>		w_grf_we;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">4</span> :<span class="number">0</span>] w_grf_addr;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] w_grf_wdata;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] w_inst_addr;</span><br><span class="line"></span><br><span class="line">	mips uut(</span><br><span class="line">		<span class="variable">.clk</span>(clk),</span><br><span class="line">		<span class="variable">.reset</span>(reset),</span><br><span class="line">		<span class="variable">.interrupt</span>(interrupt),</span><br><span class="line">		<span class="variable">.macroscopic_pc</span>(macroscopic_pc),</span><br><span class="line"></span><br><span class="line">		<span class="variable">.i_inst_addr</span>(i_inst_addr),</span><br><span class="line">		<span class="variable">.i_inst_rdata</span>(i_inst_rdata),</span><br><span class="line"></span><br><span class="line">		<span class="variable">.m_data_addr</span>(m_data_addr),</span><br><span class="line">		<span class="variable">.m_data_rdata</span>(m_data_rdata),</span><br><span class="line">		<span class="variable">.m_data_wdata</span>(m_data_wdata),</span><br><span class="line">		<span class="variable">.m_data_byteen</span>(m_data_byteen),</span><br><span class="line"></span><br><span class="line">		<span class="variable">.m_inst_addr</span>(m_inst_addr),</span><br><span class="line"></span><br><span class="line">		<span class="variable">.w_grf_we</span>(w_grf_we),</span><br><span class="line">		<span class="variable">.w_grf_addr</span>(w_grf_addr),</span><br><span class="line">		<span class="variable">.w_grf_wdata</span>(w_grf_wdata),</span><br><span class="line"></span><br><span class="line">		<span class="variable">.w_inst_addr</span>(w_inst_addr)</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		clk &lt;= <span class="number">0</span>;</span><br><span class="line">		reset &lt;= <span class="number">1</span>;</span><br><span class="line">		interrupt &lt;= <span class="number">0</span>;</span><br><span class="line">		#<span class="number">20</span> reset &lt;= <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">integer</span> i;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] fixed_addr;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] fixed_wdata;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] data[<span class="number">0</span>:<span class="number">4095</span>];</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] inst[<span class="number">0</span>:<span class="number">5119</span>];</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----------- For Instructions -----------</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> m_data_rdata = data[(m_data_addr &gt;&gt; <span class="number">2</span>) % <span class="number">5120</span>];</span><br><span class="line">	<span class="keyword">assign</span> i_inst_rdata = inst[((i_inst_addr - <span class="number">32&#x27;h3000</span>) &gt;&gt; <span class="number">2</span>) % <span class="number">5120</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		<span class="built_in">$readmemh</span>(<span class="string">&quot;code.txt&quot;</span>, inst);</span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">5120</span>; i = i + <span class="number">1</span>) data[i] &lt;= <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----------- For Data Memory -----------</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">		fixed_wdata = data[(m_data_addr &gt;&gt; <span class="number">2</span>) &amp; <span class="number">4095</span>];</span><br><span class="line">		fixed_addr = m_data_addr &amp; <span class="number">32&#x27;hfffffffc</span>;</span><br><span class="line">		<span class="keyword">if</span> (m_data_byteen[<span class="number">3</span>]) fixed_wdata[<span class="number">31</span>:<span class="number">24</span>] = m_data_wdata[<span class="number">31</span>:<span class="number">24</span>];</span><br><span class="line">		<span class="keyword">if</span> (m_data_byteen[<span class="number">2</span>]) fixed_wdata[<span class="number">23</span>:<span class="number">16</span>] = m_data_wdata[<span class="number">23</span>:<span class="number">16</span>];</span><br><span class="line">		<span class="keyword">if</span> (m_data_byteen[<span class="number">1</span>]) fixed_wdata[<span class="number">15</span>: <span class="number">8</span>] = m_data_wdata[<span class="number">15</span>: <span class="number">8</span>];</span><br><span class="line">		<span class="keyword">if</span> (m_data_byteen[<span class="number">0</span>]) fixed_wdata[<span class="number">7</span> : <span class="number">0</span>] = m_data_wdata[<span class="number">7</span> : <span class="number">0</span>];</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (reset) <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4096</span>; i = i + <span class="number">1</span>) data[i] &lt;= <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (|m_data_byteen &amp;&amp; fixed_addr &gt;&gt; <span class="number">2</span> &lt; <span class="number">4096</span>) <span class="keyword">begin</span></span><br><span class="line">			data[fixed_addr &gt;&gt; <span class="number">2</span>] &lt;= fixed_wdata;</span><br><span class="line">			<span class="built_in">$display</span>(<span class="string">&quot;%d@%h: *%h &lt;= %h&quot;</span>, <span class="built_in">$time</span>, m_inst_addr, fixed_addr, fixed_wdata);</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----------- For Registers -----------</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (~reset) <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (w_grf_we &amp;&amp; (w_grf_addr != <span class="number">0</span>)) <span class="keyword">begin</span></span><br><span class="line">				<span class="built_in">$display</span>(<span class="string">&quot;%d@%h: $%d &lt;= %h&quot;</span>, <span class="built_in">$time</span>, w_inst_addr, w_grf_addr, w_grf_wdata);</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// ----------- For Interrupt -----------</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] fixed_macroscopic_pc;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> fixed_macroscopic_pc = macroscopic_pc &amp; <span class="number">32&#x27;hfffffffc</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (reset) interrupt &lt;= <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">negedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (~reset &amp;&amp; interrupt &amp;&amp; |m_data_byteen) <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (fixed_addr == <span class="number">32&#x27;h7F20</span>) <span class="keyword">begin</span></span><br><span class="line">				interrupt &lt;= <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] need_interrupt = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">negedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (~reset) <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d100</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3010</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d99</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3014</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d98</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3018</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d97</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h301c</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d96</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3020</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d95</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3024</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d94</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3028</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d93</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h302c</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d92</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3030</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d91</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3034</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d90</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3038</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d89</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h303c</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">2</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d87</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3044</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d86</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3048</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d85</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h304c</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (need_interrupt == <span class="number">32&#x27;d84</span> &amp;&amp; fixed_macroscopic_pc == <span class="number">32&#x27;h3050</span>) <span class="keyword">begin</span></span><br><span class="line">					interrupt &lt;= <span class="number">1</span>;</span><br><span class="line">					need_interrupt &lt;= need_interrupt - <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">            <span class="comment">//………………………………………………</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="思考题"><a class="markdownIt-Anchor" href="#思考题"></a> 思考题</h2>
+<ul>
+<li>
+<p><strong>Q：我们计组课程一本参考书目标题中有“硬件/软件接口”接口字样，那么到底什么是“硬件/软件接口”？(Tips：什么是接口？和我们到现在为止所学的有什么联系？)</strong></p>
+<p><strong>A：</strong> 硬件/软件接口是指软件和硬件之间数据交互的接口。在我看来，这个应该指的是操作系统，操作系统将外部软件程序的机器码传入core，由core执行；而core执行后产生的数据又通过操作系统传给软件。</p>
+</li>
+<li>
+<p><strong>Q：BE 部件对所有的外设都是必要的吗？</strong></p>
+<p><strong>A：</strong> 我认为没有必要，BE部件是为了实现DM按字节访存设置的，而其他的部件例如Timer仅仅支持按字访存，因此不需要BE部件。</p>
+</li>
+<li>
+<p><strong>Q：请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU 知晓的？</strong></p>
+<p><strong>A：</strong> 鼠标和键盘等外设并不是直接与CPU相连的，中间需要通过软件来连接，这个软件也就是我们熟知的驱动。驱动和硬件之间通过操作系统进行处理。</p>
+</li>
+<li>
+<p>**Q:**请开发一个主程序以及定时器的 exception handler。整个系统完成如下功能：</p>
+<p>（1）定时器在主程序中被初始化为模式 0；</p>
+<p>（2）定时器倒计数至 0 产生中断；</p>
+<p>（3）handler 设置使能 Enable 为 1 从而再次启动定时器的计数器。(2) 及 (3) 被无限重复。</p>
+<p>（4）主程序在初始化时将定时器初始化为模式 0，设定初值寄存器的初值为某个值，如 100 或 1000。（注意，主程序可能需要涉及对 <a target="_blank" rel="noopener" href="http://CP0.SR">CP0.SR</a> 的编程，推荐阅读过后文后再进行。）</p>
+<p><strong>A:</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">主程序:</span><br><span class="line"><span class="variable">.text</span></span><br><span class="line">ori $t0, $<span class="number">0</span>, <span class="number">0</span>xfc01</span><br><span class="line">mtc0 $t0, $<span class="number">12</span></span><br><span class="line">ori $t0, $<span class="number">0</span>, <span class="number">0</span>x0</span><br><span class="line">sw $t0, <span class="number">0</span>x7f00</span><br><span class="line">ori $t0, $<span class="number">0</span>, <span class="number">288</span></span><br><span class="line">sw $t0, <span class="number">0</span>x7f04</span><br><span class="line">ori $t0, $<span class="number">0</span>, <span class="number">0</span>x9</span><br><span class="line">sw $t0, <span class="number">0</span>x7f00</span><br><span class="line">addi $t1, $<span class="number">0</span>, <span class="number">1</span></span><br><span class="line">loop:</span><br><span class="line">add $s0, $<span class="number">0</span>, $<span class="number">0</span></span><br><span class="line">add $s1, $<span class="number">0</span>, $<span class="number">0</span></span><br><span class="line">add $s2, $<span class="number">0</span>, $<span class="number">0</span></span><br><span class="line">add $s3, $<span class="number">0</span>, $<span class="number">0</span></span><br><span class="line">j loop</span><br><span class="line">异常处理程序:</span><br><span class="line"><span class="variable">.ktext</span> <span class="number">0</span>x00004180</span><br><span class="line">ori $k0, $<span class="number">0</span>, <span class="number">0</span>x1</span><br><span class="line">ori $k1, $<span class="number">0</span>, <span class="number">0</span>x9</span><br><span class="line">sw $k0, <span class="number">0</span>x7f00</span><br><span class="line">sw $k1, <span class="number">0</span>x7f00</span><br><span class="line">eret</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/12/25/CO_P8_MIPS微系统（板级验证）/" data-toggle="tooltip" data-placement="top" title="CO_P8_MIPS微系统（板级验证）">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/2022/12/06/CO_P5&P6课上测试总结/" data-toggle="tooltip" data-placement="top" title="CO_P5&P6课上测试总结">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=CO_P7_MIPS微系统（异常中断）&body=Hi,I found this website and thought you might like it http://example.com/2022/12/15/CO_P7_MIPS微系统（异常中断）/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '',
+      clientSecret: '',
+      repo: '',
+      owner: '',
+      admin: '',
+      id: 'Thu Dec 15 2022 09:34:17 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mips%E5%BE%AE%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> MIPS微系统设计方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 设计概述</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%8C%87%E4%BB%A4%E8%AF%B4%E6%98%8E"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 实现指令说明</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%B7%A5%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 工程模块定义</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cpu%E6%A8%A1%E5%9D%97"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> CPU模块</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cp0%E6%A8%A1%E5%9D%97"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> CP0模块</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#bridge%E6%A8%A1%E5%9D%97"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> Bridge模块</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#tc%E6%A8%A1%E5%9D%97"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text"> TC模块</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%87%8D%E8%A6%81%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 重要机制实现方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cp0%E5%93%8D%E5%BA%94%E6%9C%BA%E5%88%B6"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> CP0响应机制</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%A1%A5%E8%AE%BE%E8%AE%A1"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 系统桥设计</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%BC%82%E5%B8%B8%E8%AF%86%E5%88%AB"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"> 异常识别</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 测试方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#handler%E8%AE%BE%E8%AE%A1"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text"> handler设计</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E6%A0%B7%E4%BE%8B"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text"> 测试数据样例</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">5.</span> <span class="toc-nav-text"> 思考题</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
+
+
+		<!-- Footer (contains ThemeColor、viewer) -->
+		<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center">
+          
+
+          
+            <li>
+              <a target="_blank" href="https://github.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+            <li>
+              <a target="_blank" href="http://weibo.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+        </ul>
+        <p class="copyright text-muted">
+          Copyright &copy;
+          Hyggge
+          2022
+          <br>
+          Theme by
+          <a target="_blank" rel="noopener" href="http://beantech.org">BeanTech</a>
+          <span style="display: inline-block; margin: 0 5px;">
+            <i class="fa fa-heart"></i>
+          </span>
+          re-Ported by
+          <a target="_blank" rel="noopener" href="https://v-vincen.life/">Live My Life</a>
+          |
+          <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=V-Vincen&repo=V-Vincen.github.io&type=star&count=true"></iframe>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a id="rocket" href="#top" class=""></a>
+
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <!-- Custom Theme JavaScript -->
+  <script type="text/javascript" src="/js/hux-blog.min.js"></script>
+  <!-- catalog -->
+  <script async="true" type="text/javascript" src="/js/catalog.js"></script>
+  <!-- totop(rocket) -->
+  <script async="true" type="text/javascript" src="/js/totop.js"></script>
+
+  
+    <!-- Busuanzi JavaScript -->
+    <script async="async" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <!-- Scroll start -->
+    <script async="async" type="text/javascript" src="/js/scroll.js"></script>
+    <!-- Scroll end -->
+  
+
+  
+
+  
+    <!-- Mouseclick -->
+    <script type="text/javascript" src="/js/mouseclick.js" content='The first step is as good as half over...,Laugh and grow fat...,Man proposes God disposes...,When all else is lost the future still remains...,Wasting time is robbing oneself...,Sharp tools make good work...,Cease to struggle and you cease to live...,A friend in need is a friend indeed...,Faith can move mountains...' color='#9933CC,#339933,#66CCCC,#FF99CC,#CCCCFF,#6666CC,#663399,#66CC99,#FF0033'></script>
+  
+
+  
+    <!-- ribbon -->
+    <script type="text/javascript" src="/js/ribbonDynamic.js"></script>
+  
+
+  
+
+
+
+
+
+
+  <!-- viewer start -->
+  <!-- viewer start (Picture preview) -->
+  
+    <script async="async" type="text/javascript" src="/js/viewer/viewer.min.js"></script>
+    <script async="async" type="text/javascript" src="/js/viewer/pic-viewer.js"></script>
+  
+
+  <!-- viewer end -->
+
+
+<script>
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function (e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  // fastClick.js
+  async ("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+    var $nav = document.querySelector("nav");
+    if ($nav)
+      FastClick.attach($nav);
+    }
+  )
+</script>
+
+<!-- Because of the native support for backtick-style fenced code blocks right within the Markdown is landed in Github Pages, From V1.6, There is no need for Highlight.js, so Huxblog drops it officially. -
+https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0 - https://help.github.com/articles/creating-and-highlighting-code-blocks/ -->
+<!-- <script> async ("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function () { hljs.initHighlightingOnLoad(); }) </script> <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet"> -->
+
+<!-- jquery.tagcloud.js -->
+<!-- <script> // only load tagcloud.js in tag.html if ($('#tag_cloud').length !== 0) { async ("http://example.com/js/jquery.tagcloud.js", function () { $.fn.tagcloud.defaults = { // size: { start: 1, end: 1, unit: 'em' }, color: {
+start: '#bbbbee', end: '#0085a1' } }; $('#tag_cloud a').tagcloud(); }) } </script> -->
+
+
+		<!-- Search -->
+		
+		<div class="popup search-popup local-search-popup">
+  <span class="popup-btn-close">
+    ESC
+  </span>
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-9 col-md-offset-1"> -->
+      <div class="col-lg-9 col-lg-offset-1 col-md-10 col-md-offset-1 local-search-content">
+
+        <div class="local-search-header clearfix">
+
+          <div class="local-search-input-wrapper">
+            <span class="search-icon">
+              <i class="fa fa-search fa-lg" style="margin: 25px 10px 25px 20px;"></i>
+            </span>
+            <input autocomplete="off" placeholder="SEARCH..." type="text" id="local-search-input">
+          </div>
+        </div>
+        <div id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    <script src="/js/ziploader.js"></script>
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    // monitor main search box;
+    var onPopupClose = function (e) {
+      $('.popup').fadeOut(300);
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $('.popup').fadeIn(300);
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+    // get search zip version
+    $.get('/searchVersion.json?t=' + (+new Date()), function (res) {
+      if (localStorage.getItem('searchVersion') !== res) {
+        localStorage.setItem('searchVersion', res);
+        initSearchJson();
+      }
+    });
+
+    function initSearchJson() {
+      initLoad(['/search.flv'], {
+        loadOptions: {
+          success: function (obj) {
+            localStorage.setItem('searchJson', obj['search.json'])
+          },
+          error: function (e) {
+            return console.log(e)
+          }
+        },
+        returnOptions: {
+          'json': TYPE_TEXT
+        },
+        mimeOptions: {
+          'json': 'application/json'
+        }
+      })
+    }
+    // search function;
+    var searchFunc = function (search_id, content_id) {
+      'use strict';
+      isfetched = true;
+      var datas = JSON.parse(localStorage.getItem('searchJson'));
+      // console.log(search_id)
+      var input = document.getElementById(search_id);
+      var resultContent = document.getElementById(content_id);
+      var inputEventFunction = function () {
+        var searchText = input.value.trim().toLowerCase();
+        var keywords = searchText.split(/[\s\-]+/);
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        var resultItems = [];
+        if (searchText.length > 0) {
+          // perform local searching
+          datas.forEach(function (data) {
+            var isMatch = false;
+            var hitCount = 0;
+            var searchTextCount = 0;
+            var title = data.title
+              ? data.title.trim()
+              : '';
+            var titleInLowerCase = title.toLowerCase();
+            var content = data.content
+              ? data.content.trim().replace(/<[^>]+>/g, "")
+              : '';
+            var contentInLowerCase = content.toLowerCase();
+            var articleUrl = decodeURIComponent(data.url);
+
+            var date = data.date;
+            var dateTime = date.replace(/T/, " ").replace(/.000Z/, "");
+            var imgUrl = data.header_img;
+            
+
+
+            var indexOfTitle = [];
+            var indexOfContent = [];
+            // only match articles with not empty titles
+            keywords.forEach(function (keyword) {
+              function getIndexByWord(word, text, caseSensitive) {
+                var wordLen = word.length;
+                if (wordLen === 0) {
+                  return [];
+                }
+                var startPosition = 0,
+                  position = [],
+                  index = [];
+                if (!caseSensitive) {
+                  text = text.toLowerCase();
+                  word = word.toLowerCase();
+                }
+                while ((position = text.indexOf(word, startPosition)) > -1) {
+                  index.push({position: position, word: word});
+                  startPosition = position + wordLen;
+                }
+                return index;
+              }
+              indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+              indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+            });
+            if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+              isMatch = true;
+              hitCount = indexOfTitle.length + indexOfContent.length;
+            }
+            // show search results
+            if (isMatch) {
+              // sort index by position of keyword
+              [indexOfTitle, indexOfContent].forEach(function (index) {
+                index.sort(function (itemLeft, itemRight) {
+                  if (itemRight.position !== itemLeft.position) {
+                    return itemRight.position - itemLeft.position;
+                  } else {
+                    return itemLeft.word.length - itemRight.word.length;
+                  }
+                });
+              });
+              // merge hits into slices
+              function mergeIntoSlice(text, start, end, index) {
+                var item = index[index.length - 1];
+                var position = item.position;
+                var word = item.word;
+                var hits = [];
+                var searchTextCountInSlice = 0;
+                while (position + word.length <= end && index.length != 0) {
+                  if (word === searchText) {
+                    searchTextCountInSlice++;
+                  }
+                  hits.push({position: position, length: word.length});
+                  var wordEnd = position + word.length;
+                  // move to next position of hit
+                  index.pop();
+                  while (index.length != 0) {
+                    item = index[index.length - 1];
+                    position = item.position;
+                    word = item.word;
+                    if (wordEnd > position) {
+                      index.pop();
+                    } else {
+                      break;
+                    }
+                  }
+                }
+                searchTextCount += searchTextCountInSlice;
+                return {hits: hits, start: start, end: end, searchTextCount: searchTextCountInSlice};
+              }
+              var slicesOfTitle = [];
+              if (indexOfTitle.length != 0) {
+                slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+              }
+              var slicesOfContent = [];
+              while (indexOfContent.length != 0) {
+                var item = indexOfContent[indexOfContent.length - 1];
+                var position = item.position;
+                var word = item.word;
+                // cut out 100 characters
+                var start = position - 20;
+                var end = position + 80;
+                if (start < 0) {
+                  start = 0;
+                }
+                if (end < position + word.length) {
+                  end = position + word.length;
+                }
+                if (end > content.length) {
+                  end = content.length;
+                }
+                slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+              }
+              // sort slices in content by search text's count and hits' count
+              slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                  return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                  return sliceRight.hits.length - sliceLeft.hits.length;
+                } else {
+                  return sliceLeft.start - sliceRight.start;
+                }
+              });
+              // select top N slices in content
+              var upperBound = parseInt('1');
+              if (upperBound >= 0) {
+                slicesOfContent = slicesOfContent.slice(0, upperBound);
+              }
+              // highlight title and content
+              function highlightKeyword(text, slice) {
+                var result = '';
+                var prevEnd = slice.start;
+                slice.hits.forEach(function (hit) {
+                  result += text.substring(prevEnd, hit.position);
+                  var end = hit.position + hit.length;
+                  result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                  prevEnd = end;
+                });
+                result += text.substring(prevEnd, slice.end);
+                return result;
+              }
+              var resultItem = '';
+
+              // if (slicesOfTitle.length != 0) {   resultItem += "<li><a target='_blank' href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>"; } else {   resultItem += "<li><a target='_blank' href='" +
+              // articleUrl + "' class='search-result-title'>" + title + "</a>"; } slicesOfContent.forEach(function (slice) {   resultItem += "<a target='_blank' href='" + articleUrl + "'><p class=\"search-result\">" + highlightKeyword(content, slice) +
+              // "...</p></a>"; }); resultItem += "</li>";
+
+              if (slicesOfTitle.length != 0) {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              } else {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + title + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              }
+              slicesOfContent.forEach(function (slice) {
+                resultItem += "<p class=\"search-result-content\">" + highlightKeyword(content, slice) + "...</p>";
+              });
+              resultItem += "</div><div class='search-result-right'><img class='media-image' src='" + imgUrl + "' width='64px' height='48px'></img></div></a>";
+
+              resultItems.push({item: resultItem, searchTextCount: searchTextCount, hitCount: hitCount, id: resultItems.length});
+            }
+          })
+        };
+
+        if (keywords.length === 1 && keywords[0] === "") {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else if (resultItems.length === 0) {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else {
+          resultItems.sort(function (resultLeft, resultRight) {
+            if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+              return resultRight.searchTextCount - resultLeft.searchTextCount;
+            } else if (resultLeft.hitCount !== resultRight.hitCount) {
+              return resultRight.hitCount - resultLeft.hitCount;
+            } else {
+              return resultRight.id - resultLeft.id;
+            }
+          });
+          var searchResultList = '<div class=\"search-result-list\">';
+          resultItems.forEach(function (result) {
+            searchResultList += result.item;
+          })
+          searchResultList += "</div>";
+          resultContent.innerHTML = searchResultList;
+        }
+      }
+      if ('auto' === 'auto') {
+        input.addEventListener('input', inputEventFunction);
+      } else {
+        $('.search-icon').click(inputEventFunction);
+        input.addEventListener('keypress', function (event) {
+          if (event.keyCode === 13) {
+            inputEventFunction();
+          }
+        });
+      }
+      // remove loading animation
+      $('body').css('overflow', '');
+      proceedsearch();
+    }
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function (e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc('local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function (e) {
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 && $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      var _con = document.querySelector(".local-search-content");
+      if (_con) {
+        if (!_con.contains(e.target)) {
+          onPopupClose();
+        }
+      }
+    });
+  </script>
+
+
+		
+	</body>
+</html>
