@@ -244,17 +244,6 @@
 
           
           
-          <li>
-            <a href="/categories/">
-              
-              分类
-              
-              
-            </a>
-          </li>
-          
-          
-          
           
           
           <li>
@@ -272,6 +261,17 @@
             <a href="/archive/">
               
               归档
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              分类
               
               
             </a>
@@ -348,19 +348,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('/img/header_img/lml_bg.jpg');
-      --intro-header-background-image-url-page: url('//img/header_img/lml_bg.jpg');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_essay.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_essay.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/lml_bg.jpg');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/lml_bg.jpg');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_essay.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_essay.jpg');
     }
 
     header.intro-header {
        /*post*/
         background-image: var(--intro-header-background-image-url-post);
-        /* background-image: url('/img/header_img/lml_bg.jpg'); */
+        /* background-image: url('/img/header_img/bg_essay.jpg'); */
       
     }
 
@@ -551,9 +551,7 @@
 </li>
 </ul>
 <p>经过以上的Q&amp;A，你大概可以发现，每一个状态的计算都依赖他的上一个状态（即子过程）的值，状态转移方程可以写作</p>
-<p>$$<br>
-\mathsf{DP[S][v]=\bigcup_{i=1}^n \ (DP[S_prev][u_i]} \ \  &amp;\ \    \mathsf{road[u_i][v])}<br>
-$$<br>
+<p>$$\mathsf{DP[S][v]=\bigcup_{i=1}^n \ (DP[S_prev][u_i]} \ \  &amp;\ \    \mathsf{road[u_i][v])}$$<br>
 相信你已经对状态转移的具体过程有了大致的了解，那么我们结合下面的代码来进一步分析</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(S = <span class="number">1</span>; S &lt; (<span class="number">1</span> &lt;&lt; n); S++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(v = <span class="number">0</span>; v &lt; n; v++)&#123;</span><br><span class="line">        <span class="keyword">if</span>((S &gt;&gt; v) &amp; <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> S_prev = S ^ (<span class="number">1</span> &lt;&lt; v);</span><br><span class="line">            <span class="keyword">for</span>(u = <span class="number">0</span>; u &lt; n; u++)&#123;</span><br><span class="line">                <span class="keyword">if</span>((S_prev &gt;&gt; u) &amp; <span class="number">1</span>) </span><br><span class="line">                    dp[S][v] | = (dp[S_prev][u] &amp; edge[u][v]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在最外层的循环 <strong><code>for(S = 1; S &lt; (1 &lt;&lt; n); S++)</code></strong> 中，我们让 <strong>子集S</strong> 从 <strong>1 (0b00000001)</strong> 到 <strong>1&lt;&lt;8 (0b1111111)</strong> （假设n=8）进行遍历。因为表示子集状态的值S是从小到大变化的，所以可以保证当计算当前状态时，其子状态一定被计算过。</p>
@@ -573,10 +571,10 @@ $$<br>
         <!-- Pager -->
         <ul class="pager">
           
-          
-          <li class="next">
-            <a href="/2020/04/17/博客配置说明/" data-toggle="tooltip" data-placement="top" title="博客配置说明">Next Post &rarr;</a>
+          <li class="previous">
+            <a href="/2020/04/17/博客配置说明/" data-toggle="tooltip" data-placement="top" title="博客配置说明">&larr; Previous Post</a>
           </li>
+          
           
         </ul>
 
