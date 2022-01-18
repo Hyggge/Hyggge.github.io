@@ -239,7 +239,7 @@
       <div class="navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="/">首页</a>
+            <a href="/">HOME</a>
           </li>
 
           
@@ -249,18 +249,7 @@
           <li>
             <a href="/about/">
               
-              关于
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              归档
+              ABOUT
               
               
             </a>
@@ -271,7 +260,7 @@
           <li>
             <a href="/categories/">
               
-              分类
+              CATEGORIES
               
               
             </a>
@@ -282,7 +271,18 @@
           <li>
             <a href="/tags/">
               
-              标签
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -293,7 +293,7 @@
           
           <li>
             <a class="popup-trigger">
-              <span class="search-icon"></span>搜索</a>
+              <span class="search-icon"></span>SEARCH</a>
           </li>
           
 
@@ -551,8 +551,8 @@
 </li>
 </ul>
 <p>经过以上的Q&amp;A，你大概可以发现，每一个状态的计算都依赖他的上一个状态（即子过程）的值，状态转移方程可以写作</p>
-<p>$$\mathsf{DP[S][v]=\bigcup_{i=1}^n \ (DP[S_prev][u_i]} \ \  &amp;\ \    \mathsf{road[u_i][v])}$$<br>
-相信你已经对状态转移的具体过程有了大致的了解，那么我们结合下面的代码来进一步分析</p>
+<p>$\mathsf{DP[S][v]=\bigcup_{i=1}^n \ (DP[S_prev][u_i]} \ \  &amp;\ \    \mathsf{road[u_i][v])}$</p>
+<p>相信你已经对状态转移的具体过程有了大致的了解，那么我们结合下面的代码来进一步分析</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(S = <span class="number">1</span>; S &lt; (<span class="number">1</span> &lt;&lt; n); S++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(v = <span class="number">0</span>; v &lt; n; v++)&#123;</span><br><span class="line">        <span class="keyword">if</span>((S &gt;&gt; v) &amp; <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> S_prev = S ^ (<span class="number">1</span> &lt;&lt; v);</span><br><span class="line">            <span class="keyword">for</span>(u = <span class="number">0</span>; u &lt; n; u++)&#123;</span><br><span class="line">                <span class="keyword">if</span>((S_prev &gt;&gt; u) &amp; <span class="number">1</span>) </span><br><span class="line">                    dp[S][v] | = (dp[S_prev][u] &amp; edge[u][v]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在最外层的循环 <strong><code>for(S = 1; S &lt; (1 &lt;&lt; n); S++)</code></strong> 中，我们让 <strong>子集S</strong> 从 <strong>1 (0b00000001)</strong> 到 <strong>1&lt;&lt;8 (0b1111111)</strong> （假设n=8）进行遍历。因为表示子集状态的值S是从小到大变化的，所以可以保证当计算当前状态时，其子状态一定被计算过。</p>
 <p>在第二层循环 <strong><code>for(v = 0; v &lt; n; v++)</code></strong> 中，我们遍历所有的点，通过 <strong><code>(S &gt;&gt; v) &amp; 1</code></strong> 来判断序号为 <strong>v</strong> 的点是否在点集 <strong>S</strong> 中，如果结果为1，我们便找出计算对象 <strong><code>dp[S][v]</code></strong>，并找出上一状态对应的点集 <strong><code>S_prev = S ^ (1 &lt;&lt; v)</code></strong> ，然后进入第三层循环。</p>
@@ -585,7 +585,7 @@
 <div class="tip">
   <p>
     
-      如果您喜欢此博客或发现它对您有用，则欢迎对此发表评论。 也欢迎您共享此博客，以便更多人可以参与。 如果博客中使用的图像侵犯了您的版权，请与作者联系以将其删除。 谢谢 ！
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
     
   </p>
 </div>
@@ -708,7 +708,7 @@
     
       <aside id="sidebar">
         <div id="toc" class="toc-article">
-        <strong class="toc-title">目录</strong>
+        <strong class="toc-title">Contents</strong>
         
           <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">序言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E7%8A%B6%E5%8E%8BDP%EF%BC%9F"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">为什么可以使用状压DP？</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">解题思路</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%93%88%E5%AF%86%E9%A1%BF%E8%B7%AF%E5%BE%84%EF%BC%88%E7%8A%B6%E5%8E%8BDP%EF%BC%89"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">判断是否存在哈密顿路径（状压DP）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%9C%89%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%9E%E8%B7%AF"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">判断是否有哈密顿回路</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">后记</span></a></li></ol>
         
@@ -729,7 +729,7 @@
         <section>
           <!-- no hr -->
           <h5>
-            <a href="/tags/">特色标签</a>
+            <a href="/tags/">FEATURED TAGS</a>
           </h5>
           <div class="tags">
             
@@ -964,7 +964,7 @@ start: '#bbbbee', end: '#0085a1' } }; $('#tag_cloud a').tagcloud(); }) } </scrip
             <span class="search-icon">
               <i class="fa fa-search fa-lg" style="margin: 25px 10px 25px 20px;"></i>
             </span>
-            <input autocomplete="off" placeholder="搜索..." type="text" id="local-search-input">
+            <input autocomplete="off" placeholder="SEARCH..." type="text" id="local-search-input">
           </div>
         </div>
         <div id="local-search-result"></div>
@@ -1291,6 +1291,7 @@ start: '#bbbbee', end: '#0085a1' } }; $('#tag_cloud a').tagcloud(); }) } </scrip
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 </body>
 </html>
