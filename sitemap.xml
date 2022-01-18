@@ -23,14 +23,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/2020/04/17/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://example.com/2020/04/17/%E7%8A%B6%E5%8E%8BDP%E8%A7%A3%E5%86%B3Hamilton%E5%9B%9E%E8%B7%AF%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2020-04-16</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2020/04/17/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://example.com/2020/04/17/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/</loc>
     
     <lastmod>2020-04-16</lastmod>
     
@@ -60,7 +60,35 @@
 
   
   <url>
-    <loc>http://example.com/tags/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://example.com/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2022-01-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/Hamilton/</loc>
+    <lastmod>2022-01-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
+    <lastmod>2022-01-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/github/</loc>
+    <lastmod>2022-01-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/hexo/</loc>
     <lastmod>2022-01-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -69,7 +97,14 @@
 
   
   <url>
-    <loc>http://example.com/categories/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://example.com/categories/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2022-01-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2022-01-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
