@@ -251,20 +251,9 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/archive/">
               
-              CATEGORIES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
+              ARCHIVES
               
               
             </a>
@@ -284,9 +273,20 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
               
               
             </a>
@@ -542,19 +542,17 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_verilog其他tips/">
+  <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/">
     <h2 class="post-title">
-      CO_P1_verilog其他tips
+      CO_P1_verilog符号数的理解与使用
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-      
-always中的敏感列表不支持(posedge clk or negedge clk)
-parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
-复位的时候要把所有的reg型变量都复位
-integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
+       算数右移符号&gt;&gt;&gt;
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
     </div>
   </a>
   
@@ -583,17 +581,19 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/">
+  <a href="/2021/10/26/CO_P1_verilog其他tips/">
     <h2 class="post-title">
-      CO_P1_verilog符号数的理解与使用
+      CO_P1_verilog其他tips
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-       算数右移符号&gt;&gt;&gt;
-我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
-12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
+      
+always中的敏感列表不支持(posedge clk or negedge clk)
+parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
+复位的时候要把所有的reg型变量都复位
+integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
     </div>
   </a>
   

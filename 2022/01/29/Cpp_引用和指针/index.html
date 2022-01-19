@@ -251,20 +251,9 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/archive/">
               
-              CATEGORIES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
+              ARCHIVES
               
               
             </a>
@@ -284,9 +273,20 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
               
               
             </a>
@@ -479,7 +479,10 @@
 <p>引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。</p>
 </blockquote>
 <ul>
-<li>举例如下<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">int</span> a = <span class="number">16</span>;</span><br><span class="line">  <span class="keyword">int</span> &amp;b = a; <span class="comment">//b是a的引用，需要在b前加引用符&amp;</span></span><br><span class="line">  <span class="keyword">int</span> &amp;c;     <span class="comment">//错误，没有初始化！！！</span></span><br><span class="line">- 引用的实质：**引用并不是对象，而是对象的一个新名字，所有对引用的操作实际是都是在对源对象进行操作**。</span><br><span class="line">- 引用的定义：允许在一行中定义多个引用但是每个引用前必须有&amp;限定，例如</span><br><span class="line">  ```cpp</span><br><span class="line">  <span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">int</span> &amp;c = a, &amp;d = b;</span><br></pre></td></tr></table></figure>
+<li>举例如下<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;b = a; <span class="comment">//b是a的引用，需要在b前加引用符&amp;</span></span><br><span class="line"><span class="keyword">int</span> &amp;c;     <span class="comment">//错误，没有初始化！！！</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>引用的实质：<strong>引用并不是对象，而是对象的一个新名字，所有对引用的操作实际是都是在对源对象进行操作</strong>。</li>
+<li>引用的定义：允许在一行中定义多个引用但是每个引用前必须有&amp;限定，例如<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;c = a, &amp;d = b;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h2>
@@ -498,7 +501,25 @@
 </li>
 <li>
 <p><strong>指针的定义</strong>：允许一行对多个指针类型进行声明和定义</p>
- <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> *c = &amp;a, *d = &amp;b;</span><br><span class="line"><span class="number">1.</span> **空指针**</span><br><span class="line">     - 一般要用`<span class="literal">nullptr</span>`进行初始化</span><br><span class="line">     - 空指针不能使用解引用符进行解引用</span><br><span class="line"><span class="number">1.</span> **关于`<span class="keyword">void</span>`**</span><br><span class="line">     - `<span class="keyword">void</span>`是一种比较特殊的指针类型，可以**指向任意对象**，存放任意对象的地址，但是也仅限于存放，**不能进行访问**，也不可以直接操作`<span class="keyword">void</span>*`所指的对象。</span><br><span class="line">     - <span class="keyword">void</span>可以做的事： **和其他指针进行比较**、**作为函数的输入和输出**、**或者赋值给另外一个`<span class="keyword">void</span>*`指针**。</span><br><span class="line"><span class="number">0.</span> **指向指针的指针**</span><br><span class="line">    ```cpp</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> *b = &amp;a;    <span class="comment">//b指向的是“int型”</span></span><br><span class="line">    <span class="keyword">int</span> **c = &amp;b;   <span class="comment">//c指向的是“指向int的指针”</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> *c = &amp;a, *d = &amp;b;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>空指针</strong></p>
+<ul>
+<li>一般要用<code>nullptr</code>进行初始化</li>
+<li>空指针不能使用解引用符进行解引用</li>
+</ul>
+</li>
+<li>
+<p><strong>关于<code>void</code></strong></p>
+<ul>
+<li><code>void</code>是一种比较特殊的指针类型，可以<strong>指向任意对象</strong>，存放任意对象的地址，但是也仅限于存放，<strong>不能进行访问</strong>，也不可以直接操作<code>void*</code>所指的对象。</li>
+<li>void可以做的事： <strong>和其他指针进行比较</strong>、<strong>作为函数的输入和输出</strong>、<strong>或者赋值给另外一个<code>void*</code>指针</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>指向指针的指针</strong></p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *b = &amp;a;    <span class="comment">//b指向的是“int型”</span></span><br><span class="line"><span class="keyword">int</span> **c = &amp;b;   <span class="comment">//c指向的是“指向int的指针”</span></span><br></pre></td></tr></table></figure>
 </li>
 <li>
 <p><strong>对指针的引用</strong></p>
@@ -545,7 +566,9 @@
 <li><strong>函数指针</strong>
 <ul>
 <li>定义：函数指针就是一个<strong>指向函数的指针</strong>。每个函数在编译时，会被分配一个入口地址，一般用函数名来表示，这个地址就是该函数的指针。</li>
-<li>用法1：（基础用法）   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in"><span class="keyword">int</span></span>(*func)(<span class="keyword">int</span>, <span class="keyword">int</span>);       <span class="comment">//定义一个指向该函数形式的指针变量</span></span><br><span class="line">        func = max;</span><br><span class="line">        cout &lt;&lt; <span class="built_in">func</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">- 用法<span class="number">2</span>：（<span class="keyword">typedef</span>）</span><br><span class="line">    ```cpp</span><br><span class="line">    <span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*func)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">        func newfunc = max;</span><br><span class="line">        cout &lt;&lt; <span class="built_in">newfunc</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<li>用法1：（基础用法）   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in"><span class="keyword">int</span></span>(*func)(<span class="keyword">int</span>, <span class="keyword">int</span>);       <span class="comment">//定义一个指向该函数形式的指针变量</span></span><br><span class="line">    func = max;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">func</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>用法2：（typedef）  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*func)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    func newfunc = max;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">newfunc</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
