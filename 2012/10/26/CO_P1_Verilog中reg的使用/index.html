@@ -262,6 +262,17 @@
           
           
           <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
             <a href="/about/">
               
               ABOUT
@@ -276,17 +287,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -408,7 +408,7 @@
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">321</span> In Total
+              Words <span class="post-count">322</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -470,13 +470,23 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="定义和实例化模块时reg的使用"><a href="#定义和实例化模块时reg的使用" class="headerlink" title="定义和实例化模块时reg的使用"></a>定义和实例化模块时reg的使用</h2><ul>
-<li>在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。</li>
-<li><p>在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。</p>
+        <h2 id="定义和实例化模块时reg的使用"><a class="markdownIt-Anchor" href="#定义和实例化模块时reg的使用"></a> 定义和实例化模块时reg的使用</h2>
+<ul>
+<li>
+<p>在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。</p>
+</li>
+<li>
+<p>在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。</p>
 <p>定义输出端口时，我们可以直接定义成reg类型</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> a;</span><br></pre></td></tr></table></figure></li>
-<li>或者在模块内部声明<code>reg</code>寄存器，然后通过<code>assign</code>语句将寄存器中的值赋给<code>wire</code>型输出端口<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">output</span> b; <span class="comment">//b是wire型(net)端口</span></span><br><span class="line"><span class="keyword">reg</span> temp;</span><br><span class="line"><span class="keyword">assign</span> b = temp;</span><br></pre></td></tr></table></figure>
-<h2 id="task-和-function-中-reg-的使用"><a href="#task-和-function-中-reg-的使用" class="headerlink" title="task 和 function 中 reg 的使用"></a>task 和 function 中 reg 的使用</h2></li>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> a;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>或者在模块内部声明<code>reg</code>寄存器，然后通过<code>assign</code>语句将寄存器中的值赋给<code>wire</code>型输出端口</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">output</span> b; <span class="comment">//b是wire型(net)端口</span></span><br><span class="line"><span class="keyword">reg</span> temp;</span><br><span class="line"><span class="keyword">assign</span> b = temp;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="task-和-function-中-reg-的使用"><a class="markdownIt-Anchor" href="#task-和-function-中-reg-的使用"></a> task 和 function 中 reg 的使用</h2>
+<ul>
 <li>任务(<code>task</code>)中，返回值是通过输出端口的变量决定的， 而task输出端口必须为<code>reg</code>类型。因此在调用<code>task</code>时，需要在调用前定义一个reg型变量，接收<code>task</code>的返回值。</li>
 <li>函数(<code>function</code>)中，调用函数的表达式的操作结果就是返回值。在函数的定义时，默认存在一个与函数同名的，在函数内部的寄存器(<code>reg</code>)，相当于C语言中的  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(……)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp_reg; <span class="comment">//建立临时变量，储存要返回的结果</span></span><br><span class="line">    <span class="comment">/* 对temp_reg 进行操作*/</span></span><br><span class="line">    <span class="keyword">return</span> temp_reg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -626,7 +636,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%8C%96%E6%A8%A1%E5%9D%97%E6%97%B6reg%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">定义和实例化模块时reg的使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#task-%E5%92%8C-function-%E4%B8%AD-reg-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">task 和 function 中 reg 的使用</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%8C%96%E6%A8%A1%E5%9D%97%E6%97%B6reg%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 定义和实例化模块时reg的使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#task-%E5%92%8C-function-%E4%B8%AD-reg-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> task 和 function 中 reg 的使用</span></a></li></ol>
         
         </div>
       </aside>
