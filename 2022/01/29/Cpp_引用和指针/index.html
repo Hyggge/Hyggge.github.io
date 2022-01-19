@@ -262,6 +262,17 @@
           
           
           <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
             <a href="/archive/">
               
               ARCHIVES
@@ -276,17 +287,6 @@
             <a href="/tags/">
               
               TAGS
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/categories/">
-              
-              CATEGORIES
               
               
             </a>
@@ -575,7 +575,7 @@
 </li>
 </ul>
 </li>
-<li>函数指针数组
+<li><strong>函数指针数组</strong>
 <ul>
 <li>定义：顾名思义，就是每个元素都是函数指针的数组，直接在函数指针名后面加上数组符号[ ]即可。</li>
 <li>用法   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f1&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f2&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f3&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//定义三个函数指针</span></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf1)() = &amp;f1;</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf2)() = &amp;f2;</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf3)() = &amp;f3;</span><br><span class="line">    <span class="comment">//接下来就是定义一个数组把他们三个装进去。</span></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pfarr[<span class="number">3</span>])();</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pfunarr[<span class="number">3</span>])();</span><br><span class="line">    pfunarr[<span class="number">0</span>] = pfun;</span><br><span class="line">    pfunarr[<span class="number">1</span>] = pfun2;</span><br><span class="line">    pfunarr[<span class="number">2</span>] = pfun3;</span><br><span class="line">    <span class="comment">/*  或者这样赋值</span></span><br><span class="line"><span class="comment">    pfunarr[0] = &amp;fun1;</span></span><br><span class="line"><span class="comment">    pfunarr[1] = &amp;fun2;</span></span><br><span class="line"><span class="comment">    pfunarr[2] = &amp;fun3;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    pfunarr[<span class="number">0</span>]();</span><br><span class="line">    pfunarr[<span class="number">1</span>]();</span><br><span class="line">    pfunarr[<span class="number">2</span>]();</span><br><span class="line">    <span class="comment">/*  或者这样调用</span></span><br><span class="line"><span class="comment">    (*pfunarr[0])();</span></span><br><span class="line"><span class="comment">    (*pfunarr[1])();</span></span><br><span class="line"><span class="comment">    (*pfunarr[2])();</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
