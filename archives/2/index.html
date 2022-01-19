@@ -251,9 +251,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/about/">
               
-              ARCHIVES
+              ABOUT
               
               
             </a>
@@ -262,9 +262,9 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/archive/">
               
-              CATEGORIES
+              ARCHIVES
               
               
             </a>
@@ -284,9 +284,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/categories/">
               
-              ABOUT
+              CATEGORIES
               
               
             </a>
@@ -460,24 +460,19 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog状态机设计/">
+  <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/">
     <h2 class="post-title">
-      CO_P1_Verilog状态机设计
+      CO_P1_Verilog边沿检测总结
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-      在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
+       上升沿（或下降沿）检测
+如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
 
-
-逻辑抽象，得出状态转换图。
-
-
-状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。
-
-
-状态分配，也就是状态编码。通常有很多种编码方式，比如 Gr......
+只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
+1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0]......
     </div>
   </a>
   
