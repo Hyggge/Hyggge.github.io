@@ -86,14 +86,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E8%BE%B9%E6%B2%BF%E6%A3%80%E6%B5%8B%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2021-10-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E8%BE%B9%E6%B2%BF%E6%A3%80%E6%B5%8B%E6%80%BB%E7%BB%93/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
     
     <lastmod>2021-10-26</lastmod>
     
@@ -107,14 +107,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_verilog%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BD%BF%E7%94%A8/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_verilog%E5%85%B6%E4%BB%96tips/</loc>
     
     <lastmod>2021-10-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_verilog%E5%85%B6%E4%BB%96tips/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_verilog%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2021-10-26</lastmod>
     
@@ -165,20 +165,6 @@
 
   
   <url>
-    <loc>http://example.com/tags/C/</loc>
-    <lastmod>2022-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/C-Primer/</loc>
-    <lastmod>2022-01-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2022-01-19</lastmod>
     <changefreq>daily</changefreq>
@@ -187,6 +173,20 @@
   
   <url>
     <loc>http://example.com/tags/%E5%9B%BE%E8%AE%BA/</loc>
+    <lastmod>2022-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/C/</loc>
+    <lastmod>2022-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/C-Primer/</loc>
     <lastmod>2022-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -202,14 +202,14 @@
 
   
   <url>
-    <loc>http://example.com/categories/C/</loc>
+    <loc>http://example.com/categories/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2022-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E7%AE%97%E6%B3%95/</loc>
+    <loc>http://example.com/categories/C/</loc>
     <lastmod>2022-01-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

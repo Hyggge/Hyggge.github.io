@@ -262,9 +262,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/categories/">
               
-              ABOUT
+              CATEGORIES
               
               
             </a>
@@ -284,9 +284,9 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/about/">
               
-              CATEGORIES
+              ABOUT
               
               
             </a>
@@ -460,19 +460,24 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/">
+  <a href="/2021/10/26/CO_P1_Verilog状态机设计/">
     <h2 class="post-title">
-      CO_P1_Verilog边沿检测总结
+      CO_P1_Verilog状态机设计
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-       上升沿（或下降沿）检测
-如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
+      在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
 
-只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
-1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0]......
+
+逻辑抽象，得出状态转换图。
+
+
+状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。
+
+
+状态分配，也就是状态编码。通常有很多种编码方式，比如 Gr......
     </div>
   </a>
   
@@ -542,17 +547,19 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/">
+  <a href="/2021/10/26/CO_P1_verilog其他tips/">
     <h2 class="post-title">
-      CO_P1_verilog符号数的理解与使用
+      CO_P1_verilog其他tips
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-       算数右移符号&gt;&gt;&gt;
-我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
-12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
+      
+always中的敏感列表不支持(posedge clk or negedge clk)
+parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
+复位的时候要把所有的reg型变量都复位
+integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
     </div>
   </a>
   
@@ -581,19 +588,17 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_verilog其他tips/">
+  <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/">
     <h2 class="post-title">
-      CO_P1_verilog其他tips
+      CO_P1_verilog符号数的理解与使用
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-      
-always中的敏感列表不支持(posedge clk or negedge clk)
-parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
-复位的时候要把所有的reg型变量都复位
-integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
+       算数右移符号&gt;&gt;&gt;
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
     </div>
   </a>
   
@@ -789,19 +794,19 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
   <div class="tags">
     
     
-    <a href="/tags/#C++" title="C++" rel="1">C++</a>
-    
-    
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
-    
-    
-    
     <a href="/tags/#算法" title="算法" rel="1">算法</a>
     
     
     
     <a href="/tags/#图论" title="图论" rel="1">图论</a>
+    
+    
+    
+    <a href="/tags/#C++" title="C++" rel="1">C++</a>
+    
+    
+    
+    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
     
     
     
@@ -919,12 +924,12 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
 <div class="widget">
   <ul>
     
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
     <a href="/categories/#算法">
       <li>算法</li>
+    </a>
+    
+    <a href="/categories/#C++">
+      <li>C++</li>
     </a>
     
     <a href="/categories/#计算机组成">
