@@ -251,6 +251,17 @@
           
           
           <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
             <a href="/about/">
               
               ABOUT
@@ -265,17 +276,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/categories/">
-              
-              CATEGORIES
               
               
             </a>
@@ -468,11 +468,47 @@
       
     </h3>
     <div class="post-content-preview">
-       上升沿（或下降沿）检测
-如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
+      上升沿（或下降沿）检测如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
+1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0] ped......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2021-10-26
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
+    
+  </div>
+  
 
-只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
-1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0]......
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
+  <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/">
+    <h2 class="post-title">
+      CO_P1_Verilog阻塞和非阻塞赋值的讨论
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      概念区别
+阻塞赋值操作符用等号(即 = )表示。“阻塞”是指在进程语句（initial和always）中，当前的赋值语句阻断了其后的语句，也就是说后面的语句必须等到当前的赋值语句执行完毕才能执行。而且阻塞赋值可以看成是一步完成的，即：计算等号右边的值并同时赋给左边变量。
+ 也就是说：赋值时先计算等号右手方向（RHS）部分的值，这时赋值语句不允许任何别的Verilog语句的干扰，直到现行的赋值......
     </div>
   </a>
   
@@ -542,47 +578,6 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/">
-    <h2 class="post-title">
-      CO_P1_Verilog阻塞和非阻塞赋值的讨论
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       概念区别
-
-
-阻塞赋值操作符用等号(即 = )表示。“阻塞”是指在进程语句（initial和always）中，当前的赋值语句阻断了其后的语句，也就是说后面的语句必须等到当前的赋值语句执行完毕才能执行。而且阻塞赋值可以看成是一步完成的，即：计算等号右边的值并同时赋给左边变量。
-也就是说：赋值时先计算等号右手方向（RHS）部分的值，这时赋值语句不允许任何别的Verilog语句的干扰，直到现行的......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-10-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
   <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/">
     <h2 class="post-title">
       CO_P1_verilog符号数的理解与使用
@@ -591,9 +586,7 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       
     </h3>
     <div class="post-content-preview">
-       算数右移符号&gt;&gt;&gt;
-我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
-12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
+      算数右移符号&gt;&gt;&gt;我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号assi......
     </div>
   </a>
   
@@ -630,27 +623,18 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       
     </h3>
     <div class="post-content-preview">
-       时序逻辑电路的基本元件
- SR锁存器
-
-功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）
-缺点：没有时间上的同步关系
- 
-
- D锁存器
-
-功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转
-缺点：无法实现时钟沿储存
+      时序逻辑电路的基本元件SR锁存器
+功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）  
+缺点：没有时间上的同步关系 D锁存器
+功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转    
+缺点：无法实现时钟沿储存  
 
 
- D触发器
+D触发器
+功能：时钟沿上升时储存 
 
-功能：时钟沿上升时储存
- 
-
- 带使能端的D触发器
-
-功能：若使能信号有效则可以正常读入，否则保存当前......
+带使能端的D触发器
+功能：若使能信号有效则可以正常读入，否则保存当前值而不读入可......
     </div>
   </a>
   
@@ -687,9 +671,8 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       
     </h3>
     <div class="post-content-preview">
-       序言
-刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过 深度优先搜索(DFS) 解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数、还有在调用过程中使用过的并希望保存的寄存器（笔者曾因为堆栈处理不当陷入了十分抓狂的境地）。
-后来听翔宇哥哥说这个题可以采用 状压DP 的方法解决（xy......
+      序言刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过 深度优先搜索(DFS) 解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数、还有在调用过程中使用过的并希望保存的寄存器（笔者曾因为堆栈处理不当陷入了十分抓狂的境地）。
+后来听翔宇哥哥说这个题可以采用 状压DP 的方法解决（xygg......
     </div>
   </a>
   
@@ -728,18 +711,12 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       
     </h3>
     <div class="post-content-preview">
-       定义和实例化模块时reg的使用
-
-
+      定义和实例化模块时reg的使用
 在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
-
-
 在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。
 定义输出端口时，我们可以直接定义成reg类型
 1output reg a;
-
-
-或者在模块内部声明reg寄存器，然后通过assi......
+或者在模块内部声明reg寄存器，然后通过assign语句将寄存......
     </div>
   </a>
   
@@ -820,15 +797,15 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
   <div class="tags">
     
     
+    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
+    
+    
+    
     <a href="/tags/#算法" title="算法" rel="1">算法</a>
     
     
     
     <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
     
     
     
@@ -950,12 +927,12 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
 <div class="widget">
   <ul>
     
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
     <a href="/categories/#计算机组成">
       <li>计算机组成</li>
+    </a>
+    
+    <a href="/categories/#算法">
+      <li>算法</li>
     </a>
     
     <a href="/categories/#C++">

@@ -251,6 +251,17 @@
           
           
           <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
             <a href="/about/">
               
               ABOUT
@@ -265,17 +276,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/categories/">
-              
-              CATEGORIES
               
               
             </a>
@@ -470,47 +470,29 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="时序逻辑电路的基本元件"><a class="markdownIt-Anchor" href="#时序逻辑电路的基本元件"></a> 时序逻辑电路的基本元件</h2>
-<h3 id="sr锁存器"><a class="markdownIt-Anchor" href="#sr锁存器"></a> SR锁存器</h3>
-<ul>
-<li>功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）</li>
-<li>缺点：没有时间上的同步关系<br />
-<img src="SR%E9%94%81%E5%AD%98%E5%99%A8%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="" /> <img src="SR%E9%94%81%E5%AD%98%E5%99%A8%E7%9C%9F%E5%80%BC%E8%A1%A8.png" alt="" /></li>
+        <h2 id="时序逻辑电路的基本元件"><a href="#时序逻辑电路的基本元件" class="headerlink" title="时序逻辑电路的基本元件"></a>时序逻辑电路的基本元件</h2><h3 id="SR锁存器"><a href="#SR锁存器" class="headerlink" title="SR锁存器"></a>SR锁存器</h3><ul>
+<li>功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）  </li>
+<li>缺点：没有时间上的同步关系<br><img src="SR锁存器原理图.png" alt=""> <img src="SR锁存器真值表.png" alt=""><h3 id="D锁存器"><a href="#D锁存器" class="headerlink" title="D锁存器"></a>D锁存器</h3></li>
+<li>功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转    </li>
+<li>缺点：无法实现时钟沿储存  </li>
 </ul>
-<h3 id="d锁存器"><a class="markdownIt-Anchor" href="#d锁存器"></a> D锁存器</h3>
-<ul>
-<li>功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转</li>
-<li>缺点：无法实现时钟沿储存</li>
+<p><img src="D锁存器.png" alt=""></p>
+<h3 id="D触发器"><a href="#D触发器" class="headerlink" title="D触发器"></a>D触发器</h3><ul>
+<li>功能：时钟沿上升时储存<br><img src="D触发器_1.png" alt=""> <img src="D触发器_2.png" alt=""></li>
 </ul>
-<p><img src="D%E9%94%81%E5%AD%98%E5%99%A8.png" alt="" /></p>
-<h3 id="d触发器"><a class="markdownIt-Anchor" href="#d触发器"></a> D触发器</h3>
-<ul>
-<li>功能：时钟沿上升时储存<br />
-<img src="D%E8%A7%A6%E5%8F%91%E5%99%A8_1.png" alt="" /> <img src="D%E8%A7%A6%E5%8F%91%E5%99%A8_2.png" alt="" /></li>
-</ul>
-<h3 id="带使能端的d触发器"><a class="markdownIt-Anchor" href="#带使能端的d触发器"></a> 带使能端的D触发器</h3>
-<ul>
-<li>功能：若使能信号有效则可以正常读入，否则保存当前值而不读入<br />
-<img src="%E5%B8%A6%E4%BD%BF%E8%83%BD%E7%AB%AF%E7%9A%84D%E8%A7%A6%E5%8F%91%E5%99%A8.png" alt="" /></li>
-</ul>
-<h3 id="可置位的d触发器"><a class="markdownIt-Anchor" href="#可置位的d触发器"></a> 可置位的D触发器</h3>
-<ul>
+<h3 id="带使能端的D触发器"><a href="#带使能端的D触发器" class="headerlink" title="带使能端的D触发器"></a>带使能端的D触发器</h3><ul>
+<li>功能：若使能信号有效则可以正常读入，否则保存当前值而不读入<br><img src="带使能端的D触发器.png" alt=""><h3 id="可置位的D触发器"><a href="#可置位的D触发器" class="headerlink" title="可置位的D触发器"></a>可置位的D触发器</h3></li>
 <li>功能：若置位信号有效，则下一个时钟沿到来时触发器只更新为0</li>
 </ul>
-<p><img src="%E7%BD%AE%E4%BD%8D_1.png" alt="" /><img src="%E7%BD%AE%E4%BD%8D_2.png" alt="" /></p>
-<h3 id="多路选择器"><a class="markdownIt-Anchor" href="#多路选择器"></a> 多路选择器</h3>
-<ul>
-<li>功能：根据S的值选的输出D0还是D1<br />
-<img src="%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8.png" alt="" /></li>
+<p><img src="置位_1.png" alt=""><img src="置位_2.png" alt=""></p>
+<h3 id="多路选择器"><a href="#多路选择器" class="headerlink" title="多路选择器"></a>多路选择器</h3><ul>
+<li>功能：根据S的值选的输出D0还是D1<br><img src="多路选择器.png" alt=""></li>
 </ul>
-<h2 id="有限状态机基本知识"><a class="markdownIt-Anchor" href="#有限状态机基本知识"></a> 有限状态机基本知识</h2>
-<h3 id="状态机类型"><a class="markdownIt-Anchor" href="#状态机类型"></a> 状态机类型</h3>
-<ul>
+<h2 id="有限状态机基本知识"><a href="#有限状态机基本知识" class="headerlink" title="有限状态机基本知识"></a>有限状态机基本知识</h2><h3 id="状态机类型"><a href="#状态机类型" class="headerlink" title="状态机类型"></a>状态机类型</h3><ul>
 <li>Moore型：输出信号仅为状态的函数，与输入信号无关（输出晚，有效周期是circle的整数倍）</li>
 <li>Meely型：输出信号是状态与输入信号的函数（输出早，有效时间可能更短）</li>
 </ul>
-<h3 id="设计步骤"><a class="markdownIt-Anchor" href="#设计步骤"></a> 设计步骤</h3>
-<ul>
+<h3 id="设计步骤"><a href="#设计步骤" class="headerlink" title="设计步骤"></a>设计步骤</h3><ul>
 <li><strong>确定输入和输出</strong></li>
 <li><strong>画出状态转移图</strong>（注意所有可能的情况以及复位操作）</li>
 <li><strong>为状态编码</strong>（独热码or二进制码）</li>
@@ -518,18 +500,10 @@
 <li><strong>将真值表转化为表达式</strong></li>
 <li><strong>连接电路</strong></li>
 </ul>
-<h3 id="设计要点"><a class="markdownIt-Anchor" href="#设计要点"></a> 设计要点</h3>
-<ul>
-<li>
-<p><strong>初始状态</strong><br />
-状态机必须指定一个初始状态，以确保系统在上电后处于确定的状态</p>
-</li>
-<li>
-<p><strong>复位信号</strong><br />
-复位信号的作用是将状态机强制初始化为初始状态,包括同步复位和异步复位。</p>
-</li>
-<li>
-<p><strong>状态编码方式</strong></p>
+<h3 id="设计要点"><a href="#设计要点" class="headerlink" title="设计要点"></a>设计要点</h3><ul>
+<li><strong>初始状态</strong><br>状态机必须指定一个初始状态，以确保系统在上电后处于确定的状态</li>
+<li><strong>复位信号</strong><br>复位信号的作用是将状态机强制初始化为初始状态,包括同步复位和异步复位。</li>
+<li><p><strong>状态编码方式</strong></p>
 <ul>
 <li>二进制编码：log2𝑁个触发器表示N个状态,节省逻辑资源，但可能产生毛刺</li>
 <li>格雷编码：log2𝑁个触发器表示N个状态，但相邻状态编码值只有1位不同,节省逻辑资源,又避免产生毛刺（状态顺序的转换中有效）</li>
@@ -537,43 +511,32 @@
 </ul>
 </li>
 </ul>
-<h2 id="logisim中有限状态机的实现"><a class="markdownIt-Anchor" href="#logisim中有限状态机的实现"></a> logisim中有限状态机的实现</h2>
-<p>总体来说，使用 Logism 设计有限状态机的过程基本上可以分为三个步骤：</p>
+<h2 id="logisim中有限状态机的实现"><a href="#logisim中有限状态机的实现" class="headerlink" title="logisim中有限状态机的实现"></a>logisim中有限状态机的实现</h2><p> 总体来说，使用 Logism 设计有限状态机的过程基本上可以分为三个步骤：</p>
 <ul>
-<li>设计实现状态存储模块</li>
+<li>设计实现状态存储模块 </li>
 <li>设计实现状态转移模块</li>
-<li>设计实现输出模块</li>
+<li>设计实现输出模块  </li>
 </ul>
 <p>其中，状态转移模块和输出模块内是纯组合逻辑，不涉及时序逻辑；状态存储模块则需要存储每个周期有限状态机的具体状态。</p>
-<p><strong>两种状态机的状态转移和状态存储模块的设计方法基本一致</strong>：<br />
-状态转移模块根据当前有限状态机的状态(即状态存储模块所存储的值)和当前的输入计算出有限状态机的下一状态值，当时钟上升沿到来时，这个新的状态值被存入状态存储模块中。</p>
+<p><strong>两种状态机的状态转移和状态存储模块的设计方法基本一致</strong>：<br>状态转移模块根据当前有限状态机的状态(即状态存储模块所存储的值)和当前的输入计算出有限状态机的下一状态值，当时钟上升沿到来时，这个新的状态值被存入状态存储模块中。</p>
 <p><strong>两种状态机的不同之处在于输出模块对输入数据的要求</strong>：</p>
 <ul>
-<li>more型有限状态机的设计<br />
-<img src="moore.png" alt="" /></li>
-<li>mealy型有限状态机的设计<br />
-<img src="mealy.PNG" alt="" /></li>
+<li>more型有限状态机的设计<br><img src="moore.png" alt=""></li>
+<li>mealy型有限状态机的设计<br><img src="mealy.PNG" alt=""></li>
 </ul>
-<h3 id="verilog中有限状态机的实现"><a class="markdownIt-Anchor" href="#verilog中有限状态机的实现"></a> verilog中有限状态机的实现</h3>
-<p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：</p>
+<h3 id="verilog中有限状态机的实现"><a href="#verilog中有限状态机的实现" class="headerlink" title="verilog中有限状态机的实现"></a>verilog中有限状态机的实现</h3><p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：</p>
 <ul>
-<li>
-<p>逻辑抽象，得出状态转换图。</p>
+<li><p>逻辑抽象，得出状态转换图。</p>
 </li>
-<li>
-<p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p>
+<li><p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p>
 </li>
-<li>
-<p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray 编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为 FPGA 有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p>
+<li><p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray 编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为 FPGA 有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p>
 </li>
-<li>
-<p>根据状态转移图得出次态逻辑和输出逻辑。</p>
+<li><p>根据状态转移图得出次态逻辑和输出逻辑。</p>
 </li>
-<li>
-<p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else 语句描述出状态的转移。</p>
-</li>
+<li><p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else 语句描述出状态的转移。</p>
+<h4 id="设计建议"><a href="#设计建议" class="headerlink" title="设计建议"></a>设计建议</h4></li>
 </ul>
-<h4 id="设计建议"><a class="markdownIt-Anchor" href="#设计建议"></a> 设计建议</h4>
 <ol>
 <li>一般用case、casez 或 casex语句进行状态判断，比用 if-else 语句更加清晰明了。</li>
 <li>在 case 语句的最后，要加上 default 分支语句，以避免锁存器的产生。</li>
@@ -729,7 +692,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91%E7%94%B5%E8%B7%AF%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%83%E4%BB%B6"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 时序逻辑电路的基本元件</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sr%E9%94%81%E5%AD%98%E5%99%A8"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> SR锁存器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#d%E9%94%81%E5%AD%98%E5%99%A8"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> D锁存器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#d%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B8%A6%E4%BD%BF%E8%83%BD%E7%AB%AF%E7%9A%84d%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> 带使能端的D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%AF%E7%BD%AE%E4%BD%8D%E7%9A%84d%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> 可置位的D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text"> 多路选择器</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 有限状态机基本知识</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%B1%BB%E5%9E%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 状态机类型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%AD%A5%E9%AA%A4"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 设计步骤</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%A6%81%E7%82%B9"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 设计要点</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#logisim%E4%B8%AD%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> logisim中有限状态机的实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#verilog%E4%B8%AD%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> verilog中有限状态机的实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%BB%BA%E8%AE%AE"><span class="toc-nav-number">3.1.1.</span> <span class="toc-nav-text"> 设计建议</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91%E7%94%B5%E8%B7%AF%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%83%E4%BB%B6"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">时序逻辑电路的基本元件</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#SR%E9%94%81%E5%AD%98%E5%99%A8"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">SR锁存器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#D%E9%94%81%E5%AD%98%E5%99%A8"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">D锁存器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#D%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B8%A6%E4%BD%BF%E8%83%BD%E7%AB%AF%E7%9A%84D%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">带使能端的D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%AF%E7%BD%AE%E4%BD%8D%E7%9A%84D%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">可置位的D触发器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">多路选择器</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">有限状态机基本知识</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%B1%BB%E5%9E%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">状态机类型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%AD%A5%E9%AA%A4"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">设计步骤</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%A6%81%E7%82%B9"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">设计要点</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#logisim%E4%B8%AD%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">logisim中有限状态机的实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#verilog%E4%B8%AD%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">verilog中有限状态机的实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%BB%BA%E8%AE%AE"><span class="toc-nav-number">3.1.1.</span> <span class="toc-nav-text">设计建议</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
