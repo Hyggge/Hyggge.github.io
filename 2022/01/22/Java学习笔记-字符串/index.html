@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/archive/">
+  <link rel="canonical" href="http://example.com/2022/01/22/Java学习笔记-字符串/">
   <title>
     
-      Archives - either thin | or die
+      Java学习笔记_字符串 - either thin | or die
     
   </title>
 <!-- hexo injector head_end start -->
@@ -352,19 +352,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('img/header_img/archive_bg.jpg');
-      --intro-header-background-image-url-page: url('/img/header_img/archive_bg.jpg');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_7.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_7.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('img/header_img/archive_bg.jpg');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/archive_bg.jpg');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_7.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_7.jpg');
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/archive_bg.jpg'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_7.jpg'); */
       
     }
 
@@ -386,10 +386,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Archives</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Don&#39;t rush and never settle...... If it&#39;s meant to be, it will be......</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+              
+            </div>
+            <h1>Java学习笔记_字符串</h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-01-22
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">2</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">654</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -430,511 +462,300 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <p>Java中和字符串相关类有以下3种——</p>
+<ul>
+<li><strong>String类</strong></li>
+<li><strong>StringBuild类</strong></li>
+<li><strong>StringBuffer类</strong></li>
+</ul>
+<hr />
+<h2 id="string类"><a class="markdownIt-Anchor" href="#string类"></a> String类</h2>
+<h3 id="对象创建"><a class="markdownIt-Anchor" href="#对象创建"></a> 对象创建</h3>
+<ul>
+<li>例程  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s_1 = <span class="string">&quot;Hyggge&quot;</span>;</span><br><span class="line">String s_2 = s_1;</span><br><span class="line">String s_3 = <span class="keyword">new</span> String(<span class="string">&quot;Czh&quot;</span>);</span><br><span class="line"><span class="keyword">char</span>[] s_4 = &#123;<span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;Z&#x27;</span>, <span class="string">&#x27;H&#x27;</span>&#125;;</span><br><span class="line">String s_5 = <span class="keyword">new</span> String(s_4);</span><br></pre></td></tr></table></figure>
+</li>
+<li>需要注意的是，String类对象是不可变的(本质上用<code>final</code>修饰)，如以下程序  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">&quot;Hyggge&quot;</span>; </span><br><span class="line">String a = <span class="string">&quot;Czh&quot;</span>; </span><br></pre></td></tr></table></figure>
+虽然程序最后<code>a</code>引用的对象是&quot;Czh&quot;, 但是一开始创建的&quot;Hyggge&quot;对象并没有消失。相当于以下C++程序  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++</span></span><br><span class="line">string s_1 = <span class="string">&quot;Hyggge&quot;</span>;</span><br><span class="line">string &amp;a = s_1;</span><br><span class="line">string s_2 = <span class="string">&quot;Czh&quot;</span>;</span><br><span class="line">string &amp;a = s_2;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="创建格式化字符串"><a class="markdownIt-Anchor" href="#创建格式化字符串"></a> 创建格式化字符串</h3>
+<ul>
+<li>格式化输出和已通过printf和format实现。其中，format是String类中的静态方法。  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> age = <span class="number">19</span>;</span><br><span class="line"><span class="comment">//method one</span></span><br><span class="line">System.out.printf(<span class="string">&quot;Hyggge&#x27;s age is %d\n&quot;</span>, age);</span><br><span class="line"><span class="comment">//method two</span></span><br><span class="line">String s;</span><br><span class="line">s = String.format(<span class="string">&quot;Hyggge&#x27;s age is %d\n&quot;</span>, age);</span><br><span class="line">System.out.println(s);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="string-类中的常用方法"><a class="markdownIt-Anchor" href="#string-类中的常用方法"></a> String 类中的常用方法</h3>
+<ul>
+<li><code>int length()</code>字符串长度</li>
+<li><code>boolean isEmpty()</code>检查字符串是否非空</li>
+<li><code>int compareTo(String anotherString)</code>字符串比较（字典序）</li>
+<li><code>int indexOf(int ch)</code>返回指定字符第一次出现处的索引</li>
+<li><code>int indexOf(String str)</code>返回指定子字符串在此字符串中第一次出现处的索引</li>
+<li><code>String concat(String str)</code>字符串连接（原对象不变，需要使用中间对象，严重消耗内存，<strong>不推荐使用</strong>）</li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/manual/jdk11api/java.base/java/lang/String.html">其他方法</a></li>
+</ul>
+<hr />
+<h2 id="stringbuffer-和-stringbuilder-类"><a class="markdownIt-Anchor" href="#stringbuffer-和-stringbuilder-类"></a> StringBuffer 和 StringBuilder 类</h2>
+<p>和 <code>String</code> 类不同的是，<code>StringBuffer</code> 和 <code>StringBuilder</code> 类的对象能够被多次的修改，并且不产生新的未使用对象。他们的区别是——</p>
+<ul>
+<li><code>StringBuffer</code> 线程安全 <code>StringBuilder</code> 线程不安全</li>
+<li><code>StringBuilder</code> 相较于 <code>StringBuffer</code> 有速度优势（绝大多数情况下使用<code>StringBuilder</code>）<br />
+类</li>
+</ul>
+<h3 id="对象创建以stringbuilder类为例"><a class="markdownIt-Anchor" href="#对象创建以stringbuilder类为例"></a> 对象创建（以StringBuilder类为例）</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder s = <span class="keyword">new</span> StringBuilder(); </span><br><span class="line">StringBuilder s = <span class="keyword">new</span> StringBuilder(<span class="number">10</span>); <span class="comment">//可以显式的规定大小</span></span><br><span class="line">StringBuilder s = <span class="keyword">new</span> StringBuilder(<span class="string">&quot;Hyggge&quot;</span>); <span class="comment">//可以显式的规定大小</span></span><br></pre></td></tr></table></figure>
+<h3 id="常用方法以stringbuilder类为例"><a class="markdownIt-Anchor" href="#常用方法以stringbuilder类为例"></a> 常用方法（以StringBuilder类为例）</h3>
+<ul>
+<li><code>StringBuilder append(String str)</code>将指定的字符串追加到此字符序列</li>
+<li><code>StringBuilder insert(int offset, String str)</code>将 str 参数的字符串插入此序列中</li>
+<li><code>String substring(int start)</code>返回一个新的 String，它包含此字符序列当前所包含的字符子序列</li>
+<li><code>StringBuilder reverse</code>翻转字符串</li>
+<li><code>StringBuilder delete(int start, int end)</code>注意左闭右开</li>
+<li><code>StringBuilder replace((int start, int end, String str)</code>使用给定 String 中的字符替换此序列的子字符串中的字符</li>
+<li><code>String toString()</code>返回此序列中数据的字符串表示形式</li>
+<li><code>int indexOf(String str)</code>返回第一次出现的指定子字符串在该字符串中的索引。</li>
+<li><code>int length()</code>返回长度（字符数）。</li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/manual/jdk11api/java.base/java/lang/StringBuilder.html">其他方法</a></li>
+</ul>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/01/22/Java学习笔记-数组/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_数组">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_变量类型和修饰符">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=Java学习笔记_字符串&body=Hi,I found this website and thought you might like it http://example.com/2022/01/22/Java学习笔记-字符串/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '',
+      clientSecret: '',
+      repo: '',
+      owner: '',
+      admin: '',
+      id: 'Sat Jan 22 2022 10:33:33 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#string%E7%B1%BB"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> String类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 对象创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 创建格式化字符串</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#string-%E7%B1%BB%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> String 类中的常用方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#stringbuffer-%E5%92%8C-stringbuilder-%E7%B1%BB"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> StringBuffer 和 StringBuilder 类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 对象创建（以StringBuilder类为例）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 常用方法（以StringBuilder类为例）</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
-
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-数组/" style="color: #0085a1">
-              <span>
-                Java学习笔记_数组
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-字符串/" style="color: #0085a1">
-              <span>
-                Java学习笔记_字符串
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/" style="color: #0085a1">
-              <span>
-                Java学习笔记_变量类型和修饰符
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-19
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/19/Cpp_引用和指针/" style="color: #0085a1">
-              <span>
-                Cpp_引用和指针
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2021">
-          <span class="tag-text">2021</span>
-        </span>
-        <ul>
-          
-          <li>
-            12-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/25/CO_P8_MIPS微系统（板级验证）/" style="color: #0085a1">
-              <span>
-                CO_P8_MIPS微系统（板级验证）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/15/CO_P7_MIPS微系统（异常中断）/" style="color: #0085a1">
-              <span>
-                CO_P7_MIPS微系统（异常中断）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/06/CO_P5&P6课上测试总结/" style="color: #0085a1">
-              <span>
-                CO_P5&P6课上测试总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/" style="color: #0085a1">
-              <span>
-                CO_P6_流水线cpu（Plus）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/15/CO_P5_流水线cpu（Basic）/" style="color: #0085a1">
-              <span>
-                CO_P5_流水线cpu（Basic）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-09
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/09/CO_P4_单周期cpu（Verilog实现）/" style="color: #0085a1">
-              <span>
-                CO_P4_单周期cpu（Verilog实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/01/CO_P3_单周期cpu（Logisim实现）/" style="color: #0085a1">
-              <span>
-                CO_P3_单周期cpu（Logisim实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-30
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/30/CO_P2_MIPS汇编程序设计/" style="color: #0085a1">
-              <span>
-                CO_P2_MIPS汇编程序设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/" style="color: #0085a1">
-              <span>
-                CO_P1_verilog符号数的理解与使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_verilog其他tips/" style="color: #0085a1">
-              <span>
-                CO_P1_verilog其他tips
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog状态机设计/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog阻塞和非阻塞赋值的讨论
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog边沿检测总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-17
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/17/CO_P0_logisim状态机设计/" style="color: #0085a1">
-              <span>
-                CO_P0_logisim状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/01/状压DP解决Hamilton回路问题/" style="color: #0085a1">
-              <span>
-                状压DP解决Hamilton回路问题
-                
-                -- Algorithm
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2012">
-          <span class="tag-text">2012</span>
-        </span>
-        <ul>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2012/10/26/CO_P1_Verilog中reg的使用/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog中reg的使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-
-      <!-- 如果开启评论功能 -->
-      
-      <hr>
-
-      
-
-      
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#Java" title="Java">Java</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="1">C++</a>
-    
-    
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="3">Java</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../2022/01/22/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%95%B0%E7%BB%84/">
-      <li>Java学习笔记_数组</li>
-    </a>
-    
-    <a href="../2022/01/22/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-      <li>Java学习笔记_字符串</li>
-    </a>
-    
-    <a href="../2022/01/21/JAVA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E5%92%8C%E4%BF%AE%E9%A5%B0%E7%AC%A6/">
-      <li>Java学习笔记_变量类型和修饰符</li>
-    </a>
-    
-    <a href="../2022/01/19/Cpp_%E5%BC%95%E7%94%A8%E5%92%8C%E6%8C%87%E9%92%88/">
-      <li>Cpp_引用和指针</li>
-    </a>
-    
-    <a href="../2021/12/25/CO_P8_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F%EF%BC%88%E6%9D%BF%E7%BA%A7%E9%AA%8C%E8%AF%81%EF%BC%89/">
-      <li>CO_P8_MIPS微系统（板级验证）</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../archives/2022/01/">January 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/10/">October 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2012/10/">October 2012</a><span class="archive-list-count">1</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
