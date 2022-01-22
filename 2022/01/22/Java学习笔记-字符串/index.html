@@ -404,11 +404,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">2</span> Minutes
+              Estimated Reading Time <span class="post-count">3</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">656</span> In Total
+              Words <span class="post-count">729</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -486,6 +486,13 @@
 虽然程序最后<code>a</code>引用的对象是&quot;Czh&quot;, 但是一开始创建的&quot;Hyggge&quot;对象并没有消失。相当于以下C++程序  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++</span></span><br><span class="line">string s_1 = <span class="string">&quot;Hyggge&quot;</span>;</span><br><span class="line">string &amp;a = s_1;</span><br><span class="line">string s_2 = <span class="string">&quot;Czh&quot;</span>;</span><br><span class="line">string &amp;a = s_2;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<h3 id="字符串连接"><a class="markdownIt-Anchor" href="#字符串连接"></a> 字符串连接</h3>
+<ul>
+<li>第一种方法——使用<code>concat()</code>函数  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">&quot;Hyggge is &quot;</span>;</span><br><span class="line">String b = a.concat(<span class="string">&quot;Czh&quot;</span>);</span><br><span class="line">String c = <span class="string">&quot;Hyggge is &quot;</span>.concat(<span class="string">&quot;Czh&quot;</span>); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>第二种方法——使用<code>+</code>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">&quot;Hyggge is &quot;</span> + <span class="string">&quot;Czh &quot;</span> + <span class="string">&quot;!!!&quot;</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <h3 id="创建格式化字符串"><a class="markdownIt-Anchor" href="#创建格式化字符串"></a> 创建格式化字符串</h3>
 <ul>
 <li>格式化输出和已通过printf和format实现。其中，format是String类中的静态方法。  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> age = <span class="number">19</span>;</span><br><span class="line"><span class="comment">//method one</span></span><br><span class="line">System.out.printf(<span class="string">&quot;Hyggge&#x27;s age is %d\n&quot;</span>, age);</span><br><span class="line"><span class="comment">//method two</span></span><br><span class="line">String s;</span><br><span class="line">s = String.format(<span class="string">&quot;Hyggge&#x27;s age is %d\n&quot;</span>, age);</span><br><span class="line">System.out.println(s);</span><br></pre></td></tr></table></figure>
@@ -499,6 +506,7 @@
 <li><strong><code>int indexOf(int ch)</code></strong> 返回指定字符第一次出现处的索引</li>
 <li><strong><code>int indexOf(String str)</code></strong> 返回指定子字符串在此字符串中第一次出现处的索引</li>
 <li><strong><code>String concat(String str)</code></strong> 字符串连接（原对象不变，需要使用中间对象，严重消耗内存，<strong>不推荐使用</strong>）</li>
+<li>**<code>boolean equals(Object anObject)</code>**将字符串和一个对象进行比较</li>
 <li><a target="_blank" rel="noopener" href="https://www.runoob.com/manual/jdk11api/java.base/java/lang/String.html">其他方法</a></li>
 </ul>
 <hr />
@@ -673,7 +681,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#string%E7%B1%BB"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> String类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 对象创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 创建格式化字符串</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#string-%E7%B1%BB%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> String 类中的常用方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#stringbuffer-%E5%92%8C-stringbuilder-%E7%B1%BB"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> StringBuffer 和 StringBuilder 类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 对象创建（以StringBuilder类为例）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 常用方法（以StringBuilder类为例）</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#string%E7%B1%BB"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> String类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 对象创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 字符串连接</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 创建格式化字符串</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#string-%E7%B1%BB%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> String 类中的常用方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#stringbuffer-%E5%92%8C-stringbuilder-%E7%B1%BB"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> StringBuffer 和 StringBuilder 类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 对象创建（以StringBuilder类为例）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%A5stringbuilder%E7%B1%BB%E4%B8%BA%E4%BE%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 常用方法（以StringBuilder类为例）</span></a></li></ol></li></ol>
         
         </div>
       </aside>
