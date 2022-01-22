@@ -114,6 +114,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E4%B8%ADreg%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2021-10-26</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://example.com/2021/10/26/CO_P1_Verilog%E8%BE%B9%E6%B2%BF%E6%A3%80%E6%B5%8B%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2021-10-26</lastmod>
@@ -169,13 +176,6 @@
     
   </url>
   
-  <url>
-    <loc>http://example.com/2012/10/26/CO_P1_Verilog%E4%B8%ADreg%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2012-10-26</lastmod>
-    
-  </url>
-  
 
   <url>
     <loc>http://example.com/</loc>
@@ -200,6 +200,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/tags/Java/</loc>
+    <lastmod>2022-01-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/C/</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>daily</changefreq>
@@ -208,13 +215,6 @@
   
   <url>
     <loc>http://example.com/tags/C-Primer/</loc>
-    <lastmod>2022-01-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/Java/</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -237,14 +237,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/C/</loc>
+    <loc>http://example.com/categories/Java/</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/Java/</loc>
+    <loc>http://example.com/categories/C/</loc>
     <lastmod>2022-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
