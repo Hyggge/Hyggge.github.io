@@ -251,17 +251,6 @@
           
           
           <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
             <a href="/about/">
               
               ABOUT
@@ -273,9 +262,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/categories/">
               
-              TAGS
+              CATEGORIES
               
               
             </a>
@@ -284,9 +273,20 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/archive/">
               
-              CATEGORIES
+              ARCHIVES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
               
               
             </a>
@@ -469,15 +469,10 @@
     </h3>
     <div class="post-content-preview">
       
- 数组的创建的访问
- 一维数组的创建
-
+数组的创建的访问一维数组的创建
 一维数组的创建有以下几种方法——  1234567//先声明后定义int[] array;array = new int[100];//直接定义int[] array = new int[100];//列表定义int[] array = &#123;1, 2, 3, 4&#125;;
-
-
- 多维数组的创建
-
-下面以二维数组为例介绍多维数组的创建方法 ......
+多维数组的创建
+下面以二维数组为例介绍多维数组的创建方法  1234567......
     </div>
   </a>
   
@@ -521,10 +516,8 @@ StringBuild类
 StringBuffer类
 
 
- String类
- 对象创建
-
-例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27......
+String类对象创建
+例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27;C&#......
     </div>
   </a>
   
@@ -562,17 +555,15 @@ StringBuffer类
     </h3>
     <div class="post-content-preview">
       
- Java的变量类型
-Java中的变量类型有以下三种——
+Java的变量类型Java中的变量类型有以下三种——
 
 类变量
 实例变量
 局部变量
 
- 类变量(静态变量)
-
+类变量(静态变量)
 类变量是属于所在的类，而不属于任何由该类定义的对象。 换句话说，不管实例化了多少对象，类变量都只有一个。类变量是由static修饰的，这一点和C++相似。
-一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，......
+一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，经常会见......
     </div>
   </a>
   
@@ -609,16 +600,13 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       序言
-
+      序言
 本文介绍C++中引用，指针，const限定符和常量表达式等几个部分的内容。对应原书45页——60页。
- 引用
-
+引用
 
 引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。
 
-
-举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &......
+举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &amp;c......
     </div>
   </a>
   
@@ -657,13 +645,11 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       MIPS微系统设计方案
- 设计概述
-本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
+      MIPS微系统设计方案设计概述本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
 
 为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。
 
- 实......
+实现指令说明......
     </div>
   </a>
   
@@ -700,9 +686,7 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       MIPS微系统设计方案
- 设计概述
-​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将......
+      MIPS微系统设计方案设计概述​        本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整—......
     </div>
   </a>
   
@@ -741,15 +725,10 @@ Java中的变量类型有以下三种——
     <div class="post-content-preview">
       
 
- 增添指令一般步骤
- 明确指令RTL
-
+增添指令一般步骤明确指令RTL
 该步骤需要结合题目弄懂指令行为，包括明确指令类型（R型？I型？J型？即明确读和写的目标）、opcode和funct域数据、执行功能（计算？跳转？访存？）
-最好可以先用MARS模拟下，以免对指令行为理解不到位。
-
- 明确非转发数据通路
-
-在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信......
+最好可以先用MARS模拟下，以免对指令行为理解不到位。明确非转发数据通路
+在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信号（P5中的DM......
     </div>
   </a>
   
@@ -786,9 +765,7 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       流水线CPU设计方案
- 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭......
+      流水线CPU设计方案设计概述​        本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计......
     </div>
   </a>
   
@@ -825,9 +802,7 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       流水线CPU设计方案
- 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个......
+      流水线CPU设计方案设计概述​        本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对......
     </div>
   </a>
   
@@ -864,9 +839,7 @@ Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-       单周期CPU设计方案
- 设计概述
- 本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。......
+      单周期CPU设计方案设计概述&emsp;本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路......
     </div>
   </a>
   
@@ -932,11 +905,11 @@ Java中的变量类型有以下三种——
     
     
     
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
     <a href="/tags/#Java" title="Java" rel="3">Java</a>
+    
+    
+    
+    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
     
     
   </div>
@@ -1058,12 +1031,12 @@ Java中的变量类型有以下三种——
       <li>C++</li>
     </a>
     
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
     <a href="/categories/#Java">
       <li>Java</li>
+    </a>
+    
+    <a href="/categories/#计算机组成">
+      <li>计算机组成</li>
     </a>
     
   </ul>
