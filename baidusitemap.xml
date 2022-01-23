@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://example.com/2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E9%87%8D%E5%86%99%EF%BC%88Overwrite%EF%BC%89/</loc>
+    <loc>http://example.com/2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%8E%A5%E5%8F%A3/</loc>
+    <lastmod>2022-01-23</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E9%87%8D%E5%86%99%EF%BC%88Override%EF%BC%89/</loc>
     <lastmod>2022-01-23</lastmod>
   </url>
   <url>
@@ -57,10 +61,6 @@
     <lastmod>2021-10-30</lastmod>
   </url>
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2021-10-26</lastmod>
-  </url>
-  <url>
     <loc>http://example.com/2021/10/26/CO_P1_Verilog%E4%B8%ADreg%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2021-10-26</lastmod>
   </url>
@@ -69,11 +69,15 @@
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E%E8%B5%8B%E5%80%BC%E7%9A%84%E8%AE%A8%E8%AE%BA/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>
     <loc>http://example.com/2021/10/26/CO_P1_verilog%E5%85%B6%E4%BB%96tips/</loc>
+    <lastmod>2021-10-26</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E%E8%B5%8B%E5%80%BC%E7%9A%84%E8%AE%A8%E8%AE%BA/</loc>
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>

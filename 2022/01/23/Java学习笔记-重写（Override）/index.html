@@ -139,7 +139,7 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/2022/01/23/Java学习笔记-重写（Overwrite）/">
+  <link rel="canonical" href="http://example.com/2022/01/23/Java学习笔记-重写（Override）/">
   <title>
     
       Java学习笔记_重写（Overwrite） - either thin | or die
@@ -251,9 +251,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/about/">
               
-              ARCHIVES
+              ABOUT
               
               
             </a>
@@ -262,9 +262,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -408,7 +408,7 @@
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">1.3k</span> In Total
+              Words <span class="post-count">1.5k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -471,11 +471,11 @@
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
         <hr>
-<h2 id="重写"><a href="#重写" class="headerlink" title="重写"></a>重写</h2><p>重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。</p>
-<h3 id="重写父类中的方法"><a href="#重写父类中的方法" class="headerlink" title="重写父类中的方法"></a>重写父类中的方法</h3><ul>
-<li>当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出英文欢迎</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayBye</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;GoodByene&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;           </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出中文欢迎  </span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello world!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">myfirst</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    B b=<span class="keyword">new</span> B();                                <span class="comment">//创建子类B的一个实例对象，使用默认构造方法</span></span><br><span class="line">    b.sayHello();                               <span class="comment">//调用子类中重写的方法</span></span><br><span class="line">    b.sayBye();                                 <span class="comment">//调用父类中的方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p><strong>重写规则</strong></p>
-<ol>
+<p><strong>重写</strong>是子类对父类的允许访问的方法的实现过程进行重新编写,<strong> 返回值和形参都不能改变</strong>。</p>
+<p><strong>重写的好处</strong>在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。</p>
+<hr>
+<h2 id="重写父类中的方法"><a href="#重写父类中的方法" class="headerlink" title="重写父类中的方法"></a>重写父类中的方法</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出英文欢迎</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayBye</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;GoodByene&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;           </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出中文欢迎  </span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello world!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">myfirst</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    B b=<span class="keyword">new</span> B();                                <span class="comment">//创建子类B的一个实例对象，使用默认构造方法</span></span><br><span class="line">    b.sayHello();                               <span class="comment">//调用子类中重写的方法</span></span><br><span class="line">    b.sayBye();                                 <span class="comment">//调用父类中的方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h3 id="重写规则"><a href="#重写规则" class="headerlink" title="重写规则"></a><strong>重写规则</strong></h3><ol>
 <li><p>参数列表与被重写方法的<strong>参数列表必须完全相同</strong>。</p>
 </li>
 <li><p>返回类型与被重写方法的<strong>返回类型可以不相同</strong>，但是必须是父类返回值的派生类（java5 及更早版本返回类型要一样，java7 及更高版本可以不同）。</p>
@@ -497,21 +497,34 @@
 <li><p>构造方法不能被重写。</p>
 </li>
 <li><p>如果不能继承一个类，则不能重写该类的方法。</p>
-</li>
-</ol>
-</li>
-<li><strong>子类可以通过<code>super()</code>访问被重写的父类中的方法</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出英文欢迎</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;           </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">        <span class="keyword">super</span>.hello                   <span class="comment">//输出中文欢迎  </span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello world!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    B b=<span class="keyword">new</span> B();                                <span class="comment">//创建子类B的一个实例对象，使用默认构造方法</span></span><br><span class="line">    b.sayHello();                               <span class="comment">//调用子类中重写的方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="隐藏父类中的方法"><a href="#隐藏父类中的方法" class="headerlink" title="隐藏父类中的方法"></a>隐藏父类中的方法</h3>如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</li>
-<li>当调用被重写的方法时，调用的版本是子类的方法；</li>
-<li>当调用被隐藏的方法时，调用的版本取决于是从父类中调用还是从子类中调用。<br>下面有一个例子(取材于该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52122271/article/details/114285424">博客</a>)，我暂时还没看懂,先挂一下…<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//原文链接：https://blog.csdn.net/weixin_52122271/article/details/114285424</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;             <span class="comment">//静态类方法</span></span><br><span class="line">		System.out.println(<span class="string">&quot;大家好，这是A的静态类方法&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello2</span><span class="params">()</span> </span>&#123;                   <span class="comment">//实例方法</span></span><br><span class="line">		System.out.println(<span class="string">&quot;大家好，这是A中的实例方法&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;             <span class="comment">//静态类方法</span></span><br><span class="line">    	System.out.println(<span class="string">&quot;大家好，这是B的静态类方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello2</span><span class="params">()</span> </span>&#123;                   <span class="comment">//实例方法</span></span><br><span class="line">    	System.out.println(<span class="string">&quot;大家好，这是B的实例方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">myfirst</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	    B b=<span class="keyword">new</span> B();                           <span class="comment">//创建B类的实例对象b</span></span><br><span class="line">	    A a=b;                                 <span class="comment">//隐式对象类型转换</span></span><br><span class="line">	    A.sayHello();                          <span class="comment">//调用A类的静态类方法</span></span><br><span class="line">	    a.sayHello();                          <span class="comment">//调用a对象的静态类方法</span></span><br><span class="line">	    B.sayHello();                          <span class="comment">//调用B类的静态方法</span></span><br><span class="line">	    a.sayHello2();                         <span class="comment">//调用a对象的实例方法</span></span><br><span class="line">	    b.sayHello2();                         <span class="comment">//调用b对象的的实例方法</span></span><br><span class="line">	    A a2=<span class="keyword">new</span> A();                          <span class="comment">//创建A类的实例对象a2</span></span><br><span class="line">	    a2.sayHello2();                        <span class="comment">//调用a2对象的实现方法</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">/*运行结果</span></span><br><span class="line"><span class="comment">  大家好，这是A的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是A的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的实例方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的实例方法</span></span><br><span class="line"><span class="comment">  大家好，这是A中的实例方法</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>子类可以通过<code>super()</code>访问被重写的父类中的方法</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;                      <span class="comment">//输出英文欢迎</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;           </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">        <span class="keyword">super</span>.sayhello()                   <span class="comment">//输出中文欢迎  </span></span><br><span class="line">        System.out.println(<span class="string">&quot;Hello world!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    B b=<span class="keyword">new</span> B();                                <span class="comment">//创建子类B的一个实例对象，使用默认构造方法</span></span><br><span class="line">    b.sayHello();                               <span class="comment">//调用子类中重写的方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="子类可以覆盖父类的中的变量"><a href="#子类可以覆盖父类的中的变量" class="headerlink" title="子类可以覆盖父类的中的变量"></a>子类可以覆盖父类的中的变量</h3><p>如果子类中重新定义了一个<strong>与父类中已有变量同名的变量</strong>，那么父类中的变量就被“覆盖”</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name = <span class="string">&quot;Name&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name = <span class="string">&quot;Cat&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Cat cat = <span class="keyword">new</span> Cat();</span><br><span class="line">        System.out.println(cat.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*运行结果:cat*/</span></span><br></pre></td></tr></table></figure></h2>
+</li>
+</ol>
+<hr>
+<h2 id="隐藏父类中的方法"><a href="#隐藏父类中的方法" class="headerlink" title="隐藏父类中的方法"></a>隐藏父类中的方法</h2><p>如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</p>
+<ul>
+<li>当调用被重写的方法时，调用的版本是子类的方法；</li>
+<li>当调用被隐藏的方法时，调用的版本取决于是从父类中调用还是从子类中调用。</li>
+</ul>
+<p>下面有一个例子(取材于该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52122271/article/details/114285424">博客</a>)，我暂时还没看懂,先挂一下…</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//原文链接：https://blog.csdn.net/weixin_52122271/article/details/114285424</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;             <span class="comment">//静态类方法</span></span><br><span class="line">		System.out.println(<span class="string">&quot;大家好，这是A的静态类方法&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello2</span><span class="params">()</span> </span>&#123;                   <span class="comment">//实例方法</span></span><br><span class="line">		System.out.println(<span class="string">&quot;大家好，这是A中的实例方法&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;             <span class="comment">//静态类方法</span></span><br><span class="line">    	System.out.println(<span class="string">&quot;大家好，这是B的静态类方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello2</span><span class="params">()</span> </span>&#123;                   <span class="comment">//实例方法</span></span><br><span class="line">    	System.out.println(<span class="string">&quot;大家好，这是B的实例方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">myfirst</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	    B b=<span class="keyword">new</span> B();                           <span class="comment">//创建B类的实例对象b</span></span><br><span class="line">	    A a=b;                                 <span class="comment">//隐式对象类型转换</span></span><br><span class="line">	    A.sayHello();                          <span class="comment">//调用A类的静态类方法</span></span><br><span class="line">	    a.sayHello();                          <span class="comment">//调用a对象的静态类方法</span></span><br><span class="line">	    B.sayHello();                          <span class="comment">//调用B类的静态方法</span></span><br><span class="line">	    a.sayHello2();                         <span class="comment">//调用a对象的实例方法</span></span><br><span class="line">	    b.sayHello2();                         <span class="comment">//调用b对象的的实例方法</span></span><br><span class="line">	    A a2=<span class="keyword">new</span> A();                          <span class="comment">//创建A类的实例对象a2</span></span><br><span class="line">	    a2.sayHello2();                        <span class="comment">//调用a2对象的实现方法</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">/*运行结果</span></span><br><span class="line"><span class="comment">  大家好，这是A的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是A的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的静态类方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的实例方法</span></span><br><span class="line"><span class="comment">  大家好，这是B的实例方法</span></span><br><span class="line"><span class="comment">  大家好，这是A中的实例方法</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></h2><h2 id="覆盖父类的中的变量"><a href="#覆盖父类的中的变量" class="headerlink" title="覆盖父类的中的变量"></a>覆盖父类的中的变量</h2><p>如果子类中重新定义了一个<strong>与父类中已有变量同名</strong>的变量，那么父类中的变量就被“覆盖”。</p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name = <span class="string">&quot;Name&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name = <span class="string">&quot;Cat&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Cat cat = <span class="keyword">new</span> Cat();</span><br><span class="line">        System.out.println(cat.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*运行结果:cat*/</span></span><br></pre></td></tr></table></figure></h2><h2 id="关于-Override"><a href="#关于-Override" class="headerlink" title="关于@Override"></a>关于<code>@Override</code></h2><p><code>@Override</code>是伪代码,表示重写，在“<strong>子类重写父类</strong>”或“<strong>某类实现某接口</strong>”时使用。写上有如下好处:（详见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_32885165/article/details/102779323">博客</a>）</p>
+<ul>
+<li>可以当注释用,方便阅读；</li>
+<li>编译器可以给你验证<code>@Override</code>下面的方法名是否是你父类中所有的，<strong>如果没有则报错</strong>。<br>例如，你如果没写<code>@Override</code>，而你下面的方法名又写错了，这时你的编译器是可以编译通过的，因为编译器以为这个方法是你的子类中自己增加的方法。</li>
+</ul>
+
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/01/23/Java学习笔记-接口/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_接口">&larr; Previous Post</a>
+          </li>
           
           
           <li class="next">
@@ -564,7 +577,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=Java学习笔记_重写（Overwrite）&body=Hi,I found this website and thought you might like it http://example.com/2022/01/23/Java学习笔记-重写（Overwrite）/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=Java学习笔记_重写（Overwrite）&body=Hi,I found this website and thought you might like it http://example.com/2022/01/23/Java学习笔记-重写（Override）/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -652,7 +665,83 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%87%8D%E5%86%99"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">重写</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%87%8D%E5%86%99%E7%88%B6%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">重写父类中的方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%9A%90%E8%97%8F%E7%88%B6%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">隐藏父类中的方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AD%90%E7%B1%BB%E5%8F%AF%E4%BB%A5%E8%A6%86%E7%9B%96%E7%88%B6%E7%B1%BB%E7%9A%84%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">子类可以覆盖父类的中的变量</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">1
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%87%8D%E5%86%99%E7%88%B6%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">重写父类中的方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">概念</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%87%8D%E5%86%99%E8%A7%84%E5%88%99"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">重写规则</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%9A%90%E8%97%8F%E7%88%B6%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">隐藏父类中的方法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+
+&#x2F;&#x2F;原文链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_52122271&#x2F;article&#x2F;details&#x2F;114285424
+class A&amp;#123;
+	public static void sayHello() &amp;#123;             &#x2F;&#x2F;静态类方法
+		System.out.println(&quot;大家好，这是A的静态类方法&quot;);
+	&amp;#125;
+	public void sayHello2() &amp;#123;                   &#x2F;&#x2F;实例方法
+		System.out.println(&quot;大家好，这是A中的实例方法&quot;);
+	&amp;#125;
+&amp;#125;
+class B extends A &amp;#123;    
+    public static void sayHello() &amp;#123;             &#x2F;&#x2F;静态类方法
+    	System.out.println(&quot;大家好，这是B的静态类方法&quot;);
+    &amp;#125;
+    public void sayHello2() &amp;#123;                   &#x2F;&#x2F;实例方法
+    	System.out.println(&quot;大家好，这是B的实例方法&quot;);
+    &amp;#125;
+&amp;#125;
+public class myfirst &amp;#123;
+	public static void main(String[] args) &amp;#123;
+	    B b&#x3D;new B();                           &#x2F;&#x2F;创建B类的实例对象b
+	    A a&#x3D;b;                                 &#x2F;&#x2F;隐式对象类型转换
+	    A.sayHello();                          &#x2F;&#x2F;调用A类的静态类方法
+	    a.sayHello();                          &#x2F;&#x2F;调用a对象的静态类方法
+	    B.sayHello();                          &#x2F;&#x2F;调用B类的静态方法
+	    a.sayHello2();                         &#x2F;&#x2F;调用a对象的实例方法
+	    b.sayHello2();                         &#x2F;&#x2F;调用b对象的的实例方法
+	    A a2&#x3D;new A();                          &#x2F;&#x2F;创建A类的实例对象a2
+	    a2.sayHello2();                        &#x2F;&#x2F;调用a2对象的实现方法
+	&amp;#125;
+&#x2F;*运行结果
+  大家好，这是A的静态类方法
+  大家好，这是A的静态类方法
+  大家好，这是B的静态类方法
+  大家好，这是B的实例方法
+  大家好，这是B的实例方法
+  大家好，这是A中的实例方法
+*&#x2F;
+</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A6%86%E7%9B%96%E7%88%B6%E7%B1%BB%E7%9A%84%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">覆盖父类的中的变量</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#-1"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">1
 2
 3
 4
@@ -682,7 +771,7 @@ public class Test&amp;#123;
     &amp;#125;
 &amp;#125;
 &#x2F;*运行结果:cat*&#x2F;
-</span></a></li></ol>
+</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%85%B3%E4%BA%8E-Override"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">关于@Override</span></a></li></ol>
         
         </div>
       </aside>
