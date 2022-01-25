@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/tags/计算机组成/">
+  <link rel="canonical" href="http://example.com/2022/01/25/Maven-依赖与依赖管理/">
   <title>
     
-      either thin | or die
+      Maven_依赖与依赖管理 - either thin | or die
     
   </title>
 <!-- hexo injector head_end start -->
@@ -352,19 +352,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_7.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_7.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_7.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_7.jpg');
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/bg.png'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_7.jpg'); */
       
     }
 
@@ -386,10 +386,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Hyggge&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Be what you want to be, do what you want to do.</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#Maven" title="Maven">Maven</a>
+              
+            </div>
+            <h1>Maven_依赖与依赖管理</h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-01-25
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">4</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">970</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -430,582 +462,369 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <hr />
+<h2 id="pomxml文件中的依赖声明"><a class="markdownIt-Anchor" href="#pomxml文件中的依赖声明"></a> pom.xml文件中的依赖声明</h2>
+<p>所有的依赖写在<code>&lt;dependnecies&gt;</code>框架中，每当声名一个新的依赖时，需要新建一个<code>&lt;dependnecy&gt;</code>，中间至少包含三个内容——<code>groupId</code> <code>artifactId</code> <code>version</code>,可以直接在<a target="_blank" rel="noopener" href="https://mvnrepository.com/">官网</a>中查找。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--具体的依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--依赖所属群组id--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--依赖所属项目id--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--依赖版本号--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="依赖管理"><a class="markdownIt-Anchor" href="#依赖管理"></a> 依赖管理</h2>
+<h3 id="依赖传递"><a class="markdownIt-Anchor" href="#依赖传递"></a> 依赖传递</h3>
+<ul>
+<li><strong>直接依赖：</strong> 在当前项目中通过<strong>依赖配置</strong>建立的依赖关系（直接在<code>pom.xml</code>中配置的依赖）</li>
+<li><strong>间接依赖：</strong> 当被依赖的资源如果依赖其他资源，则当前项目<strong>间接依赖</strong>其他的资源。例如项目A依赖资源B，资源B又依赖资源C，则A间接依赖C……以此类推，类似于继承。</li>
+</ul>
+<h3 id="冲突问题的解决"><a class="markdownIt-Anchor" href="#冲突问题的解决"></a> 冲突问题的解决</h3>
+<p>如果一个项目<strong>直接和间接依赖的资源中</strong>有相同的（版本号不要求相同），则会产生冲突。冲突的解决依赖于以下三个原则——</p>
+<ul>
+<li><strong>路径优先</strong>：当依赖中出现相同的资源时，层级越深则优先级越低，层级越浅则优先级越高——即<strong>遵循就近原则</strong>。</li>
+<li><strong>声明优先</strong>：当资源在相同层级被依赖时，<strong>配置顺序靠前</strong>的覆盖<strong>配置顺序靠后</strong>的。</li>
+<li><strong>特殊优先</strong>：当同级配置了相同资源的不同版本，<strong>后配置的覆盖先配置的</strong></li>
+<li></li>
+</ul>
+<h3 id="可选依赖"><a class="markdownIt-Anchor" href="#可选依赖"></a> 可选依赖</h3>
+<p>可选依赖是指<strong>对外隐藏当前所依赖的资源</strong>。例如，项目A依赖了资源B，资源B依赖了资源C，但是B对C的依赖时被隐藏的，那么项目A不会间接依赖资源C。</p>
+<p>可选依赖的设置方法如下——</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--具体的依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--可选依赖选项 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="排除依赖"><a class="markdownIt-Anchor" href="#排除依赖"></a> 排除依赖</h3>
+<p>排除依赖是指 <strong>主动断开依赖的资源</strong>，被排除的资源无需指定版本。例如，项目A依赖了资源B，资源B依赖了资源C，但是我们又不想让项目A间接依赖资源C，那么这时候就需要在项目A中将对资源C的依赖排除。</p>
+<p>排除依赖的设置方法如下——</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--具体的依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>project_C<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>project_C<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--排除依赖选项 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span><span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span><span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="依赖范围"><a class="markdownIt-Anchor" href="#依赖范围"></a> 依赖范围</h2>
+<p>依赖的<code>jar</code>在默认情况下可以在任何地方使用，也可以通过scope标签设定其作用范围。</p>
+<h3 id="依赖范围分类"><a class="markdownIt-Anchor" href="#依赖范围分类"></a> 依赖范围分类</h3>
+<ul>
+<li>主程序范围有效（main文件夹）</li>
+<li>测试程序范围有效（test文件夹）</li>
+<li>是否参与打包（package指令范围）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">scope</th>
+<th style="text-align:center">主代码</th>
+<th style="text-align:center">测试代码</th>
+<th style="text-align:center">打包</th>
+<th style="text-align:center">资源范例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">compile</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">log4j</td>
+</tr>
+<tr>
+<td style="text-align:center">test</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">junit</td>
+</tr>
+<tr>
+<td style="text-align:center">provided</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">servlet-api</td>
+</tr>
+<tr>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">jdbc</td>
+</tr>
+</tbody>
+</table>
+<h3 id="依赖范围设置"><a class="markdownIt-Anchor" href="#依赖范围设置"></a> 依赖范围设置</h3>
+<p>需要使用<code>scope</code>关键字设置依赖的范围——</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--具体的依赖--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>project_C<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>project_C<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--依赖范围选项 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="依赖范围传递"><a class="markdownIt-Anchor" href="#依赖范围传递"></a> 依赖范围传递</h3>
+<p>带有依赖范围的资源进行传递时，作用范围会受到影响，并未严格传递。如下表所示（注：&quot;行&quot;为<strong>直接依赖</strong>，&quot;列&quot;为<strong>间接依赖</strong>）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">compile</th>
+<th style="text-align:center">test</th>
+<th style="text-align:center">provided</th>
+<th style="text-align:center">runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>compile</strong></td>
+<td style="text-align:center">compile</td>
+<td style="text-align:center">test</td>
+<td style="text-align:center">provided</td>
+<td style="text-align:center">runtime</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>test</strong></td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>provided</strong></td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>runtime</strong></td>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center">test</td>
+<td style="text-align:center">provided</td>
+<td style="text-align:center">runtime</td>
+</tr>
+</tbody>
+</table>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/01/25/Maven-生命周期与插件/" data-toggle="tooltip" data-placement="top" title="Maven_生命周期与插件">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/2022/01/24/Java学习笔记-包-Package/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_包(Package)">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=Maven_依赖与依赖管理&body=Hi,I found this website and thought you might like it http://example.com/2022/01/25/Maven-依赖与依赖管理/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '',
+      clientSecret: '',
+      repo: '',
+      owner: '',
+      admin: '',
+      id: 'Tue Jan 25 2022 21:34:06 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#pomxml%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E4%BE%9D%E8%B5%96%E5%A3%B0%E6%98%8E"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> pom.xml文件中的依赖声明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 依赖管理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E4%BC%A0%E9%80%92"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 依赖传递</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 冲突问题的解决</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%AF%E9%80%89%E4%BE%9D%E8%B5%96"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 可选依赖</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%92%E9%99%A4%E4%BE%9D%E8%B5%96"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text"> 排除依赖</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E8%8C%83%E5%9B%B4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 依赖范围</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E8%8C%83%E5%9B%B4%E5%88%86%E7%B1%BB"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> 依赖范围分类</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E8%8C%83%E5%9B%B4%E8%AE%BE%E7%BD%AE"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 依赖范围设置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%9D%E8%B5%96%E8%8C%83%E5%9B%B4%E4%BC%A0%E9%80%92"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"> 依赖范围传递</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
-
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-生命周期与插件/" style="color: #0085a1">
-              <span>
-                Maven_生命周期与插件
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-依赖与依赖管理/" style="color: #0085a1">
-              <span>
-                Maven_依赖与依赖管理
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/24/Java学习笔记-包-Package/" style="color: #0085a1">
-              <span>
-                Java学习笔记_包(Package)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-接口/" style="color: #0085a1">
-              <span>
-                Java学习笔记_接口
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-重写（Override）/" style="color: #0085a1">
-              <span>
-                Java学习笔记_重写(Override)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-继承/" style="color: #0085a1">
-              <span>
-                Java学习笔记_继承
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-数组/" style="color: #0085a1">
-              <span>
-                Java学习笔记_数组
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-字符串/" style="color: #0085a1">
-              <span>
-                Java学习笔记_字符串
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/" style="color: #0085a1">
-              <span>
-                Java学习笔记_变量类型和修饰符
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-19
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/19/Cpp_引用和指针/" style="color: #0085a1">
-              <span>
-                Cpp_引用和指针
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2021">
-          <span class="tag-text">2021</span>
-        </span>
-        <ul>
-          
-          <li>
-            12-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/25/CO_P8_MIPS微系统（板级验证）/" style="color: #0085a1">
-              <span>
-                CO_P8_MIPS微系统（板级验证）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/15/CO_P7_MIPS微系统（异常中断）/" style="color: #0085a1">
-              <span>
-                CO_P7_MIPS微系统（异常中断）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/06/CO_P5&P6课上测试总结/" style="color: #0085a1">
-              <span>
-                CO_P5&P6课上测试总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/" style="color: #0085a1">
-              <span>
-                CO_P6_流水线cpu（Plus）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/15/CO_P5_流水线cpu（Basic）/" style="color: #0085a1">
-              <span>
-                CO_P5_流水线cpu（Basic）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-09
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/09/CO_P4_单周期cpu（Verilog实现）/" style="color: #0085a1">
-              <span>
-                CO_P4_单周期cpu（Verilog实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/01/CO_P3_单周期cpu（Logisim实现）/" style="color: #0085a1">
-              <span>
-                CO_P3_单周期cpu（Logisim实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-30
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/30/CO_P2_MIPS汇编程序设计/" style="color: #0085a1">
-              <span>
-                CO_P2_MIPS汇编程序设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_verilog符号数的理解与使用/" style="color: #0085a1">
-              <span>
-                CO_P1_verilog符号数的理解与使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_verilog其他tips/" style="color: #0085a1">
-              <span>
-                CO_P1_verilog其他tips
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog阻塞和非阻塞赋值的讨论
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog状态机设计/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog边沿检测总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog中reg的使用/" style="color: #0085a1">
-              <span>
-                CO_P1_Verilog中reg的使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-17
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/17/CO_P0_logisim状态机设计/" style="color: #0085a1">
-              <span>
-                CO_P0_logisim状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/01/状压DP解决Hamilton回路问题/" style="color: #0085a1">
-              <span>
-                状压DP解决Hamilton回路问题
-                
-                -- Algorithm
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#Maven" title="Maven">Maven</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="1">C++</a>
-    
-    
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="2">Maven</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../2022/01/25/Maven-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8F%92%E4%BB%B6/">
-      <li>Maven_生命周期与插件</li>
-    </a>
-    
-    <a href="../../2022/01/25/Maven-%E4%BE%9D%E8%B5%96%E4%B8%8E%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/">
-      <li>Maven_依赖与依赖管理</li>
-    </a>
-    
-    <a href="../../2022/01/24/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8C%85-Package/">
-      <li>Java学习笔记_包(Package)</li>
-    </a>
-    
-    <a href="../../2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%8E%A5%E5%8F%A3/">
-      <li>Java学习笔记_接口</li>
-    </a>
-    
-    <a href="../../2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E9%87%8D%E5%86%99%EF%BC%88Override%EF%BC%89/">
-      <li>Java学习笔记_重写(Override)</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/01/">January 2022</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
