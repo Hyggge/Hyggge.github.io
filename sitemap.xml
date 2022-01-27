@@ -16,6 +16,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/2022/01/24/Maven-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</loc>
+    
+    <lastmod>2022-01-24</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://example.com/2022/01/24/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8C%85-Package/</loc>
     
     <lastmod>2022-01-24</lastmod>
@@ -221,7 +228,7 @@
 
   <url>
     <loc>http://example.com/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -229,49 +236,49 @@
   
   <url>
     <loc>http://example.com/tags/%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/%E5%9B%BE%E8%AE%BA/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/C/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/C-Primer/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/Maven/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/tags/Java/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -280,35 +287,35 @@
   
   <url>
     <loc>http://example.com/categories/%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/categories/C/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/categories/Maven/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://example.com/categories/Java/</loc>
-    <lastmod>2022-01-25</lastmod>
+    <lastmod>2022-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
