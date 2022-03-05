@@ -154,7 +154,7 @@
 
 <!-- hack iOS CSS :active style -->
 
-	<body ontouchstart="" class="body--light body--dark">
+	<body ontouchstart="" class="body--light body--light">
 
 
 		<!-- ThemeColor -->
@@ -188,7 +188,7 @@
       ? b.pop()
       : '';
   }
-  let themeMode = 'dark';
+  let themeMode = 'light';
   if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
     let dbody = document.body.classList;
     themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
@@ -248,6 +248,28 @@
 
           
           
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
           
           
           <li>
@@ -265,28 +287,6 @@
             <a href="/categories/">
               
               CATEGORIES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/about/">
-              
-              ABOUT
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -445,29 +445,22 @@
                 post-container
             ">
 
-      <h2 id="talk-to-me"><a class="markdownIt-Anchor" href="#talk-to-me"></a> Talk To Me</h2>
-<blockquote>
+      <h2 id="Talk-To-Me"><a href="#Talk-To-Me" class="headerlink" title="Talk To Me"></a>Talk To Me</h2><blockquote>
 <p>I always say to myself :</p>
 <p>if my life is peaceful and plain sailing all the time ,</p>
 <p>it means to die in the electrocardiogram …</p>
 </blockquote>
-<h2 id="just-me"><a class="markdownIt-Anchor" href="#just-me"></a> Just Me</h2>
-<p><img src="/img/about/my_photo.jpg" width="350" alt="about_bg4"></img></p>
+<h2 id="Just-Me"><a href="#Just-Me" class="headerlink" title="Just Me"></a>Just Me</h2><p><img src="/img/about/my_photo.jpg" width="350" alt="about_bg4"></img></p>
 <blockquote>
-<p>A student from BUAA…<br />
-Having a wide range of insterets, such as coding, photographing, running…<br />
-Hoping to live a hygge life…</p>
+<p>A student from BUAA…<br>Having a wide range of insterets, such as coding, photographing, running…<br>Hoping to live a hygge life…</p>
 </blockquote>
-<h2 id="the-longest-way"><a class="markdownIt-Anchor" href="#the-longest-way"></a> The Longest Way …</h2>
-<blockquote>
-<p>活在当下 然后忘记 继续往前走 …</p>
-<p>即便是一个人 …</p>
-<p>On the way to meet myself …</p>
+<h2 id="The-Longest-Way-…"><a href="#The-Longest-Way-…" class="headerlink" title="The Longest Way …"></a>The Longest Way …</h2><blockquote>
+<p> 活在当下 然后忘记 继续往前走 …</p>
+<p> 即便是一个人 …</p>
+<p> On the way to meet myself …</p>
 </blockquote>
-<h2 id="contact-me"><a class="markdownIt-Anchor" href="#contact-me"></a> Contact me</h2>
-<blockquote>
-<p>Email: <a href="mailto:hyggge@buaa.edu.cn">hyggge@buaa.edu.cn</a>  <a href="mailto:1695386157@qq.com">1695386157@qq.com</a><br />
-WeChat: czh20020503</p>
+<h2 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h2><blockquote>
+<p>Email: hyggge@buaa.edu.cn  1695386157@qq.com<br>WeChat: czh20020503</p>
 </blockquote>
 
 
@@ -497,19 +490,19 @@ WeChat: czh20020503</p>
   <div class="tags">
     
     
+    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
+    
+    
+    
+    <a href="/tags/#C++" title="C++" rel="2">C++</a>
+    
+    
+    
     <a href="/tags/#算法" title="算法" rel="1">算法</a>
     
     
     
     <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="1">C++</a>
-    
-    
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
     
     
     
@@ -593,24 +586,24 @@ WeChat: czh20020503</p>
 <div class="widget">
   <ul>
     
+    <a href="../2022/03/04/ECS%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8-%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%92%8C%E6%96%B0%E7%BB%88%E7%AB%AF%E5%BB%BA%E7%AB%8B/">
+      <li>「ECS服务器」文件传输和新终端建立</li>
+    </a>
+    
+    <a href="../2022/03/02/Cpp-Programing-Lec-1/">
+      <li>「Cpp Programing」 Lec1 Notes</li>
+    </a>
+    
+    <a href="../2022/01/27/Spring-Spring%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+      <li>Spring_Spring配置文件</li>
+    </a>
+    
     <a href="../2022/01/25/Maven-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8F%92%E4%BB%B6/">
-      <li>Maven_生命周期与插件</li>
+      <li>「Maven」生命周期与插件</li>
     </a>
     
     <a href="../2022/01/25/Maven-%E4%BE%9D%E8%B5%96%E4%B8%8E%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/">
-      <li>Maven_依赖与依赖管理</li>
-    </a>
-    
-    <a href="../2022/01/24/Maven-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
-      <li>Maven_基础知识</li>
-    </a>
-    
-    <a href="../2022/01/24/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8C%85-Package/">
-      <li>Java学习笔记_包(Package)</li>
-    </a>
-    
-    <a href="../2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%8E%A5%E5%8F%A3/">
-      <li>Java学习笔记_接口</li>
+      <li>「Maven」依赖与依赖管理</li>
     </a>
     
   </ul>
@@ -623,7 +616,7 @@ WeChat: czh20020503</p>
 
 <h5><a href="/archives/">archives</a></h5>
 <div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../archives/2022/01/">January 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
+  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../archives/2022/03/">March 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
 </div>
 
 
@@ -635,16 +628,24 @@ WeChat: czh20020503</p>
 <div class="widget">
   <ul>
     
+    <a href="/categories/#ECS">
+      <li>ECS</li>
+    </a>
+    
+    <a href="/categories/#C++ Programing">
+      <li>C++ Programing</li>
+    </a>
+    
     <a href="/categories/#算法">
       <li>算法</li>
     </a>
     
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
     <a href="/categories/#计算机组成">
       <li>计算机组成</li>
+    </a>
+    
+    <a href="/categories/#C++">
+      <li>C++</li>
     </a>
     
     <a href="/categories/#Maven">

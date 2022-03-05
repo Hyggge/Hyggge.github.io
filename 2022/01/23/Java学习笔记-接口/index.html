@@ -142,7 +142,7 @@
   <link rel="canonical" href="http://example.com/2022/01/23/Java学习笔记-接口/">
   <title>
     
-      Java学习笔记_接口 - Hyggge‘s blog
+      「Java」接口 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -154,7 +154,7 @@
 
 <!-- hack iOS CSS :active style -->
 
-	<body ontouchstart="" class="body--light body--dark">
+	<body ontouchstart="" class="body--light body--light">
 
 
 		<!-- ThemeColor -->
@@ -188,7 +188,7 @@
       ? b.pop()
       : '';
   }
-  let themeMode = 'dark';
+  let themeMode = 'light';
   if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
     let dbody = document.body.classList;
     themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
@@ -248,6 +248,28 @@
 
           
           
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
           
           
           <li>
@@ -265,28 +287,6 @@
             <a href="/categories/">
               
               CATEGORIES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/about/">
-              
-              ABOUT
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -392,7 +392,7 @@
               <a class="tag" href="/tags/#Java" title="Java">Java</a>
               
             </div>
-            <h1>Java学习笔记_接口</h1>
+            <h1>「Java」接口</h1>
             <h2 class="subheading"></h2>
             <span class="meta">
               Posted by Hyggge on
@@ -470,35 +470,28 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <hr />
-<h2 id="接口和类"><a class="markdownIt-Anchor" href="#接口和类"></a> 接口和类</h2>
-<p>《Thinking in Java》一书在《接口》一节中讲到——“<strong>接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法</strong>”。我认为接口其实是 <strong>一组抽象方法的集合</strong>，是一种<strong>极度抽象的类</strong>，但是他和类又有许多不同点。</p>
-<h3 id="接口与类的相似点"><a class="markdownIt-Anchor" href="#接口与类的相似点"></a> 接口与类的相似点</h3>
-<ul>
+        <hr>
+<h2 id="接口和类"><a href="#接口和类" class="headerlink" title="接口和类"></a>接口和类</h2><p>《Thinking in Java》一书在《接口》一节中讲到——“<strong>接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法</strong>”。我认为接口其实是 <strong>一组抽象方法的集合</strong>，是一种<strong>极度抽象的类</strong>，但是他和类又有许多不同点。</p>
+<h3 id="接口与类的相似点"><a href="#接口与类的相似点" class="headerlink" title="接口与类的相似点"></a>接口与类的相似点</h3><ul>
 <li>接口中可以有多个方法（也仅限于方法）</li>
 <li>接口文件保存在 .java 结尾的文件中，文件名使用接口名，遵循类的命名方法。</li>
 </ul>
-<h3 id="接口与类的不同点"><a class="markdownIt-Anchor" href="#接口与类的不同点"></a> 接口与类的不同点</h3>
-<ul>
+<h3 id="接口与类的不同点"><a href="#接口与类的不同点" class="headerlink" title="接口与类的不同点"></a>接口与类的不同点</h3><ul>
 <li>接口<strong>不能用于实例化对象</strong>，因此没有且<strong>无法定义构造方法</strong>。但接口中的方法可以被对象实现（类似于继承，但不是继承）。</li>
 <li>接口中所有的方法都是<strong>抽象方法</strong>，即不能在接口中实现（无方法体）。每一个方法都是隐式抽象的，接口中的方法被隐式的指定为 <code>public abstract</code>（只能是 <code>public abstract</code>，其他修饰符都会报错）。</li>
 <li>接口中<strong>不能包含有成员变量</strong>（<strong><code>static</code>和<code>final</code>型变量除外</strong>）。如果在接口中定义变量，则会被隐式地定义为<code>public static final</code>变量（并且只能是 <code>public</code>，用 <code>private</code> 修饰会报编译错误）。</li>
-<li>接口中不能含有<strong>静态代码块</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>以及<strong>静态方法</strong>(用 <code>static</code> 修饰的方法)，而类（包括抽象类）是可以有静态代码块和静态方法。</li>
+<li>接口中不能含有<strong>静态代码块</strong><sup><a href="#fn_1" id="reffn_1">1</a></sup>以及<strong>静态方法</strong>(用 <code>static</code> 修饰的方法)，而类（包括抽象类）是可以有静态代码块和静态方法。</li>
 <li>一个类只能继承一个抽象类，但一个类却可以实现多个接口，并且接口支持多<strong>重继承</strong>。</li>
 </ul>
-<hr />
-<h2 id="接口的声明"><a class="markdownIt-Anchor" href="#接口的声明"></a> 接口的声明</h2>
-<p>声明接口需要使用<code>interface</code>关键字——</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[可见度] <span class="class"><span class="keyword">interface</span> 接口名称 </span>&#123;</span><br><span class="line">    <span class="comment">// 声明变量</span></span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="接口的声明"><a href="#接口的声明" class="headerlink" title="接口的声明"></a>接口的声明</h2><p>声明接口需要使用<code>interface</code>关键字——<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[可见度] <span class="class"><span class="keyword">interface</span> 接口名称 </span>&#123;</span><br><span class="line">    <span class="comment">// 声明变量</span></span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><strong>接口</strong>是<strong>隐式抽象</strong>的，当声明一个接口的时候，不必使用<code>abstract</code>关键字。</li>
 <li><strong>接口中每一个方法</strong>也是<strong>隐式抽象</strong>的，声明时同样不需要<code>abstract</code>关键字。</li>
 <li>接口中的方法都是<code>public</code><strong>公有的</strong>。</li>
 </ul>
-<hr />
-<h2 id="接口的实现"><a class="markdownIt-Anchor" href="#接口的实现"></a> 接口的实现</h2>
-<p>当一个类实现接口时，需要用<code>implements</code> 关键字。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...implements 接口名称[, 其他接口名称, 其他接口名称..., ...] ...</span><br><span class="line"></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">dog</span> <span class="keyword">implements</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;eat&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;sleep&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;fight&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="接口的实现"><a href="#接口的实现" class="headerlink" title="接口的实现"></a>接口的实现</h2><p>当一个类实现接口时，需要用<code>implements</code> 关键字。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...implements 接口名称[, 其他接口名称, 其他接口名称..., ...] ...</span><br><span class="line"></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">dog</span> <span class="keyword">implements</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;eat&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;sleep&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;fight&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>需要注意以下规则——</p>
 <ul>
 <li>一个类只能继承一个类，但是能实现多个接口。</li>
@@ -506,30 +499,21 @@
 <li>类在重写方法时要<strong>保持一致的方法名</strong>，并且应该保持相同或者相兼容的<strong>返回值类型</strong>。</li>
 <li>类在实现接口的方法时，不能抛出强制性异常，只能在接口中，或者继承接口的抽象类中抛出该强制性异常。（暂时还不理解…）</li>
 </ul>
-<hr />
-<h2 id="接口的继承"><a class="markdownIt-Anchor" href="#接口的继承"></a> 接口的继承</h2>
-<p>一个接口能继承另一个接口，和类之间的继承方式比较相似，使用<code>extends</code>关键字。继承和被继承的两个接口是可以定义相同的抽象方法的（不会报错…）。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[可见度] <span class="class"><span class="keyword">interface</span> 接口名称 <span class="keyword">extends</span> 其他的接口名 </span>&#123;</span><br><span class="line">    <span class="comment">// 声明变量</span></span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DogInterface</span> <span class="keyword">extends</span> <span class="title">AnimalInterface</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bark</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tailShake</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此时如果一个类需要实现 DogInterface 接口的话需要总共实现五个方法。</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="接口的继承"><a href="#接口的继承" class="headerlink" title="接口的继承"></a>接口的继承</h2><p>一个接口能继承另一个接口，和类之间的继承方式比较相似，使用<code>extends</code>关键字。继承和被继承的两个接口是可以定义相同的抽象方法的（不会报错…）。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[可见度] <span class="class"><span class="keyword">interface</span> 接口名称 <span class="keyword">extends</span> 其他的接口名 </span>&#123;</span><br><span class="line">    <span class="comment">// 声明变量</span></span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AnimalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;<span class="comment">//不需要写&#123;&#125;，可省略abstract</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DogInterface</span> <span class="keyword">extends</span> <span class="title">AnimalInterface</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bark</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">tailShake</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此时如果一个类需要实现 DogInterface 接口的话需要总共实现五个方法。</span></span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>虽然类的<strong>多重继承</strong>是不合法的，但是接口却可是实现<strong>多重继承</strong>。</li>
+<li>虽然类的<strong>多重继承</strong>是不合法的，但是接口却可是实现<strong>多重继承</strong>。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">B</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">A</span>, <span class="title">B</span></span>&#123;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">B</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">A</span>, <span class="title">B</span></span>&#123;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<hr />
-<h2 id="标记接口"><a class="markdownIt-Anchor" href="#标记接口"></a> 标记接口</h2>
-<p>我们把<strong>不包含任何方法和变量的接口</strong>定义为<strong>标记接口</strong>。标记接口作用是是给某个对象打个标（盖个戳），<strong>使对象拥有某个或某些特权</strong>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Flag</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>标记接口用于以下两个目的——</p>
+<hr>
+<h2 id="标记接口"><a href="#标记接口" class="headerlink" title="标记接口"></a>标记接口</h2><p>我们把<strong>不包含任何方法和变量的接口</strong>定义为<strong>标记接口</strong>。标记接口作用是是给某个对象打个标（盖个戳），<strong>使对象拥有某个或某些特权</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Flag</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure><br>标记接口用于以下两个目的——</p>
 <ul>
 <li><strong>建立一个公共的父接口</strong>：正如 <code>java.util.EventListener</code> 接口，这是由几十个其他接口扩展的Java API，你可以使用一个标记接口来建立一组接口的父接口。例如：当一个接口继承了<code>EventListener</code>接口，Java虚拟机(JVM)就知道该接口将要被用于一个事件的代理方案。</li>
 <li><strong>向一个类添加数据类型</strong>：这种情况是标记接口最初的目的，实现标记接口的类不需要定义任何接口方法(因为标记接口根本就没有方法)，但是该类通过多态性变成一个接口类型。</li>
 </ul>
-<hr class="footnotes-sep" />
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><strong>静态代码块</strong>，在虚拟机加载<strong>类</strong>的时候就会加载执行，而且<strong>只执行一次</strong>；<strong>非静态代码块</strong>，在创建<strong>对象</strong>的时候(即new一个对象的时候)执行，<strong>每次创建对象都会执行一次</strong>。详见<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44519124/article/details/103363548">博客</a>。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+<blockquote id="fn_1">
+<sup>1</sup>. <strong>静态代码块</strong>，在虚拟机加载<strong>类</strong>的时候就会加载执行，而且<strong>只执行一次</strong>；<strong>非静态代码块</strong>，在创建<strong>对象</strong>的时候(即new一个对象的时候)执行，<strong>每次创建对象都会执行一次</strong>。详见<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44519124/article/details/103363548">博客</a>。<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
+</blockquote>
 
 
         <hr>
@@ -537,12 +521,12 @@
         <ul class="pager">
           
           <li class="previous">
-            <a href="/2022/01/24/Java学习笔记-包-Package/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_包(Package)">&larr; Previous Post</a>
+            <a href="/2022/01/24/Java学习笔记-包-Package/" data-toggle="tooltip" data-placement="top" title="「Java」包(Package)">&larr; Previous Post</a>
           </li>
           
           
           <li class="next">
-            <a href="/2022/01/23/Java学习笔记-重写（Override）/" data-toggle="tooltip" data-placement="top" title="Java学习笔记_重写(Override)">Next Post &rarr;</a>
+            <a href="/2022/01/23/Java学习笔记-重写（Override）/" data-toggle="tooltip" data-placement="top" title="「Java」重写(Override)">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -591,7 +575,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=Java学习笔记_接口&body=Hi,I found this website and thought you might like it http://example.com/2022/01/23/Java学习笔记-接口/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Java」接口&body=Hi,I found this website and thought you might like it http://example.com/2022/01/23/Java学习笔记-接口/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -679,7 +663,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%92%8C%E7%B1%BB"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 接口和类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%B1%BB%E7%9A%84%E7%9B%B8%E4%BC%BC%E7%82%B9"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 接口与类的相似点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%B1%BB%E7%9A%84%E4%B8%8D%E5%90%8C%E7%82%B9"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 接口与类的不同点</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 接口的声明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 接口的实现</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 接口的继承</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%A0%87%E8%AE%B0%E6%8E%A5%E5%8F%A3"><span class="toc-nav-number">5.</span> <span class="toc-nav-text"> 标记接口</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%92%8C%E7%B1%BB"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">接口和类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%B1%BB%E7%9A%84%E7%9B%B8%E4%BC%BC%E7%82%B9"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">接口与类的相似点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%B1%BB%E7%9A%84%E4%B8%8D%E5%90%8C%E7%82%B9"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">接口与类的不同点</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">接口的声明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">接口的实现</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">接口的继承</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%A0%87%E8%AE%B0%E6%8E%A5%E5%8F%A3"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">标记接口</span></a></li></ol>
         
         </div>
       </aside>

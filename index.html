@@ -154,7 +154,7 @@
 
 <!-- hack iOS CSS :active style -->
 
-	<body ontouchstart="" class="body--light body--dark">
+	<body ontouchstart="" class="body--light body--light">
 
 
 		<!-- ThemeColor -->
@@ -188,7 +188,7 @@
       ? b.pop()
       : '';
   }
-  let themeMode = 'dark';
+  let themeMode = 'light';
   if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
     let dbody = document.body.classList;
     themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
@@ -248,6 +248,28 @@
 
           
           
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
           
           
           <li>
@@ -265,28 +287,6 @@
             <a href="/categories/">
               
               CATEGORIES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/about/">
-              
-              ABOUT
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -460,9 +460,89 @@
   <!-- top end -->
   
 
+  <a href="/2022/03/04/ECS服务器使用-文件传输和新终端建立/">
+    <h2 class="post-title">
+      「ECS服务器」文件传输和新终端建立
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      本篇博客介绍一下如何使用pscp在本地（Windows）和ECS服务器之间进行文件传输，以及如何在服务器中建立新终端。
+前言今天想把OO第一次作业的自动评测程序放到在阿里云ECS服务器上运行，以减轻笔记本CPU的压力（避免过早更换电脑）。但是理想很丰满，现实很骨感，在一开始便遇到了两个问题——
+
+如何将本地的文件传到服务器上？
+如何使程序在服务器后台运行？（一旦关闭服务器前端网页，在当前终端......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2022-03-04
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#ECS" title="ECS">ECS</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
+  <a href="/2022/03/02/Cpp-Programing-Lec-1/">
+    <h2 class="post-title">
+      「Cpp Programing」 Lec1 Notes
+    </h2>
+    <h3 class="post-subtitle">
+      北航《C++程序设计》课程第1节：主要讲授C++函数相比C函数的不同点，以及C++头文件写法等知识点。
+    </h3>
+    <div class="post-content-preview">
+      C++函数函数重载(overloading)
+C++函数重载和Java类似，即“同名函数，不同参数”， 例如  12void print(int i) &#123;&#125;void print(char *i) &#123;&#125;
+“同名函数，相同参数，返回值不同”不能成为重载函数，例如  12int print() &#123;&#125;char* print() &#123;......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2022-03-02
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#C++" title="C++">C++</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
   <a href="/2022/01/25/Maven-生命周期与插件/">
     <h2 class="post-title">
-      Maven_生命周期与插件
+      「Maven」生命周期与插件
     </h2>
     <h3 class="post-subtitle">
       
@@ -470,14 +550,13 @@
     <div class="post-content-preview">
       
 
- Maven项目构建的生命周期
-Maven的生命周期就是为了对所有的构建过程进行抽象和统一，这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤，由相互独立三套生命周期组成——
+Maven项目构建的生命周期Maven的生命周期就是为了对所有的构建过程进行抽象和统一，这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤，由相互独立三套生命周期组成——
 
 clean：清理项目
 default：构建项目
-site：构建项目站点
+site：构建项目站点 
 
-当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的......
+当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的其......
     </div>
   </a>
   
@@ -508,16 +587,14 @@ site：构建项目站点
 
   <a href="/2022/01/25/Maven-依赖与依赖管理/">
     <h2 class="post-title">
-      Maven_依赖与依赖管理
+      「Maven」依赖与依赖管理
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
       
- pom.xml文件中的依赖声明
-所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。
-1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &......
+pom.xml文件中的依赖声明所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &lt;......
     </div>
   </a>
   
@@ -546,20 +623,60 @@ site：构建项目站点
   <!-- top end -->
   
 
+  <a href="/2022/01/24/Maven-基础知识/">
+    <h2 class="post-title">
+      「Maven」基础知识
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。 Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是 “通过pom.xml文件的配置获取jar包不用手动的去添加jar包”。该工具的原理图如下所示——
+仓库仓库可以储存资源，包含各种jar包。仓库分为两种：本地仓库和远程仓库
+
+本地仓库：是在本机电脑上储存资源的仓库，可以从远程仓库中获取资源。
+远程仓库：非本......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2022-01-24
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#Maven" title="Maven">Maven</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
   <a href="/2022/01/24/Java学习笔记-包-Package/">
     <h2 class="post-title">
-      Java学习笔记_包(Package)
+      「Java」包(Package)
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
       
- 包的定义
-
+包的定义
 在笔者看来，包其实就是一个 文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
 一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。
-包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（ann......
+包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（annot......
     </div>
   </a>
   
@@ -590,22 +707,20 @@ site：构建项目站点
 
   <a href="/2022/01/23/Java学习笔记-接口/">
     <h2 class="post-title">
-      Java学习笔记_接口
+      「Java」接口
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
       
- 接口和类
-《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
- 接口与类的相似点
-
+接口和类《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
+接口与类的相似点
 接口中可以有多个方法（也仅限于方法）
 接口文件保存在 .java 结尾的文件中，文件名使用接口名，遵循类的命名方法。
 
- 接口与类的不同点
-......
+接口与类的不同点
+接口不能用......
     </div>
   </a>
   
@@ -636,7 +751,7 @@ site：构建项目站点
 
   <a href="/2022/01/23/Java学习笔记-重写（Override）/">
     <h2 class="post-title">
-      Java学习笔记_重写(Override)
+      「Java」重写(Override)
     </h2>
     <h3 class="post-subtitle">
       
@@ -646,10 +761,7 @@ site：构建项目站点
 重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。
 重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
 
- 重写父类中的方法
- 概念
-当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如
-1234567891011121314......
+重写父类中的方法概念当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如123456789101112131415161......
     </div>
   </a>
   
@@ -680,26 +792,24 @@ site：构建项目站点
 
   <a href="/2022/01/22/Java学习笔记-继承/">
     <h2 class="post-title">
-      Java学习笔记_继承
+      「Java」继承
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
       
- 继承
- 语法和概念
-1修饰符 class 子类名 extends 父类名
+继承语法和概念1修饰符 class 子类名 extends 父类名
 
-子类从它的父类中继承可访问的数据域和方法，也可以添加新的数据域和新的方法。
+子类从它的父类中继承所有的数据域和方法，也可以添加新的数据域和新的方法。
 如果类 B 从类 A 派生，或者说类 B 扩展自类 A，或者说类 B 继承类 A，
-
-称类 A 为&quot;父类&quot;，也称为超类、基类；
-称类 B 为&quot;子类&quot;，也称为次类、扩展类、派生类。
-
+称类 A 为”父类“，也称为超类、基类；
+称类 B 为”子类”，也称为次类、扩展类、派生类。
 
 
- 继承的注意......
+
+继承的注意点
+子类不是父类的子集，子类一般比父类包含更多的数据域......
     </div>
   </a>
   
@@ -730,22 +840,17 @@ site：构建项目站点
 
   <a href="/2022/01/22/Java学习笔记-数组/">
     <h2 class="post-title">
-      Java学习笔记_数组
+      「Java」数组
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
       
- 数组的创建的访问
- 一维数组的创建
-
+数组的创建的访问一维数组的创建
 一维数组的创建有以下几种方法——  1234567//先声明后定义int[] array;array = new int[100];//直接定义int[] array = new int[100];//列表定义int[] array = &#123;1, 2, 3, 4&#125;;
-
-
- 多维数组的创建
-
-下面以二维数组为例介绍多维数组的创建方法 ......
+多维数组的创建
+下面以二维数组为例介绍多维数组的创建方法  1234567......
     </div>
   </a>
   
@@ -756,149 +861,6 @@ site：构建项目站点
   <div class="tags">
     
     <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/22/Java学习笔记-字符串/">
-    <h2 class="post-title">
-      Java学习笔记_字符串
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      Java中和字符串相关类有以下3种——
-
-String类
-StringBuild类
-StringBuffer类
-
-
- String类
- 对象创建
-
-例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-22
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/">
-    <h2 class="post-title">
-      Java学习笔记_变量类型和修饰符
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
- Java的变量类型
-Java中的变量类型有以下三种——
-
-类变量
-实例变量
-局部变量
-
- 类变量(静态变量)
-
-类变量是属于所在的类，而不属于任何由该类定义的对象。 换句话说，不管实例化了多少对象，类变量都只有一个。类变量是由static修饰的，这一点和C++相似。
-一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-21
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/19/Cpp_引用和指针/">
-    <h2 class="post-title">
-      Cpp_引用和指针
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       序言
-
-本文介绍C++中引用，指针，const限定符和常量表达式等几个部分的内容。对应原书45页——60页。
- 引用
-
-
-引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。
-
-
-举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-19
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#C++" title="C++">C++</a>
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer">C++ Primer</a>
     
   </div>
   
@@ -938,19 +900,19 @@ Java中的变量类型有以下三种——
   <div class="tags">
     
     
+    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
+    
+    
+    
+    <a href="/tags/#C++" title="C++" rel="2">C++</a>
+    
+    
+    
     <a href="/tags/#算法" title="算法" rel="1">算法</a>
     
     
     
     <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="1">C++</a>
-    
-    
-    
-    <a href="/tags/#C++ Primer" title="C++ Primer" rel="1">C++ Primer</a>
     
     
     
@@ -1034,24 +996,24 @@ Java中的变量类型有以下三种——
 <div class="widget">
   <ul>
     
+    <a href="2022/03/04/ECS%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8-%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%92%8C%E6%96%B0%E7%BB%88%E7%AB%AF%E5%BB%BA%E7%AB%8B/">
+      <li>「ECS服务器」文件传输和新终端建立</li>
+    </a>
+    
+    <a href="2022/03/02/Cpp-Programing-Lec-1/">
+      <li>「Cpp Programing」 Lec1 Notes</li>
+    </a>
+    
+    <a href="2022/01/27/Spring-Spring%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+      <li>Spring_Spring配置文件</li>
+    </a>
+    
     <a href="2022/01/25/Maven-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8F%92%E4%BB%B6/">
-      <li>Maven_生命周期与插件</li>
+      <li>「Maven」生命周期与插件</li>
     </a>
     
     <a href="2022/01/25/Maven-%E4%BE%9D%E8%B5%96%E4%B8%8E%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/">
-      <li>Maven_依赖与依赖管理</li>
-    </a>
-    
-    <a href="2022/01/24/Maven-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
-      <li>Maven_基础知识</li>
-    </a>
-    
-    <a href="2022/01/24/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8C%85-Package/">
-      <li>Java学习笔记_包(Package)</li>
-    </a>
-    
-    <a href="2022/01/23/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%8E%A5%E5%8F%A3/">
-      <li>Java学习笔记_接口</li>
+      <li>「Maven」依赖与依赖管理</li>
     </a>
     
   </ul>
@@ -1064,7 +1026,7 @@ Java中的变量类型有以下三种——
 
 <h5><a href="/archives/">archives</a></h5>
 <div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/01/">January 2022</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
+  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/03/">March 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
 </div>
 
 
@@ -1076,16 +1038,24 @@ Java中的变量类型有以下三种——
 <div class="widget">
   <ul>
     
+    <a href="/categories/#ECS">
+      <li>ECS</li>
+    </a>
+    
+    <a href="/categories/#C++ Programing">
+      <li>C++ Programing</li>
+    </a>
+    
     <a href="/categories/#算法">
       <li>算法</li>
     </a>
     
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
     <a href="/categories/#计算机组成">
       <li>计算机组成</li>
+    </a>
+    
+    <a href="/categories/#C++">
+      <li>C++</li>
     </a>
     
     <a href="/categories/#Maven">
