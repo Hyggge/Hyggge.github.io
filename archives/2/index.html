@@ -248,17 +248,6 @@
 
           
           
-          <li>
-            <a href="/tags/">
-              
-              TAGS
-              
-              
-            </a>
-          </li>
-          
-          
-          
           
           
           <li>
@@ -273,9 +262,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/categories/">
               
-              ARCHIVES
+              CATEGORIES
               
               
             </a>
@@ -284,9 +273,20 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/tags/">
               
-              CATEGORIES
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -460,6 +460,48 @@
   <!-- top end -->
   
 
+  <a href="/2022/01/24/Java学习笔记-包-Package/">
+    <h2 class="post-title">
+      「Java」包(Package)
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      
+ 包的定义
+
+在笔者看来，包其实就是一个 文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
+一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。
+包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（ann......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2022-01-24
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#Java" title="Java">Java</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
   <a href="/2022/01/23/Java学习笔记-接口/">
     <h2 class="post-title">
       「Java」接口
@@ -469,13 +511,15 @@
     </h3>
     <div class="post-content-preview">
       
-接口和类《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
-接口与类的相似点
+ 接口和类
+《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
+ 接口与类的相似点
+
 接口中可以有多个方法（也仅限于方法）
 接口文件保存在 .java 结尾的文件中，文件名使用接口名，遵循类的命名方法。
 
-接口与类的不同点
-接口不能用......
+ 接口与类的不同点
+......
     </div>
   </a>
   
@@ -516,7 +560,10 @@
 重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。
 重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
 
-重写父类中的方法概念当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如123456789101112131415161......
+ 重写父类中的方法
+ 概念
+当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如
+1234567891011121314......
     </div>
   </a>
   
@@ -554,17 +601,19 @@
     </h3>
     <div class="post-content-preview">
       
-继承语法和概念1修饰符 class 子类名 extends 父类名
+ 继承
+ 语法和概念
+1修饰符 class 子类名 extends 父类名
 
 子类从它的父类中继承所有的数据域和方法，也可以添加新的数据域和新的方法。
 如果类 B 从类 A 派生，或者说类 B 扩展自类 A，或者说类 B 继承类 A，
-称类 A 为”父类“，也称为超类、基类；
-称类 B 为”子类”，也称为次类、扩展类、派生类。
+
+称类 A 为&quot;父类&quot;，也称为超类、基类；
+称类 B 为&quot;子类&quot;，也称为次类、扩展类、派生类。
 
 
 
-继承的注意点
-子类不是父类的子集，子类一般比父类包含更多的数据域......
+ 继承的注意点......
     </div>
   </a>
   
@@ -602,10 +651,15 @@
     </h3>
     <div class="post-content-preview">
       
-数组的创建的访问一维数组的创建
+ 数组的创建的访问
+ 一维数组的创建
+
 一维数组的创建有以下几种方法——  1234567//先声明后定义int[] array;array = new int[100];//直接定义int[] array = new int[100];//列表定义int[] array = &#123;1, 2, 3, 4&#125;;
-多维数组的创建
-下面以二维数组为例介绍多维数组的创建方法  1234567......
+
+
+ 多维数组的创建
+
+下面以二维数组为例介绍多维数组的创建方法 ......
     </div>
   </a>
   
@@ -649,8 +703,10 @@ StringBuild类
 StringBuffer类
 
 
-String类对象创建
-例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27;C&#......
+ String类
+ 对象创建
+
+例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27......
     </div>
   </a>
   
@@ -688,15 +744,17 @@ String类对象创建
     </h3>
     <div class="post-content-preview">
       
-Java的变量类型Java中的变量类型有以下三种——
+ Java的变量类型
+Java中的变量类型有以下三种——
 
 类变量
 实例变量
 局部变量
 
-类变量(静态变量)
+ 类变量(静态变量)
+
 类变量是属于所在的类，而不属于任何由该类定义的对象。 换句话说，不管实例化了多少对象，类变量都只有一个。类变量是由static修饰的，这一点和C++相似。
-一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，经常会见......
+一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，......
     </div>
   </a>
   
@@ -733,13 +791,16 @@ Java的变量类型Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-      序言
+       序言
+
 本文介绍C++中引用，指针，const限定符和常量表达式等几个部分的内容。对应原书45页——60页。
-引用
+ 引用
+
 
 引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。
 
-举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &amp;c......
+
+举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &......
     </div>
   </a>
   
@@ -776,11 +837,13 @@ Java的变量类型Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-      MIPS微系统设计方案设计概述本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
+       MIPS微系统设计方案
+ 设计概述
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
 
 为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。
 
-实现指令说明......
+ 实......
     </div>
   </a>
   
@@ -817,55 +880,15 @@ Java的变量类型Java中的变量类型有以下三种——
       
     </h3>
     <div class="post-content-preview">
-      MIPS微系统设计方案设计概述​        本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整—......
+       MIPS微系统设计方案
+ 设计概述
+​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将......
     </div>
   </a>
   
   <p class="post-meta" style="margin: 10px 0;">
     Posted by Hyggge on
     2021-12-15
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/12/06/CO_P5&P6课上测试总结/">
-    <h2 class="post-title">
-      「CO」P5&P6_课上测试总结
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-
-增添指令一般步骤明确指令RTL
-该步骤需要结合题目弄懂指令行为，包括明确指令类型（R型？I型？J型？即明确读和写的目标）、opcode和funct域数据、执行功能（计算？跳转？访存？）
-最好可以先用MARS模拟下，以免对指令行为理解不到位。明确非转发数据通路
-在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信号（P5中的DM......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-12-06
   </p>
   <div class="tags">
     
@@ -913,14 +936,6 @@ Java的变量类型Java中的变量类型有以下三种——
   <div class="tags">
     
     
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="5">C++</a>
-    
-    
-    
     <a href="/tags/#算法" title="算法" rel="1">算法</a>
     
     
@@ -929,11 +944,15 @@ Java的变量类型Java中的变量类型有以下三种——
     
     
     
+    <a href="/tags/#C++" title="C++" rel="5">C++</a>
+    
+    
+    
     <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
     
     
     
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
+    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
     
     
     
@@ -941,7 +960,15 @@ Java的变量类型Java中的变量类型有以下三种——
     
     
     
+    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
+    
+    
+    
     <a href="/tags/#OS" title="OS" rel="1">OS</a>
+    
+    
+    
+    <a href="/tags/#OO" title="OO" rel="1">OO</a>
     
     
   </div>
@@ -1013,6 +1040,10 @@ Java的变量类型Java中的变量类型有以下三种——
 <div class="widget">
   <ul>
     
+    <a href="../../2022/03/24/OO-%E7%AC%AC%E4%B8%80%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
+      <li>「BUAA-OO」第一单元总结</li>
+    </a>
+    
     <a href="../../2022/03/21/Cpp-Progranming-Lec-4/">
       <li>「Cpp Programing」 Lec4 Notes</li>
     </a>
@@ -1029,10 +1060,6 @@ Java的变量类型Java中的变量类型有以下三种——
       <li>「Cpp Programing」 Lec2 Notes</li>
     </a>
     
-    <a href="../../2022/03/04/ECS%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8-%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%92%8C%E6%96%B0%E7%BB%88%E7%AB%AF%E5%BB%BA%E7%AB%8B/">
-      <li>「ECS服务器」文件传输和新终端建立</li>
-    </a>
-    
   </ul>
 </div>
 
@@ -1043,7 +1070,7 @@ Java的变量类型Java中的变量类型有以下三种——
 
 <h5><a href="/archives/">archives</a></h5>
 <div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
+  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
 </div>
 
 
@@ -1055,16 +1082,12 @@ Java的变量类型Java中的变量类型有以下三种——
 <div class="widget">
   <ul>
     
-    <a href="/categories/#ECS">
-      <li>ECS</li>
+    <a href="/categories/#算法">
+      <li>算法</li>
     </a>
     
     <a href="/categories/#C++ Programing">
       <li>C++ Programing</li>
-    </a>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
     </a>
     
     <a href="/categories/#计算机组成">
@@ -1075,16 +1098,24 @@ Java的变量类型Java中的变量类型有以下三种——
       <li>C++</li>
     </a>
     
-    <a href="/categories/#Maven">
-      <li>Maven</li>
+    <a href="/categories/#ECS">
+      <li>ECS</li>
     </a>
     
     <a href="/categories/#Java">
       <li>Java</li>
     </a>
     
+    <a href="/categories/#Maven">
+      <li>Maven</li>
+    </a>
+    
     <a href="/categories/#OS Lab">
       <li>OS Lab</li>
+    </a>
+    
+    <a href="/categories/#OO">
+      <li>OO</li>
     </a>
     
   </ul>
