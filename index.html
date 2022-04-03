@@ -460,23 +460,59 @@
   <!-- top end -->
   
 
+  <a href="/2022/04/03/OS-Lab1实验报告/">
+    <h2 class="post-title">
+      「BUAA-OS」 Lab1实验报告
+    </h2>
+    <h3 class="post-subtitle">
+      内核、BOOT和Printf
+    </h3>
+    <div class="post-content-preview">
+      实验思考题Thinking 1.1Q： 请查阅并给出前述 objdump 中使用的参数的含义。使用其它体系结构的编译器（如课程平台的 MIPS 交叉编译器）重复上述各步编译过程，观察并在实验报告中提交相应的结果。A：objdump命令的常用参数有以下几个|参数|含义||:—:|:—:||-d|将代码段反汇编 反汇编那些应该还有指令机器码的section||-D|与 -d 类似，但反汇编所有s......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2022-04-03
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
+    
+    <a href="/tags/#操作系统" title="操作系统">操作系统</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
   <a href="/2022/03/29/Cpp-Progranming-Lec-5/">
     <h2 class="post-title">
-      「BUAA-C++」 Lec5 Notes
+      「BUAA-C++」 Lec5:继承和组合
     </h2>
     <h3 class="post-subtitle">
       北航《C++程序设计》课程第4节：主要讲授C++中类的继承和组合
     </h3>
     <div class="post-content-preview">
-      C++中有两种实现 代码重用（reuse） 的方式——继承（inheritance）和组合（composition）
- 继承inheritance
-继承：共性和特性的关系——
+      C++中有两种实现代码重用（reuse）的方式——继承（inheritance）和组合（composition）
+继承inheritance继承：共性和特性的关系——
 
-子类拥有父类所有成员和方法，这是所有子类的共性。
+子类拥有父类所有数据成员和函数，这是所有子类的共性。
 子类可以父类实现的函数进行重写， 成为子类自己的特性。（一代更比一代强）
-
-
-通常情况下，一旦在子类中对父类函数进行了改写，在该方法（子类）中通常会以某种方式调用了父......
+通常情况下，一旦在子类中对父类函数进行了改写，在子类中的该函数中通常会以某种方式调用了父类的同名......
     </div>
   </a>
   
@@ -525,7 +561,9 @@
   </p>
   <div class="tags">
     
-    <a href="/tags/#OO" title="OO">OO</a>
+    <a href="/tags/#面向对象" title="面向对象">面向对象</a>
+    
+    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
     
   </div>
   
@@ -546,19 +584,15 @@
 
   <a href="/2022/03/21/Cpp-Progranming-Lec-4/">
     <h2 class="post-title">
-      「BUAA-C++」 Lec4 Notes
+      「BUAA-C++」 Lec4:static、const和运算符重载
     </h2>
     <h3 class="post-subtitle">
       北航《C++程序设计》课程第4节：主要讲授C++中的static和const限定符，以及运算符重载相关内容。
     </h3>
     <div class="post-content-preview">
-       static限定符
- static local variable
-
+      static限定符static local variable
 静态局部变量的特点是”一次构造，永不析构，直到程序结束“。因此静态局部变量可以用来保值，这和全局变量行为相似）
-静态变量放在全局变量区
-
-12345678910void func() &#123;    static int i = 0;    cout &lt;&lt; i++ &lt;&lt; endl;&#125;i......
+静态变量放在全局变量区12345678910void func() &#123;    static int i = 0;    cout &lt;&lt; i++ &lt;&lt; endl;&#125;int mai......
     </div>
   </a>
   
@@ -608,7 +642,9 @@ A： 这两个status不一样。第一次add之前是的status是Untracked files
   </p>
   <div class="tags">
     
-    <a href="/tags/#OS" title="OS">OS</a>
+    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
+    
+    <a href="/tags/#操作系统" title="操作系统">操作系统</a>
     
   </div>
   
@@ -629,24 +665,17 @@ A： 这两个status不一样。第一次add之前是的status是Untracked files
 
   <a href="/2022/03/20/Cpp-Progranming-Lec-3/">
     <h2 class="post-title">
-      「BUAA-C++」 Lec3 Notes
+      「BUAA-C++」 Lec3:引用和拷贝构造
     </h2>
     <h3 class="post-subtitle">
       北航《C++程序设计》课程第3节：主要讲授C++中的引用和拷贝构造。
     </h3>
     <div class="post-content-preview">
-       引用（reference）
-
-
+      引用（reference）
 引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。
-
-
 引用必须初始化, 和C语言中野指针不同
   123int b = 0;int &amp;a; //errorint &amp;a = b;
-
-
-引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。
-  12int &amp;a = b......
+引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。  12int &amp;a = b;a = c; ......
     </div>
   </a>
   
@@ -677,22 +706,20 @@ A： 这两个status不一样。第一次add之前是的status是Untracked files
 
   <a href="/2022/03/10/Cpp-Progranming-Lec-2/">
     <h2 class="post-title">
-      「BUAA-C++」 Lec2 Notes
+      「BUAA-C++」 Lec2:C++的类
     </h2>
     <h3 class="post-subtitle">
       北航《C++程序设计》课程第2节：主要讲授C结构体和C++类的联系和区别，以及C++类的特性。
     </h3>
     <div class="post-content-preview">
-       C++面向对象
-
+      C++面向对象
 封装（一个类）
 继承（多类之间的父子关系）
 多态（行为关系）
 
- C结构体—&gt;C++类
-C语言只可以封装，struct关键字可以建立结构体
+C结构体—-&gt;C++类C语言只可以封装，struct关键字可以建立结构体
 
-结构体的最小内存单元以内存最大的成员类型为准  1234567struct Student &#123;    int i;    int j;    double d;    char c;&#125;;// sizeof(......
+结构体的最小内存单元以内存最大的成员类型为准  1234567struct Student &#123;    int i;    int j;    double d;    char c;&#125;;// sizeof(str......
     </div>
   </a>
   
@@ -765,18 +792,15 @@ C语言只可以封装，struct关键字可以建立结构体
 
   <a href="/2022/03/02/Cpp-Programing-Lec-1/">
     <h2 class="post-title">
-      「BUAA-C++」 Lec1 Notes
+      「BUAA-C++」 Lec1:C++函数的特性和常用的宏
     </h2>
     <h3 class="post-subtitle">
       北航《C++程序设计》课程第1节：主要讲授C++函数相比C函数的不同点，以及C++头文件写法等知识点。
     </h3>
     <div class="post-content-preview">
-       C++函数
- 函数重载(overloading)
-
+      C++函数函数重载(overloading)
 C++函数重载和Java类似，即“同名函数，不同参数”， 例如  12void print(int i) &#123;&#125;void print(char *i) &#123;&#125;
-
-“同名函数，相同参数，返回值不同”不能成为重载函数，例如  12int print() &#123;&#125;char* print() &......
+“同名函数，相同参数，返回值不同”不能成为重载函数，例如  12int print() &#123;&#125;char* print() &#123;......
     </div>
   </a>
   
@@ -823,46 +847,6 @@ default：构建项目
 site：构建项目站点
 
 当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-25
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Maven" title="Maven">Maven</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/25/Maven-依赖与依赖管理/">
-    <h2 class="post-title">
-      「Maven」依赖与依赖管理
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
- pom.xml文件中的依赖声明
-所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。
-1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &......
     </div>
   </a>
   
@@ -940,11 +924,15 @@ site：构建项目站点
     
     
     
-    <a href="/tags/#OS" title="OS" rel="1">OS</a>
+    <a href="/tags/#面向对象" title="面向对象" rel="1">面向对象</a>
     
     
     
-    <a href="/tags/#OO" title="OO" rel="1">OO</a>
+    <a href="/tags/#BUAA" title="BUAA" rel="3">BUAA</a>
+    
+    
+    
+    <a href="/tags/#操作系统" title="操作系统" rel="2">操作系统</a>
     
     
   </div>
@@ -1016,8 +1004,12 @@ site：构建项目站点
 <div class="widget">
   <ul>
     
+    <a href="2022/04/03/OS-Lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+      <li>「BUAA-OS」 Lab1实验报告</li>
+    </a>
+    
     <a href="2022/03/29/Cpp-Progranming-Lec-5/">
-      <li>「BUAA-C++」 Lec5 Notes</li>
+      <li>「BUAA-C++」 Lec5:继承和组合</li>
     </a>
     
     <a href="2022/03/24/OO-%E7%AC%AC%E4%B8%80%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
@@ -1025,15 +1017,11 @@ site：构建项目站点
     </a>
     
     <a href="2022/03/21/Cpp-Progranming-Lec-4/">
-      <li>「BUAA-C++」 Lec4 Notes</li>
+      <li>「BUAA-C++」 Lec4:static、const和运算符重载</li>
     </a>
     
     <a href="2022/03/21/OS-Lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
       <li>「BUAA-OS」 Lab0实验报告</li>
-    </a>
-    
-    <a href="2022/03/20/Cpp-Progranming-Lec-3/">
-      <li>「BUAA-C++」 Lec3 Notes</li>
     </a>
     
   </ul>
@@ -1046,7 +1034,7 @@ site：构建项目站点
 
 <h5><a href="/archives/">archives</a></h5>
 <div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
+  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/04/">April 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
 </div>
 
 
@@ -1060,10 +1048,6 @@ site：构建项目站点
     
     <a href="/categories/#算法">
       <li>算法</li>
-    </a>
-    
-    <a href="/categories/#C++ Programing">
-      <li>C++ Programing</li>
     </a>
     
     <a href="/categories/#计算机组成">
@@ -1086,12 +1070,12 @@ site：构建项目站点
       <li>Maven</li>
     </a>
     
-    <a href="/categories/#OO">
-      <li>OO</li>
+    <a href="/categories/#面向对象">
+      <li>面向对象</li>
     </a>
     
-    <a href="/categories/#OS">
-      <li>OS</li>
+    <a href="/categories/#操作系统">
+      <li>操作系统</li>
     </a>
     
   </ul>
