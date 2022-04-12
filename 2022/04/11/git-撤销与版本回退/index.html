@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/archives/2022/01/">
+  <link rel="canonical" href="http://example.com/2022/04/11/git-撤销与版本回退/">
   <title>
     
-      Hyggge‘s blog
+      「Git」撤销、删除与版本回退 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -352,19 +352,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_6.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_6.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_6.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_6.jpg');
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/bg.png'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_6.jpg'); */
       
     }
 
@@ -386,10 +386,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Hyggge&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Be what you want to be, do what you want to do.</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#C++" title="C++">C++</a>
+              
+            </div>
+            <h1>「Git」撤销、删除与版本回退</h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-04-11
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">1</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">501</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -430,822 +462,316 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h2 id="查看修改"><a href="#查看修改" class="headerlink" title="查看修改"></a>查看修改</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>git diff &lt;file&gt;</code></td>
+<td style="text-align:center">查看工作区中某文件的修改</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git diff HEAD -- &lt;file&gt;</code></td>
+<td style="text-align:center">查看工作区文件和版本库最新版本的区别</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="撤销指令"><a href="#撤销指令" class="headerlink" title="撤销指令"></a>撤销指令</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>git checkout -- &lt;file&gt;</code></td>
+<td style="text-align:center">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git reset HEAD &lt;file&gt;</code></td>
+<td style="text-align:center">将暂存区文件撤销到工作区</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>“</li>
+</ul>
+<h2 id="删除指令"><a href="#删除指令" class="headerlink" title="删除指令"></a>删除指令</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>git rm &lt;file&gt;</code></td>
+<td style="text-align:center">工作区和暂存区的该文件都会被删除。再使用<code>git commit</code>就可以将该文件从版本库中删除</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git rm --cached &lt;file&gt;</code></td>
+<td style="text-align:center">从暂存区删去该文件，而工作区不删除。此时使用<code>git commit</code>可以将该文件从版本库中删除，但是工作区仍然不会被删</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git clean &lt;file&gt; -f</code></td>
+<td style="text-align:center">删除工作区中没有被追踪的文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）</p>
+<p>确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——<br>|指令|作用|<br>|:—-:|:—-:|<br>|<code>git reset --hard HEAD^</code>|回退到上一个版本，<code>^</code>的个数表示回滚的次数|<br>|<code>git reset --hard HEAD~100</code>|回滚100次，<code>~</code>后的数字表示回滚的次数|<br>|<code>git reset --hard &lt;hashcode&gt;</code>|回滚到<code>&lt;hashcode&gt;</code>表示的版本|</p>
+<p>如果想要重返未来，则需要先使用<code>git relog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard &lt;hashcode&gt;</code>进行重返。</p>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用及常见问题">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/2022/04/10/Letax-数学符号/" data-toggle="tooltip" data-placement="top" title="「Letax」Letax Mathematical Symbols">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Git」撤销、删除与版本回退&body=Hi,I found this website and thought you might like it http://example.com/2022/04/11/git-撤销与版本回退/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Mon Apr 11 2022 09:05:10 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">查看修改</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%92%A4%E9%94%80%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">撤销指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">删除指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">版本回退</span></a></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
-
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
-          
-          <li>
-            04-12
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/12/Cpp-Progranming-Lec-6/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec5:多态
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-分支管理/" style="color: #0085a1">
-              <span>
-                「Git」分支管理
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-pull和push/" style="color: #0085a1">
-              <span>
-                「Git」pull和push的使用及常见问题
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-撤销与版本回退/" style="color: #0085a1">
-              <span>
-                「Git」撤销、删除与版本回退
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/10/Letax-数学符号/" style="color: #0085a1">
-              <span>
-                「Letax」Letax Mathematical Symbols
-                
-                -- Letax
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-03
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/03/OS-Lab1实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab1实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-29
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/29/Cpp-Progranming-Lec-5/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec5:继承和组合
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/24/OO-第一单元总结/" style="color: #0085a1">
-              <span>
-                「BUAA-OO」第一单元:表达式展开
-                
-                -- OO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/21/Cpp-Progranming-Lec-4/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec4:static、const和运算符重载
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/21/OS-Lab0实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab0实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-20
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/20/Cpp-Progranming-Lec-3/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec3:引用和拷贝构造
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/10/Cpp-Progranming-Lec-2/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec2:C++的类
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-04
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/04/ECS服务器使用-文件传输和新终端建立/" style="color: #0085a1">
-              <span>
-                「ECS服务器」文件传输和新终端建立
-                
-                -- ECS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-02
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/02/Cpp-Programing-Lec-1/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」 Lec1:C++函数的特性和常用的宏
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-27
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/27/Spring-Spring配置文件/" style="color: #0085a1">
-              <span>
-                Spring_Spring配置文件
-                
-                -- undefined
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-生命周期与插件/" style="color: #0085a1">
-              <span>
-                「Maven」生命周期与插件
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-依赖与依赖管理/" style="color: #0085a1">
-              <span>
-                「Maven」依赖与依赖管理
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/24/Maven-基础知识/" style="color: #0085a1">
-              <span>
-                「Maven」基础知识
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/24/Java学习笔记-包-Package/" style="color: #0085a1">
-              <span>
-                「Java SE」包(Package)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-接口/" style="color: #0085a1">
-              <span>
-                「Java SE」接口
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-重写（Override）/" style="color: #0085a1">
-              <span>
-                「Java SE」重写(Override)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-继承/" style="color: #0085a1">
-              <span>
-                「Java SE」继承
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-数组/" style="color: #0085a1">
-              <span>
-                「Java SE」数组
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-字符串/" style="color: #0085a1">
-              <span>
-                「Java SE」字符串
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/" style="color: #0085a1">
-              <span>
-                「Java SE」变量类型和修饰符
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-19
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/19/Cpp_引用和指针/" style="color: #0085a1">
-              <span>
-                「Cpp」引用和指针
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2021">
-          <span class="tag-text">2021</span>
-        </span>
-        <ul>
-          
-          <li>
-            12-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/25/CO_P8_MIPS微系统（板级验证）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P8_.MIPS微系统（板级验证）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/15/CO_P7_MIPS微系统（异常中断）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P7_MIPS微系统（异常中断）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/06/CO_P5&P6课上测试总结/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P5&P6_课上测试总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P6_流水线cpu（Plus）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/15/CO_P5_流水线cpu（Basic）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P5_流水线cpu（Basic）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-09
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/09/CO_P4_单周期cpu（Verilog实现）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P4_单周期cpu（Verilog实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/01/CO_P3_单周期cpu（Logisim实现）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P3_单周期cpu（Logisim实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-30
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/30/CO_P2_MIPS汇编程序设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P2_MIPS汇编程序设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog符号数的理解与使用/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog符号数的理解与使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog边沿检测总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog其他tips/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog其他tips
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog状态机设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog中reg的使用/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog中reg的使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-17
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/17/CO_P0_logisim状态机设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P0_logisim状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/01/状压DP解决Hamilton回路问题/" style="color: #0085a1">
-              <span>
-                「Algorithm」状压DP解决Hamilton回路问题
-                
-                -- Algorithm
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#C++" title="C++">C++</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="10">C++</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
-    
-    
-    
-    <a href="/tags/#面向对象" title="面向对象" rel="1">面向对象</a>
-    
-    
-    
-    <a href="/tags/#BUAA" title="BUAA" rel="3">BUAA</a>
-    
-    
-    
-    <a href="/tags/#操作系统" title="操作系统" rel="2">操作系统</a>
-    
-    
-    
-    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../../2022/04/12/Cpp-Progranming-Lec-6/">
-      <li>「BUAA-C++」 Lec5:多态</li>
-    </a>
-    
-    <a href="../../../2022/04/11/git-%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/">
-      <li>「Git」分支管理</li>
-    </a>
-    
-    <a href="../../../2022/04/11/git-pull%E5%92%8Cpush/">
-      <li>「Git」pull和push的使用及常见问题</li>
-    </a>
-    
-    <a href="../../../2022/04/11/git-%E6%92%A4%E9%94%80%E4%B8%8E%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80/">
-      <li>「Git」撤销、删除与版本回退</li>
-    </a>
-    
-    <a href="../../../2022/04/10/Letax-%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7/">
-      <li>「Letax」Letax Mathematical Symbols</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../04/">April 2022</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#ECS">
-      <li>ECS</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
-    </a>
-    
-    <a href="/categories/#面向对象">
-      <li>面向对象</li>
-    </a>
-    
-    <a href="/categories/#操作系统">
-      <li>操作系统</li>
-    </a>
-    
-    <a href="/categories/#Letax">
-      <li>Letax</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
