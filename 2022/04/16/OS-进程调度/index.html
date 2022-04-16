@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/archives/3/">
+  <link rel="canonical" href="http://example.com/2022/04/16/OS-进程调度/">
   <title>
     
-      Hyggge‘s blog
+      「操作系统」进程调度 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -352,19 +352,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_china.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_china.jpg');
     }
 
     header.intro-header {
-       /*config*/
-        background-image: var(--intro-header-background-image-url-home);
-        /* background-image: url('/img/header_img/bg.png'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_china.jpg'); */
       
     }
 
@@ -386,10 +386,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Hyggge&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Be what you want to be, do what you want to do.</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+              
+            </div>
+            <h1>「操作系统」进程调度</h1>
+            <h2 class="subheading">操作系统中进程调度的时机、执行方式和常用策略</h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-04-16
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">6</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">1.8k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -430,720 +462,331 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <p>进程调度实际上就是在<strong>就绪进程队列</strong>中选择一个进程执行，关于进程的调度我们需要考虑三个问题——</p>
+<ul>
+<li><strong>调度的时机</strong>：何时进行进程调度</li>
+<li><strong>调度的执行</strong>：调度时如何进行CPU上下文切换</li>
+<li><strong>调度的策略</strong>：按照什么原则选择一个就绪进程进行调度</li>
+</ul>
+<h2 id="调度的时机"><a class="markdownIt-Anchor" href="#调度的时机"></a> 调度的时机</h2>
+<p>当遇到下面几种情况时，可能会发生进程的调度——</p>
+<ul>
+<li><strong>当一个新的进程被创建时</strong></li>
+<li><strong>当一个进程运行完毕时</strong></li>
+<li><strong>当一个进程由于I/O、信号量或其他原因被阻塞时</strong></li>
+<li><strong>当一个I/O中断发生时（表明某个I/O操作已经完成，而等待该I/O操作的进程转入就绪状态）</strong></li>
+<li><strong>在分时系统中，当一个时钟中断发生时</strong></li>
+<li><strong>当OS取得对CPU的控制时（例如用户系统调用、中断、陷阱）</strong></li>
+</ul>
+<h2 id="调度的执行"><a class="markdownIt-Anchor" href="#调度的执行"></a> 调度的执行</h2>
+<p>在进程上下文切换时，会执行以下步骤——</p>
+<ol>
+<li><strong>保存处理器的上下文，包括程序计数器（PC）和其它寄存器；保存内存镜像（页表信息）</strong></li>
+<li><strong>用新状态和其它相关信息更新正在运行进程的PCB</strong></li>
+<li><strong>把进程移至合适的队列-就绪或阻塞</strong></li>
+<li><strong>选择另一个要执行的进程，更新进程的PCB</strong></li>
+<li><strong>从被选中进程中重装入CPU上下文和内存镜像</strong></li>
+</ol>
+<p>CPU调度按调度层次的不同可以划分为三级——</p>
+<ul>
+<li><strong>高级调度：</strong> 作业层面，即从用户工作流程的角度，对用户提交到每个作业进行调度，时间上通常是分钟、小时或天</li>
+<li><strong>中级调度：</strong> 储存器资源层面，即将进程的部分或全部换出到外存上，将当前所需部分换入到内存</li>
+<li><strong>低级调度：</strong> CPU资源层面，即对CPU计算资源（ALU等）进行分配，时间上通常是毫秒。</li>
+</ul>
+<h2 id="调度的策略"><a class="markdownIt-Anchor" href="#调度的策略"></a> 调度的策略</h2>
+<h3 id="调度策略的度量指标"><a class="markdownIt-Anchor" href="#调度策略的度量指标"></a> 调度策略的度量指标</h3>
+<p>衡量调度策略时通常采用以下几个常用的度量指标——</p>
+<ul>
+<li><strong>吞吐量：</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">总</mi><mi mathvariant="normal">执</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">作业数/总执行时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span><span class="mord">/</span><span class="mord cjk_fallback">总</span><span class="mord cjk_fallback">执</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span></li>
+<li><strong>周转时间：</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">完</mi><mi mathvariant="normal">成</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mo>−</mo><mi mathvariant="normal">提</mi><mi mathvariant="normal">交</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">完成时间-提交时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord cjk_fallback">完</span><span class="mord cjk_fallback">成</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord cjk_fallback">提</span><span class="mord cjk_fallback">交</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span></li>
+<li><strong>带权周转时间：</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">服</mi><mi mathvariant="normal">务</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">（</mi><mi mathvariant="normal">执</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">周转时间/服务时间（执行时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord">/</span><span class="mord cjk_fallback">服</span><span class="mord cjk_fallback">务</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">（</span><span class="mord cjk_fallback">执</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span>）</li>
+<li><strong>平均周转时间：</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">一</mi><mi mathvariant="normal">组</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">之</mi><mi mathvariant="normal">和</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi></mrow><annotation encoding="application/x-tex">一组作业周转时间之和/作业数</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">组</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">之</span><span class="mord cjk_fallback">和</span><span class="mord">/</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span></span></span></span></li>
+<li><strong>平均带权周转时间：</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">一</mi><mi mathvariant="normal">组</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">带</mi><mi mathvariant="normal">权</mi><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">之</mi><mi mathvariant="normal">和</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi></mrow><annotation encoding="application/x-tex">一组作业带权周转时间之和/作业数</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">组</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">带</span><span class="mord cjk_fallback">权</span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">之</span><span class="mord cjk_fallback">和</span><span class="mord">/</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span></span></span></span></li>
+</ul>
+<h3 id="调度策略的选择"><a class="markdownIt-Anchor" href="#调度策略的选择"></a> 调度策略的选择</h3>
+<p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以奖惩分为两种分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
+<p>对于不同特性的进程，我们通常会采用不同的调度算法。</p>
+<p>根据 <strong>”是否在时钟中断作出调度决策“</strong>，我们将进程的调度分为<strong>非抢占式和抢占式</strong>。</p>
+<ul>
+<li><strong>非抢占式：</strong> 被调度进程会一直执行<strong>直到阻塞或主动放弃CPU</strong>，时钟中断时不会做调度决策</li>
+<li><strong>抢占式：</strong> 被调度程序运行一个固定的最大时间段（时间片），如果时间结束进程还在执行，挂起进程并进行切换（时钟中断时做调度决策）。</li>
+</ul>
+<p>对于不同的应用领域，我们会采用不同的调度策略，而这些策略也都离不开非抢占式和抢占式两种基本算法。常见的应用领域包括<strong>批处理系统、交互式系统、实时系统、多处理系统</strong>。<br />
+<img src="%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6.jpg" alt="" /></p>
+<h4 id="批处理系统"><a class="markdownIt-Anchor" href="#批处理系统"></a> <strong>批处理系统</strong></h4>
+<p>批处理是指用户将一批作业提交给操作系统后就不再干预。在批处理系统中，一个作业需要长时间的占用CPU，因此我们一般采用<strong>非抢占式算法或分配长时间周期的抢占算法</strong>。</p>
+<p>在策略选择时，我们主要关注<strong>吞吐量和周转时间</strong>这两个指标。常用策略——</p>
+<ul>
+<li>先来先服务（FCFS：First Come First Serve)</li>
+<li>最短作业优先（SJF：Shortest Job First)</li>
+<li>最短剩余时间优先（SRTN：Shortest Remaining Time Next）</li>
+<li>最高响应比优先（HRRN：Highest Response<br />
+Ratio Next）</li>
+</ul>
+<h4 id="交互式系统"><a class="markdownIt-Anchor" href="#交互式系统"></a> <strong>交互式系统</strong></h4>
+<p>交互式计算机系统与操作人员以人机对话的方式一问一答，直至获得最后处理结果。这种系统服务于多个用户的环境，例如分时系统、手机系统，因此需要避免一个进程霸占CPU，一般使用<strong>抢占式算法</strong>。</p>
+<p>在策略选择时，我们主要关注<strong>响应时间</strong>这个指标，并希望任务花费时间随着其复杂度应该线性增长。常用策略——</p>
+<ul>
+<li>时间片轮转(RR：Round Robin）</li>
+<li>优先级调度(Priority Scheduling)</li>
+<li>多级队列（MQ：Multi-level Queue）</li>
+<li>多级反馈队列（MFQ：Multi-level Feedback<br />
+Queue ）</li>
+<li>彩票调度（Lottery Scheduling）</li>
+</ul>
+<h4 id="实时系统"><a class="markdownIt-Anchor" href="#实时系统"></a> <strong>实时系统</strong></h4>
+<p>实时系统是指计算的正确性不仅取决于程序的逻辑正确性，也取决于结果产生的时间。如果不满足确定性的截止时间需求，将会发生系统出错。因此我们<strong>主要采用抢占式算法，也可能非抢占式</strong>。</p>
+<p>在策略选择时，我们主要关注 <strong>“截止时间是否可以得到满足”</strong>，并希望策略有一定可预测性和规律性。常用策略——</p>
+<ul>
+<li>静态表调度（Static table-driven scheduling）</li>
+<li>单调速率调度（RMS：Rate Monotonic<br />
+Scheduling）</li>
+<li>最早截止时间优先算法（EDF：Earliest<br />
+Deadline First）</li>
+</ul>
+<h4 id="多处理系统"><a class="markdownIt-Anchor" href="#多处理系统"></a> <strong>多处理系统</strong></h4>
+<p>多处理系统指系统中有多个处理机同时进行工作，这种系统的调度更需要关注于系统整体的运行效率，调度单位广泛采用线程。</p>
+<p>多处理系统有两种，包括<strong>非对称式多处理系统(AMP)<strong>和</strong>对称式多处理系统(SMP)</strong>。</p>
+<ul>
+<li>AMP中各个处理器的地位不同，有“主从”之分——由主处理机管理一个公共就绪队列，并分派进程给从处理机执行，每个处理机都有固定的分工（执行OS的系统功能？处理I/O？）</li>
+<li>SMP中各个处理器的地位是相同的。根据控制的方式的不同，SMP调度算法可分为集中控制和分散控制，前者主要包括<strong>静态分配(static assignment)<strong>和</strong>动态分配(dynamic assignment)</strong>，后者主要包括<strong>自调度（Self Scheduling）</strong>。</li>
+</ul>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2022/04/12/Cpp-Progranming-Lec-6/" data-toggle="tooltip" data-placement="top" title="「BUAA-C++」 Lec6:多态">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「操作系统」进程调度&body=Hi,I found this website and thought you might like it http://example.com/2022/04/16/OS-进程调度/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Sat Apr 16 2022 20:36:45 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 调度的时机</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 调度的执行</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E7%AD%96%E7%95%A5"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 调度的策略</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> 调度策略的度量指标</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 调度策略的选择</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text"> 批处理系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text"> 交互式系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.3.</span> <span class="toc-nav-text"> 实时系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.4.</span> <span class="toc-nav-text"> 多处理系统</span></a></li></ol></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-
-
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/23/Java学习笔记-重写（Override）/">
-    <h2 class="post-title">
-      「Java SE」重写(Override)
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。
-重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
-
- 重写父类中的方法
- 概念
-当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如
-1234567891011121314......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-23
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/22/Java学习笔记-继承/">
-    <h2 class="post-title">
-      「Java SE」继承
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
- 继承
- 语法和概念
-1修饰符 class 子类名 extends 父类名
-
-子类从它的父类中继承所有的数据域和方法，也可以添加新的数据域和新的方法。
-如果类 B 从类 A 派生，或者说类 B 扩展自类 A，或者说类 B 继承类 A，
-
-称类 A 为&quot;父类&quot;，也称为超类、基类；
-称类 B 为&quot;子类&quot;，也称为次类、扩展类、派生类。
-
-
-
- 继承的注意点......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-22
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/22/Java学习笔记-数组/">
-    <h2 class="post-title">
-      「Java SE」数组
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
- 数组的创建的访问
- 一维数组的创建
-
-一维数组的创建有以下几种方法——  1234567//先声明后定义int[] array;array = new int[100];//直接定义int[] array = new int[100];//列表定义int[] array = &#123;1, 2, 3, 4&#125;;
-
-
- 多维数组的创建
-
-下面以二维数组为例介绍多维数组的创建方法 ......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-22
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/22/Java学习笔记-字符串/">
-    <h2 class="post-title">
-      「Java SE」字符串
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      Java中和字符串相关类有以下3种——
-
-String类
-StringBuild类
-StringBuffer类
-
-
- String类
- 对象创建
-
-例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-22
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/">
-    <h2 class="post-title">
-      「Java SE」变量类型和修饰符
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
- Java的变量类型
-Java中的变量类型有以下三种——
-
-类变量
-实例变量
-局部变量
-
- 类变量(静态变量)
-
-类变量是属于所在的类，而不属于任何由该类定义的对象。 换句话说，不管实例化了多少对象，类变量都只有一个。类变量是由static修饰的，这一点和C++相似。
-一般情况下和final一起声明常量，很少单独使用static声明变量。而且，大多数静态变量被声明为public类型。因此，......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-21
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/19/Cpp_引用和指针/">
-    <h2 class="post-title">
-      「Cpp」引用和指针
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       序言
-
-本文介绍C++中引用，指针，const限定符和常量表达式等几个部分的内容。对应原书45页——60页。
- 引用
-
-
-引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。
-
-
-举例如下123int a = 16;int &amp;b = a; //b是a的引用，需要在b前加引用符&amp;int &......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-19
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#C++" title="C++">C++</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/12/25/CO_P8_MIPS微系统（板级验证）/">
-    <h2 class="post-title">
-      「BUAA-CO」P8_.MIPS微系统（板级验证）
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       MIPS微系统设计方案
- 设计概述
-本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
-
-为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。
-
- 实......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-12-25
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/12/15/CO_P7_MIPS微系统（异常中断）/">
-    <h2 class="post-title">
-      「BUAA-CO」P7_MIPS微系统（异常中断）
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       MIPS微系统设计方案
- 设计概述
-​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-12-15
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/12/06/CO_P5&P6课上测试总结/">
-    <h2 class="post-title">
-      「BUAA-CO」P5&P6_课上测试总结
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-
- 增添指令一般步骤
- 明确指令RTL
-
-该步骤需要结合题目弄懂指令行为，包括明确指令类型（R型？I型？J型？即明确读和写的目标）、opcode和funct域数据、执行功能（计算？跳转？访存？）
-最好可以先用MARS模拟下，以免对指令行为理解不到位。
-
- 明确非转发数据通路
-
-在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-12-06
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/">
-    <h2 class="post-title">
-      「BUAA-CO」P6_流水线cpu（Plus）
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-       流水线CPU设计方案
- 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-11-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-
-  <!-- Pager -->
-  <ul class="pager">
-    
-    <li class="previous">
-      <a href="/archives/2/">&larr; Older Posts</a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/archives/4/">Newer Posts &rarr;</a>
-    </li>
-    
-  </ul>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="7">C++</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
-    
-    
-    
-    <a href="/tags/#面向对象" title="面向对象" rel="1">面向对象</a>
-    
-    
-    
-    <a href="/tags/#BUAA" title="BUAA" rel="3">BUAA</a>
-    
-    
-    
-    <a href="/tags/#操作系统" title="操作系统" rel="3">操作系统</a>
-    
-    
-    
-    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
-    
-    
-    
-    <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../2022/04/16/OS-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">
-      <li>「操作系统」进程调度</li>
-    </a>
-    
-    <a href="../../2022/04/12/Cpp-Progranming-Lec-6/">
-      <li>「BUAA-C++」 Lec6:多态</li>
-    </a>
-    
-    <a href="../../2022/04/11/git-%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/">
-      <li>「Git」分支管理</li>
-    </a>
-    
-    <a href="../../2022/04/11/git-pull%E5%92%8Cpush/">
-      <li>「Git」pull和push的使用及常见问题</li>
-    </a>
-    
-    <a href="../../2022/04/11/git-%E6%92%A4%E9%94%80%E4%B8%8E%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80/">
-      <li>「Git」撤销、删除与版本回退</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/04/">April 2022</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#ECS">
-      <li>ECS</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
-    </a>
-    
-    <a href="/categories/#面向对象">
-      <li>面向对象</li>
-    </a>
-    
-    <a href="/categories/#操作系统">
-      <li>操作系统</li>
-    </a>
-    
-    <a href="/categories/#Letax">
-      <li>Letax</li>
-    </a>
-    
-    <a href="/categories/#Git">
-      <li>Git</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
