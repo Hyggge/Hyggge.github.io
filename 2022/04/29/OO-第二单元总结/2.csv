@@ -1,0 +1,75 @@
+Complexity metrics,ÖÜÈý, 27 4ÔÂ 2022 17:32:50 CST
+Method,CogC,ev(G),iv(G),v(G)
+MainClass.main(String[]),3,1,4,4
+"elevator.ElevatorFactory.create(String, int, int, int, RequestTable)",2,2,1,2
+"elevator.LateralElevator.LateralElevator(int, int, int, RequestTable, Strategy)",1,1,2,2
+elevator.LateralElevator.in(HashSet<Person>),1,1,2,2
+elevator.LateralElevator.move(),2,1,3,3
+elevator.LateralElevator.openAndClose(HashSet<Person>),1,1,2,2
+elevator.LateralElevator.out(),1,1,2,2
+"elevator.LateralElevator.pickPeople(int, int)",0,1,1,1
+elevator.LateralElevator.run(),10,8,7,8
+"elevator.VerticalElevator.VerticalElevator(int, int, int, RequestTable, Strategy)",1,1,2,2
+elevator.VerticalElevator.in(HashSet<Person>),1,1,2,2
+elevator.VerticalElevator.move(),2,1,2,3
+elevator.VerticalElevator.openAndClose(HashSet<Person>),1,1,2,2
+elevator.VerticalElevator.out(),1,1,2,2
+"elevator.VerticalElevator.pickPeople(int, int, boolean)",0,1,1,1
+elevator.VerticalElevator.run(),10,8,7,8
+"strategy.LateralStrategy.getAdvice(int, int, int, boolean, HashMap<Integer, HashSet<Person>>, RequestTable)",12,6,5,8
+"strategy.LateralStrategy.needReverse(int, boolean, RequestTable, HashMap<Integer, HashSet<Person>>)",4,2,8,8
+"strategy.VerticalStrategy.getAdvice(int, int, int, boolean, HashMap<Integer, HashSet<Person>>, RequestTable)",12,6,4,8
+"strategy.VerticalStrategy.hasReqInNowDirection(int, boolean, RequestTable)",12,6,4,6
+"system.InputHandler.InputHandler(ElevatorFactory, HashMap<Integer, RequestTable>, HashMap<Integer, RequestTable>)",0,1,1,1
+system.InputHandler.getElevatorRequest(ElevatorRequest),2,1,2,2
+system.InputHandler.getPersonRequest(PersonRequest),2,1,2,2
+system.InputHandler.run(),12,3,8,8
+system.OutputHandler.println(String),0,1,1,1
+"utils.Person.Person(int, int, int, int, int)",0,1,1,1
+utils.Person.getFromBuilding(),0,1,1,1
+utils.Person.getFromFloor(),0,1,1,1
+utils.Person.getId(),0,1,1,1
+utils.Person.getToBuilding(),0,1,1,1
+utils.Person.getToFloor(),0,1,1,1
+utils.RequestTable.RequestTable(String),1,1,2,2
+utils.RequestTable.addRequest(Person),2,1,2,2
+"utils.RequestTable.check(int, boolean)",7,4,5,7
+"utils.RequestTable.delRequest(int, boolean, int)",4,1,4,4
+"utils.RequestTable.delRequest(int, int)",2,1,3,3
+utils.RequestTable.isEmpty(),0,1,1,1
+utils.RequestTable.isOver(),0,1,1,1
+utils.RequestTable.needGetIn(int),0,1,1,1
+utils.RequestTable.setOver(),0,1,1,1
+utils.RequestTable.waitRequest(),1,1,2,2
+utils.Tool.adjustId(int),2,1,1,3
+utils.Tool.charToId(char),0,1,1,1
+utils.Tool.idToChar(int),0,1,1,1
+
+Class,OCavg,OCmax,WMC
+MainClass,4.00,4,4
+elevator.Elevator,n/a,n/a,0
+elevator.ElevatorFactory,2.00,2,2
+elevator.LateralElevator,2.57,8,18
+elevator.VerticalElevator,2.57,8,18
+strategy.LateralStrategy,4.00,6,8
+strategy.VerticalStrategy,6.00,6,12
+system.InputHandler,3.00,7,12
+system.OutputHandler,1.00,1,1
+utils.Advice,n/a,n/a,0
+utils.Person,1.00,1,6
+utils.RequestTable,1.80,4,18
+utils.Tool,1.67,3,5
+
+Package,v(G)avg,v(G)tot
+,4.00,4
+elevator,2.80,42
+strategy,7.50,30
+system,2.80,14
+utils,1.84,35
+
+Module,v(G)avg,v(G)tot
+U2_H6_P,2.84,125
+
+Project,v(G)avg,v(G)tot
+project,2.84,125
+

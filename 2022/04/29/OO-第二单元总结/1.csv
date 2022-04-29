@@ -1,0 +1,54 @@
+Complexity metrics,ÖÜÈý, 27 4ÔÂ 2022 17:29:34 CST
+Method,CogC,ev(G),iv(G),v(G)
+MainClass.main(String[]),0,1,1,1
+"system.Elevator.Elevator(int, char, RequestTable)",1,1,2,2
+system.Elevator.in(),1,1,2,2
+system.Elevator.move(),2,1,2,3
+system.Elevator.openAndClose(),1,1,2,2
+system.Elevator.out(),1,1,2,2
+system.Elevator.run(),7,3,7,7
+"system.InputHandler.InputHandler(HashMap<Character, RequestTable>)",0,1,1,1
+system.InputHandler.run(),8,3,5,5
+system.OutputHandler.println(String),0,1,1,1
+system.RequestTable.RequestTable(),1,1,2,2
+system.RequestTable.addRequest(Person),0,1,1,1
+"system.RequestTable.delRequest(int, boolean, int)",6,1,6,6
+system.RequestTable.isEmpty(),0,1,1,1
+system.RequestTable.isOver(),0,1,1,1
+system.RequestTable.needGetIn(int),0,1,1,1
+system.RequestTable.setOver(),0,1,1,1
+system.RequestTable.waitRequest(),1,1,2,2
+system.Strategy.Strategy(RequestTable),0,1,1,1
+"system.Strategy.canOpenForIn(int, int)",1,2,1,2
+"system.Strategy.canOpenForOut(int, HashMap<Integer, HashSet<Person>>)",0,1,1,1
+"system.Strategy.getAdvice(int, int, boolean, HashMap<Integer, HashSet<Person>>)",16,7,4,8
+"system.Strategy.hasReqInOriginDirection(int, boolean)",12,6,4,6
+"system.Strategy.needAdjustDirection(int, boolean, HashMap<Integer, HashSet<Person>>)",10,5,6,8
+"utils.Person.Person(int, char, char, int, int)",0,1,1,1
+utils.Person.getFromBuilding(),0,1,1,1
+utils.Person.getFromFloor(),0,1,1,1
+utils.Person.getId(),0,1,1,1
+utils.Person.getToBuilding(),0,1,1,1
+utils.Person.getToFloor(),0,1,1,1
+
+Class,OCavg,OCmax,WMC
+MainClass,1.00,1,1
+system.Elevator,2.67,7,16
+system.InputHandler,2.50,4,5
+system.OutputHandler,1.00,1,1
+system.RequestTable,1.50,4,12
+system.Strategy,3.67,7,22
+utils.Advice,n/a,n/a,0
+utils.Person,1.00,1,6
+
+Package,v(G)avg,v(G)tot
+,1.00,1
+system,2.87,66
+utils,1.00,6
+
+Module,v(G)avg,v(G)tot
+U2_H5_Project,2.43,73
+
+Project,v(G)avg,v(G)tot
+project,2.43,73
+
