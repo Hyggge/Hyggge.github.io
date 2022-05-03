@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/categories/ECS/">
+  <link rel="canonical" href="http://example.com/2022/05/03/OS-Lab3实验报告/">
   <title>
     
-      Hyggge‘s blog
+      「BUAA-OS」 Lab3实验报告 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -352,19 +352,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_china.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_china.jpg');
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/bg.png'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_china.jpg'); */
       
     }
 
@@ -386,10 +386,44 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Hyggge&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Be what you want to be, do what you want to do.</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+              
+              <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+              
+            </div>
+            <h1>「BUAA-OS」 Lab3实验报告</h1>
+            <h2 class="subheading">进程调度</h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-05-03
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">7</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">1.9k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -430,895 +464,325 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h1 id="lab3-实验报告"><a class="markdownIt-Anchor" href="#lab3-实验报告"></a> Lab3 实验报告</h1>
+<h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
+<h3 id="thinking-31"><a class="markdownIt-Anchor" href="#thinking-31"></a> Thinking 3.1</h3>
+<p><strong>Q：</strong> <strong>思考<code>envid2env</code> 函数:为什么<code>envid2env</code>中需要判断<code>e-&gt;env_id != envid</code> 的情况？如果没有这步判断会发生什么情况？</strong></p>
+<p><strong>A：</strong> 通过阅读该函数的代码，我们能知道，<code>e</code>是根据<code>envid</code>的后10位从<code>envs</code>数组中获得的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">envid2env</span><span class="params">(u_int envid, struct Env **penv, <span class="keyword">int</span> checkperm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Env</span> *<span class="title">e</span>;</span></span><br><span class="line">	<span class="keyword">if</span> (envid == <span class="number">0</span>) &#123;</span><br><span class="line">		*penv = curenv;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		e = envs + <span class="built_in">ENVX</span>(envid);</span><br><span class="line">	&#125; e = envs + <span class="built_in">ENVX</span>(envid);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+<p>但是这样获得的<code>e</code>的<code>envid</code>不一定和<code>envid</code>相同，因为<code>envid</code>中还有<code>ASID</code>字段（11-16位），当<code>envs</code>中的某一个进程控制块被替换，新生成的<code>envid</code>的后10不变，但是<code>ASID</code>字段会改变。所以我们需要进一步判断<code>e-&gt;env_id != envid</code>是否成立。</p>
+<p>如果不判断，则通过最终获得的<code>e</code>可能并不是我们想要的内存控制块，而如果对这个错误的内存控制块操作，则可能会导致内存控制出现混乱（例如获得一个仍在<code>env_free_list</code>中的PCB，然后运行它）。</p>
+<h3 id="thinking-32"><a class="markdownIt-Anchor" href="#thinking-32"></a> Thinking 3.2</h3>
+<p><strong>Q：</strong> <strong>结合include/mmu.h 中的地址空间布局，思考<code>env_setup_vm</code> 函数：</strong></p>
+<ul>
+<li><strong><code>UTOP</code> 和<code>ULIM</code>的含义分别是什么，<code>UTOP</code> 和 <code>ULIM</code> 之间的区域与UTOP以下的区域相比有什么区别？</strong></li>
+<li><strong>请结合系统自映射机制解释代码中<code>pgdir[PDX(UVPT)]=env_cr3</code>的含义。</strong></li>
+<li><strong>谈谈自己对进程中物理地址和虚拟地址的理解。</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li>
+<p><code>ULIM</code>是<code>kseg0</code>和<code>kuseg</code>的分界线，也是内核态虚拟内存区和用户态虚拟内存区的分界线；<code>UTOP</code>是<code>kuseg</code>中只读区和可读写区的分界线。<strong><code>UTOP</code>和<code>ULIM</code>之间是只读区域</strong>，用来存放用户的进程信息和页表信息；<strong><code>UTOP</code>之下的是可读写区域</strong>，用户可以自由读写。</p>
+</li>
+<li>
+<p><code>UVPT</code>是<code>kuseg</code>中保存用户（当前进程）页表信息的虚拟内存区，大小为4MB（0x7fc00000-0x80000000），<code>env_cr3</code>是进程页目录所在的物理地址。<code>pgdir[PDX(UVPT)]=env_cr3</code>表示页目录中第<code>PDX(UVPT)</code>项映射到页目录本身的物理地址，实现自映射机制。</p>
+</li>
+<li>
+<p>在用户进程中使用的是虚拟地址（用户可见），然后MMU通过查询页表得到对应的物理地址（用户不可见），并最终通过物理地址在物理内存中获取值。</p>
+</li>
+</ul>
+<h3 id="thinking-33"><a class="markdownIt-Anchor" href="#thinking-33"></a> Thinking 3.3</h3>
+<p><strong>Q：</strong> <strong>找到 <code>user_data</code> 这一参数的来源，思考它的作用。没有这个参数可不可以？为什么？（可以尝试说明实际的应用场景，举一个实际的库中的例子）</strong></p>
+<p><strong>A：</strong> <code>user_data</code> 在 <code>load_elf</code> 和 <code>load_icode_mapper</code> 两个函数中用到。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//env.c</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">load_icode_mapper</span><span class="params">(u_long va, <span class="keyword">u_int32_t</span> sgsize,</span></span></span><br><span class="line"><span class="function"><span class="params">                             u_char *bin, <span class="keyword">u_int32_t</span> bin_size, <span class="keyword">void</span> *user_data)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//kernel_elfloader.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">load_elf</span><span class="params">(u_char *binary, <span class="keyword">int</span> size, u_long *entry_point, <span class="keyword">void</span> *user_data,</span></span></span><br><span class="line"><span class="function"><span class="params">			 <span class="keyword">int</span> (*map)(u_long va, <span class="keyword">u_int32_t</span> sgsize, </span></span></span><br><span class="line"><span class="function"><span class="params">			 	u_char *bin, <span class="keyword">u_int32_t</span> bin_size, <span class="keyword">void</span> *user_data))</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">int</span> ret = <span class="built_in">map</span>(phdr-&gt;p_vaddr, phdr-&gt;p_memsz, binary + phdr-&gt;p_offset, phdr-&gt;p_filesz, user_data);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不可以没有这个参数，因为在<code>load_elf</code>函数中需要进一步将这个参数传递给函数指针<code>map</code>（实际上指向的是<code>load_icode_mapper</code>）。</p>
+<h3 id="thinking-34"><a class="markdownIt-Anchor" href="#thinking-34"></a> Thinking 3.4</h3>
+<p><strong>Q：</strong> <strong>结合<code>load_icode_mapper</code> 的参数以及二进制镜像的大小，考虑该函数可能会面临哪几种复制的情况？你是否都考虑到了？</strong><br />
+<strong>A：</strong> <code>va</code>和<code>va+bin_size</code>的相对位置有以下6种</p>
+<p><img src="3.4-1.svg" alt="" /></p>
+<p><code>va+bin_size</code>和<code>va+sg_size</code>的相对位置有以下6种</p>
+<p><img src="3.4-2.svg" alt="" /></p>
+<h3 id="thinking-35"><a class="markdownIt-Anchor" href="#thinking-35"></a> Thinking 3.5</h3>
+<p><strong>Q：</strong> <strong>思考上面这一段话，并根据自己在lab2 中的理解，回答：</strong></p>
+<ul>
+<li><strong>你认为这里的 <code>env_tf.pc</code> 存储的是物理地址还是虚拟地址?</strong></li>
+<li><strong>你觉得<code>entry_point</code>其值对于每个进程是否一样？该如何理解这种统一或不同？</strong></li>
+</ul>
+<p><strong>A：</strong> env_tf.pc中存储的是虚拟地址。对于每个进程来说entry_point都是一样的，这样可使让程序的每次执行都从一个固定的虚拟地址开始，这种统一对CPU是友好的。</p>
+<h3 id="thinking-36"><a class="markdownIt-Anchor" href="#thinking-36"></a> Thinking 3.6</h3>
+<p><strong>Q：</strong> <strong>请查阅相关资料解释，上面提到的<code>epc</code>是什么？为什么要将<code>env_tf.pc</code>设置为<code>epc</code>呢？</strong></p>
+<p><strong>A：</strong> <code>epc</code>是CP0中的一个寄存器（14号），用于保存使该进程出现异常（包括中断）时指令所在的<code>pc</code>。进程因异常被切换时将<code>env_tf.pc</code>设置为<code>epc</code>，实际上就是保存了“该进程运行到了什么地方”。这样就可以使进程在下一次被调度时，<strong>直接从上次出现异常的位置继续向后运行</strong>。</p>
+<h3 id="thinking-37"><a class="markdownIt-Anchor" href="#thinking-37"></a> Thinking 3.7</h3>
+<p><strong>Q：</strong>  <strong>关于 <code>TIMESTACK</code>，请思考以下问题：</strong></p>
+<ul>
+<li><strong>操作系统在何时将什么内容存到了 <code>TIMESTACK</code> 区域</strong></li>
+<li><strong><code>TIMESTACK</code> 和 <code>env_asm.S</code> 中所定义的 <code>KERNEL_SP</code> 的含义有何不同</strong></li>
+</ul>
+<p><strong>A：</strong> 操作系统在进程切换时将新进程的<code>env_tf</code>中的内容保存到<code>TIMESTACK</code>区域。 <code>TIMESTACK</code>时发生时钟中断时的栈顶指针，<code>KERNEL_SP</code>是发生其他中断时的栈顶指针。</p>
+<h3 id="thinking-38"><a class="markdownIt-Anchor" href="#thinking-38"></a> Thinking 3.8</h3>
+<p><strong>Q：</strong> <strong>试找出上述 5 个异常处理函数的具体实现位置</strong><br />
+<strong>A：</strong> 只能找出<code>handle_int</code>和<code>handle_sys</code>的实现位置，前者在<code>genex.S</code>文件中，后者在<code>syscall.S</code>文件中</p>
+<h3 id="thinking-39"><a class="markdownIt-Anchor" href="#thinking-39"></a> Thinking 3.9</h3>
+<p><strong>Q：</strong> <strong>阅读 <code>kclock_asm.S</code> 和 <code>genex.S</code> 两个文件，并尝试说出 <code>set_timer</code> 和 <code>timer_irq</code> 函数中每行汇编代码的作用</strong><br />
+<strong>A：</strong> <code>set_time</code>函数的分析如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.macro	setup_c0_status set clr</span><br><span class="line">	.set	push</span><br><span class="line">	mfc0	t0, CP0_STATUS</span><br><span class="line">	or	t0, \set|\clr</span><br><span class="line">	xor	t0, \clr</span><br><span class="line">	mtc0	t0, CP0_STATUS			</span><br><span class="line">	.set	pop</span><br><span class="line">.endm</span><br><span class="line"></span><br><span class="line">LEAF(set_timer)</span><br><span class="line">	li t0, 0xc8							</span><br><span class="line">	sb t0, 0xb5000100					#在地址0xb5000100中写入0xc8，使时钟频率设为200</span><br><span class="line">	sw	sp, KERNEL_SP					#将sp寄存器中的值存入地址KERNEL_SP中</span><br><span class="line">setup_c0_status STATUS_CU0|0x1001 0		#将CP0的SR寄存器中第1、12、28位 置为1，作用是开启全局中断使能和始终中断使能，并允许用户态使用CP0</span><br><span class="line">	jr ra								#函数返回</span><br><span class="line"></span><br><span class="line">	nop</span><br><span class="line">END(set_timer)</span><br></pre></td></tr></table></figure>
+<p><code>time_irq</code>函数的分析如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">timer_irq:</span><br><span class="line"></span><br><span class="line">	sb zero, 0xb5000110					#在地址0xb0000110中写入0，响应时钟中断</span><br><span class="line">1:	j	sched_yield						#跳转到sched_yield函数，进行进程切换</span><br><span class="line">	nop</span><br><span class="line">	&#x2F;*li t1, 0xff</span><br><span class="line">	lw    t0, delay</span><br><span class="line">	addu  t0, 1</span><br><span class="line">	sw	t0, delay</span><br><span class="line">	beq	t0,t1,1f	</span><br><span class="line">	nop*&#x2F;</span><br><span class="line">	j	ret_from_exception				#跳转到ret_from_exception函数</span><br><span class="line">	nop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="thinking-39-2"><a class="markdownIt-Anchor" href="#thinking-39-2"></a> Thinking 3.9</h3>
+<p><strong>Q：</strong> <strong>阅读相关代码，思考操作系统是怎么根据时钟周期切换进程的。</strong><br />
+<strong>A：</strong> <code>env_sched_list</code>有两个链表存放就绪进程。当进程被创建时，我们将其插入第一个进程调度链表的头部。调用 <code>sched_yield</code> 函数时, 先判断当前时间片是否用完。如果用完，则将其插入另一个链表的结尾，之后判断当前就绪状态进程链表是否为空。如果为空, 将指针切换到另一个就绪状态进程链表。最后从指针指向的链表的头部获取一个就绪进程进行切换。</p>
+<hr />
+<h2 id="实验难点图示"><a class="markdownIt-Anchor" href="#实验难点图示"></a> 实验难点图示</h2>
+<p>我认为该实验的难点在于理解<strong>进程的创建流程</strong>、<strong>时钟中断的处理流程</strong>和<strong>进程的切换流程</strong>。</p>
+<h3 id="进程创建流程"><a class="markdownIt-Anchor" href="#进程创建流程"></a> 进程创建流程</h3>
+<p><img src="create.svg" alt="" /></p>
+<h3 id="时钟中断的处理流程"><a class="markdownIt-Anchor" href="#时钟中断的处理流程"></a> 时钟中断的处理流程</h3>
+<p><img src="irq.svg" alt="" /></p>
+<h3 id="进程切换流程"><a class="markdownIt-Anchor" href="#进程切换流程"></a> 进程切换流程</h3>
+<p><img src="run.svg" alt="" /></p>
+<hr />
+<h2 id="体会与感想"><a class="markdownIt-Anchor" href="#体会与感想"></a> 体会与感想</h2>
+<p>Lab3要求我们实现<strong>进程的创建、切换和调度</strong>，其中进程的调度主要是通过设置异常处理机制来实现。</p>
+<p>本次实验的难度比Lab2稍稍低一些，主要原因是本次lab中各个函数之间的联系比较紧密。虽然某些复杂函数理解起来还是有些困难，但是如果在宏观上把握这些函数的关系，那么对于单个函数的理解就变得相对容易了。</p>
+<p>所以，在阅读复杂工程的代码时，不要急于阅读每一个函数的细节，而是应该首先搞清楚<strong>工程的文件结构</strong>（by makefile）和<strong>不同函数之间的关系</strong>（by doc），然后再按照一定的逻辑顺序阅读代码，这样就可以达到事半功倍的效果。</p>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2022/04/29/OO-第二单元总结/" data-toggle="tooltip" data-placement="top" title="「BUAA-OO」第二单元:电梯调度">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OS」 Lab3实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/05/03/OS-Lab3实验报告/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Tue May 03 2022 11:13:40 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#lab3-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> Lab3 实验报告</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-31"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text"> Thinking 3.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-32"><span class="toc-nav-number">1.1.2.</span> <span class="toc-nav-text"> Thinking 3.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-33"><span class="toc-nav-number">1.1.3.</span> <span class="toc-nav-text"> Thinking 3.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-34"><span class="toc-nav-number">1.1.4.</span> <span class="toc-nav-text"> Thinking 3.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-35"><span class="toc-nav-number">1.1.5.</span> <span class="toc-nav-text"> Thinking 3.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-36"><span class="toc-nav-number">1.1.6.</span> <span class="toc-nav-text"> Thinking 3.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-37"><span class="toc-nav-number">1.1.7.</span> <span class="toc-nav-text"> Thinking 3.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-38"><span class="toc-nav-number">1.1.8.</span> <span class="toc-nav-text"> Thinking 3.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-39"><span class="toc-nav-number">1.1.9.</span> <span class="toc-nav-text"> Thinking 3.9</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-39-2"><span class="toc-nav-number">1.1.10.</span> <span class="toc-nav-text"> Thinking 3.9</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text"> 进程创建流程</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%97%B6%E9%92%9F%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text"> 时钟中断的处理流程</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text"> 进程切换流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
-
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
-          
-          <li>
-            05-03
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/05/03/OS-Lab3实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab3实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-29
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/29/OO-第二单元总结/" style="color: #0085a1">
-              <span>
-                「BUAA-OO」第二单元:电梯调度
-                
-                -- OO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-18
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/18/Cpp-Programing-Lec-7/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec7:C++类模版和STL简介
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-18
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/18/OS-Lab2实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab2实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-16
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/16/OS-进程调度/" style="color: #0085a1">
-              <span>
-                「操作系统」进程调度
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-12
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/12/Cpp-Progranming-Lec-6/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec6:多态
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-分支管理/" style="color: #0085a1">
-              <span>
-                「Git」分支管理
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-pull和push/" style="color: #0085a1">
-              <span>
-                「Git」pull和push的使用及常见问题
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-11
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/11/git-撤销与版本回退/" style="color: #0085a1">
-              <span>
-                「Git」撤销、删除与版本回退
-                
-                -- Git
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/10/Letax-数学符号/" style="color: #0085a1">
-              <span>
-                「Letax」Letax Mathematical Symbols
-                
-                -- Letax
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            04-03
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/04/03/OS-Lab1实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab1实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-29
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/29/Cpp-Progranming-Lec-5/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec5:继承和组合
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/24/OO-第一单元总结/" style="color: #0085a1">
-              <span>
-                「BUAA-OO」第一单元:表达式展开
-                
-                -- OO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/21/Cpp-Progranming-Lec-4/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec4:static、const和运算符重载
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/21/OS-Lab0实验报告/" style="color: #0085a1">
-              <span>
-                「BUAA-OS」 Lab0实验报告
-                
-                -- OS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-20
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/20/Cpp-Progranming-Lec-3/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec3:引用和拷贝构造
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/10/Cpp-Progranming-Lec-2/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec2:C++的类
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-04
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/04/ECS服务器使用-文件传输和新终端建立/" style="color: #0085a1">
-              <span>
-                「ECS服务器」文件传输和新终端建立
-                
-                -- ECS
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            03-02
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/03/02/Cpp-Programing-Lec-1/" style="color: #0085a1">
-              <span>
-                「BUAA-C++」Lec1:C++函数的特性和常用的宏
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-27
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/27/Spring-Spring配置文件/" style="color: #0085a1">
-              <span>
-                Spring_Spring配置文件
-                
-                -- undefined
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-生命周期与插件/" style="color: #0085a1">
-              <span>
-                「Maven」生命周期与插件
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/25/Maven-依赖与依赖管理/" style="color: #0085a1">
-              <span>
-                「Maven」依赖与依赖管理
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/24/Maven-基础知识/" style="color: #0085a1">
-              <span>
-                「Maven」基础知识
-                
-                -- Maven
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/24/Java学习笔记-包-Package/" style="color: #0085a1">
-              <span>
-                「Java SE」包(Package)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-接口/" style="color: #0085a1">
-              <span>
-                「Java SE」接口
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/23/Java学习笔记-重写（Override）/" style="color: #0085a1">
-              <span>
-                「Java SE」重写(Override)
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-继承/" style="color: #0085a1">
-              <span>
-                「Java SE」继承
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-数组/" style="color: #0085a1">
-              <span>
-                「Java SE」数组
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-22
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/22/Java学习笔记-字符串/" style="color: #0085a1">
-              <span>
-                「Java SE」字符串
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-21
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/21/JAVA学习笔记-变量类型和修饰符/" style="color: #0085a1">
-              <span>
-                「Java SE」变量类型和修饰符
-                
-                -- Java
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-19
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2022/01/19/Cpp_引用和指针/" style="color: #0085a1">
-              <span>
-                「Cpp」引用和指针
-                
-                -- C++
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2021">
-          <span class="tag-text">2021</span>
-        </span>
-        <ul>
-          
-          <li>
-            12-25
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/25/CO_P8_MIPS微系统（板级验证）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P8_MIPS微系统（板级验证）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/15/CO_P7_MIPS微系统（异常中断）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P7_MIPS微系统（异常中断）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            12-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/12/06/CO_P5&P6课上测试总结/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P5&P6_课上测试总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P6_流水线cpu（Plus）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-15
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/15/CO_P5_流水线cpu（Basic）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P5_流水线cpu（Basic）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-09
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/09/CO_P4_单周期cpu（Verilog实现）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P4_单周期cpu（Verilog实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            11-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/11/01/CO_P3_单周期cpu（Logisim实现）/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P3_单周期cpu（Logisim实现）
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-30
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/30/CO_P2_MIPS汇编程序设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P2_MIPS汇编程序设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog中符号数的使用/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog中符号数的使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog边沿检测总结
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog其他tips/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog其他tips
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog状态机设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-26
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/26/CO_P1_Verilog中reg的使用/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P1_Verilog中reg的使用
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-17
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/17/CO_P0_logisim状态机设计/" style="color: #0085a1">
-              <span>
-                「BUAA-CO」P0_logisim状态机设计
-                
-                -- CO
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            10-01
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/2021/10/01/状压DP解决Hamilton回路问题/" style="color: #0085a1">
-              <span>
-                「Algorithm」状压DP解决Hamilton回路问题
-                
-                -- Algorithm
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+            
+            <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="8">C++</a>
-    
-    
-    
-    <a href="/tags/#BUAA" title="BUAA" rel="13">BUAA</a>
-    
-    
-    
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
-    <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
-    
-    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
-    
-    
-    
-    <a href="/tags/#面向对象" title="面向对象" rel="2">面向对象</a>
-    
-    
-    
-    <a href="/tags/#操作系统" title="操作系统" rel="5">操作系统</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../2022/05/03/OS-Lab3%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>「BUAA-OS」 Lab3实验报告</li>
-    </a>
-    
-    <a href="../../2022/04/29/OO-%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
-      <li>「BUAA-OO」第二单元:电梯调度</li>
-    </a>
-    
-    <a href="../../2022/04/18/Cpp-Programing-Lec-7/">
-      <li>「BUAA-C++」Lec7:C++类模版和STL简介</li>
-    </a>
-    
-    <a href="../../2022/04/18/OS-Lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>「BUAA-OS」 Lab2实验报告</li>
-    </a>
-    
-    <a href="../../2022/04/16/OS-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/">
-      <li>「操作系统」进程调度</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/05/">May 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/04/">April 2022</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#ECS">
-      <li>ECS</li>
-    </a>
-    
-    <a href="/categories/#Git">
-      <li>Git</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-    <a href="/categories/#Letax">
-      <li>Letax</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
-    </a>
-    
-    <a href="/categories/#面向对象">
-      <li>面向对象</li>
-    </a>
-    
-    <a href="/categories/#操作系统">
-      <li>操作系统</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
