@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -470,30 +470,35 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <hr>
-<h2 id="Java的变量类型"><a href="#Java的变量类型" class="headerlink" title="Java的变量类型"></a>Java的变量类型</h2><p>Java中的变量类型有以下三种——</p>
+        <hr />
+<h2 id="java的变量类型"><a class="markdownIt-Anchor" href="#java的变量类型"></a> Java的变量类型</h2>
+<p>Java中的变量类型有以下三种——</p>
 <ul>
 <li><strong>类变量</strong></li>
 <li><strong>实例变量</strong></li>
 <li><strong>局部变量</strong></li>
 </ul>
-<h3 id="类变量-静态变量"><a href="#类变量-静态变量" class="headerlink" title="类变量(静态变量)"></a>类变量(静态变量)</h3><ul>
+<h3 id="类变量静态变量"><a class="markdownIt-Anchor" href="#类变量静态变量"></a> 类变量(静态变量)</h3>
+<ul>
 <li>类变量是属于所在的类，而不属于任何<strong>由该类定义的对象</strong>。 换句话说，不管实例化了多少对象，类变量都只有一个。类变量是由static修饰的，这一点和C++相似。</li>
-<li>一般情况下和<code>final</code>一起声明常量，很少单独使用<code>static</code>声明变量。而且，大多数静态变量被声明为<code>public</code>类型。因此，经常会见到  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> CONST = <span class="number">0x7fffffff</span> <span class="comment">//一般常量定义使用全大写命名</span></span><br></pre></td></tr></table></figure></li>
+<li>一般情况下和<code>final</code>一起声明常量，很少单独使用<code>static</code>声明变量。而且，大多数静态变量被声明为<code>public</code>类型。因此，经常会见到  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> CONST = <span class="number">0x7fffffff</span> <span class="comment">//一般常量定义使用全大写命名</span></span><br></pre></td></tr></table></figure>
+</li>
 <li>默认值和实例化变量相似，数值型变量默认值是<code>0</code>，布尔型默认值是 <code>false</code>，引用类型默认值是 <code>null</code>。变量的值可以在声明的时候指定，也可以在<code>构造方法</code>中指定。此外，静态变量还可以在静态语句块中初始化。</li>
 <li>访问时使用<code>ClassName.VariableName</code></li>
 <li><strong>可以</strong>被访问修饰符<code>public</code>,<code>private</code>,<code>protected</code>,<code>defualt</code>修饰</li>
 <li>例程如下  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> countValue = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Counter</span><span class="params">()</span></span>&#123;</span><br><span class="line">        countValue++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; ++i)&#123;</span><br><span class="line">            <span class="keyword">new</span> Counter();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;countValue = &quot;</span> + countValue); <span class="comment">//输出 countValue = 100</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="实例变量"><a href="#实例变量" class="headerlink" title="实例变量"></a>实例变量</h3><ul>
+<h3 id="实例变量"><a class="markdownIt-Anchor" href="#实例变量"></a> 实例变量</h3>
+<ul>
 <li>与类变量不同，实例变量是属于<strong>实例化的对象</strong>，也就是说如果实例化100个对象，那就有100的实例变量的值被确定。</li>
 <li>实例变量对于类中的方法、构造方法或者语句块是可见的，而且实例变量的值应该至少被一个方法、构造方法或者语句块引用。</li>
 <li>实例变量具有默认值。数值型变量的默认值是0，布尔型变量的默认值是false，引用类型变量的默认值是null。变量的值可以在声明时指定，也可以在构造方法中指定。</li>
 <li>访问时使用<code>ObjectName.VariableName</code>。</li>
 <li><strong>可以</strong>被访问修饰符<code>public</code>,<code>private</code>,<code>protected</code>,<code>defualt</code>修饰。</li>
 </ul>
-<h3 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h3><ul>
+<h3 id="局部变量"><a class="markdownIt-Anchor" href="#局部变量"></a> 局部变量</h3>
+<ul>
 <li>局部变量必须要在局部变量声明在<strong>方法、构造方法或者语句块</strong>中，作用域是它所在的<strong>方法、构造方法或者语句块</strong>，并且只在作用域中可见。</li>
 <li>实例变量没有默认值，因此在声明后必须初始化。</li>
 <li><strong>不可以</strong>被访问控制修饰符<code>public</code>,<code>private</code>,<code>protected</code>,<code>defualt</code>修饰。</li>
@@ -501,15 +506,15 @@
 <li>例程如下  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adder</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = a + b;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        System.out.println(add(<span class="number">1</span>, <span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<hr>
-<h2 id="Java-访问控制修饰符"><a href="#Java-访问控制修饰符" class="headerlink" title="Java 访问控制修饰符"></a>Java 访问控制修饰符</h2><p>Java中的访问控制修饰符有以下4种——</p>
+<hr />
+<h2 id="java-访问控制修饰符"><a class="markdownIt-Anchor" href="#java-访问控制修饰符"></a> Java 访问控制修饰符</h2>
+<p>Java中的访问控制修饰符有以下4种——</p>
 <ul>
 <li><strong>public</strong></li>
 <li><strong>protected</strong></li>
 <li><strong>default</strong></li>
 <li><strong>private</strong></li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -556,8 +561,8 @@
 </tr>
 </tbody>
 </table>
-</div>
-<h3 id="public"><a href="#public" class="headerlink" title="public"></a>public</h3><ul>
+<h3 id="public"><a class="markdownIt-Anchor" href="#public"></a> public</h3>
+<ul>
 <li><strong>适用范围</strong>：类、接口、变量、方法，构造方法。</li>
 <li><strong>访问权限</strong>：被声明为 <code>public</code> 的类、方法、构造方法和接口<strong>能够被任何其他类访问（包括同一包和不同包）</strong></li>
 <li>如果几个相互访问的 <code>public</code> 类分布在不同的包中，则需要导入相应 <code>public</code> 类所在的包再使用。</li>
@@ -565,9 +570,11 @@
 <li><code>main()</code> 必须设置为共有。</li>
 <li>一个Java文件中可以定义多个类，但是最多只有一个类被<code>public</code>修饰，并且这个类的类名与文件名必须相同。</li>
 </ul>
-<h3 id="protected"><a href="#protected" class="headerlink" title="protected"></a>protected</h3><ul>
+<h3 id="protected"><a class="markdownIt-Anchor" href="#protected"></a> protected</h3>
+<ul>
 <li><strong>适用范围</strong>：变量、方法，构造方法。<strong>类（内部类除外）和接口不能声明为 <code>protected</code></strong>。</li>
-<li><strong>访问权限</strong>：<code>protected</code> 修饰的变量，方法，构造方法可以<strong>被同一包内的所有类访问（即<code>defualt</code>的访问权限）</strong>，也可以<strong>被不同包内的子孙类部分访问</strong>，讨论如下——<ul>
+<li><strong>访问权限</strong>：<code>protected</code> 修饰的变量，方法，构造方法可以<strong>被同一包内的所有类访问（即<code>defualt</code>的访问权限）</strong>，也可以<strong>被不同包内的子孙类部分访问</strong>，讨论如下——
+<ul>
 <li><strong>子类与基类在同一包中</strong>：被声明为 <code>protected</code> 的变量、方法和构造方法能被同一个包中的任何其他类访问；</li>
 <li><strong>子类与基类不在同一包中</strong>：那么在子类中，子类实例可以访问其从基类继承而来的 <code>protected</code> 方法，而不能访问基类实例的 <code>protected</code> 方法。</li>
 </ul>
@@ -575,34 +582,41 @@
 <li>子类能访问和重写 <code>protected</code> 修饰符声明的方法和变量，这样就能保护不相关的类使用这些方法和变量(这就是为什么叫做<code>protected</code>的原因)</li>
 <li><strong>构造方法</strong>使用修饰符，则默认为<code>protected</code>;</li>
 </ul>
-<h3 id="default"><a href="#default" class="headerlink" title="default"></a>default</h3><ul>
+<h3 id="default"><a class="markdownIt-Anchor" href="#default"></a> default</h3>
+<ul>
 <li><strong>适用范围</strong>：类、接口、变量、方法，构造方法。</li>
 <li><strong>访问权限</strong>：使用默认访问修饰符声明的变量和方法，对<strong>同一个包内的类</strong>是可见的</li>
 </ul>
-<h3 id="private"><a href="#private" class="headerlink" title="private"></a>private</h3><ul>
+<h3 id="private"><a class="markdownIt-Anchor" href="#private"></a> private</h3>
+<ul>
 <li><strong>适用范围</strong>：变量、方法，构造方法。<strong>类（内部类除外）和接口不能声明为 <code>private</code></strong>。</li>
 <li><strong>访问权限</strong>：被声明为 <code>private</code> 的方法、变量和构造方法<strong>只能被所属类访问</strong></li>
 <li>声明为<code>private</code>的变量只能通过类中<code>public</code>方法被外部类访问，因此可以实现类数据的保护和类实现细节多隐藏。</li>
 </ul>
-<hr>
-<h2 id="Java-中的非访问修饰符"><a href="#Java-中的非访问修饰符" class="headerlink" title="Java 中的非访问修饰符"></a>Java 中的非访问修饰符</h2><p>Java中的非访问修饰符有以下6种——</p>
+<hr />
+<h2 id="java-中的非访问修饰符"><a class="markdownIt-Anchor" href="#java-中的非访问修饰符"></a> Java 中的非访问修饰符</h2>
+<p>Java中的非访问修饰符有以下6种——</p>
 <ul>
 <li><strong>static</strong></li>
 <li><strong>final</strong></li>
 <li><strong>abstract</strong></li>
 <li><strong>synchronized</strong></li>
 <li><strong>transient</strong></li>
-<li><strong>volatile</strong>（后三种与多线程和序列化有关，不在此介绍）    </li>
+<li><strong>volatile</strong>（后三种与多线程和序列化有关，不在此介绍）</li>
 </ul>
-<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><ul>
+<h3 id="static"><a class="markdownIt-Anchor" href="#static"></a> static</h3>
+<ul>
 <li>意为“静态的”，归属于类。</li>
-<li><strong>适用范围</strong>：变量和方法<ul>
-<li><code>static</code>变量：即静态变量。独立于对象，只归属于整个类。<ul>
+<li><strong>适用范围</strong>：变量和方法
+<ul>
+<li><code>static</code>变量：即静态变量。独立于对象，只归属于整个类。
+<ul>
 <li><code>static</code>不可以修饰局部变量！！！</li>
 <li>访问时使用<code>ClassName.variableName</code>。</li>
 </ul>
 </li>
-<li><code>static</code>方法：即静态方法。独立于对象，只归属于整个类。<ul>
+<li><code>static</code>方法：即静态方法。独立于对象，只归属于整个类。
+<ul>
 <li>静态方法不能使用所在类的<strong>非静态变量</strong>。</li>
 <li>静态方法只能从<strong>参数列表</strong>中获取数据，然后计算这些数据。</li>
 <li>访问时使用<code>ClassName.methodName</code>。</li>
@@ -611,15 +625,19 @@
 </ul>
 </li>
 </ul>
-<h3 id="final"><a href="#final" class="headerlink" title="final"></a>final</h3><ul>
+<h3 id="final"><a class="markdownIt-Anchor" href="#final"></a> final</h3>
+<ul>
 <li>意为“最终的”，一旦定义后，不能被重新定义</li>
-<li><strong>适用范围</strong>：变量，方法和类<ul>
-<li><code>final</code>变量：一旦赋值后，不能被重新赋值。<ul>
+<li><strong>适用范围</strong>：变量，方法和类
+<ul>
+<li><code>final</code>变量：一旦赋值后，不能被重新赋值。
+<ul>
 <li>被<code>final</code>修饰的实例变量<strong>必须显式指定初始值</strong>（因为它不能再次被赋值）</li>
 <li><code>final</code>修饰符通常和<code>static</code>修饰符一起使用来创建<strong>类常量</strong>（上文已经提到了）</li>
 </ul>
 </li>
-<li><code>final</code>方法：可以被子类继承，但是不能被子类重写。<ul>
+<li><code>final</code>方法：可以被子类继承，但是不能被子类重写。
+<ul>
 <li>用<code>final</code>修饰方法可以防止方法的内容被子类修改。</li>
 </ul>
 </li>
@@ -627,13 +645,17 @@
 </ul>
 </li>
 </ul>
-<h3 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h3><ul>
+<h3 id="abstract"><a class="markdownIt-Anchor" href="#abstract"></a> abstract</h3>
+<ul>
 <li>意为“抽象的”，目的是为了将来可以对<code>abstract</code>的修饰目标进行扩充</li>
-<li><strong>适用范围</strong>：方法和类<ul>
-<li><code>abstract</code>类：抽象类<strong>不能用来实例化对象</strong>,声明抽象类的唯一目的是为了将来对该类进行扩充。<ul>
+<li><strong>适用范围</strong>：方法和类
+<ul>
+<li><code>abstract</code>类：抽象类<strong>不能用来实例化对象</strong>,声明抽象类的唯一目的是为了将来对该类进行扩充。
+<ul>
 <li>有抽象方法的类一定要定义成抽象类，但抽象类可以不包含抽象方法。</li>
-<li>只有抽象类的非抽象子类可以创建对象<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">        </span><br></pre></td></tr></table></figure></li>
+<li>只有抽象类的非抽象子类可以创建对象</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">        </span><br></pre></td></tr></table></figure>
 </li>
 <li><code>abstract</code>方法：是一种<strong>没有任何实现的方法</strong>（抽象类中的抽象方法只是声明，不包含方法体），该方法的具体实现由<strong>子类</strong>提供。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="title">getNum</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentNum</span> <span class="keyword">extends</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="title">getNum</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//realize...</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -794,7 +816,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Java%E7%9A%84%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Java的变量类型</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%B1%BB%E5%8F%98%E9%87%8F-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">类变量(静态变量)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">实例变量</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">局部变量</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Java-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Java 访问控制修饰符</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#public"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">public</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#protected"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">protected</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#default"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">default</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#private"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">private</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Java-%E4%B8%AD%E7%9A%84%E9%9D%9E%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Java 中的非访问修饰符</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#static"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">static</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#final"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">final</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#abstract"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">abstract</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java%E7%9A%84%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> Java的变量类型</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%B1%BB%E5%8F%98%E9%87%8F%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 类变量(静态变量)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 实例变量</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 局部变量</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> Java 访问控制修饰符</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#public"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> public</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#protected"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> protected</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#default"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> default</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#private"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text"> private</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#java-%E4%B8%AD%E7%9A%84%E9%9D%9E%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> Java 中的非访问修饰符</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#static"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> static</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#final"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> final</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#abstract"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"> abstract</span></a></li></ol></li></ol>
         
         </div>
       </aside>

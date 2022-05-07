@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -470,7 +470,7 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="分支基本操作"><a href="#分支基本操作" class="headerlink" title="分支基本操作"></a>分支基本操作</h2><div class="table-container">
+        <h2 id="分支基本操作"><a class="markdownIt-Anchor" href="#分支基本操作"></a> 分支基本操作</h2>
 <table>
 <thead>
 <tr>
@@ -521,19 +521,33 @@
 </tr>
 </tbody>
 </table>
-</div>
-<h2 id="分支合并及冲突"><a href="#分支合并及冲突" class="headerlink" title="分支合并及冲突"></a>分支合并及冲突</h2><p>将使用<code>git merge &lt;name&gt;</code>进行分支合并时，有的时候需要解决冲突，举下面三个例子。</p>
-<h3 id="Position-1"><a href="#Position-1" class="headerlink" title="Position 1"></a>Position 1</h3><p>如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br><img src="2.png" alt=""><br>此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br><img src="1.png" alt=""><br>这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
-<h3 id="Position-2"><a href="#Position-2" class="headerlink" title="Position 2"></a>Position 2</h3><p>接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br><img src="3.png" alt=""><br>如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用<code>git merge --no-ff -m &quot;msg&quot; dev</code>即可。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
-<h3 id="Position-3"><a href="#Position-3" class="headerlink" title="Position 3"></a>Position 3</h3><p>我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
+<h2 id="分支合并及冲突"><a class="markdownIt-Anchor" href="#分支合并及冲突"></a> 分支合并及冲突</h2>
+<p>将使用<code>git merge &lt;name&gt;</code>进行分支合并时，有的时候需要解决冲突，举下面三个例子。</p>
+<h3 id="position-1"><a class="markdownIt-Anchor" href="#position-1"></a> Position 1</h3>
+<p>如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br />
+<img src="2.png" alt="" /><br />
+此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br />
+<img src="1.png" alt="" /><br />
+这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
+<h3 id="position-2"><a class="markdownIt-Anchor" href="#position-2"></a> Position 2</h3>
+<p>接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br />
+<img src="3.png" alt="" /><br />
+如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用<code>git merge --no-ff -m &quot;msg&quot; dev</code>即可。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
+<h3 id="position-3"><a class="markdownIt-Anchor" href="#position-3"></a> Position 3</h3>
+<p>我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
 <ul>
 <li>之后我们切换到在<code>dev</code>分支上，在<code>readme.txt</code>的第一行添加了一句 <strong>“dev modify it!”</strong>, 保存之后commit到本地仓库。</li>
 <li>然后我们在切换到<code>master</code>分支上，此时<code>readme.txt</code>还是一个空文件。我们在<code>readme.txt</code>的第一行添加了一句 <strong>“master modify it!”</strong>, 保存之后也commit到本地仓库</li>
 </ul>
-<p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——<br><img src="4.png" alt=""></p>
+<p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——<br />
+<img src="4.png" alt="" /></p>
 <p>这种情况下，如果在<code>master</code>分支中使用指令<code>git merge dev</code>，则可能产生冲突。因为我们在两个分支上同时对<code>readme.txt</code>加了一行，但是内容不同，Git并不知道该保存哪个。此时使用<code>merge</code>命令后，Git会提示我们 <strong>“Automatic merge failed; fix conflicts and then commit the result.”</strong> 也就是说自动给合并失败了，需要我们手动结局冲突后再次提交。</p>
-<p>我们打开<code>readme.txt</code>,会发现内容变成了<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">master modify it！</span><br><span class="line">=======</span><br><span class="line">dev modify it！</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span><br></pre></td></tr></table></figure><br>此时我们手动修改之后再<code>commit</code>即可。</p>
-<h2 id="stash命令"><a href="#stash命令" class="headerlink" title="stash命令"></a>stash命令</h2><p>假设我们正在分支<code>dev</code>上干活，干着干着突然被要求在<code>master</code>分支上解决一个问题。但是此时我们在<code>dev</code>上的工作还没完成，没法commit到本地版本库，如果所以我们现在应该怎么做呢？<br>这就需要<code>stash</code>出场了——<strong><code>stash</code>可以把当前<code>dev</code>的工作现场保存起来</strong>，等到解决完<code>master</code>分支上的问题后，在回到<code>dev</code>分支恢复现场。此时会涉及到以下和stash相关的指令——</p>
+<p>我们打开<code>readme.txt</code>,会发现内容变成了</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">master modify it！</span><br><span class="line">=======</span><br><span class="line">dev modify it！</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span><br></pre></td></tr></table></figure>
+<p>此时我们手动修改之后再<code>commit</code>即可。</p>
+<h2 id="stash命令"><a class="markdownIt-Anchor" href="#stash命令"></a> stash命令</h2>
+<p>假设我们正在分支<code>dev</code>上干活，干着干着突然被要求在<code>master</code>分支上解决一个问题。但是此时我们在<code>dev</code>上的工作还没完成，没法commit到本地版本库，如果所以我们现在应该怎么做呢？<br />
+这就需要<code>stash</code>出场了——<strong><code>stash</code>可以把当前<code>dev</code>的工作现场保存起来</strong>，等到解决完<code>master</code>分支上的问题后，在回到<code>dev</code>分支恢复现场。此时会涉及到以下和stash相关的指令——</p>
 <ul>
 <li><strong><code>git stash</code>：将工作现场储藏起来（使用该命令后工作区就被清空了）。</strong></li>
 <li><strong><code>git stash list</code>：查看被储藏起来的内容。</strong></li>
@@ -690,7 +704,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">分支基本操作</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%8F%8A%E5%86%B2%E7%AA%81"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">分支合并及冲突</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-1"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Position 1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-2"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Position 2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-3"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Position 3</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#stash%E5%91%BD%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">stash命令</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 分支基本操作</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%8F%8A%E5%86%B2%E7%AA%81"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 分支合并及冲突</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-1"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> Position 1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-2"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> Position 2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-3"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> Position 3</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#stash%E5%91%BD%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> stash命令</span></a></li></ol>
         
         </div>
       </aside>

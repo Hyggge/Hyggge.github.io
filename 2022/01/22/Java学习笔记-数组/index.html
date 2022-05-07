@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -408,7 +408,7 @@
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">913</span> In Total
+              Words <span class="post-count">915</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -470,39 +470,61 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <hr>
-<h2 id="数组的创建的访问"><a href="#数组的创建的访问" class="headerlink" title="数组的创建的访问"></a>数组的创建的访问</h2><h3 id="一维数组的创建"><a href="#一维数组的创建" class="headerlink" title="一维数组的创建"></a>一维数组的创建</h3><ul>
+        <hr />
+<h2 id="数组的创建的访问"><a class="markdownIt-Anchor" href="#数组的创建的访问"></a> 数组的创建的访问</h2>
+<h3 id="一维数组的创建"><a class="markdownIt-Anchor" href="#一维数组的创建"></a> 一维数组的创建</h3>
+<ul>
 <li>一维数组的创建有以下几种方法——  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先声明后定义</span></span><br><span class="line"><span class="keyword">int</span>[] array;</span><br><span class="line">array = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">100</span>];</span><br><span class="line"><span class="comment">//直接定义</span></span><br><span class="line"><span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">100</span>];</span><br><span class="line"><span class="comment">//列表定义</span></span><br><span class="line"><span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="多维数组的创建"><a href="#多维数组的创建" class="headerlink" title="多维数组的创建"></a>多维数组的创建</h3></li>
+</li>
+</ul>
+<h3 id="多维数组的创建"><a class="markdownIt-Anchor" href="#多维数组的创建"></a> 多维数组的创建</h3>
+<ul>
 <li>下面以二维数组为例介绍多维数组的创建方法  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//直接为每一维分配空间</span></span><br><span class="line"><span class="keyword">int</span>[][] s = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>][<span class="number">4</span>];</span><br><span class="line"><span class="comment">//从最高维开始，分别为每一维分配空间</span></span><br><span class="line">String[][] s = <span class="keyword">new</span> String[<span class="number">2</span>][];</span><br><span class="line">s[<span class="number">0</span>] = <span class="keyword">new</span> String[<span class="number">2</span>];</span><br><span class="line">s[<span class="number">1</span>] = <span class="keyword">new</span> String[<span class="number">3</span>];</span><br><span class="line">s[<span class="number">0</span>][<span class="number">0</span>] = <span class="keyword">new</span> String(<span class="string">&quot;Good&quot;</span>);</span><br><span class="line">s[<span class="number">0</span>][<span class="number">1</span>] = <span class="keyword">new</span> String(<span class="string">&quot;Luck&quot;</span>);</span><br><span class="line">s[<span class="number">1</span>][<span class="number">0</span>] = <span class="keyword">new</span> String(<span class="string">&quot;to&quot;</span>);</span><br><span class="line">s[<span class="number">1</span>][<span class="number">1</span>] = <span class="keyword">new</span> String(<span class="string">&quot;you&quot;</span>);</span><br><span class="line">s[<span class="number">1</span>][<span class="number">2</span>] = <span class="keyword">new</span> String(<span class="string">&quot;!&quot;</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="数组的访问"><a href="#数组的访问" class="headerlink" title="数组的访问"></a>数组的访问</h3></li>
+</li>
+</ul>
+<h3 id="数组的访问"><a class="markdownIt-Anchor" href="#数组的访问"></a> 数组的访问</h3>
+<ul>
 <li>数组的访问直接使用下标即可</li>
-<li>一般使用循环遍历数组  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; ++i)&#123;</span><br><span class="line">    System.out.println(array[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> it : array)&#123;</span><br><span class="line">    System.out.println(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><code>length()</code> 方法，<code>length</code> 属性和 <code>size()</code>方法的区别:<ul>
+<li>一般使用循环遍历数组  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; ++i)&#123;</span><br><span class="line">    System.out.println(array[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> it : array)&#123;</span><br><span class="line">    System.out.println(it);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><code>length()</code> 方法，<code>length</code> 属性和 <code>size()</code>方法的区别:
+<ul>
 <li><code>length()</code> 方法是针对字符串来说的，要求一个字符串的长度就要用到它的<code>length()</code>方法；</li>
 <li><code>length</code> 属性是针对 Java 中的数组来说的，要求数组的长度可以用其 <code>length</code> 属性；</li>
 <li>Java 中的 <code>size()</code> 方法是针对泛型集合说的, 如果想看这个泛型有多少个元素, 就调用此方法来查看.</li>
 </ul>
 </li>
 </ul>
-<hr>
-<h2 id="数组作为函数参数和返回值"><a href="#数组作为函数参数和返回值" class="headerlink" title="数组作为函数参数和返回值"></a>数组作为函数参数和返回值</h2><ul>
-<li>数组作为<strong>函数参数</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        System.out.print(array[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<hr />
+<h2 id="数组作为函数参数和返回值"><a class="markdownIt-Anchor" href="#数组作为函数参数和返回值"></a> 数组作为函数参数和返回值</h2>
+<ul>
+<li>数组作为<strong>函数参数</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        System.out.print(array[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 <li>数组作为<strong>函数返回值</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] reverse(<span class="keyword">int</span>[] list) &#123;</span><br><span class="line">    <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[list.length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = result.length - <span class="number">1</span>; i &lt; list.length; i++, j--) &#123;</span><br><span class="line">        result[j] = list[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<hr>
-<h2 id="Arrays类"><a href="#Arrays类" class="headerlink" title="Arrays类"></a>Arrays类</h2><p><code>java.util.Arrays</code>类能方便地操作数组，它提供的所有方法都是静态方法（即归属于Arrays类）。</p>
-<h4 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h4><p> Arrays类中有以下常用方法——</p>
+<hr />
+<h2 id="arrays类"><a class="markdownIt-Anchor" href="#arrays类"></a> Arrays类</h2>
+<p><code>java.util.Arrays</code>类能方便地操作数组，它提供的所有方法都是静态方法（即归属于Arrays类）。</p>
+<h4 id="常用方法"><a class="markdownIt-Anchor" href="#常用方法"></a> 常用方法</h4>
+<p>Arrays类中有以下常用方法——</p>
 <ul>
-<li><strong><code>int binarySearch(Object[] a, Object key)</code></strong><br>用<strong>二分查找算法</strong>在给定数组中搜索给定值的对象(<code>Byte</code>,<code>Int</code>,<code>double</code>等)。数组在调用前<strong>必须排序好</strong>的。如果查找值包含在数组中，则<strong>返回搜索键的索引</strong>；否则返回 (-(插入点) - 1)。</li>
-<li><strong><code>boolean equals(long[] a, long[] a2)</code></strong><br>如果两个指定的 <strong>long 型数组</strong>彼此相等，则返回 <code>true</code>。<strong>如果两个数组包含相同数量的元素，并且两个数组中的所有相应元素对都是相等的，则认为这两个数组是相等的</strong>。换句话说，如果两个数组以相同顺序包含相同的元素，则两个数组是相等的。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
-<li><strong><code>void fill(int[] a, int val)</code></strong><br>将指定的 <code>int</code> 值<strong>分配</strong>给指定 <code>int</code> 型数组指定范围中的每个元素。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
-<li><strong><code>void sort(Object[] a)</code></strong><br>对指定对象数组根据其元素的自然顺序进行<strong>升序排列</strong>。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
-<li><strong><code>copy(Object[] e,newLength)</code></strong><br>其第一个形参指的是需要扩容的数组，后面是扩容后的大小，其内部实现其实是使用了 <code>System.arrayCopy()</code>; 在内部重新创建一个长度为 <code>newLength</code> 类型是<code>Object</code>的数组。</li>
-<li><strong><code>toString(Object[] arr)</code></strong><br>将数组<code>arr</code>以字符串的形式输出到终端。<h4 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h4>因为Arrays类中的方法都是静态的，因此调用时应该使用<code>Arrays.methodName</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">Arrays.sort(array);</span><br><span class="line">System.out.println(Arrays.toString(array));</span><br></pre></td></tr></table></figure></li>
+<li><strong><code>int binarySearch(Object[] a, Object key)</code></strong><br />
+用<strong>二分查找算法</strong>在给定数组中搜索给定值的对象(<code>Byte</code>,<code>Int</code>,<code>double</code>等)。数组在调用前<strong>必须排序好</strong>的。如果查找值包含在数组中，则<strong>返回搜索键的索引</strong>；否则返回 (-(插入点) - 1)。</li>
+<li><strong><code>boolean equals(long[] a, long[] a2)</code></strong><br />
+如果两个指定的 <strong>long 型数组</strong>彼此相等，则返回 <code>true</code>。<strong>如果两个数组包含相同数量的元素，并且两个数组中的所有相应元素对都是相等的，则认为这两个数组是相等的</strong>。换句话说，如果两个数组以相同顺序包含相同的元素，则两个数组是相等的。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
+<li><strong><code>void fill(int[] a, int val)</code></strong><br />
+将指定的 <code>int</code> 值<strong>分配</strong>给指定 <code>int</code> 型数组指定范围中的每个元素。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
+<li><strong><code>void sort(Object[] a)</code></strong><br />
+对指定对象数组根据其元素的自然顺序进行<strong>升序排列</strong>。同样的方法适用于所有的其他基本数据类型（<code>Byte</code>，<code>short</code>，<code>Int</code>等）。</li>
+<li><strong><code>copy(Object[] e,newLength)</code></strong><br />
+其第一个形参指的是需要扩容的数组，后面是扩容后的大小，其内部实现其实是使用了 <code>System.arrayCopy()</code>; 在内部重新创建一个长度为 <code>newLength</code> 类型是<code>Object</code>的数组。</li>
+<li><strong><code>toString(Object[] arr)</code></strong><br />
+将数组<code>arr</code>以字符串的形式输出到终端。</li>
 </ul>
-
+<h4 id="方法调用"><a class="markdownIt-Anchor" href="#方法调用"></a> 方法调用</h4>
+<p>因为Arrays类中的方法都是静态的，因此调用时应该使用<code>Arrays.methodName</code></p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">Arrays.sort(array);</span><br><span class="line">System.out.println(Arrays.toString(array));</span><br></pre></td></tr></table></figure>
 
         <hr>
         <!-- Pager -->
@@ -651,7 +673,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">数组的创建的访问</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">一维数组的创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">多维数组的创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">数组的访问</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E5%92%8C%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">数组作为函数参数和返回值</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Arrays%E7%B1%BB"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Arrays类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-number">3.0.1.</span> <span class="toc-nav-text">常用方法</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8"><span class="toc-nav-number">3.0.2.</span> <span class="toc-nav-text">方法调用</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 数组的创建的访问</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 一维数组的创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 多维数组的创建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 数组的访问</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E5%92%8C%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 数组作为函数参数和返回值</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#arrays%E7%B1%BB"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> Arrays类</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-number">3.0.1.</span> <span class="toc-nav-text"> 常用方法</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8"><span class="toc-nav-number">3.0.2.</span> <span class="toc-nav-text"> 方法调用</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>

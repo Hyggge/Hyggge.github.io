@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -468,11 +468,13 @@
       
     </h3>
     <div class="post-content-preview">
-      MIPS微系统设计方案设计概述本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
+       MIPS微系统设计方案
+ 设计概述
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
 
 为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。
 
-实现指令说明......
+ 实......
     </div>
   </a>
   
@@ -509,7 +511,9 @@
       
     </h3>
     <div class="post-content-preview">
-      MIPS微系统设计方案设计概述​        本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整—......
+       MIPS微系统设计方案
+ 设计概述
+​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将......
     </div>
   </a>
   
@@ -548,10 +552,15 @@
     <div class="post-content-preview">
       
 
-增添指令一般步骤明确指令RTL
+ 增添指令一般步骤
+ 明确指令RTL
+
 该步骤需要结合题目弄懂指令行为，包括明确指令类型（R型？I型？J型？即明确读和写的目标）、opcode和funct域数据、执行功能（计算？跳转？访存？）
-最好可以先用MARS模拟下，以免对指令行为理解不到位。明确非转发数据通路
-在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信号（P5中的DM......
+最好可以先用MARS模拟下，以免对指令行为理解不到位。
+
+ 明确非转发数据通路
+
+在该步骤中，可以在单周期中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括使能信......
     </div>
   </a>
   
@@ -588,7 +597,9 @@
       
     </h3>
     <div class="post-content-preview">
-      流水线CPU设计方案设计概述​        本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计......
+       流水线CPU设计方案
+ 设计概述
+​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭......
     </div>
   </a>
   
@@ -625,7 +636,9 @@
       
     </h3>
     <div class="post-content-preview">
-      流水线CPU设计方案设计概述​        本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对......
+       流水线CPU设计方案
+ 设计概述
+​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个......
     </div>
   </a>
   
@@ -662,9 +675,10 @@
       
     </h3>
     <div class="post-content-preview">
-      单周期CPU设计方案设计概述本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。
-
-实现指......
+       单周期CPU设计方案
+ 设计概述
+本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。
+......
     </div>
   </a>
   
@@ -701,7 +715,9 @@
       
     </h3>
     <div class="post-content-preview">
-      单周期CPU设计方案设计概述&emsp;本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branch Control，LS Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能......
+       单周期CPU设计方案
+ 设计概述
+ 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branch Control，LS Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部......
     </div>
   </a>
   
@@ -738,15 +754,24 @@
       
     </h3>
     <div class="post-content-preview">
-      MIPS架构（RISC）CPU执行程序的过程
+       MIPS架构（RISC）
+ CPU执行程序的过程
+
 读取指令
 分析指令
-执行指令RISC的设计思想：CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
+执行指令
+
+ RISC的设计思想：
+CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
+
 加速大概率事件
 简单意味着更容易设计、电路频率更高
-简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）RISC的设计策略
-指令定长：所有指令都占用32位（1个字）降低了从存储器中读取指令的复杂度
-简化指令寻......
+简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）
+
+ RISC的设计策略
+
+指令定长：所有指令都占用32位（1个字）
+降低了从存储器中......
     </div>
   </a>
   
@@ -783,7 +808,9 @@
       
     </h3>
     <div class="post-content-preview">
-      算数右移符号&gt;&gt;&gt;我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号assi......
+       算数右移符号&gt;&gt;&gt;
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
     </div>
   </a>
   
@@ -820,12 +847,18 @@
       
     </h3>
     <div class="post-content-preview">
-      定义和实例化模块时reg的使用
+       定义和实例化模块时reg的使用
+
+
 在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
+
+
 在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。
 定义输出端口时，我们可以直接定义成reg类型
 1output reg a;
-或者在模块内部声明reg寄存器，然后通过assign语句将寄存......
+
+
+或者在模块内部声明reg寄存器，然后通过assi......
     </div>
   </a>
   
@@ -895,15 +928,15 @@
     
     
     
+    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
+    
+    
+    
     <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
     
     
     
     <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
     
     
     
@@ -1045,16 +1078,16 @@
       <li>C++</li>
     </a>
     
+    <a href="/categories/#计算机组成">
+      <li>计算机组成</li>
+    </a>
+    
     <a href="/categories/#ECS">
       <li>ECS</li>
     </a>
     
     <a href="/categories/#Git">
       <li>Git</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
     </a>
     
     <a href="/categories/#Java">

@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -406,7 +406,7 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">7</span> Minutes
+              Estimated Reading Time <span class="post-count">8</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
@@ -472,8 +472,11 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="实验思考题"><a href="#实验思考题" class="headerlink" title="实验思考题"></a>实验思考题</h2><h3 id="Thinking-1-1"><a href="#Thinking-1-1" class="headerlink" title="Thinking 1.1"></a>Thinking 1.1</h3><p><strong>Q：</strong> 请查阅并给出前述 <code>objdump</code> 中使用的参数的含义。使用其它体系结构的编译器（如课程平台的 MIPS 交叉编译器）重复上述各步编译过程，观察并在实验报告中提交相应的结果。<br><strong>A：</strong><br>objdump命令的常用参数有以下几个</p>
-<div class="table-container">
+        <h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
+<h3 id="thinking-11"><a class="markdownIt-Anchor" href="#thinking-11"></a> Thinking 1.1</h3>
+<p><strong>Q：</strong> 请查阅并给出前述 <code>objdump</code> 中使用的参数的含义。使用其它体系结构的编译器（如课程平台的 MIPS 交叉编译器）重复上述各步编译过程，观察并在实验报告中提交相应的结果。<br />
+<strong>A：</strong><br />
+objdump命令的常用参数有以下几个</p>
 <table>
 <thead>
 <tr>
@@ -508,34 +511,66 @@
 </tr>
 </tbody>
 </table>
-</div>
-<p>因此，指导书上的<code>objdump -DS [executable file]</code>这一命令中<code>-DS</code>表示将所有的<code>section</code>反汇编，并<strong>将反汇编代码和原码交替显示</strong>。<br>我们使用MIPS交叉编译器重复指导书上的编译过程——</p>
+<p>因此，指导书上的<code>objdump -DS [executable file]</code>这一命令中<code>-DS</code>表示将所有的<code>section</code>反汇编，并<strong>将反汇编代码和原码交替显示</strong>。<br />
+我们使用MIPS交叉编译器重复指导书上的编译过程——</p>
 <ul>
-<li>我们先新建一个C文件<code>main.c</code><br><img src="1.1_code.png" alt=""></li>
-<li>然后使用交叉编译器<code>mips_4KC-gcc</code>将该文件编译成<code>main.o</code>文件,然后用<code>mips_4KC-objdump</code>将其反汇编。<br><img src="1.1_order.png" alt=""></li>
+<li>我们先新建一个C文件<code>main.c</code><br />
+<img src="1.1_code.png" alt="" /></li>
+<li>然后使用交叉编译器<code>mips_4KC-gcc</code>将该文件编译成<code>main.o</code>文件,然后用<code>mips_4KC-objdump</code>将其反汇编。<br />
+<img src="1.1_order.png" alt="" /></li>
 <li>反汇编结果如下所示（截取部分）  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">main.o:     file format elf32-tradbigmips</span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">00000000 &lt;main&gt;:</span><br><span class="line">0:   27bdffe0        addiu   sp,sp,-32</span><br><span class="line">4:   afbe0018        sw      s8,24(sp)</span><br><span class="line">8:   03a0f021        move    s8,sp</span><br><span class="line">c:   24020001        li      v0,1</span><br><span class="line">10:   afc20010        sw      v0,16(s8)</span><br><span class="line">14:   24020002        li      v0,2</span><br><span class="line">18:   afc2000c        sw      v0,12(s8)</span><br><span class="line">1c:   8fc30010        lw      v1,16(s8)</span><br><span class="line">20:   8fc2000c        lw      v0,12(s8)</span><br><span class="line">24:   00621021        addu    v0,v1,v0</span><br><span class="line">28:   afc20008        sw      v0,8(s8)</span><br><span class="line">2c:   00001021        move    v0,zero</span><br><span class="line">30:   03c0e821        move    sp,s8</span><br><span class="line">34:   8fbe0018        lw      s8,24(sp)</span><br><span class="line">38:   27bd0020        addiu   sp,sp,32</span><br><span class="line">3c:   03e00008        jr      ra</span><br><span class="line">40:   00000000        nop</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="Thinking-1-2"><a href="#Thinking-1-2" class="headerlink" title="Thinking 1.2"></a>Thinking 1.2</h3><p><strong>Q：</strong> 也许你会发现我们的 <code>readelf</code> 程序是不能解析之前生成的内核文件 (内核文件是可执行文件) 的，而我们刚才介绍的工具 <code>readelf</code> 则可以解析，这是为什么呢?(提示：尝试使用 <code>readelf -h</code>，观察不同) </p>
-<p><strong>A：</strong> 我们使用<code>readelf -h</code>分别查看<code>testELF</code>和<code>vmlinux</code>的文件头<br><img src="1.2testelf.png" alt=""><br><img src="1.2vmlinux.png" alt=""><br>可以发现，<code>testELF</code>文件是小端储存，而<code>vmlinux</code>是大端储存。因为我们写的<code>readelf</code>不能读取大端存储的数据，所以无法解析<code>vmlinux</code>。</p>
-<h3 id="Thinking-1-3"><a href="#Thinking-1-3" class="headerlink" title="Thinking 1.3"></a>Thinking 1.3</h3><p><strong>Q：</strong> 在理论课上我们了解到， MIPS 体系结构上电时，启动入口地址为<code>0xBFC00000</code>（其实启动入口地址是根据具体型号而定的，由硬件逻辑确定，也有可能不是这个地址，但一定是一个确定的地址），但实验操作系统的内核入口并没有放在上电启动地址，而是按照内存布局图放置。思考为什么这样放置内核还能保证内核入口被正确跳转到？<br><strong>A：</strong> 因为我们在<code>scse0_3.lds</code>中设置好了各个节被加载的位置，即最终的<code>segment</code>地址，同时使用了<code>ENTRY(_start)</code>指定了程序入口（即内核入口），最终保证了内核入口能够被正确跳转。</p>
-<h3 id="Thinking-1-4"><a href="#Thinking-1-4" class="headerlink" title="Thinking 1.4"></a>Thinking 1.4</h3><p><strong>Q：</strong> <code>sg_size</code> 和 <code>bin_size</code> 的区别它的开始加载位置并非页对齐，同时 <code>bin_size</code> 的结束位置（<code>va+i</code>）也并非页对齐，最终整个段加载完毕的 <code>sg_size</code> 末尾的位置也并非页对齐，请思考，为了保证页面不冲突（不重复为同一地址申请多个页，以及页上数据尽可能减少冲突），这样一个程序段应该怎样加载内存空间中。<br><img src="1.4.png" alt=""><br><strong>A：</strong> 加载前先检查，当程序运行到该页面时，再把该页面加载到相应位置。</p>
-<h3 id="Thinking-1-5"><a href="#Thinking-1-5" class="headerlink" title="Thinking 1.5"></a>Thinking 1.5</h3><p><strong>Q：</strong> 内核入口在什么地方？<code>main</code>函数在什么地方？我们是怎么让内核进入到想要的<code>main</code>函数的呢？又是怎么进行跨文件调用函数的呢？<br><strong>A：</strong> 内核入口的起始地址是<code>_start</code>的地址（因为在<code>linker script</code>中用<code>ENTRY()</code>指定了），main函数是在<code>start.S</code>中跳转的地址。这两个地址可以通过反汇编<code>vmlinux</code>获知。<br><img src="1.5.png" alt=""><br>由上图可知，内核入口地址是<code>0x80010000</code>， <code>main</code>函数地址是<code>0x80010050</code></p>
+<h3 id="thinking-12"><a class="markdownIt-Anchor" href="#thinking-12"></a> Thinking 1.2</h3>
+<p><strong>Q：</strong> 也许你会发现我们的 <code>readelf</code> 程序是不能解析之前生成的内核文件 (内核文件是可执行文件) 的，而我们刚才介绍的工具 <code>readelf</code> 则可以解析，这是为什么呢?(提示：尝试使用 <code>readelf -h</code>，观察不同)</p>
+<p><strong>A：</strong> 我们使用<code>readelf -h</code>分别查看<code>testELF</code>和<code>vmlinux</code>的文件头<br />
+<img src="1.2testelf.png" alt="" /><br />
+<img src="1.2vmlinux.png" alt="" /><br />
+可以发现，<code>testELF</code>文件是小端储存，而<code>vmlinux</code>是大端储存。因为我们写的<code>readelf</code>不能读取大端存储的数据，所以无法解析<code>vmlinux</code>。</p>
+<h3 id="thinking-13"><a class="markdownIt-Anchor" href="#thinking-13"></a> Thinking 1.3</h3>
+<p><strong>Q：</strong> 在理论课上我们了解到， MIPS 体系结构上电时，启动入口地址为<code>0xBFC00000</code>（其实启动入口地址是根据具体型号而定的，由硬件逻辑确定，也有可能不是这个地址，但一定是一个确定的地址），但实验操作系统的内核入口并没有放在上电启动地址，而是按照内存布局图放置。思考为什么这样放置内核还能保证内核入口被正确跳转到？<br />
+<strong>A：</strong> 因为我们在<code>scse0_3.lds</code>中设置好了各个节被加载的位置，即最终的<code>segment</code>地址，同时使用了<code>ENTRY(_start)</code>指定了程序入口（即内核入口），最终保证了内核入口能够被正确跳转。</p>
+<h3 id="thinking-14"><a class="markdownIt-Anchor" href="#thinking-14"></a> Thinking 1.4</h3>
+<p><strong>Q：</strong> <code>sg_size</code> 和 <code>bin_size</code> 的区别它的开始加载位置并非页对齐，同时 <code>bin_size</code> 的结束位置（<code>va+i</code>）也并非页对齐，最终整个段加载完毕的 <code>sg_size</code> 末尾的位置也并非页对齐，请思考，为了保证页面不冲突（不重复为同一地址申请多个页，以及页上数据尽可能减少冲突），这样一个程序段应该怎样加载内存空间中。<br />
+<img src="1.4.png" alt="" /><br />
+<strong>A：</strong> 加载前先检查，当程序运行到该页面时，再把该页面加载到相应位置。</p>
+<h3 id="thinking-15"><a class="markdownIt-Anchor" href="#thinking-15"></a> Thinking 1.5</h3>
+<p><strong>Q：</strong> 内核入口在什么地方？<code>main</code>函数在什么地方？我们是怎么让内核进入到想要的<code>main</code>函数的呢？又是怎么进行跨文件调用函数的呢？<br />
+<strong>A：</strong> 内核入口的起始地址是<code>_start</code>的地址（因为在<code>linker script</code>中用<code>ENTRY()</code>指定了），main函数是在<code>start.S</code>中跳转的地址。这两个地址可以通过反汇编<code>vmlinux</code>获知。<br />
+<img src="1.5.png" alt="" /><br />
+由上图可知，内核入口地址是<code>0x80010000</code>， <code>main</code>函数地址是<code>0x80010050</code></p>
 <p>本实验中是通过<code>start.S</code>中使用<code>jal</code>指令跳转到<code>main</code>函数的。跨文件调用是通过跳转指令实现的，在调用函数之前还需将数据存入<strong>栈</strong>中。</p>
-<h3 id="Thinking-1-6"><a href="#Thinking-1-6" class="headerlink" title="Thinking 1.6"></a>Thinking 1.6</h3><p><strong>Q：</strong> 查阅《See MIPS Run Linux》一书相关章节，解释 boot/start.S 中下面几行对 CP0 协处理器寄存器进行读写的意义。具体而言，它们分别读/写了哪些寄存器的哪些特定位，从而达到什么目的？<br><img src="1.6.png" alt=""><br><strong>A：</strong> </p>
+<h3 id="thinking-16"><a class="markdownIt-Anchor" href="#thinking-16"></a> Thinking 1.6</h3>
+<p><strong>Q：</strong> 查阅《See MIPS Run Linux》一书相关章节，解释 boot/start.S 中下面几行对 CP0 协处理器寄存器进行读写的意义。具体而言，它们分别读/写了哪些寄存器的哪些特定位，从而达到什么目的？<br />
+<img src="1.6.png" alt="" /><br />
+<strong>A：</strong></p>
 <ul>
-<li><code>mtc0 zero, CP0_STATUS</code>主要是用来将CPO的<code>12</code>号寄存器（即<code>SR</code>寄存器）设置为0，此时全局中断能位<code>IE</code>的值也是<code>0</code>,全局中断使能失效，CPU不对中断进行响应.<br><img src="SR.png" alt=""></li>
-<li>下面4行代码主要是对CP0的<code>16</code>号寄存器（即<code>Config</code>寄存器）进行操作。使用<code>and</code>和<code>ori</code>指令将该寄存器的<code>K0</code>域（0-2位）域设置为<code>0b010</code>，目的是禁止固定的<code>kseg0</code>经过高速缓存。<br><img src="Config.png" alt=""></li>
+<li><code>mtc0 zero, CP0_STATUS</code>主要是用来将CPO的<code>12</code>号寄存器（即<code>SR</code>寄存器）设置为0，此时全局中断能位<code>IE</code>的值也是<code>0</code>,全局中断使能失效，CPU不对中断进行响应.<br />
+<img src="SR.png" alt="" /></li>
+<li>下面4行代码主要是对CP0的<code>16</code>号寄存器（即<code>Config</code>寄存器）进行操作。使用<code>and</code>和<code>ori</code>指令将该寄存器的<code>K0</code>域（0-2位）域设置为<code>0b010</code>，目的是禁止固定的<code>kseg0</code>经过高速缓存。<br />
+<img src="Config.png" alt="" /></li>
 </ul>
-<h2 id="实验难点图示"><a href="#实验难点图示" class="headerlink" title="实验难点图示"></a>实验难点图示</h2><p>我认为该实验的难点主要包含以下两个难点——</p>
+<h2 id="实验难点图示"><a class="markdownIt-Anchor" href="#实验难点图示"></a> 实验难点图示</h2>
+<p>我认为该实验的难点主要包含以下两个难点——</p>
 <ul>
 <li>如何使用指针来获取ELF文件中各个<code>section</code>和<code>segment</code>中的数据</li>
-<li>printf实现逻辑的梳理<h3 id="ELF的解析"><a href="#ELF的解析" class="headerlink" title="ELF的解析"></a>ELF的解析</h3>在这一部分中，我们需要熟悉ELF文件的基本结构，尤其是下面这个图——<br><img src="elf.png" alt=""></li>
+<li>printf实现逻辑的梳理</li>
 </ul>
-<p>此外，我们需要学会通过<code>ELF</code>手册来获知各个结构体的内部数据，最后通过指针来将数据获取。无论是解析<code>section</code>还是解析<code>segment</code>，我们都需要从文件头中获得<code>section header table</code>或者<code>segment header table</code>的位置。<br>以<code>segment</code>为例，我们需要先从 <strong>文件头结构体（<code>ELF header</code>）</strong> 中获得段表（<code>sgement header table</code>）与文件头的偏移<code>e_phoff</code>，然后让文件头地址<code>bineary</code>与之相加就可以得到段表的位置了。此外，我们还能在<strong>文件头结构体</strong>中获得每个<code>segment</code>的大小（<code>e_phentsize</code>）和<code>segment</code>的总数量（<code>e_phnum</code>）,然后我们就可以通过指针的移动来遍历所有的<code>segment</code>了。</p>
-<p>具体的实现方法有以下两种——<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Elf32_Phdr *phdr = null;</span><br><span class="line"></span><br><span class="line">ptr_ph_table = binary + ehdr -&gt; e_phoff; <span class="comment">//ptr_ph_table是u_char*类型</span></span><br><span class="line">ph_entry_count = ehdr -&gt; e_phnum;</span><br><span class="line">ph_entry_size = ehdr -&gt; e_phentsize;</span><br><span class="line"><span class="comment">//第一种：指向段表指针的移动</span></span><br><span class="line"><span class="keyword">for</span> (Nr = <span class="number">0</span>; Nr &lt; ph_entry_count; Nr++) &#123;</span><br><span class="line">    shdr = (Elf32_Phdr*)(ptr_ph_table + Nr * ph_entry_size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d:0x%x\n&quot;</span>, Nr, shdr-&gt;sh_addr);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//第二种：将段表作为数组访问</span></span><br><span class="line">shdr =  (Elf32_Phdr*)ptr_ph_table;</span><br><span class="line"><span class="keyword">for</span> (Nr = <span class="number">0</span>; Nr &lt; ph_entry_count; Nr++) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d:0x%x\n&quot;</span>, Nr, shdr[Nr].sh_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="printf实现逻辑"><a href="#printf实现逻辑" class="headerlink" title="printf实现逻辑"></a>printf实现逻辑</h3><p>我们的<code>printf()</code>函数是通过调用<code>print.c</code>文件中定义的的<code>lp_Print()</code>函数来实现打印的功能——<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Pvoid <span class="title">printf</span><span class="params">(<span class="keyword">char</span> *fmt, ...)</span> </span>&#123;</span><br><span class="line">     	va_list ap;</span><br><span class="line">     	<span class="built_in">va_start</span>(ap, fmt);</span><br><span class="line">     	<span class="built_in">lp_Print</span>(myoutput, <span class="number">0</span>, fmt, ap);</span><br><span class="line">      	<span class="built_in">va_end</span>(ap);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br>这个<code>lp_Print()</code>函数实现了<code>printf</code>的核心逻辑，虽然函数很长，但是逻辑并不复杂。实际上就是，遍历一遍<strong>格式字符串<code>fmt</code></strong>，如果没有遇到<code>\0</code>或者<code>%</code>就直接打印到终端，如果遇到<code>%</code>就按照<code>%[flags][width][.precision][length]specifier</code>的形式进行<strong>输出格式的解析</strong>，并以这种输出格式打印<strong>从可变参数列表获得的参数</strong>；如果遇到<code>\n</code>就结束整个打印过程。具体流程如下图所示——<br><img src="printf.png" alt=""></p>
-<h2 id="体会与感想"><a href="#体会与感想" class="headerlink" title="体会与感想"></a>体会与感想</h2><p>Lab1主要让我们学习<strong>操作系统启动的基本流程</strong>、掌握<strong>ELF文件的结构和功能</strong>，以及最终<strong>完成一个<code>printf</code>函数的书写</strong>。本次Lab花费时间大约为10个小时，大多数时间都花在阅读源代码和思考源代码的逻辑上。由于完成每个功能依赖的代码文件不止一个，而且在vim中阅读代码终归不如在vscode等图形化编辑器上方便，因此给代码阅读和理解带来了不小的麻烦。此外，课程组提供的源代码中大量使用了“指针”，也给代码的理解带来了一定的困难。<br>但是，当我真正的读懂所给代码的逻辑并完成练习，尤其是当我看到<code>printf</code>函数可以正常运行时，那种成就感和快乐感是无法用言语来形容的。从一开始“不识庐山真面目”，到最终“柳暗花明又一村”，这大概就是操作系统的魅力吧！</p>
+<h3 id="elf的解析"><a class="markdownIt-Anchor" href="#elf的解析"></a> ELF的解析</h3>
+<p>在这一部分中，我们需要熟悉ELF文件的基本结构，尤其是下面这个图——<br />
+<img src="elf.png" alt="" /></p>
+<p>此外，我们需要学会通过<code>ELF</code>手册来获知各个结构体的内部数据，最后通过指针来将数据获取。无论是解析<code>section</code>还是解析<code>segment</code>，我们都需要从文件头中获得<code>section header table</code>或者<code>segment header table</code>的位置。<br />
+以<code>segment</code>为例，我们需要先从 <strong>文件头结构体（<code>ELF header</code>）</strong> 中获得段表（<code>sgement header table</code>）与文件头的偏移<code>e_phoff</code>，然后让文件头地址<code>bineary</code>与之相加就可以得到段表的位置了。此外，我们还能在<strong>文件头结构体</strong>中获得每个<code>segment</code>的大小（<code>e_phentsize</code>）和<code>segment</code>的总数量（<code>e_phnum</code>）,然后我们就可以通过指针的移动来遍历所有的<code>segment</code>了。</p>
+<p>具体的实现方法有以下两种——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Elf32_Phdr *phdr = null;</span><br><span class="line"></span><br><span class="line">ptr_ph_table = binary + ehdr -&gt; e_phoff; <span class="comment">//ptr_ph_table是u_char*类型</span></span><br><span class="line">ph_entry_count = ehdr -&gt; e_phnum;</span><br><span class="line">ph_entry_size = ehdr -&gt; e_phentsize;</span><br><span class="line"><span class="comment">//第一种：指向段表指针的移动</span></span><br><span class="line"><span class="keyword">for</span> (Nr = <span class="number">0</span>; Nr &lt; ph_entry_count; Nr++) &#123;</span><br><span class="line">    shdr = (Elf32_Phdr*)(ptr_ph_table + Nr * ph_entry_size);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d:0x%x\n&quot;</span>, Nr, shdr-&gt;sh_addr);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//第二种：将段表作为数组访问</span></span><br><span class="line">shdr =  (Elf32_Phdr*)ptr_ph_table;</span><br><span class="line"><span class="keyword">for</span> (Nr = <span class="number">0</span>; Nr &lt; ph_entry_count; Nr++) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d:0x%x\n&quot;</span>, Nr, shdr[Nr].sh_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="printf实现逻辑"><a class="markdownIt-Anchor" href="#printf实现逻辑"></a> printf实现逻辑</h3>
+<p>我们的<code>printf()</code>函数是通过调用<code>print.c</code>文件中定义的的<code>lp_Print()</code>函数来实现打印的功能——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Pvoid <span class="title">printf</span><span class="params">(<span class="keyword">char</span> *fmt, ...)</span> </span>&#123;</span><br><span class="line">     	va_list ap;</span><br><span class="line">     	<span class="built_in">va_start</span>(ap, fmt);</span><br><span class="line">     	<span class="built_in">lp_Print</span>(myoutput, <span class="number">0</span>, fmt, ap);</span><br><span class="line">      	<span class="built_in">va_end</span>(ap);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这个<code>lp_Print()</code>函数实现了<code>printf</code>的核心逻辑，虽然函数很长，但是逻辑并不复杂。实际上就是，遍历一遍<strong>格式字符串<code>fmt</code></strong>，如果没有遇到<code>\0</code>或者<code>%</code>就直接打印到终端，如果遇到<code>%</code>就按照<code>%[flags][width][.precision][length]specifier</code>的形式进行<strong>输出格式的解析</strong>，并以这种输出格式打印<strong>从可变参数列表获得的参数</strong>；如果遇到<code>\n</code>就结束整个打印过程。具体流程如下图所示——<br />
+<img src="printf.png" alt="" /></p>
+<h2 id="体会与感想"><a class="markdownIt-Anchor" href="#体会与感想"></a> 体会与感想</h2>
+<p>Lab1主要让我们学习<strong>操作系统启动的基本流程</strong>、掌握<strong>ELF文件的结构和功能</strong>，以及最终<strong>完成一个<code>printf</code>函数的书写</strong>。本次Lab花费时间大约为10个小时，大多数时间都花在阅读源代码和思考源代码的逻辑上。由于完成每个功能依赖的代码文件不止一个，而且在vim中阅读代码终归不如在vscode等图形化编辑器上方便，因此给代码阅读和理解带来了不小的麻烦。此外，课程组提供的源代码中大量使用了“指针”，也给代码的理解带来了一定的困难。<br />
+但是，当我真正的读懂所给代码的逻辑并完成练习，尤其是当我看到<code>printf</code>函数可以正常运行时，那种成就感和快乐感是无法用言语来形容的。从一开始“不识庐山真面目”，到最终“柳暗花明又一村”，这大概就是操作系统的魅力吧！</p>
 
 
         <hr>
@@ -685,7 +720,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-1"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Thinking 1.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-2"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">Thinking 1.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-3"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">Thinking 1.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-4"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">Thinking 1.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-5"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">Thinking 1.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-1-6"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">Thinking 1.6</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ELF%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">ELF的解析</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#printf%E5%AE%9E%E7%8E%B0%E9%80%BB%E8%BE%91"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">printf实现逻辑</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">体会与感想</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-11"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> Thinking 1.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-12"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> Thinking 1.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-13"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> Thinking 1.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-14"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> Thinking 1.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-15"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> Thinking 1.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-16"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text"> Thinking 1.6</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#elf%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> ELF的解析</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#printf%E5%AE%9E%E7%8E%B0%E9%80%BB%E8%BE%91"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> printf实现逻辑</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol>
         
         </div>
       </aside>

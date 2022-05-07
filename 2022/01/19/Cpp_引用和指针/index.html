@@ -248,19 +248,6 @@
 
           
           
-          
-          
-          <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
           <li>
             <a href="/about/">
               
@@ -272,10 +259,23 @@
           
           
           
+          
+          
           <li>
             <a href="/categories/">
               
               CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
               
               
             </a>
@@ -470,87 +470,114 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><hr>
+        <h2 id="序言"><a class="markdownIt-Anchor" href="#序言"></a> 序言</h2>
+<hr />
 <p>本文介绍C++中<strong>引用</strong>，<strong>指针</strong>，<strong>const限定符</strong>和<strong>常量表达式</strong>等几个部分的内容。对应原书<strong>45页——60页</strong>。</p>
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><hr>
+<h2 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h2>
+<hr />
 <blockquote>
 <p>引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。</p>
+</blockquote>
 <ul>
-<li>举例如下<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;b = a; <span class="comment">//b是a的引用，需要在b前加引用符&amp;</span></span><br><span class="line"><span class="keyword">int</span> &amp;c;     <span class="comment">//错误，没有初始化！！！</span></span><br></pre></td></tr></table></figure></li>
+<li>举例如下<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;b = a; <span class="comment">//b是a的引用，需要在b前加引用符&amp;</span></span><br><span class="line"><span class="keyword">int</span> &amp;c;     <span class="comment">//错误，没有初始化！！！</span></span><br></pre></td></tr></table></figure>
+</li>
 <li>引用的实质：<strong>引用并不是对象，而是对象的一个新名字，所有对引用的操作实际是都是在对源对象进行操作</strong>。</li>
 <li>引用的定义：允许在一行中定义多个引用但是每个引用前必须有&amp;限定，例如<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;c = a, &amp;d = b;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-</blockquote>
-<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><hr>
+<h2 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h2>
+<hr />
 <blockquote>
 <p>指针是“指向”另外一种类型的复合类型，可以像引用一样实现对其他对象的间接引用。但是它有两点和引用不同——</p>
 <ul>
 <li>指针本身是对象，可以对指针本身进行赋值和访问，而且可以在指针的生命周期内先后指向不同的对象</li>
-<li>指针在定义的时候无需赋初值。和其他类型相似，如果在快作用域中的指针没有被初始化，则会拥有一个不确定的值。<h3 id="指针基础知识"><a href="#指针基础知识" class="headerlink" title="指针基础知识"></a>指针基础知识</h3></li>
+<li>指针在定义的时候无需赋初值。和其他类型相似，如果在快作用域中的指针没有被初始化，则会拥有一个不确定的值。</li>
 </ul>
-<ol>
-<li><strong>举例如下</strong> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指针定义</span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *b = &amp;a;  <span class="comment">//用取地址符&amp;取得a的地址，并将地址赋值给b</span></span><br><span class="line"><span class="keyword">int</span> *c = b;   <span class="comment">//此时b和c其实是一样的</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//用指针访问对象（仅适用于有效指针）</span></span><br><span class="line">cout &lt;&lt; *b;   <span class="comment">//用解引用符*得到原指针指向的对象的值</span></span><br><span class="line">*b = <span class="number">0x7fff</span>;  <span class="comment">//此时a的值被赋成0x7fff</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
 </blockquote>
+<h3 id="指针基础知识"><a class="markdownIt-Anchor" href="#指针基础知识"></a> 指针基础知识</h3>
 <ol>
-<li><strong>指针的定义</strong>：允许一行对多个指针类型进行声明和定义 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> *c = &amp;a, *d = &amp;b;</span><br></pre></td></tr></table></figure></li>
-<li><strong>空指针</strong><ul>
+<li>
+<p><strong>举例如下</strong></p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指针定义</span></span><br><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *b = &amp;a;  <span class="comment">//用取地址符&amp;取得a的地址，并将地址赋值给b</span></span><br><span class="line"><span class="keyword">int</span> *c = b;   <span class="comment">//此时b和c其实是一样的</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//用指针访问对象（仅适用于有效指针）</span></span><br><span class="line">cout &lt;&lt; *b;   <span class="comment">//用解引用符*得到原指针指向的对象的值</span></span><br><span class="line">*b = <span class="number">0x7fff</span>;  <span class="comment">//此时a的值被赋成0x7fff</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>指针的定义</strong>：允许一行对多个指针类型进行声明和定义</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> *c = &amp;a, *d = &amp;b;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>空指针</strong></p>
+<ul>
 <li>一般要用<code>nullptr</code>进行初始化</li>
 <li>空指针不能使用解引用符进行解引用</li>
 </ul>
 </li>
-<li><strong>关于<code>void</code></strong><ul>
+<li>
+<p><strong>关于<code>void</code></strong></p>
+<ul>
 <li><code>void</code>是一种比较特殊的指针类型，可以<strong>指向任意对象</strong>，存放任意对象的地址，但是也仅限于存放，<strong>不能进行访问</strong>，也不可以直接操作<code>void*</code>所指的对象。</li>
 <li>void可以做的事： <strong>和其他指针进行比较</strong>、<strong>作为函数的输入和输出</strong>、<strong>或者赋值给另外一个<code>void*</code>指针</strong>。</li>
 </ul>
 </li>
-<li><strong>指向指针的指针</strong> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *b = &amp;a;    <span class="comment">//b指向的是“int型”</span></span><br><span class="line"><span class="keyword">int</span> **c = &amp;b;   <span class="comment">//c指向的是“指向int的指针”</span></span><br></pre></td></tr></table></figure></li>
-<li><strong>对指针的引用</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;i;</span><br><span class="line"><span class="keyword">int</span> *&amp;r = p;</span><br></pre></td></tr></table></figure>
-<h3 id="指针数组和数组指针"><a href="#指针数组和数组指针" class="headerlink" title="指针数组和数组指针"></a>指针数组和数组指针</h3></li>
-<li><p><strong>基本解释</strong>（参考这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/men_wen/article/details/52694069">博客</a>)</p>
+<li>
+<p><strong>指向指针的指针</strong></p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *b = &amp;a;    <span class="comment">//b指向的是“int型”</span></span><br><span class="line"><span class="keyword">int</span> **c = &amp;b;   <span class="comment">//c指向的是“指向int的指针”</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>对指针的引用</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> *p = &amp;i;</span><br><span class="line"><span class="keyword">int</span> *&amp;r = p;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="指针数组和数组指针"><a class="markdownIt-Anchor" href="#指针数组和数组指针"></a> 指针数组和数组指针</h3>
+<ol>
+<li>
+<p><strong>基本解释</strong>（参考这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/men_wen/article/details/52694069">博客</a>)</p>
 <blockquote>
 <p><strong>指针数组</strong>：指针数组可以说成是”指针的数组”，首先这个变量是一个数组，其次，”指针”修饰这个数组，意思是说这个数组的所有元素都是指针类型，在32位系统中，指针占四个字节。</p>
 <p><strong>数组指针</strong>：数组指针可以说成是”数组的指针”，首先这个变量是一个指针，其次，”数组”修饰这个指针，意思是说这个指针存放着一个数组的首地址，或者说这个指针指向一个数组的首地址。`</p>
 </blockquote>
 </li>
-<li><strong>指针数组</strong><ul>
+<li>
+<p><strong>指针数组</strong></p>
+<ul>
 <li>指针数组的定义 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *a = &#123;<span class="string">&quot;red&quot;</span>, <span class="string">&quot;blue&quot;</span>, <span class="string">&quot;green&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li>函数形参使用指针数组  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//first method</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">char</span> *a[])</span></span>&#123;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//second method</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">char</span> **a)</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>数组指针</strong></p>
 <ul>
-<li>函数形参使用指针数组 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//first method</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">char</span> *a[])</span></span>&#123;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//second method</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">char</span> **a)</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>数组指针</strong><ul>
 <li>数组指针的定义(<strong>注意此时是<code>(*p)</code></strong>)   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">5</span>][<span class="number">4</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="built_in"><span class="keyword">int</span></span> (*p1)[<span class="number">4</span>] = a;</span><br><span class="line"><span class="built_in"><span class="keyword">int</span></span> (*p2)[<span class="number">4</span>] = &amp;a[<span class="number">0</span>]; <span class="comment">//p1和p2都是指向二维数组a的首地址</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>函数形参使用二维数组可用数组指针  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f1</span><span class="params">(a[][<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">((*p)[<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">          <span class="keyword">int</span> a[<span class="number">5</span>][<span class="number">4</span>];</span><br><span class="line">          <span class="built_in">f1</span>(a);</span><br><span class="line">          <span class="built_in">f2</span>(a);</span><br><span class="line">          <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="指针函数函数指针和函数指针数组"><a class="markdownIt-Anchor" href="#指针函数函数指针和函数指针数组"></a> 指针函数，函数指针和函数指针数组</h3>
+<ol>
+<li><strong>指针函数</strong>
 <ul>
-<li>函数形参使用二维数组可用数组指针   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f1</span><span class="params">(a[][<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">((*p)[<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">          <span class="keyword">int</span> a[<span class="number">5</span>][<span class="number">4</span>];</span><br><span class="line">          <span class="built_in">f1</span>(a);</span><br><span class="line">          <span class="built_in">f2</span>(a);</span><br><span class="line">          <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="指针函数，函数指针和函数指针数组"><a href="#指针函数，函数指针和函数指针数组" class="headerlink" title="指针函数，函数指针和函数指针数组"></a>指针函数，函数指针和函数指针数组</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>指针函数</strong><ul>
 <li>定义：指针函数就是<strong>返回指针值的函数</strong>，本质是一个函数。所以指针函数等价于“返回值为指针的函数”</li>
 <li>用法：   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> *<span class="title">GetNum</span><span class="params">(<span class="keyword">int</span> x)</span></span>; <span class="comment">//指针函数声明形式</span></span><br></pre></td></tr></table></figure>
-   由此可以看出，指针函数的本质仍然是函数，可以把它当作一般函数来声明和使用。</li>
+由此可以看出，指针函数的本质仍然是函数，可以把它当作一般函数来声明和使用。</li>
 </ul>
 </li>
-<li><strong>函数指针</strong><ul>
+<li><strong>函数指针</strong>
+<ul>
 <li>定义：函数指针就是一个<strong>指向函数的指针</strong>。每个函数在编译时，会被分配一个入口地址，一般用函数名来表示，这个地址就是该函数的指针。</li>
 <li>用法1：（基础用法）   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in"><span class="keyword">int</span></span>(*func)(<span class="keyword">int</span>, <span class="keyword">int</span>);       <span class="comment">//定义一个指向该函数形式的指针变量</span></span><br><span class="line">    func = max;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">func</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>用法2：（typedef）  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*func)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    func newfunc = max;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">newfunc</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><strong>函数指针数组</strong>
 <ul>
-<li>用法2：（typedef） <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*func)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    func newfunc = max;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">newfunc</span>(<span class="number">1</span>, <span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>函数指针数组</strong><ul>
 <li>定义：顾名思义，就是每个元素都是函数指针的数组，直接在函数指针名后面加上数组符号[ ]即可。</li>
 <li>用法   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f1&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f2&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;f3&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//定义三个函数指针</span></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf1)() = &amp;f1;</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf2)() = &amp;f2;</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pf3)() = &amp;f3;</span><br><span class="line">    <span class="comment">//接下来就是定义一个数组把他们三个装进去。</span></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pfarr[<span class="number">3</span>])();</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span>(*pfunarr[<span class="number">3</span>])();</span><br><span class="line">    pfunarr[<span class="number">0</span>] = pfun;</span><br><span class="line">    pfunarr[<span class="number">1</span>] = pfun2;</span><br><span class="line">    pfunarr[<span class="number">2</span>] = pfun3;</span><br><span class="line">    <span class="comment">/*  或者这样赋值</span></span><br><span class="line"><span class="comment">    pfunarr[0] = &amp;fun1;</span></span><br><span class="line"><span class="comment">    pfunarr[1] = &amp;fun2;</span></span><br><span class="line"><span class="comment">    pfunarr[2] = &amp;fun3;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    pfunarr[<span class="number">0</span>]();</span><br><span class="line">    pfunarr[<span class="number">1</span>]();</span><br><span class="line">    pfunarr[<span class="number">2</span>]();</span><br><span class="line">    <span class="comment">/*  或者这样调用</span></span><br><span class="line"><span class="comment">    (*pfunarr[0])();</span></span><br><span class="line"><span class="comment">    (*pfunarr[1])();</span></span><br><span class="line"><span class="comment">    (*pfunarr[2])();</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
-   从上述代码中也可以看出来，函数名实际上就是函数地址，这一点与数组有异曲同工之妙。</li>
+从上述代码中也可以看出来，函数名实际上就是函数地址，这一点与数组有异曲同工之妙。</li>
 </ul>
 </li>
 </ol>
@@ -703,7 +730,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">序言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">引用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">指针</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">指针基础知识</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84%E5%92%8C%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">指针数组和数组指针</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E5%87%BD%E6%95%B0%EF%BC%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">指针函数，函数指针和函数指针数组</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 序言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 引用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 指针</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> 指针基础知识</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84%E5%92%8C%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 指针数组和数组指针</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%87%E9%92%88%E5%87%BD%E6%95%B0%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"> 指针函数，函数指针和函数指针数组</span></a></li></ol></li></ol>
         
         </div>
       </aside>
