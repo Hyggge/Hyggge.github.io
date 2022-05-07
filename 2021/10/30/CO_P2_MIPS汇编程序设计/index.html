@@ -483,7 +483,85 @@
 <li>只有load与store两类指令能够访存<br>例如，不允许寄存器+存储器或存储器+存储器</li>
 <li>把复杂留给编译<br>编译器将高层语言复杂语句转换为若干简单的汇编指令</li>
 </ul>
-<h2 id="MIPS的寄存器"><a href="#MIPS的寄存器" class="headerlink" title="MIPS的寄存器"></a>MIPS的寄存器</h2><p>MIPS共有32个一般寄存器（标号为$0 ~ $31),不区别正负。还有pc、hi、lo等特殊寄存器<br>|寄存器名|序号|作用|<br>|———|——|——|<br>|$zero|0|储存常量0，不支持修改|<br>|$v0 ~ $v1|2~3|函数返回值|<br>|$a0 ~ $a3|4~7|函数参数|<br>|$t0 ~ $t9|8~15, 24~25|临时变量|<br>|$s0 ~ $s7|16~23|程序员变量（全局变量）<br>|$k0 ~ $k1|26~27|操作系统使用|<br>|$gp|28|在生成复杂的存储布局时使用（属于编译范畴）|<br>|$sp|29|栈顶指针|<br>|$fp|30|在生成复杂的存储布局时使用（属于编译范畴）|<br>|$ra|31|函数返回值|<br>|pc|无|程序计数器（冯诺依曼计算机）|<br>|hi|无|储存乘法运算结果的高32位和除法运算的余数|<br>|lo|无|储存乘法运算结果的低32位和除法运算的商|</p>
+<h2 id="MIPS的寄存器"><a href="#MIPS的寄存器" class="headerlink" title="MIPS的寄存器"></a>MIPS的寄存器</h2><p>MIPS共有32个一般寄存器（标号为$0 ~ $31),不区别正负。还有pc、hi、lo等特殊寄存器</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>寄存器名</th>
+<th>序号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$zero</td>
+<td>0</td>
+<td>储存常量0，不支持修改</td>
+</tr>
+<tr>
+<td>$v0 ~ $v1</td>
+<td>2~3</td>
+<td>函数返回值</td>
+</tr>
+<tr>
+<td>$a0 ~ $a3</td>
+<td>4~7</td>
+<td>函数参数</td>
+</tr>
+<tr>
+<td>$t0 ~ $t9</td>
+<td>8~15, 24~25</td>
+<td>临时变量</td>
+</tr>
+<tr>
+<td>$s0 ~ $s7</td>
+<td>16~23</td>
+<td>程序员变量（全局变量）</td>
+</tr>
+<tr>
+<td>$k0 ~ $k1</td>
+<td>26~27</td>
+<td>操作系统使用</td>
+</tr>
+<tr>
+<td>$gp</td>
+<td>28</td>
+<td>在生成复杂的存储布局时使用（属于编译范畴）</td>
+</tr>
+<tr>
+<td>$sp</td>
+<td>29</td>
+<td>栈顶指针</td>
+</tr>
+<tr>
+<td>$fp</td>
+<td>30</td>
+<td>在生成复杂的存储布局时使用（属于编译范畴）</td>
+</tr>
+<tr>
+<td>$ra</td>
+<td>31</td>
+<td>函数返回值</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>无</td>
+<td>程序计数器（冯诺依曼计算机）</td>
+</tr>
+<tr>
+<td>hi</td>
+<td>无</td>
+<td>储存乘法运算结果的高32位和除法运算的余数</td>
+</tr>
+<tr>
+<td>lo</td>
+<td>无</td>
+<td>储存乘法运算结果的低32位和除法运算的商</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="MIPS中主存地址的表示和主存数据的存储"><a href="#MIPS中主存地址的表示和主存数据的存储" class="headerlink" title="MIPS中主存地址的表示和主存数据的存储"></a>MIPS中主存地址的表示和主存数据的存储</h2><h3 id="地址表示方式："><a href="#地址表示方式：" class="headerlink" title="地址表示方式："></a>地址表示方式：</h3><ul>
 <li>绝对地址<br>主存单元的地址直接用具体的数值来表示</li>
 <li>相对地址<br>采用“基地址+偏移”的方式，优点如下<ul>
@@ -503,7 +581,7 @@
 <h4 id="特权指令"><a href="#特权指令" class="headerlink" title="特权指令"></a>特权指令</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eret(异常返回)， mfc0(读CP0寄存器)， mtc0(写CP0寄存器)</span><br></pre></td></tr></table></figure>
 <h4 id="陷阱指令"><a href="#陷阱指令" class="headerlink" title="陷阱指令"></a>陷阱指令</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">break</span>(断点异常)， syscall(系统调用异常)</span><br></pre></td></tr></table></figure>
 <h4 id="tips1-MIPS指令判断溢出的方法"><a href="#tips1-MIPS指令判断溢出的方法" class="headerlink" title="tips1: MIPS指令判断溢出的方法"></a>tips1: MIPS指令判断溢出的方法</h4></li>
-<li>以add指令为例：<br>I<a href="add判断溢出.png"></a></li>
+<li>以add指令为例：<br><img src="add判断溢出.png" alt=""></li>
 </ul>
 <h4 id="tips2-LO和HI寄存器中保存的值"><a href="#tips2-LO和HI寄存器中保存的值" class="headerlink" title="tips2: LO和HI寄存器中保存的值"></a>tips2: LO和HI寄存器中保存的值</h4><ul>
 <li>在乘法指令中， LO保存运算结果的低32位，HI保存运算结果的高32位；</li>
@@ -544,15 +622,52 @@
 <li>$ra：返回地址寄存器，保存着调用者的地址用到的寄存器</li>
 </ul>
 <h3 id="保存和恢复寄存器"><a href="#保存和恢复寄存器" class="headerlink" title="保存和恢复寄存器"></a>保存和恢复寄存器</h3><ul>
-<li>因为寄存器数量较少，因此需要桟将寄存器中的数据保存在内存中，防止调用函数的过程中某些需要保存的值被覆盖。此时我们需要对保存栈顶地址的寄存器<code>$sp</code>进行操作：<strong>申请桟帧-&gt;储存寄存器的值-&gt;调用函数-&gt;将桟中的值返回寄存器-&gt;释放桟帧</strong><br>I<a href="桟操作示例.png"></a></li>
-<li>根据寄存器受保护的程度,可以将寄存器分为<strong>强保护</strong>和<strong>弱保护</strong><br>I<a href="寄存器保护分析.png"></a><br>  注意，强保护寄存器为<strong>被调用者</strong>保存（进入函数时保存，退出函数前恢复）；弱保护寄存器由<strong>调用者</strong>保存（调用子函数前保存，子函数返回后恢复）。</li>
+<li>因为寄存器数量较少，因此需要桟将寄存器中的数据保存在内存中，防止调用函数的过程中某些需要保存的值被覆盖。此时我们需要对保存栈顶地址的寄存器<code>$sp</code>进行操作：<strong>申请桟帧-&gt;储存寄存器的值-&gt;调用函数-&gt;将桟中的值返回寄存器-&gt;释放桟帧</strong><br><img src="桟操作示例.png" alt=""></li>
+<li>根据寄存器受保护的程度,可以将寄存器分为<strong>强保护</strong>和<strong>弱保护</strong><br><img src="寄存器保护分析.png" alt=""><br>  注意，强保护寄存器为<strong>被调用者</strong>保存（进入函数时保存，退出函数前恢复）；弱保护寄存器由<strong>调用者</strong>保存（调用子函数前保存，子函数返回后恢复）。</li>
 </ul>
 <h2 id="MIPS指令格式"><a href="#MIPS指令格式" class="headerlink" title="MIPS指令格式"></a>MIPS指令格式</h2><p>MIPS指令的32位被划分为若干个域，代表特定含义，每一个域在不同指令的含义大体是相同的。</p>
-<h3 id="R型指令"><a href="#R型指令" class="headerlink" title="R型指令"></a>R型指令</h3><p><strong>域的分块</strong><br>I<a href="R型分块.png"></a><br><strong>域的命名</strong><br>I<a href="R型.png"></a><br>|域名|含义|<br>|—|—|<br>|opcode|代表指令的操作，R型指令的opcode固定为0b000000<br>|funct|与opcode指令配合，精确定义指令的具体操作，主要用于服务R型指令|<br>|rs|指定第一个操作数（source寄存器）|<br>|rt|指定第二个操作数（target寄存器）|<br>|rd|指定结果回写的寄存器（destination寄存器）|<br>|shamt|移位指令（sll， sra， srl）中的移位位数，其他指令中该域固定为0|<br><strong>注意</strong>：</p>
+<h3 id="R型指令"><a href="#R型指令" class="headerlink" title="R型指令"></a>R型指令</h3><p><strong>域的分块</strong><br><img src="R型分块.png" alt=""><br><strong>域的命名</strong><br><img src="R型.png" alt=""></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>域名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>opcode</td>
+<td>代表指令的操作，R型指令的opcode固定为0b000000</td>
+</tr>
+<tr>
+<td>funct</td>
+<td>与opcode指令配合，精确定义指令的具体操作，主要用于服务R型指令</td>
+</tr>
+<tr>
+<td>rs</td>
+<td>指定第一个操作数（source寄存器）</td>
+</tr>
+<tr>
+<td>rt</td>
+<td>指定第二个操作数（target寄存器）</td>
+</tr>
+<tr>
+<td>rd</td>
+<td>指定结果回写的寄存器（destination寄存器）</td>
+</tr>
+<tr>
+<td>shamt</td>
+<td>移位指令（sll， sra， srl）中的移位位数，其他指令中该域固定为0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意</strong>：</p>
 <ul>
 <li><code>nop</code>是一条特殊指令（0x00000000）， 对应的指令为<code>sll $0, $0, 0</code>,主要用于解决流水线冲突。</li>
 </ul>
-<h3 id="I型指令"><a href="#I型指令" class="headerlink" title="I型指令"></a>I型指令</h3><p><strong>域的分块</strong><br>I<a href="I型分块.png"></a><br><strong>域的命名</strong><br>I<a href="I型命名.png"></a><br>|域名|含义|<br>|—|—|<br>|opcode|代表指令的操作， I型中opcode为非零编码，一共可以编码64条指令|<br>|rs|指定第一个操作数（source操作数）|<br>|rt|指定第二个操作数（target操作数）|<br>|immediate|表示16位立即数|<br><strong>注意</strong>：</p>
+<h3 id="I型指令"><a href="#I型指令" class="headerlink" title="I型指令"></a>I型指令</h3><p><strong>域的分块</strong><br><img src="I型分块.png" alt=""><br><strong>域的命名</strong><br><img src="I型命名.png" alt=""><br>|域名|含义|<br>|—|—|<br>|opcode|代表指令的操作， I型中opcode为非零编码，一共可以编码64条指令|<br>|rs|指定第一个操作数（source操作数）|<br>|rt|指定第二个操作数（target操作数）|<br>|immediate|表示16位立即数|<br><strong>注意</strong>：</p>
 <ul>
 <li>立即数（immediate）分为<strong>有符号立即数</strong>和<strong>无符号立即数</strong><ul>
 <li>无符号立即数的指令包括：<strong>位运算</strong>指令(and, or, nor等)和<strong>小于置位</strong>指令（slti等）<br><strong>zero_ext()</strong>：运算前需要进行无符号扩展</li>
@@ -567,10 +682,10 @@
 <li>关于跳转指令（B类指令）的跳转范围<ul>
 <li>指令都是32位长，且指令是字对齐，这意味着最低2位恒为0。因此immediate没有必要记录最低2位，乘以4后就得到了对应字节地址！immediate为16位符号数，其表示范围是正负±$2^15$</li>
 <li>如果跳转的目的地址超过了$2^15$条指令可以将<code>beq $s0, $0, far</code>改写为<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bne $s0, $<span class="number">0</span>, next</span><br><span class="line">j far</span><br><span class="line">next: <span class="meta">#next instruction</span></span><br></pre></td></tr></table></figure>
-<h3 id="J型指令"><a href="#J型指令" class="headerlink" title="J型指令"></a>J型指令</h3><strong>域的分块和命名</strong><br>I<a href="J型.png"></a><br><strong>PC地址的计算方法</strong><br>I<a href="PC的计算.png"></a><br>由于PC的值始终是4的倍数，因此最后两位都是零，没有必要存储；PC的高四位来自当前指令的高四位，意味着目的地址与当前指令必在同一区段 <strong>{X000_0000，XFFF_FFFF}</strong>,因此<code>j</code>指令的跳转范围是<strong>256MB</strong>，只有jr指令（R型）才可以跳转到<strong>4GB</strong>内的任意地址。<h3 id="指令格式总结"><a href="#指令格式总结" class="headerlink" title="指令格式总结"></a>指令格式总结</h3></li>
+<h3 id="J型指令"><a href="#J型指令" class="headerlink" title="J型指令"></a>J型指令</h3><strong>域的分块和命名</strong><br><img src="J型.png" alt=""><br><strong>PC地址的计算方法</strong><br><img src="PC的计算.png" alt=""><br>由于PC的值始终是4的倍数，因此最后两位都是零，没有必要存储；PC的高四位来自当前指令的高四位，意味着目的地址与当前指令必在同一区段 <strong>{X000_0000，XFFF_FFFF}</strong>,因此<code>j</code>指令的跳转范围是<strong>256MB</strong>，只有jr指令（R型）才可以跳转到<strong>4GB</strong>内的任意地址。<h3 id="指令格式总结"><a href="#指令格式总结" class="headerlink" title="指令格式总结"></a>指令格式总结</h3></li>
 </ul>
 </li>
-<li>三类指令格式对比<br>I<a href="指令格式总结.png"></a></li>
+<li>三类指令格式对比<br><img src="指令格式总结.png" alt=""></li>
 <li>B类指令(<strong>I型</strong>)使用<strong>PC相对寻址</strong>，J指令(<strong>J型</strong>)使用<strong>绝对地址寻址</strong></li>
 </ul>
 

@@ -538,7 +538,31 @@
 </table>
 </div>
 <h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）</p>
-<p>确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——<br>|指令|作用|<br>|:—-:|:—-:|<br>|<code>git reset --hard HEAD^</code>|回退到上一个版本，<code>^</code>的个数表示回滚的次数|<br>|<code>git reset --hard HEAD~100</code>|回滚100次，<code>~</code>后的数字表示回滚的次数|<br>|<code>git reset --hard &lt;hashcode&gt;</code>|回滚到<code>&lt;hashcode&gt;</code>表示的版本|</p>
+<p>确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>git reset --hard HEAD^</code></td>
+<td style="text-align:center">回退到上一个版本，<code>^</code>的个数表示回滚的次数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git reset --hard HEAD~100</code></td>
+<td style="text-align:center">回滚100次，<code>~</code>后的数字表示回滚的次数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>git reset --hard &lt;hashcode&gt;</code></td>
+<td style="text-align:center">回滚到<code>&lt;hashcode&gt;</code>表示的版本</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>如果想要重返未来，则需要先使用<code>git relog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard &lt;hashcode&gt;</code>进行重返。</p>
 
 
