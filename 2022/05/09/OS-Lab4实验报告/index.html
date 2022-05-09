@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/2022/05/03/OS-Lab3实验报告/">
+  <link rel="canonical" href="http://example.com/2022/05/09/OS-Lab4实验报告/">
   <title>
     
-      「BUAA-OS」 Lab3实验报告 - Hyggge‘s blog
+      「BUAA-OS」 Lab4实验报告 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -394,11 +394,11 @@
               <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
               
             </div>
-            <h1>「BUAA-OS」 Lab3实验报告</h1>
-            <h2 class="subheading">进程调度</h2>
+            <h1>「BUAA-OS」 Lab4实验报告</h1>
+            <h2 class="subheading">系统调用和fork</h2>
             <span class="meta">
               Posted by Hyggge on
-              2022-05-03
+              2022-05-09
             </span>
 
 
@@ -406,11 +406,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">7</span> Minutes
+              Estimated Reading Time <span class="post-count">12</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">2k</span> In Total
+              Words <span class="post-count">3.5k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -472,101 +472,155 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h1 id="lab3-实验报告"><a class="markdownIt-Anchor" href="#lab3-实验报告"></a> Lab3 实验报告</h1>
-<h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
-<h3 id="thinking-31"><a class="markdownIt-Anchor" href="#thinking-31"></a> Thinking 3.1</h3>
-<p><strong>Q：</strong> <strong>思考<code>envid2env</code> 函数:为什么<code>envid2env</code>中需要判断<code>e-&gt;env_id != envid</code> 的情况？如果没有这步判断会发生什么情况？</strong></p>
-<p><strong>A：</strong> 通过阅读该函数的代码，我们能知道，<code>e</code>是根据<code>envid</code>的后10位从<code>envs</code>数组中获得的。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">envid2env</span><span class="params">(u_int envid, struct Env **penv, <span class="keyword">int</span> checkperm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Env</span> *<span class="title">e</span>;</span></span><br><span class="line">	<span class="keyword">if</span> (envid == <span class="number">0</span>) &#123;</span><br><span class="line">		*penv = curenv;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		e = envs + <span class="built_in">ENVX</span>(envid);</span><br><span class="line">	&#125; e = envs + <span class="built_in">ENVX</span>(envid);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
-<p>但是这样获得的<code>e</code>的<code>envid</code>不一定和<code>envid</code>相同，因为<code>envid</code>中还有<code>ASID</code>字段（11-16位），当<code>envs</code>中的某一个进程控制块被替换，新生成的<code>envid</code>的后10不变，但是<code>ASID</code>字段会改变。所以我们需要进一步判断<code>e-&gt;env_id != envid</code>是否成立。</p>
-<p>如果不判断，则通过最终获得的<code>e</code>可能并不是我们想要的内存控制块，而如果对这个错误的内存控制块操作，则可能会导致内存控制出现混乱（例如获得一个仍在<code>env_free_list</code>中的PCB，然后运行它）。</p>
-<h3 id="thinking-32"><a class="markdownIt-Anchor" href="#thinking-32"></a> Thinking 3.2</h3>
-<p><strong>Q：</strong> <strong>结合include/mmu.h 中的地址空间布局，思考<code>env_setup_vm</code> 函数：</strong></p>
+        <h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
+<h3 id="thinking-41"><a class="markdownIt-Anchor" href="#thinking-41"></a> Thinking 4.1</h3>
+<p><strong>Q：</strong> <strong>思考并回答下面的问题：</strong></p>
 <ul>
-<li><strong><code>UTOP</code> 和<code>ULIM</code>的含义分别是什么，<code>UTOP</code> 和 <code>ULIM</code> 之间的区域与UTOP以下的区域相比有什么区别？</strong></li>
-<li><strong>请结合系统自映射机制解释代码中<code>pgdir[PDX(UVPT)]=env_cr3</code>的含义。</strong></li>
-<li><strong>谈谈自己对进程中物理地址和虚拟地址的理解。</strong></li>
+<li><strong>内核在保存现场的时候是如何避免破坏通用寄存器的？</strong></li>
+<li><strong>系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？</strong></li>
+<li><strong>我们是怎么做到让sys开头的函数“认为”我们提供了和用户调用msyscall时同样的参数的？</strong></li>
+<li><strong>内核处理系统调用的过程对Trapframe做了哪些更改？这种修改对应的用户态的变化是？</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li>内核使用宏函数<code>SAVE_ALL</code>来保存现场，在该函数的代码实现里，只使用了k0和k1两个通用寄存器来进行操作，从而保证其他通用寄存器的值都不会被改变。</li>
+<li>可以。因为内核在陷入内核、保存现场的过程中，寄存器$a0-$a3中的值都没有被破坏。</li>
+<li>用户在调用<code>msyscall</code>时，传入的参数会被保存在$a0-$a3寄存器和堆栈中。当陷入内核时，$a0-$a3寄存器不会被破坏，而且用户栈中的内容会被原封不动地被拷贝到内核栈（<code>KERNEL_SP</code>）中。因此，<strong><code>sys_*</code>函数可以从寄存器和用户栈获得&quot;用户调用<code>msyscall</code>时传入的参数值&quot;</strong>。</li>
+<li>在处理过程中，将<code>Trapframe</code>中<code>epc</code>的值进行了一定处理，同时将<code>sys_*</code>函数的返回值存入<code>Trapframe</code>中的<code>v0</code>寄存器中。这种修改保证在进入用户态时，用户程序能够从正确的位置正确运行，同时也使得用户程序从<code>v0</code>寄存器中获得<strong>系统调用的返回值</strong>。</li>
+</ul>
+<h3 id="thinking-42"><a class="markdownIt-Anchor" href="#thinking-42"></a> Thinking 4.2</h3>
+<p><strong>Q：</strong> <strong>思考下面的问题，并对这个问题谈谈你的理解： 请回顾 lib/env.c 文件中 mkenvid() 函数的实现，该函数不会返回 0，请结合系统调用和 IPC 部分的实现 与 envid2env() 函数的行为进行解释。</strong><br />
+<strong>A：</strong> 回顾<code>mkenvid</code>的实现我们会发现，<code>envid</code>的第10位永远是1，即保证了生成的<code>envid</code>一定是非0的——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">u_int <span class="title">mkenvid</span><span class="params">(struct Env *e)</span> </span>&#123;</span><br><span class="line">    u_int idx = e - envs;</span><br><span class="line">    u_int asid = <span class="built_in">asid_alloc</span>();</span><br><span class="line">    <span class="keyword">return</span> (asid &lt;&lt; (<span class="number">1</span> + LOG2NENV)) | (<span class="number">1</span> &lt;&lt; LOG2NENV) | idx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以为什么将0作为一个保留值呢？我们能在<code>envid2env</code>函数中会找到答案——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">envid2env</span><span class="params">(u_int envid, struct Env **penv, <span class="keyword">int</span> checkperm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* Hint: If envid is zero, return curenv.*/</span></span><br><span class="line">    <span class="keyword">if</span> (envid == <span class="number">0</span>) &#123;</span><br><span class="line">        *penv = curenv;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现，<strong>当<code>envid</code>的值是0时，函数会返回指向当前进程控制块的指针</strong>（通过形参<code>penv</code>返回）。当某些系统调用函数需要访问当前进程的进程控制块时，可以直接通过向<code>mkenvid</code>传0来会获得指向当前进程控制块的指针，然后通过指针对进程控制块进行访问。</p>
+<p>因此，<strong>0作为<code>envid</code>的保留值是为了方便程序直接通过<code>mkenvid</code>函数来访问当前进程的进程控制块。</strong></p>
+<h3 id="thinking-43"><a class="markdownIt-Anchor" href="#thinking-43"></a> Thinking 4.3</h3>
+<p><strong>Q：</strong> <strong>思考下面的问题，并对这两个问题谈谈你的理解：</strong></p>
+<ul>
+<li><strong>子进程完全按照 fork() 之后父进程的代码执行，说明了什么？</strong></li>
+<li><strong>但是子进程却没有执行 fork() 之前父进程的代码，又说明了什么？</strong></li>
+</ul>
+<p><strong>A：</strong> <strong>前者说明子进程的代码段和父进程是完全一样的；后者说明子进程的初始上下文位置是在<code>fork</code>函数</strong>，也就是说，子进程的初始<code>PC</code>并不是在用户程序的入口，而是在父进程<code>EPC</code>指向的位置。</p>
+<blockquote>
+<p>子进程实际上是在”syscall_env_alloc的执行刚刚从内核态返回用户态“的时候开始运行的，更准确的说，是在msyscal函数返回的位置开始的。</p>
+</blockquote>
+<h3 id="thinking-44"><a class="markdownIt-Anchor" href="#thinking-44"></a> Thinking 4.4</h3>
+<p><strong>Q：</strong> <strong>关于 fork 函数的两个返回值，下面说法正确的是：</strong></p>
+<ul>
+<li><strong>A、fork 在父进程中被调用两次，产生两个返回值</strong></li>
+<li><strong>B、fork 在两个进程中分别被调用一次，产生两个不同的返回值</strong></li>
+<li><strong>C、fork 只在父进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
+<li><strong>D、fork 只在子进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
+</ul>
+<p><strong>A：</strong> 在<code>fork</code>函数中子进程被创建，而当子进程被调度时，恢复的上下文环境仍然是在<code>fork</code>函数中（实际上是<code>syscall_env_alloc</code>函数之后），因此fork 在两个进程中分别被调用一次。此外，执行完<code>fork</code>函数后，父进程返回的是子进程的<code>envid</code>，子进程返回的是0，因此父子进程的返回值是不同的。综上，答案为B。</p>
+<h3 id="thinking-45"><a class="markdownIt-Anchor" href="#thinking-45"></a> Thinking 4.5</h3>
+<p><strong>Q：</strong> <strong>我们并不应该对所有的用户空间页都使用duppage进行映射。那么究竟哪些用户空间页应该映射，哪些不应该呢？ 请结合本章的后续描述、mm/pmap.c 中 mips_vm_init 函数进行的页面映射以及 include/mmu.h 里的内存布局图进行思考。</strong></p>
+<p><strong>A：</strong> <code>UTOP</code>和<code>TLIM</code>之间储存的是<strong>和内核相关的页表信息</strong>。在执行<code>env_alloc()</code>函数时，这一部分的映射关系直接从<code>boot_pgdir</code>拷贝到进程页表中，因此不需要进行映射。</p>
+<p><code>UTOP</code>和<code>USTACKTOP</code>之间是<strong>异常处理栈（user exception stack）和无效内存（invalid memory）</strong>，前者是进行异常处理的地方， 后者一般也不会用到，所以父子进程不需要共享这部分的内存，也就不需要进行映射了。</p>
+<p>所以，最终需要被映射的页面<strong>只有<code>USTACKTOP</code>之下的部分</strong>。</p>
+<h3 id="thinking-46"><a class="markdownIt-Anchor" href="#thinking-46"></a> Thinking 4.6</h3>
+<p><strong>Q：</strong> <strong>在遍历地址空间存取页表项时你需要使用到vpd和vpt这两个“指针的指针”，请参考 user/entry.S 和 include/mmu.h 中的相关实现，思考并回答这几个问题：</strong></p>
+<ul>
+<li><strong>vpt和vpd的作用是什么？怎样使用它们？</strong></li>
+<li><strong>从实现的角度谈一下为什么进程能够通过这种方式来存取自身的页表？</strong></li>
+<li><strong>它们是如何体现自映射设计的？</strong></li>
+<li><strong>进程能够通过这种方式来修改自己的页表项吗？</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li><code>vpt</code>和<code>vpd</code>分别是指向用户页表和用户页目录的指针，可以用来对用户页表和页目录进行访问。在使用的时候，以<code>vpt</code>为例，先用<code>*</code>运算符获得页表基地址，然后从要访问的虚拟地址中获得页表项相对基地址的偏移，最后两个相加就得到指向页表项的指针，这样我们就可以通过这个指针来对页表项进行访问。vpd同理。</li>
+<li>在<code>entry.S</code>中我们可以找到<code>vpt</code>和<code>vpd</code>的定义——  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.globl vpt</span><br><span class="line">vpt:</span><br><span class="line">    .word UVPT</span><br><span class="line"></span><br><span class="line">.globl vpd</span><br><span class="line">vpd:</span><br><span class="line">    .<span class="built_in">word</span> (UVPT+(UVPT&gt;&gt;<span class="number">12</span>)*<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+可以发现，<code>vpt</code>和<code>vpd</code>分别指向了两个值——<code>UVPT</code>和<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，这两个值分别是用户地址空间中页表的首地址和页目录的首地址。所以我们可以直接通过<code>vpt</code>和<code>vpd</code>访问到用户进程页表和页目录。</li>
+<li>上面说到，<code>vpd</code>的值是<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，而这个地址正好在<code>UVPT</code>和<code>UVPT+PDMAP</code>之间，说明页目录被映射到了某一个页表的位置。我们知道，每一个页表都被页目录中的一个页表项所映射。因此&quot;页目录被映射到某一个页表的位置&quot;就意味着，<strong>在页目录中一定有一个页表项映射到了页目录本身</strong>，即实现了自映射。</li>
+<li>不能，页表是内核态程序维护的，用户进程只能对页表项其进行访问，而不能对其进行修改。</li>
+</ul>
+<h3 id="thinking-47"><a class="markdownIt-Anchor" href="#thinking-47"></a> Thinking 4.7</h3>
+<p><strong>Q：</strong> <strong>page_fault_handler 函数中，你可能注意到了一个向异常处理栈复制Trapframe运行现场的过程，请思考并回答这几个问题：</strong></p>
+<ul>
+<li><strong>这里实现了一个支持类似于“中断重入”的机制，而在什么时候会出现这种“中断重入”？</strong></li>
+<li><strong>内核为什么需要将异常的现场Trapframe复制到用户空间？</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li>当发生缺页中断时如果在发生其他中断（比如时钟中断），就会出现中断重入。</li>
+<li>因为异常的处理是在用户态进行的，而<strong>用户态只能访问用户空间（低2G空间）内的数据</strong>，所以需要将现场保存在用户空间。</li>
+</ul>
+<h3 id="thinking-48"><a class="markdownIt-Anchor" href="#thinking-48"></a> Thinking 4.8</h3>
+<p><strong>Q：</strong> <strong>到这里我们大概知道了这是一个由用户程序处理并由用户程序自身来恢复运行现场的过程，请思考并回答以下几个问题：</strong></p>
+<ul>
+<li><strong>在用户态处理页写入异常，相比于在内核态处理有什么优势？</strong></li>
+<li><strong>从通用寄存器的用途角度讨论，在可能被中断的用户态下进行现场的恢复，要如何做到不破坏现场中的通用寄存器？</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li>尽量减少内核出现错误的可能，即使程序崩溃，也不会影响系统的稳定。同时微内核的模式下，用户态进行新页面的分配映射也更加灵活方便。</li>
+<li>在进入用户态的异常处理程序前，将通用寄存器中的值存储在一个特殊的栈空间——<strong>异常处理栈</strong>；执行完异常处理程序后，在从异常处理栈恢复到通用寄存器。</li>
+</ul>
+<h3 id="thinking-49"><a class="markdownIt-Anchor" href="#thinking-49"></a> Thinking 4.9</h3>
+<p><strong>Q：</strong> <strong>请思考并回答以下几个问题：</strong></p>
+<ul>
+<li><strong>为什么需要将set_pgfault_handler的调用放置在syscall_env_alloc之前？</strong></li>
+<li><strong>如果放置在写时复制保护机制完成之后会有怎样的效果？</strong></li>
+<li><strong>子进程是否需要对在entry.S定义的字__pgfault_handler赋值？</strong></li>
 </ul>
 <p><strong>A：</strong></p>
 <ul>
 <li>
-<p><code>ULIM</code>是<code>kseg0</code>和<code>kuseg</code>的分界线，也是内核态虚拟内存区和用户态虚拟内存区的分界线；<code>UTOP</code>是<code>kuseg</code>中只读区和可读写区的分界线。<strong><code>UTOP</code>和<code>ULIM</code>之间是只读区域</strong>，用来存放用户的进程信息和页表信息；<strong><code>UTOP</code>之下的是可读写区域</strong>，用户可以自由读写。</p>
+<p>其实<code>set_pgfault_handler</code>并不一定要置在<code>syscall_env_alloc</code>之前， 只要放在“写时复制机制建立”之前即可。理由如下——<br />
+ <br />
+我们知道，在子进程真正运行之前，父进程会将需要与子进程共享的页面共享给子进程，并同时设置写时复制机制。在这个过程中，<strong>父进程数据段里的全局变量也就变成了子进程的全局变量</strong>，因此只要在此之前父进程的<code>__pgfault_handler</code>已经被赋值过，那么设置完写时复制机制之后，子进程中<code>__pgfault_handler</code>的值就同样被&quot;赋值&quot;了（和父进程保持一致）<br />
+ <br />
+<strong>因此，<code>set_pgfault_handler</code>必须在”写时复制机制“完成之前。</strong><code>set_pgfault_handler</code>无论是放<code>syscall_env_alloc</code>之前还是之后，其实都没有问题。</p>
+<p> <br />
+但是如果非要问为什么”<code>set_pgfault_handler</code>的调用放置在<code>syscall_env_alloc</code>之前“，大概是因为，这样可以节省子进程的运行时间，因为子进程是在&quot;<strong><code>syscall_env_alloc</code>的执行刚刚从内核态返回用户态</strong>&quot;的时候开始运行的。</p>
+<p> </p>
 </li>
 <li>
-<p><code>UVPT</code>是<code>kuseg</code>中保存用户（当前进程）页表信息的虚拟内存区，大小为4MB（0x7fc00000-0x80000000），<code>env_cr3</code>是进程页目录所在的物理地址。<code>pgdir[PDX(UVPT)]=env_cr3</code>表示页目录中第<code>PDX(UVPT)</code>项映射到页目录本身的物理地址，实现自映射机制。</p>
+<p>通过上面的解释可以知道，如果将<code>set_pgfault_handler</code>放置在写时复制保护机制完成之后，那么<strong>子进程中的全局变量<code>__pgfault_handler</code>就不会被赋值</strong>，那么页写入异常处理机制也就无法被建立起来。</p>
 </li>
 <li>
-<p>在用户进程中使用的是虚拟地址（用户可见），然后MMU通过查询页表得到对应的物理地址（用户不可见），并最终通过物理地址在物理内存中获取值。</p>
+<p>不需要，因为父进程已经通过<code>set_pgfault_handler</code>函数将<code>__pgfault_handler</code>赋值为<code>pgfault</code>的函数地址了，并且在写时复制机制建立时将数据段里的全局变量都&quot;复制&quot;到了子进程的数据段（包括<code>__pgfault_handler</code>），因此子进程不需要再对其进行赋值。</p>
 </li>
 </ul>
-<h3 id="thinking-33"><a class="markdownIt-Anchor" href="#thinking-33"></a> Thinking 3.3</h3>
-<p><strong>Q：</strong> <strong>找到 <code>user_data</code> 这一参数的来源，思考它的作用。没有这个参数可不可以？为什么？（可以尝试说明实际的应用场景，举一个实际的库中的例子）</strong></p>
-<p><strong>A：</strong> <code>user_data</code> 在 <code>load_elf</code> 和 <code>load_icode_mapper</code> 两个函数中用到。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//env.c</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">load_icode_mapper</span><span class="params">(u_long va, <span class="keyword">u_int32_t</span> sgsize,</span></span></span><br><span class="line"><span class="function"><span class="params">                             u_char *bin, <span class="keyword">u_int32_t</span> bin_size, <span class="keyword">void</span> *user_data)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//kernel_elfloader.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">load_elf</span><span class="params">(u_char *binary, <span class="keyword">int</span> size, u_long *entry_point, <span class="keyword">void</span> *user_data,</span></span></span><br><span class="line"><span class="function"><span class="params">			 <span class="keyword">int</span> (*map)(u_long va, <span class="keyword">u_int32_t</span> sgsize, </span></span></span><br><span class="line"><span class="function"><span class="params">			 	u_char *bin, <span class="keyword">u_int32_t</span> bin_size, <span class="keyword">void</span> *user_data))</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">int</span> ret = <span class="built_in">map</span>(phdr-&gt;p_vaddr, phdr-&gt;p_memsz, binary + phdr-&gt;p_offset, phdr-&gt;p_filesz, user_data);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不可以没有这个参数，因为在<code>load_elf</code>函数中需要进一步将这个参数传递给函数指针<code>map</code>（实际上指向的是<code>load_icode_mapper</code>）。</p>
-<h3 id="thinking-34"><a class="markdownIt-Anchor" href="#thinking-34"></a> Thinking 3.4</h3>
-<p><strong>Q：</strong> <strong>结合<code>load_icode_mapper</code> 的参数以及二进制镜像的大小，考虑该函数可能会面临哪几种复制的情况？你是否都考虑到了？</strong><br />
-<strong>A：</strong> <code>va</code>和<code>va+bin_size</code>的相对位置有以下6种</p>
-<p><img src="3.4-1.png" alt="" /></p>
-<p><code>va+bin_size</code>和<code>va+sg_size</code>的相对位置有以下6种</p>
-<p><img src="3.4-2.png" alt="" /></p>
-<h3 id="thinking-35"><a class="markdownIt-Anchor" href="#thinking-35"></a> Thinking 3.5</h3>
-<p><strong>Q：</strong> <strong>思考上面这一段话，并根据自己在lab2 中的理解，回答：</strong></p>
-<ul>
-<li><strong>你认为这里的 <code>env_tf.pc</code> 存储的是物理地址还是虚拟地址?</strong></li>
-<li><strong>你觉得<code>entry_point</code>其值对于每个进程是否一样？该如何理解这种统一或不同？</strong></li>
-</ul>
-<p><strong>A：</strong> env_tf.pc中存储的是虚拟地址。对于每个用户进程来说entry_point都是一样的（如果不手动进行设置的话），这样可使让程序的每次执行都从一个固定的虚拟地址开始，这种统一对CPU是友好的。</p>
-<h3 id="thinking-36"><a class="markdownIt-Anchor" href="#thinking-36"></a> Thinking 3.6</h3>
-<p><strong>Q：</strong> <strong>请查阅相关资料解释，上面提到的<code>epc</code>是什么？为什么要将<code>env_tf.pc</code>设置为<code>epc</code>呢？</strong></p>
-<p><strong>A：</strong> <code>epc</code>是CP0中的一个寄存器（14号），用于保存使该进程出现异常（包括中断）时指令所在的<code>pc</code>。进程因异常被切换时将<code>env_tf.pc</code>设置为<code>epc</code>，实际上就是保存了“该进程运行到了什么地方”。这样就可以使进程在下一次被调度时，<strong>直接从上次出现异常的位置继续向后运行</strong>。</p>
-<h3 id="thinking-37"><a class="markdownIt-Anchor" href="#thinking-37"></a> Thinking 3.7</h3>
-<p><strong>Q：</strong>  <strong>关于 <code>TIMESTACK</code>，请思考以下问题：</strong></p>
-<ul>
-<li><strong>操作系统在何时将什么内容存到了 <code>TIMESTACK</code> 区域</strong></li>
-<li><strong><code>TIMESTACK</code> 和 <code>env_asm.S</code> 中所定义的 <code>KERNEL_SP</code> 的含义有何不同</strong></li>
-</ul>
-<p><strong>A：</strong> 操作系统在发生时钟中断时时将<strong>原进程</strong>的<code>env_tf</code>中的内容保存到<code>TIMESTACK</code>区域（在<code>handle_int</code>函数中通过<code>SAVE_ALL</code>实现）。 <code>TIMESTACK</code>时发生时钟中断时的栈顶指针，<code>KERNEL_SP</code>是发生其他中断时的栈顶指针。</p>
-<h3 id="thinking-38"><a class="markdownIt-Anchor" href="#thinking-38"></a> Thinking 3.8</h3>
-<p><strong>Q：</strong> <strong>试找出上述 4 个异常处理函数的具体实现位置</strong><br />
-<strong>A：</strong> <code>handle_int</code>和<code>handle_sys</code>的实现位置比较容易找到，前者在<code>genex.S</code>文件中，后者在<code>syscall.S</code>文件中。而<code>handle_mod</code>和<code>handle_tlb</code>藏得比较深，两者都是通过<code>genex.S</code>文件中的宏函数<code>BUILD_HANDLER</code>实现的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#宏函数</span><br><span class="line">.macro	BUILD_HANDLER exception handler clear</span><br><span class="line">	.align	5</span><br><span class="line">	NESTED(handle_\exception, TF_SIZE, sp)  </span><br><span class="line">	.set	noat</span><br><span class="line"></span><br><span class="line">nop</span><br><span class="line"></span><br><span class="line">	SAVE_ALL				</span><br><span class="line">	__build_clear_\clear</span><br><span class="line">	.set	at</span><br><span class="line">	move	a0, sp</span><br><span class="line">	jal	\handler</span><br><span class="line">	nop</span><br><span class="line">	j	ret_from_exception</span><br><span class="line">	nop</span><br><span class="line">	END(handle_\exception)</span><br><span class="line">.endm</span><br><span class="line"></span><br><span class="line">#具体实现</span><br><span class="line">BUILD_HANDLER reserved do_reserved cli</span><br><span class="line">BUILD_HANDLER tlb	do_refill	cli</span><br><span class="line">BUILD_HANDLER mod	page_fault_handler cli</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="thinking-39"><a class="markdownIt-Anchor" href="#thinking-39"></a> Thinking 3.9</h3>
-<p><strong>Q：</strong> <strong>阅读 <code>kclock_asm.S</code> 和 <code>genex.S</code> 两个文件，并尝试说出 <code>set_timer</code> 和 <code>timer_irq</code> 函数中每行汇编代码的作用</strong><br />
-<strong>A：</strong> <code>set_time</code>函数的分析如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.macro	setup_c0_status set clr</span><br><span class="line">	.set	push</span><br><span class="line">	mfc0	t0, CP0_STATUS</span><br><span class="line">	or	t0, \set|\clr</span><br><span class="line">	xor	t0, \clr</span><br><span class="line">	mtc0	t0, CP0_STATUS			</span><br><span class="line">	.set	pop</span><br><span class="line">.endm</span><br><span class="line"></span><br><span class="line">LEAF(set_timer)</span><br><span class="line">	li t0, 0xc8							</span><br><span class="line">	sb t0, 0xb5000100			#在地址0xb5000100中写入0xc8，使时钟频率设为200</span><br><span class="line">	sw	sp, KERNEL_SP			#将sp寄存器中的值存入地址KERNEL_SP中</span><br><span class="line">setup_c0_status STATUS_CU0|0x1001 0		#将CP0的SR寄存器中第1、12、28位 置为1，作用是开启全局中断使能和始终中断使能，并允许用户态使用CP0</span><br><span class="line">	jr ra					#函数返回</span><br><span class="line"></span><br><span class="line">	nop</span><br><span class="line">END(set_timer)</span><br></pre></td></tr></table></figure>
-<p><code>time_irq</code>函数的分析如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">timer_irq:</span><br><span class="line"></span><br><span class="line">	sb zero, 0xb5000110			#在地址0xb0000110中写入0，响应时钟中断</span><br><span class="line">1:	j	sched_yield			#跳转到sched_yield函数，进行进程切换</span><br><span class="line">	nop</span><br><span class="line">	&#x2F;*li t1, 0xff</span><br><span class="line">	lw    t0, delay</span><br><span class="line">	addu  t0, 1</span><br><span class="line">	sw	t0, delay</span><br><span class="line">	beq	t0,t1,1f	</span><br><span class="line">	nop*&#x2F;</span><br><span class="line">	j	ret_from_exception		#跳转到ret_from_exception函数</span><br><span class="line">	nop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="thinking-310"><a class="markdownIt-Anchor" href="#thinking-310"></a> Thinking 3.10</h3>
-<p><strong>Q：</strong> <strong>阅读相关代码，思考操作系统是怎么根据时钟周期切换进程的。</strong><br />
-<strong>A：</strong> <code>env_sched_list</code>有两个链表存放就绪进程。当进程被创建时，我们将其插入第一个进程调度链表的头部。调用 <code>sched_yield</code> 函数时, 先判断当前时间片是否用完。如果用完，则将其插入另一个链表的结尾，之后判断当前就绪状态进程链表是否为空。如果为空, 将指针切换到另一个就绪状态进程链表。最后从指针指向的链表的头部获取一个就绪进程进行切换。</p>
 <hr />
 <h2 id="实验难点图示"><a class="markdownIt-Anchor" href="#实验难点图示"></a> 实验难点图示</h2>
-<p>我认为该实验的难点在于理解<strong>进程的创建流程</strong>、<strong>时钟中断的处理流程</strong>和<strong>进程的切换流程</strong>。</p>
-<h3 id="进程创建流程"><a class="markdownIt-Anchor" href="#进程创建流程"></a> 进程创建流程</h3>
-<p><img src="create.png" alt="" /></p>
-<h3 id="时钟中断的处理流程"><a class="markdownIt-Anchor" href="#时钟中断的处理流程"></a> 时钟中断的处理流程</h3>
-<p><img src="irq.png" alt="" /></p>
-<h3 id="进程切换流程"><a class="markdownIt-Anchor" href="#进程切换流程"></a> 进程切换流程</h3>
-<p><img src="run.png" alt="" /></p>
+<p>本次实验实验主要包含以下两个难点——</p>
+<ul>
+<li><strong>系统调用的处理流程</strong></li>
+<li><strong>页写入异常处理机制的建立</strong></li>
+<li><strong>页写入异常处理流程</strong></li>
+</ul>
+<h3 id="系统调用的处理流程"><a class="markdownIt-Anchor" href="#系统调用的处理流程"></a> 系统调用的处理流程</h3>
+<p>系统调用的处理流程和时钟中断的处理流程相似：用户使用系统调用后，CPU进入内核态，并通过异常分发程序的分发进入到了异常服务函数<code>handle_sys</code>。然后，<code>handle_sys</code>函数根据传入的系统调用号跳转到具体的处理函数<code>sys_*</code>。经过一系列处理，最后返回用户态。</p>
+<p>整个流程如下图所示——</p>
+<p><img src="1.svg" alt="" /></p>
+<h3 id="页写入异常处理机制的建立"><a class="markdownIt-Anchor" href="#页写入异常处理机制的建立"></a> 页写入异常处理机制的建立</h3>
+<p>为建立起页写入异常处理机制，我们需要完成以下三个任务——</p>
+<ul>
+<li>为进程的异常处理栈分配物理页面</li>
+<li>将进程控制块的异常处理栈地址设置为<code>UXSTACKTOP</code>，将异常处理函数地址设置为<code>__asm_pgfault_handle</code></li>
+<li>将全局变量<code>__pgfault_handler</code>赋值为<code>pgfault</code>函数的地址</li>
+</ul>
+<p>因为父子进程都需要建立页写入异常处理机制，所以两者都需要完成上述的三个任务，即总共有6个任务。而这6个任务都由父进程通过fork函数完成的，具体过程如下——</p>
+<p><img src="2.svg" alt="" /></p>
+<h3 id="页写入异常处理流程"><a class="markdownIt-Anchor" href="#页写入异常处理流程"></a> 页写入异常处理流程</h3>
+<p>建立起页写入异常处理机制后，我们的操作系统就有了处理该异常的能力。每当写入<code>PTE_COW</code>为1的页面时，页写入异常就会被触发，处理流程如下所示——</p>
+<p><img src="3.svg" alt="" /></p>
 <hr />
 <h2 id="体会与感想"><a class="markdownIt-Anchor" href="#体会与感想"></a> 体会与感想</h2>
-<p>Lab3要求我们实现<strong>进程的创建、切换和调度</strong>，其中进程的调度主要是通过设置异常处理机制来实现。</p>
-<p>本次实验的难度比Lab2稍稍低一些，主要原因是本次lab中各个函数之间的联系比较紧密。虽然某些复杂函数理解起来还是有些困难，但是如果在宏观上把握这些函数的关系，那么对于单个函数的理解就变得相对容易了。</p>
-<p>所以，在阅读复杂工程的代码时，不要急于阅读每一个函数的细节，而是应该首先搞清楚<strong>工程的文件结构</strong>（by makefile）和<strong>不同函数之间的关系</strong>（by doc），然后再按照一定的逻辑顺序阅读代码，这样就可以达到事半功倍的效果。</p>
+<p>个人感觉这次实验的难度确实比Lab3高了很多，主要有两方面原因——一方面，fork函数本身就不太好理解，需要同时考虑父子进程的行为逻辑；另一方面，本次填写的十几个函数彼此密切相关，无论哪一个出现了问题都会导致评测出锅，所以定位bug简直就是大海捞针。虽然debug很痛苦，但是在这个过程中我又将代码重读了很多遍，对代码理解也更加深刻了。</p>
+<p>最后，我还要在此感谢王廉杰学长，他帮我纠正了代码理解上的诸多错误，没有他的指导我也不可能这么顺利的完成Lab4的任务，再次表示感谢！！！</p>
 
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
           
-          <li class="previous">
-            <a href="/2022/05/09/OS-Lab4实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab4实验报告">&larr; Previous Post</a>
-          </li>
-          
           
           <li class="next">
-            <a href="/2022/04/29/OO-第二单元总结/" data-toggle="tooltip" data-placement="top" title="「BUAA-OO」第二单元:电梯调度">Next Post &rarr;</a>
+            <a href="/2022/05/03/OS-Lab3实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab3实验报告">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -615,7 +669,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OS」 Lab3实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/05/03/OS-Lab3实验报告/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OS」 Lab4实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/05/09/OS-Lab4实验报告/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -650,7 +704,7 @@
       repo: 'hyggge.github.io',
       owner: 'Hyggge',
       admin: 'Hyggge',
-      id: 'Tue May 03 2022 11:13:40 GMT+0800', // Ensure uniqueness and length less than 50
+      id: 'Mon May 09 2022 11:34:24 GMT+0800', // Ensure uniqueness and length less than 50
       distractionFreeMode: false, // Facebook-like distraction free mode
       perPage: 10,
       pagerDirection: 'last',
@@ -703,7 +757,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#lab3-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> Lab3 实验报告</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-31"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text"> Thinking 3.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-32"><span class="toc-nav-number">1.1.2.</span> <span class="toc-nav-text"> Thinking 3.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-33"><span class="toc-nav-number">1.1.3.</span> <span class="toc-nav-text"> Thinking 3.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-34"><span class="toc-nav-number">1.1.4.</span> <span class="toc-nav-text"> Thinking 3.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-35"><span class="toc-nav-number">1.1.5.</span> <span class="toc-nav-text"> Thinking 3.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-36"><span class="toc-nav-number">1.1.6.</span> <span class="toc-nav-text"> Thinking 3.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-37"><span class="toc-nav-number">1.1.7.</span> <span class="toc-nav-text"> Thinking 3.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-38"><span class="toc-nav-number">1.1.8.</span> <span class="toc-nav-text"> Thinking 3.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-39"><span class="toc-nav-number">1.1.9.</span> <span class="toc-nav-text"> Thinking 3.9</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-310"><span class="toc-nav-number">1.1.10.</span> <span class="toc-nav-text"> Thinking 3.10</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text"> 进程创建流程</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%97%B6%E9%92%9F%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text"> 时钟中断的处理流程</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text"> 进程切换流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-41"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> Thinking 4.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-42"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> Thinking 4.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-43"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> Thinking 4.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-44"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> Thinking 4.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-45"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> Thinking 4.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-46"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text"> Thinking 4.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-47"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text"> Thinking 4.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-48"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text"> Thinking 4.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-49"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text"> Thinking 4.9</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 系统调用的处理流程</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%A1%B5%E5%86%99%E5%85%A5%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 页写入异常处理机制的建立</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%A1%B5%E5%86%99%E5%85%A5%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 页写入异常处理流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol>
         
         </div>
       </aside>

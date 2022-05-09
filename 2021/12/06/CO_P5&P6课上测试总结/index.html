@@ -473,16 +473,16 @@
         <!-- <font face="Jetbrains Mono"> -->
 <!-- <table><tr><td bgcolor=#f0f8ff> -->
 <h2 id="增添指令一般步骤"><a class="markdownIt-Anchor" href="#增添指令一般步骤"></a> 增添指令一般步骤</h2>
-<h4 id="明确指令rtl"><a class="markdownIt-Anchor" href="#明确指令rtl"></a> 明确指令RTL</h4>
+<h3 id="明确指令rtl"><a class="markdownIt-Anchor" href="#明确指令rtl"></a> 明确指令RTL</h3>
 <ul>
 <li>该步骤需要结合题目弄懂指令行为，包括<strong>明确指令类型</strong>（R型？I型？J型？即明确读和写的目标）、<strong>opcode和funct域数据</strong>、<strong>执行功能</strong>（计算？跳转？访存？）</li>
 <li>最好可以先用MARS模拟下，以免对指令行为理解不到位。</li>
 </ul>
-<h4 id="明确非转发数据通路"><a class="markdownIt-Anchor" href="#明确非转发数据通路"></a> 明确非转发数据通路</h4>
+<h3 id="明确非转发数据通路"><a class="markdownIt-Anchor" href="#明确非转发数据通路"></a> 明确非转发数据通路</h3>
 <ul>
 <li>在该步骤中，可以在<strong>单周期</strong>中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括<strong>使能信号</strong>（P5中的DM和GRF的写使能、P6中的GRF写使能和新加的byteen）、<strong>功能MUX的选择信号</strong>（GRF写入地址的选择、ALU的B端口数据的选择、GRF写入数据的选择等等）和<strong>模块功能的选择信号</strong>（ALU功能选择、NPC功能选择）。</li>
 </ul>
-<h4 id="考虑转发"><a class="markdownIt-Anchor" href="#考虑转发"></a> 考虑转发</h4>
+<h3 id="考虑转发"><a class="markdownIt-Anchor" href="#考虑转发"></a> 考虑转发</h3>
 <ul>
 <li>考虑新指令作为<strong>提供者</strong>：
 <ul>
@@ -501,14 +501,14 @@
 </li>
 <li>考虑新指令作为<strong>接受者</strong>：明确需要使用<code>GPR[rs]</code>、<code>GPR[rt]</code>的功能部件和相应接口（CMP的D1和D2？ALU的A和B？乘除模块的A和B？DM的WD？），课上可能需要设置新的接口。</li>
 </ul>
-<h4 id="考虑暂停"><a class="markdownIt-Anchor" href="#考虑暂停"></a> 考虑暂停</h4>
+<h3 id="考虑暂停"><a class="markdownIt-Anchor" href="#考虑暂停"></a> 考虑暂停</h3>
 <ul>
 <li>明确新指令的<code>Tuse_rs</code>、<code>Tuse_rt</code>以及在各级流水的<code>Tnew</code>，直接在主控制器中修改即可（<strong>千万不要忘记</strong>）。</li>
 </ul>
 <hr />
 <h2 id="课上测试题型分析"><a class="markdownIt-Anchor" href="#课上测试题型分析"></a> 课上测试题型分析</h2>
 <p>注：笔者课下cpu设计采用的是<strong>集中式译码</strong>和<strong>暴力转发</strong>。</p>
-<h4 id="计算类"><a class="markdownIt-Anchor" href="#计算类"></a> 计算类</h4>
+<h3 id="计算类"><a class="markdownIt-Anchor" href="#计算类"></a> 计算类</h3>
 <p><strong>P5中一般只需要增加ALU的功能，但一定要看清楚新指令的计算行为，最好在MARS里先模拟一下。</strong></p>
 <ul>
 <li>一般来说新指令的计算行为会稍微复杂一点，用<code>always @（*）</code>写会比较简单，用<code>assign</code>的话可以定义一个<code>function</code>。</li>
@@ -528,7 +528,7 @@
 我认为还可以对<strong>错误写法1</strong>进行修改——<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正确写法3</span></span><br><span class="line">&#123;HI_temp, LO_temp&#125; &lt;= $sigend(&#123;HI, LO&#125;) + <span class="built_in">$signed</span>(A) * <span class="built_in">$signed</span>(B);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="条件跳转类"><a class="markdownIt-Anchor" href="#条件跳转类"></a> 条件跳转类</h4>
+<h3 id="条件跳转类"><a class="markdownIt-Anchor" href="#条件跳转类"></a> 条件跳转类</h3>
 <p>一般跳转类指令有以下几种要求——</p>
 <ol>
 <li><strong>条件跳转+无条件链接</strong></li>
@@ -543,7 +543,7 @@
 <li>如果题目要求<strong>不跳转时清空延迟槽</strong>，则需要根据当前<strong>CMP模块输出结果</strong>判断是否清空<strong>D级流水寄存器</strong>。<strong>需要注意的是</strong>，如果当前正在处于<code>stall</code>状态时，不能清空延迟槽（<code>stall</code>说明前面指令的<code>Tnew</code>大于新指令的<code>Tuse</code>，即需要传入CMP模块的两个值的<strong>最新值</strong>还没有计算出来，因此还无法转发到CMP中）。写法如下——<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> D_Reg_clr = check_D &amp; ~D_CMP_out &amp; ~stall;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="条件存储类"><a class="markdownIt-Anchor" href="#条件存储类"></a> 条件存储类</h4>
+<h3 id="条件存储类"><a class="markdownIt-Anchor" href="#条件存储类"></a> 条件存储类</h3>
 <p><strong>条件存储，也就是从DM取出值之后，根据这个值是否满足某个condition，再判断要往哪个寄存器写。</strong> 和前两种题型相比更复杂，但是总结下来也就只有以下<strong>三种类型</strong>——</p>
 <ol>
 <li><strong>condition成立：</strong> 将DM中的值写入<strong>A号</strong>寄存器<br />
@@ -725,7 +725,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%A2%9E%E6%B7%BB%E6%8C%87%E4%BB%A4%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 增添指令一般步骤</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%98%8E%E7%A1%AE%E6%8C%87%E4%BB%A4rtl"><span class="toc-nav-number">1.0.1.</span> <span class="toc-nav-text"> 明确指令RTL</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%98%8E%E7%A1%AE%E9%9D%9E%E8%BD%AC%E5%8F%91%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="toc-nav-number">1.0.2.</span> <span class="toc-nav-text"> 明确非转发数据通路</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%80%83%E8%99%91%E8%BD%AC%E5%8F%91"><span class="toc-nav-number">1.0.3.</span> <span class="toc-nav-text"> 考虑转发</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%80%83%E8%99%91%E6%9A%82%E5%81%9C"><span class="toc-nav-number">1.0.4.</span> <span class="toc-nav-text"> 考虑暂停</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%AF%BE%E4%B8%8A%E6%B5%8B%E8%AF%95%E9%A2%98%E5%9E%8B%E5%88%86%E6%9E%90"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 课上测试题型分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E7%B1%BB"><span class="toc-nav-number">2.0.1.</span> <span class="toc-nav-text"> 计算类</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E7%B1%BB"><span class="toc-nav-number">2.0.2.</span> <span class="toc-nav-text"> 条件跳转类</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%AD%98%E5%82%A8%E7%B1%BB"><span class="toc-nav-number">2.0.3.</span> <span class="toc-nav-text"> 条件存储类</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%A2%9E%E6%B7%BB%E6%8C%87%E4%BB%A4%E4%B8%80%E8%88%AC%E6%AD%A5%E9%AA%A4"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 增添指令一般步骤</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%98%8E%E7%A1%AE%E6%8C%87%E4%BB%A4rtl"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 明确指令RTL</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%98%8E%E7%A1%AE%E9%9D%9E%E8%BD%AC%E5%8F%91%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 明确非转发数据通路</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%80%83%E8%99%91%E8%BD%AC%E5%8F%91"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 考虑转发</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%80%83%E8%99%91%E6%9A%82%E5%81%9C"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> 考虑暂停</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%AF%BE%E4%B8%8A%E6%B5%8B%E8%AF%95%E9%A2%98%E5%9E%8B%E5%88%86%E6%9E%90"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 课上测试题型分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E7%B1%BB"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 计算类</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%B7%B3%E8%BD%AC%E7%B1%BB"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 条件跳转类</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%AD%98%E5%82%A8%E7%B1%BB"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 条件存储类</span></a></li></ol></li></ol>
         
         </div>
       </aside>
