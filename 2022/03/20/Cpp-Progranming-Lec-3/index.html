@@ -248,6 +248,8 @@
 
           
           
+          
+          
           <li>
             <a href="/about/">
               
@@ -258,6 +260,15 @@
           </li>
           
           
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
           
           
           
@@ -276,17 +287,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -513,7 +513,7 @@
 </blockquote>
 <h2 id="拷贝构造"><a class="markdownIt-Anchor" href="#拷贝构造"></a> 拷贝构造</h2>
 <p>C++的类默认支持用一个已存在的类初始化一个新建的类。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Student</span>* <span class="title">a</span> =</span> <span class="keyword">new</span> <span class="built_in">Student</span>();</span><br><span class="line">    <span class="function">struct Student <span class="title">b</span><span class="params">(a)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Student</span>* <span class="title">a</span> =</span> <span class="keyword">new</span> <span class="built_in">Student</span>();</span><br><span class="line">    <span class="function">struct Student <span class="title">b</span><span class="params">(*a)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>C++中有拷贝有两种类型——</p>
 <ul>
 <li><code>bitwise copy</code>（浅拷贝）</li>

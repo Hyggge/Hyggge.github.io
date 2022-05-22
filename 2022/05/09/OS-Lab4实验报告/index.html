@@ -248,6 +248,8 @@
 
           
           
+          
+          
           <li>
             <a href="/about/">
               
@@ -258,6 +260,15 @@
           </li>
           
           
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
           
           
           
@@ -276,17 +287,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -514,7 +514,7 @@
 <li><strong>C、fork 只在父进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
 <li><strong>D、fork 只在子进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
 </ul>
-<p><strong>A：</strong> 在<code>fork</code>函数中子进程被创建，而当子进程被调度时，恢复的上下文环境仍然是在<code>fork</code>函数中（实际上是<code>syscall_env_alloc</code>函数之后），因此fork 在两个进程中分别被调用一次。此外，执行完<code>fork</code>函数后，父进程返回的是子进程的<code>envid</code>，子进程返回的是0，因此父子进程的返回值是不同的。综上，答案为B。</p>
+<p><strong>A：</strong> 当子进程被调度时，恢复的上下文环境是在<code>fork</code>函数中（实际上是<code>syscall_env_alloc</code>函数之后），但是这并非是真正的调用了<code>fork</code>函数，只是复制了父进程的上下文而已。此外，执行完<code>fork</code>函数后，父进程返回的是子进程的<code>envid</code>，子进程返回的是0，因此父子进程的返回值是不同的。综上，答案为C。</p>
 <h3 id="thinking-45"><a class="markdownIt-Anchor" href="#thinking-45"></a> Thinking 4.5</h3>
 <p><strong>Q：</strong> <strong>我们并不应该对所有的用户空间页都使用duppage进行映射。那么究竟哪些用户空间页应该映射，哪些不应该呢？ 请结合本章的后续描述、mm/pmap.c 中 mips_vm_init 函数进行的页面映射以及 include/mmu.h 里的内存布局图进行思考。</strong></p>
 <p><strong>A：</strong> <code>UTOP</code>和<code>TLIM</code>之间储存的是<strong>和内核相关的页表信息</strong>。在执行<code>env_alloc()</code>函数时，这一部分的映射关系直接从<code>boot_pgdir</code>拷贝到进程页表中，因此不需要进行映射。</p>

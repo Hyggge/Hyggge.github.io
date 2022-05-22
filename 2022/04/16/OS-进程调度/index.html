@@ -248,6 +248,8 @@
 
           
           
+          
+          
           <li>
             <a href="/about/">
               
@@ -258,6 +260,15 @@
           </li>
           
           
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
           
           
           
@@ -276,17 +287,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -512,7 +512,7 @@
 <li><strong>平均带权周转时间：</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">一</mi><mi mathvariant="normal">组</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">带</mi><mi mathvariant="normal">权</mi><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">之</mi><mi mathvariant="normal">和</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi></mrow><annotation encoding="application/x-tex">一组作业带权周转时间之和/作业数</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">组</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">带</span><span class="mord cjk_fallback">权</span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">之</span><span class="mord cjk_fallback">和</span><span class="mord">/</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span></span></span></span></li>
 </ul>
 <h3 id="调度策略的选择"><a class="markdownIt-Anchor" href="#调度策略的选择"></a> 调度策略的选择</h3>
-<p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以奖惩分为两种分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
+<p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以将进程分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
 <p>对于不同特性的进程，我们通常会采用不同的调度算法。</p>
 <p>根据 <strong>”是否在时钟中断作出调度决策“</strong>，我们将进程的调度分为<strong>非抢占式和抢占式</strong>。</p>
 <ul>
@@ -538,8 +538,7 @@ Ratio Next）</li>
 <li>时间片轮转(RR：Round Robin）</li>
 <li>优先级调度(Priority Scheduling)</li>
 <li>多级队列（MQ：Multi-level Queue）</li>
-<li>多级反馈队列（MFQ：Multi-level Feedback<br />
-Queue ）</li>
+<li>多级反馈队列（MFQ：Multi-level Feedback Queue ）</li>
 <li>彩票调度（Lottery Scheduling）</li>
 </ul>
 <h4 id="实时系统"><a class="markdownIt-Anchor" href="#实时系统"></a> <strong>实时系统</strong></h4>
@@ -547,10 +546,8 @@ Queue ）</li>
 <p>在策略选择时，我们主要关注 <strong>“截止时间是否可以得到满足”</strong>，并希望策略有一定可预测性和规律性。常用策略——</p>
 <ul>
 <li>静态表调度（Static table-driven scheduling）</li>
-<li>单调速率调度（RMS：Rate Monotonic<br />
-Scheduling）</li>
-<li>最早截止时间优先算法（EDF：Earliest<br />
-Deadline First）</li>
+<li>单调速率调度（RMS：Rate Monotonic Scheduling）</li>
+<li>最早截止时间优先算法（EDF：Earliest Deadline First）</li>
 </ul>
 <h4 id="多处理系统"><a class="markdownIt-Anchor" href="#多处理系统"></a> <strong>多处理系统</strong></h4>
 <p>多处理系统指系统中有多个处理机同时进行工作，这种系统的调度更需要关注于系统整体的运行效率，调度单位广泛采用线程。</p>

@@ -248,6 +248,8 @@
 
           
           
+          
+          
           <li>
             <a href="/about/">
               
@@ -258,6 +260,15 @@
           </li>
           
           
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
           
           
           
@@ -276,17 +287,6 @@
             <a href="/archive/">
               
               ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
-            <a href="/tags/">
-              
-              TAGS
               
               
             </a>
@@ -460,26 +460,19 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog中reg的使用/">
+  <a href="/2021/10/26/CO_P1_Verilog其他tips/">
     <h2 class="post-title">
-      「BUAA-CO」P1_Verilog中reg的使用
+      「BUAA-CO」P1_Verilog其他tips
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-       定义和实例化模块时reg的使用
-
-
-在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
-
-
-在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。
-定义输出端口时，我们可以直接定义成reg类型
-1output reg a;
-
-
-或者在模块内部声明reg寄存器，然后通过assi......
+      
+always中的敏感列表不支持(posedge clk or negedge clk)
+parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
+复位的时候要把所有的reg型变量都复位
+integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
     </div>
   </a>
   
@@ -508,19 +501,26 @@
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog其他tips/">
+  <a href="/2021/10/26/CO_P1_Verilog中reg的使用/">
     <h2 class="post-title">
-      「BUAA-CO」P1_Verilog其他tips
+      「BUAA-CO」P1_Verilog中reg的使用
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-      
-always中的敏感列表不支持(posedge clk or negedge clk)
-parameter可用作在顶层模块中例化底层模块时传递参数的接口，localparam的作用域仅仅限于当前module，不能作为参数传递的接口。
-复位的时候要把所有的reg型变量都复位
-integer类型也是一种寄存器数据类型，integer类型的变量为有符号数，而reg类型的变量则为无符号数，除非特别......
+       定义和实例化模块时reg的使用
+
+
+在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
+
+
+在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。
+定义输出端口时，我们可以直接定义成reg类型
+1output reg a;
+
+
+或者在模块内部声明reg寄存器，然后通过assi......
     </div>
   </a>
   
