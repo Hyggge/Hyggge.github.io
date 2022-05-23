@@ -406,11 +406,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">12</span> Minutes
+              Estimated Reading Time <span class="post-count">15</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">3.5k</span> In Total
+              Words <span class="post-count">4.2k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -542,10 +542,24 @@
 <li><strong>这里实现了一个支持类似于“中断重入”的机制，而在什么时候会出现这种“中断重入”？</strong></li>
 <li><strong>内核为什么需要将异常的现场Trapframe复制到用户空间？</strong></li>
 </ul>
-<p><strong>A：</strong></p>
+<p><strong>A：</strong> 解答如下——</p>
 <ul>
-<li>当发生缺页中断时如果在发生其他中断（比如时钟中断），就会出现中断重入。</li>
-<li>因为异常的处理是在用户态进行的，而<strong>用户态只能访问用户空间（低2G空间）内的数据</strong>，所以需要将现场保存在用户空间。</li>
+<li>
+<p>当用户程序写入了一个<code>COW</code>页，OS就会进入<strong>页写入异常的处理程序</strong>，最终调用<strong>用户态</strong>的<code>pgfault</code>函数进行处理。但是，如果在<code>pgfault</code>函数的处理过程中又写入了一个<code>COW</code>页，就会再次进入页写入异常处理程序，然后又调用<code>pgfault</code>函数……这就出现了”中断重入“的现象。<br />
+目前，<code>pgfault</code>函数的实现是不会出现中断重入的。因为在这个函数里，我们只对异常处理栈所在的页进行了读写（异常处理程序中的临时变量都保存在异常处理栈），而异常处理栈并非是父子进程共享的（详见Thinking 4.6），不可能会有<code>COW</code>标志位。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pgfault</span><span class="params">(u_int va)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    u_int *tmp;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="comment">//	writef(&quot;fork.c:pgfault():\t va:%x\n&quot;,va);</span></span><br><span class="line"></span><br><span class="line">    va = <span class="built_in">ROUNDDOWN</span>(va, BY2PG);</span><br><span class="line">    <span class="comment">//map the new page at a temporary place</span></span><br><span class="line">    <span class="keyword">if</span> ((((Pte*)(*vpt))[<span class="built_in">VPN</span>(va)] &amp; PTE_COW) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">user_panic</span>(<span class="string">&quot;In pgfault: NOT A COW PAGE!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    tmp = USTACKTOP;</span><br><span class="line">    ret = <span class="built_in">syscall_mem_alloc</span>(<span class="number">0</span>, tmp, PTE_V | PTE_R);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">user_panic</span>(<span class="string">&quot;In pgfault: MEMORY ALLOC FAILED!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//copy the content</span></span><br><span class="line">    <span class="built_in">user_bcopy</span>(va, tmp, BY2PG);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//map the page on the appropriate place</span></span><br><span class="line">    ret = <span class="built_in">syscall_mem_map</span>(<span class="number">0</span>, tmp, <span class="number">0</span>, va, PTE_V | PTE_R);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">user_panic</span>(<span class="string">&quot;In pgfault: MEMORY MAP FAILED!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//unmap the temporary place</span></span><br><span class="line">    ret = <span class="built_in">syscall_mem_unmap</span>(<span class="number">0</span>, tmp);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">user_panic</span>(<span class="string">&quot;In pgfault: MEMORY UNMAP FAILED!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以，我们的MOS为什么还要支持”中断重入“呢？</p>
+<p>实际上，用户态的页写入异常处理函数<strong>是用户态程序自行指定的</strong>，也就是说，每个用户程序都可以通过<code>syscall_set_pgfault_handler()</code>函数<strong>注册一个自己的页写入异常处理函数</strong>（直接向<code>syscall_set_pgfault_handler()</code>传递一个函数指针即可）。在MOS中，我们向<code>syscall_set_pgfault_handler()</code>传递的是<code>pgfault</code>函数指针，这个函数只对异常处理栈所在的页进行了写操作，所以不会出现异常重入。但如果用户程序注册了一个其他的函数呢？假设这个新函数写了某些全局变量，还是可能会出现”异常重入“。</p>
+<p>总而言之，<strong>支持”中断重入“可以使我们的程序有更好的可扩展性，使得用户程序可以根据需要注册自己的中断处理程序</strong>。如果内核不实现这个写入异常的重入的话，意味着用户处理函数甚至无法使用全局变量，这样就会有很大的局限性。</p>
+<blockquote>
+<p>补充：MOS中对”中断重入“的支持主要体现在——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">page_fault_handler</span><span class="params">(struct Trapframe *tf)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">if</span> (tf-&gt;regs[<span class="number">29</span>] &gt;= (curenv-&gt;env_xstacktop - BY2PG) &amp;&amp;</span><br><span class="line">        tf-&gt;regs[<span class="number">29</span>] &lt;= (curenv-&gt;env_xstacktop - <span class="number">1</span>)) &#123;</span><br><span class="line">            tf-&gt;regs[<span class="number">29</span>] = tf-&gt;regs[<span class="number">29</span>] - <span class="built_in"><span class="keyword">sizeof</span></span>(struct  Trapframe);</span><br><span class="line">            <span class="built_in">bcopy</span>(&amp;PgTrapFrame, (<span class="keyword">void</span> *)tf-&gt;regs[<span class="number">29</span>], <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line">        &#125; </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一旦进入这个<code>if</code>分支，就说明上下文中的<code>sp</code>寄存器的值就是在异常处理栈，也就是说在中断处理的过程中又发生了页写入中断。</p>
+</blockquote>
+</li>
+<li>
+<p>因为异常的处理是在用户态进行的，而<strong>用户态只能访问用户空间（低2G空间）内的数据</strong>，所以需要将现场保存在用户空间。</p>
+</li>
 </ul>
 <h3 id="thinking-48"><a class="markdownIt-Anchor" href="#thinking-48"></a> Thinking 4.8</h3>
 <p><strong>Q：</strong> <strong>到这里我们大概知道了这是一个由用户程序处理并由用户程序自身来恢复运行现场的过程，请思考并回答以下几个问题：</strong></p>
@@ -553,7 +567,7 @@
 <li><strong>在用户态处理页写入异常，相比于在内核态处理有什么优势？</strong></li>
 <li><strong>从通用寄存器的用途角度讨论，在可能被中断的用户态下进行现场的恢复，要如何做到不破坏现场中的通用寄存器？</strong></li>
 </ul>
-<p><strong>A：</strong></p>
+<p><strong>A：</strong> 解答如下——</p>
 <ul>
 <li>尽量减少内核出现错误的可能，即使程序崩溃，也不会影响系统的稳定。同时微内核的模式下，用户态进行新页面的分配映射也更加灵活方便。</li>
 <li>在进入用户态的异常处理程序前，将通用寄存器中的值存储在一个特殊的栈空间——<strong>异常处理栈</strong>；执行完异常处理程序后，在从异常处理栈恢复到通用寄存器。</li>
@@ -565,7 +579,7 @@
 <li><strong>如果放置在写时复制保护机制完成之后会有怎样的效果？</strong></li>
 <li><strong>子进程是否需要对在entry.S定义的字__pgfault_handler赋值？</strong></li>
 </ul>
-<p><strong>A：</strong></p>
+<p><strong>A：</strong> 解答如下——</p>
 <ul>
 <li>
 <p>其实<code>set_pgfault_handler</code>并不一定要置在<code>syscall_env_alloc</code>之前， 只要放在“写时复制机制建立”之前即可。理由如下——<br />
