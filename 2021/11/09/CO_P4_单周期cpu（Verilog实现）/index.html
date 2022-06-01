@@ -470,723 +470,67 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="单周期cpu设计方案"><a class="markdownIt-Anchor" href="#单周期cpu设计方案"></a> 单周期CPU设计方案</h2>
-<h3 id="设计概述"><a class="markdownIt-Anchor" href="#设计概述"></a> 设计概述</h3>
-<p>本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
-<p><img src="CPU.png" alt="" /></p>
-<h3 id="实现指令说明"><a class="markdownIt-Anchor" href="#实现指令说明"></a> 实现指令说明</h3>
-<p> 本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。</p>
-<h4 id="r型指令"><a class="markdownIt-Anchor" href="#r型指令"></a> R型指令</h4>
-<ul>
+        <h2 id="单周期CPU设计方案"><a href="#单周期CPU设计方案" class="headerlink" title="单周期CPU设计方案"></a>单周期CPU设计方案</h2><h3 id="设计概述"><a href="#设计概述" class="headerlink" title="设计概述"></a>设计概述</h3><p>本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
+<p><img src="CPU.png" alt=""></p>
+<h3 id="实现指令说明"><a href="#实现指令说明" class="headerlink" title="实现指令说明"></a>实现指令说明</h3><p>&emsp;本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。</p>
+<h4 id="R型指令"><a href="#R型指令" class="headerlink" title="R型指令"></a>R型指令</h4><ul>
 <li>算数/位运算指令：add, addu, sub, subu, and, or, nor, xor</li>
 <li>移位指令：sll, srl, sra, sllv, srlv, srav</li>
 <li>置位指令：slt, sltu</li>
-<li>跳转指令：jr, jalr</li>
-</ul>
-<h4 id="j型指令"><a class="markdownIt-Anchor" href="#j型指令"></a> J型指令</h4>
-<ul>
-<li>跳转指令：j, jal</li>
-</ul>
-<h4 id="i型指令"><a class="markdownIt-Anchor" href="#i型指令"></a> I型指令</h4>
-<ul>
+<li>跳转指令：jr, jalr<h4 id="J型指令"><a href="#J型指令" class="headerlink" title="J型指令"></a>J型指令</h4></li>
+<li>跳转指令：j, jal<h4 id="I型指令"><a href="#I型指令" class="headerlink" title="I型指令"></a>I型指令</h4></li>
 <li>算数/位运算指令： addi, andi, addiu, ori, xori, lui</li>
-<li>B类指令：beq, bne, bgtz, bgez, blez, bltz</li>
+<li>B类指令：beq, bne, bgtz, bgez, blez, bltz </li>
 <li>置位指令：slti, sltiu</li>
 <li>访存指令：lw, sw, lh, lhu, lb, lbu, sh, sb</li>
-<li></li>
+<li><h3 id="数据通路模块定义"><a href="#数据通路模块定义" class="headerlink" title="数据通路模块定义"></a>数据通路模块定义</h3><h4 id="IFU（取指令单元）"><a href="#IFU（取指令单元）" class="headerlink" title="IFU（取指令单元）"></a>IFU（取指令单元）</h4></li>
 </ul>
-<h3 id="数据通路模块定义"><a class="markdownIt-Anchor" href="#数据通路模块定义"></a> 数据通路模块定义</h3>
-<h4 id="ifu取指令单元"><a class="markdownIt-Anchor" href="#ifu取指令单元"></a> IFU（取指令单元）</h4>
-<p>  该模块内部包含PC（程序计数器）和IM（指令存储器容量为32*1024 bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
+<p>&emsp; 该模块内部包含PC（程序计数器）和IM（指令存储器容量为32*1024 bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>reset</td>
-<td>I</td>
-<td>1</td>
-<td>同步复位信号</td>
-</tr>
-<tr>
-<td>stop</td>
-<td>I</td>
-<td>1</td>
-<td>停止信号</td>
-</tr>
-<tr>
-<td>next_pc</td>
-<td>I</td>
-<td>32</td>
-<td>下一条要被执行的指令的地址</td>
-</tr>
-<tr>
-<td>pc</td>
-<td>O</td>
-<td>32</td>
-<td>输出当前正在执行的指令的地址</td>
-</tr>
-<tr>
-<td>instr</td>
-<td>O</td>
-<td>32</td>
-<td>输出当前正在执行的指令</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>端口定义</strong></p>
+<p>|信号名|方向|位宽|描述|<br>|——|——|——|——|<br>| clk     | I    | 1    | 时钟信号                     |<br>| reset   | I    | 1    | 同步复位信号                 |<br>| stop    | I    | 1    | 停止信号                     |<br>| next_pc | I    | 32   | 下一条要被执行的指令的地址   |<br>| pc      | O    | 32   | 输出当前正在执行的指令的地址 |<br>| instr   | O    | 32   | 输出当前正在执行的指令       |</p>
 </li>
-<li>
-<p><strong>功能定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>复位</td>
-<td>当reset信号有效时，将PC寄存器中的值置为0x00000000</td>
-</tr>
-<tr>
-<td>2</td>
-<td>停止</td>
-<td>当stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
-</tr>
-<tr>
-<td>3</td>
-<td>写PC寄存器</td>
-<td>当stop信号失效且时钟上升沿来临时，将下一条指令的地址（next_pc）写入PC寄存器</td>
-</tr>
-<tr>
-<td>4</td>
-<td>取指令</td>
-<td>根据当前PC的值从IM（指令存储器）中读出对应的指令到instr端口</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>功能定义</strong></p>
+<p>|序号|功能名称|功能描述|<br>|—|—|—|<br>| 1    | 复位       | 当reset信号有效时，将PC寄存器中的值置为0x00000000            |<br>| 2    | 停止       | 当stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变     |<br>| 3    | 写PC寄存器 | 当stop信号失效且时钟上升沿来临时，将下一条指令的地址（next_pc）写入PC寄存器 |<br>| 4    | 取指令     | 根据当前PC的值从IM（指令存储器）中读出对应的指令到instr端口  |</p>
 </li>
 </ul>
-<h4 id="grf通用寄存器组"><a class="markdownIt-Anchor" href="#grf通用寄存器组"></a> GRF（通用寄存器组）</h4>
-<p>该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能）。GRF可以实现异步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
+<h4 id="GRF（通用寄存器组）"><a href="#GRF（通用寄存器组）" class="headerlink" title="GRF（通用寄存器组）"></a>GRF（通用寄存器组）</h4><p>该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能）。GRF可以实现异步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>pc</td>
-<td>I</td>
-<td>1</td>
-<td>当前指令地址</td>
-</tr>
-<tr>
-<td>reset</td>
-<td>I</td>
-<td>1</td>
-<td>同步复位信号  1：复位信号有效  0：复位信号无效</td>
-</tr>
-<tr>
-<td>read_addr_1</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
-</tr>
-<tr>
-<td>read_addr_2</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
-</tr>
-<tr>
-<td>write_addr</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
-</tr>
-<tr>
-<td>write_data</td>
-<td>I</td>
-<td>32</td>
-<td>数据输入信号</td>
-</tr>
-<tr>
-<td>RegWrite</td>
-<td>I</td>
-<td>1</td>
-<td>写使能信号  1：写入有效  0：写入失效</td>
-</tr>
-<tr>
-<td>read_data_1</td>
-<td>O</td>
-<td>32</td>
-<td>输出A1指定的寄存器中的32位数据</td>
-</tr>
-<tr>
-<td>read_data_2</td>
-<td>O</td>
-<td>32</td>
-<td>输出A2指定的寄存器中的32位数据</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>端口定义</strong><br>|信号名|方向|位宽|描述|<br>|——|——|——|——|<br>| clk         | I    | 1    | 时钟信号                                                    |<br>| pc          | I    | 1    | 当前指令地址                                                |<br>| reset       | I    | 1    | 同步复位信号  1：复位信号有效  0：复位信号无效              |<br>| read_addr_1 | I    | 5    | 地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1 |<br>| read_addr_2 | I    | 5    | 地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2 |<br>| write_addr  | I    | 5    | 地址输入信号，指定32个寄存器中的一个，将其作为写入目标      |<br>| write_data  | I    | 32   | 数据输入信号                                                |<br>| RegWrite    | I    | 1    | 写使能信号  1：写入有效  0：写入失效                        |<br>| read_data_1 | O    | 32   | 输出A1指定的寄存器中的32位数据                              |<br>| read_data_2 | O    | 32   | 输出A2指定的寄存器中的32位数据                              |</p>
 </li>
-<li>
-<p><strong>功能定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>复位</td>
-<td>reset信号有效时，所有寄存器中储存的值均被清零</td>
-</tr>
-<tr>
-<td>2</td>
-<td>读数据</td>
-<td>读出read_addr_1，read_addr_2地址对应的寄存器中储存的数据，将其加载到read_data_1和read_data_2</td>
-</tr>
-<tr>
-<td>3</td>
-<td>写数据</td>
-<td>当RegWrite信号有效且时钟上升沿来临时，将write_data中的数据写入到write_addr地址对应的寄存器</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>功能定义</strong><br>|序号|功能名称|功能描述|<br>|—|—|—|<br>| 1    | 复位     | reset信号有效时，所有寄存器中储存的值均被清零                |<br>| 2    | 读数据   | 读出read_addr_1，read_addr_2地址对应的寄存器中储存的数据，将其加载到read_data_1和read_data_2 |<br>| 3    | 写数据   | 当RegWrite信号有效且时钟上升沿来临时，将write_data中的数据写入到write_addr地址对应的寄存器 |</p>
 </li>
 </ul>
-<h4 id="npc下一指令计算单元"><a class="markdownIt-Anchor" href="#npc下一指令计算单元"></a> NPC（下一指令计算单元）</h4>
-<p>该模块根据当前指令地址和控制信号，计算出下一指令所在的地址。</p>
+<h4 id="NPC（下一指令计算单元）"><a href="#NPC（下一指令计算单元）" class="headerlink" title="NPC（下一指令计算单元）"></a>NPC（下一指令计算单元）</h4><p>该模块根据当前指令地址和控制信号，计算出下一指令所在的地址。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pc</td>
-<td>I</td>
-<td>32</td>
-<td>当前指令地址</td>
-</tr>
-<tr>
-<td>offset</td>
-<td>I</td>
-<td>32</td>
-<td>地址偏移量，用于计算B类指令所要跳转的地址</td>
-</tr>
-<tr>
-<td>instr_26</td>
-<td>I</td>
-<td>26</td>
-<td>当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址</td>
-</tr>
-<tr>
-<td>ra_data</td>
-<td>I</td>
-<td>32</td>
-<td>储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令</td>
-</tr>
-<tr>
-<td>branch_judge</td>
-<td>I</td>
-<td>1</td>
-<td>B类指令分支条件判断结果  1：B类指令分支条件成立  0：B类指令分支条件不成立</td>
-</tr>
-<tr>
-<td>NPCOp</td>
-<td>I</td>
-<td>3</td>
-<td>对输出next_pc的值进行选择  0b000:next_pc为pc+4  0b001:next_pc为分支的地址  0b010:next_pc为j型指令的跳转地址  0b011:next_pc为寄存器中保存的地址</td>
-</tr>
-<tr>
-<td>next_pc</td>
-<td>O</td>
-<td>32</td>
-<td>输出下一指令地址</td>
-</tr>
-<tr>
-<td>pc+4</td>
-<td>O</td>
-<td>32</td>
-<td>输出pc+4的值，用于实现jal和jalr指令中的地址存储</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>端口定义</strong></p>
+<p>|信号名|方向|位宽|描述|<br>|——|——|——|——|<br>| pc           | I    | 32   | 当前指令地址                                                 |<br>| offset       | I    | 32   | 地址偏移量，用于计算B类指令所要跳转的地址                    |<br>| instr_26     | I    | 26   | 当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址 |<br>| ra_data      | I    | 32   | 储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令 |<br>| branch_judge | I    | 1    | B类指令分支条件判断结果  1：B类指令分支条件成立  0：B类指令分支条件不成立 |<br>| NPCOp        | I    | 3    | 对输出next_pc的值进行选择  0b000:next_pc为pc+4  0b001:next_pc为分支的地址  0b010:next_pc为j型指令的跳转地址  0b011:next_pc为寄存器中保存的地址 |<br>| next_pc      | O    | 32   | 输出下一指令地址                                             |<br>| pc+4         | O    | 32   | 输出pc+4的值，用于实现jal和jalr指令中的地址存储              |</p>
 </li>
 </ul>
-<h4 id="alu逻辑运算单元"><a class="markdownIt-Anchor" href="#alu逻辑运算单元"></a> ALU（逻辑运算单元）</h4>
-<p>  该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
+<h4 id="ALU（逻辑运算单元）"><a href="#ALU（逻辑运算单元）" class="headerlink" title="ALU（逻辑运算单元）"></a>ALU（逻辑运算单元）</h4><p>&emsp; 该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
 <ul>
-<li><strong>端口定义</strong>
-<table>
-<thead>
-<tr>
-<th><strong>信号名</strong></th>
-<th><strong>方向</strong></th>
-<th><strong>位宽</strong></th>
-<th><strong>描述</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ALUOp</td>
-<td>I</td>
-<td>4</td>
-<td>ALU功能选择信号</td>
-</tr>
-<tr>
-<td>src_A</td>
-<td>I</td>
-<td>32</td>
-<td>参与ALU计算的第一个值</td>
-</tr>
-<tr>
-<td>src_B</td>
-<td>I</td>
-<td>32</td>
-<td>参与ALU计算的第二个值</td>
-</tr>
-<tr>
-<td>shamt</td>
-<td>I</td>
-<td>5</td>
-<td>移位数输入</td>
-</tr>
-<tr>
-<td>FlowJudge</td>
-<td>I</td>
-<td>1</td>
-<td>溢出判断信号  1：进行溢出判断  0：不进行溢出判断</td>
-</tr>
-<tr>
-<td>equal</td>
-<td>O</td>
-<td>1</td>
-<td>相等判断信号  1：src_A和src_B相等  0：src_A和src_B不相等</td>
-</tr>
-<tr>
-<td>ALU_result</td>
-<td>O</td>
-<td>32</td>
-<td>输出ALU计算结果</td>
-</tr>
-<tr>
-<td>flow_result</td>
-<td>O</td>
-<td>1</td>
-<td>输出ALU计算结果的溢出情况（add，sub，addi等指令有效）</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li><strong>功能定义</strong>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>ALU_Op</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>加</td>
-<td>0b0000</td>
-<td>ALU_result = src_A + src_B</td>
-</tr>
-<tr>
-<td>2</td>
-<td>减</td>
-<td>0b0001</td>
-<td>ALU_result = src_A - src_B</td>
-</tr>
-<tr>
-<td>3</td>
-<td>按位与</td>
-<td>0b0010</td>
-<td>ALU_result = src_A &amp; src_B</td>
-</tr>
-<tr>
-<td>4</td>
-<td>按位或</td>
-<td>0b0011</td>
-<td>ALU_result = src_A | src_B</td>
-</tr>
-<tr>
-<td>5</td>
-<td>按位异或</td>
-<td>0b0100</td>
-<td>ALU_result = src_A ⊕ src_B</td>
-</tr>
-<tr>
-<td>6</td>
-<td>按位或非</td>
-<td>0b0101</td>
-<td>ALU_result = ~(src_A | src_B)</td>
-</tr>
-<tr>
-<td>7</td>
-<td>逻辑左移</td>
-<td>0b0110</td>
-<td>ALU_result = src_B &lt;&lt; shamt</td>
-</tr>
-<tr>
-<td>8</td>
-<td>逻辑右移</td>
-<td>0b0111</td>
-<td>ALU_result = src_B &gt;&gt; shamt</td>
-</tr>
-<tr>
-<td>9</td>
-<td>算术右移</td>
-<td>0b1000</td>
-<td>ALU_result = src_B &gt;&gt;&gt; shamt</td>
-</tr>
-<tr>
-<td>10</td>
-<td>带符号比较</td>
-<td>0b1001</td>
-<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（带符号比较）</td>
-</tr>
-<tr>
-<td>11</td>
-<td>无符号比较</td>
-<td>0b1010</td>
-<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（无符号比较）</td>
-</tr>
-</tbody>
-</table>
-</li>
+<li><strong>端口定义</strong><br>| <strong>信号名</strong>  | <strong>方向</strong> | <strong>位宽</strong> | <strong>描述</strong>                                                 |<br>|——|——|——|——|<br>| ALUOp       | I        | 4        | ALU功能选择信号                                          |<br>| src_A       | I        | 32       | 参与ALU计算的第一个值                                    |<br>| src_B       | I        | 32       | 参与ALU计算的第二个值                                    |<br>| shamt       | I        | 5        | 移位数输入                                               |<br>| FlowJudge   | I        | 1        | 溢出判断信号  1：进行溢出判断  0：不进行溢出判断         |<br>| equal       | O        | 1        | 相等判断信号  1：src_A和src_B相等  0：src_A和src_B不相等 |<br>| ALU_result  | O        | 32       | 输出ALU计算结果                                          |<br>| flow_result | O        | 1        | 输出ALU计算结果的溢出情况（add，sub，addi等指令有效）    |</li>
+<li><strong>功能定义</strong><br>|序号|功能名称|ALU_Op|功能描述|<br>|—|—|—|———|<br>| 1    | 加         | 0b0000 | ALU_result = src_A + src_B                         |<br>| 2    | 减         | 0b0001 | ALU_result = src_A - src_B                         |<br>| 3    | 按位与     | 0b0010 | ALU_result = src_A &amp; src_B                         |<br>| 4    | 按位或     | 0b0011 | ALU_result = src_A | src_B                        |<br>| 5    | 按位异或   | 0b0100 | ALU_result = src_A ⊕ src_B                         |<br>| 6    | 按位或非   | 0b0101 | ALU_result = ~(src_A | src_B)                     |<br>| 7    | 逻辑左移   | 0b0110 | ALU_result = src_B &lt;&lt; shamt                        |<br>| 8    | 逻辑右移   | 0b0111 | ALU_result = src_B &gt;&gt; shamt                        |<br>| 9    | 算术右移   | 0b1000 | ALU_result = src_B &gt;&gt;&gt; shamt                       |<br>| 10   | 带符号比较 | 0b1001 | ALU_result = (src_A &gt; src_B) ? 1 : 0（带符号比较） |<br>| 11   | 无符号比较 | 0b1010 | ALU_result = (src_A &gt; src_B) ? 1 : 0（无符号比较） |<h4 id="DM-（数据存储器）"><a href="#DM-（数据存储器）" class="headerlink" title="DM （数据存储器）"></a>DM （数据存储器）</h4>该模块可以实现对数据的存储与访问（包括对字、半字、字节的各种访存操作），还可以实现同步复位。</li>
+<li><strong>端口定义</strong><br> |信号名|方向|位宽|描述|<br> |——|——|——|——|<br> | pc         | I    | 32   | 当前指令的地址                                               |<br> | clk        | I    | 1    | 时钟信号                                                     |<br> | reset      | I    | 1    | 同步复位信号                                                 |<br> | MemWrite   | I    | 1    | 储存器写入使能信号  1：写入有效  0：写入失效                 |<br> | addr       | I    | 32   | 储存器写入地址                                               |<br> | write_data | I    | 32   | 储存器写入数据                                               |<br> | LSOp       | I    | 3    | 访存功能选择  <br />0b000:lw  <br />0b001:sw  <br />0b010:lh  <br />0b011:lhu  <br />0b100:sh  <br />0b101:lb  <br />0b110:lbu  <br />0b111:sb |<br> | read_data  | O    | 32   | 储存器读出数据                                               |<h4 id="Branch-Control（B类指令控制模块）"><a href="#Branch-Control（B类指令控制模块）" class="headerlink" title="Branch Control（B类指令控制模块）"></a>Branch Control（B类指令控制模块）</h4>该模块跟据当前所执行的分支指令类型进行相应判断，并将判断结果输出。</li>
+<li><strong>端口定义</strong><br> | cmp_data | I    | 32   | 输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz）  |<br> |——|——|——|——|<br> | equal    | I    | 1    | 相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne） |<br> | BranchOp | I    | 3    | B类指令选择指令  0b000：beq指令  0b001：bgez，bltz  0b010：bgtz  0b011：blez  0b100：bne |<br> | judge    | I    | 1    | 区别bgez，bltz两个指令                                       |<br> | result   | O    | 1    | 输出判断结果  1：B类指令转移条件成立  0：B类指令转移条件不成立 |</li>
 </ul>
-<h4 id="dm-数据存储器"><a class="markdownIt-Anchor" href="#dm-数据存储器"></a> DM （数据存储器）</h4>
-<p>该模块可以实现对数据的存储与访问（包括对字、半字、字节的各种访存操作），还可以实现同步复位。</p>
+<h3 id="控制模块定义"><a href="#控制模块定义" class="headerlink" title="控制模块定义"></a>控制模块定义</h3><p> 在控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等15条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND Logic）和或逻辑（OR Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
 <ul>
-<li><strong>端口定义</strong>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pc</td>
-<td>I</td>
-<td>32</td>
-<td>当前指令的地址</td>
-</tr>
-<tr>
-<td>clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>reset</td>
-<td>I</td>
-<td>1</td>
-<td>同步复位信号</td>
-</tr>
-<tr>
-<td>MemWrite</td>
-<td>I</td>
-<td>1</td>
-<td>储存器写入使能信号  1：写入有效  0：写入失效</td>
-</tr>
-<tr>
-<td>addr</td>
-<td>I</td>
-<td>32</td>
-<td>储存器写入地址</td>
-</tr>
-<tr>
-<td>write_data</td>
-<td>I</td>
-<td>32</td>
-<td>储存器写入数据</td>
-</tr>
-<tr>
-<td>LSOp</td>
-<td>I</td>
-<td>3</td>
-<td>访存功能选择  <br />0b000:lw  <br />0b001:sw  <br />0b010:lh  <br />0b011:lhu  <br />0b100:sh  <br />0b101:lb  <br />0b110:lbu  <br />0b111:sb</td>
-</tr>
-<tr>
-<td>read_data</td>
-<td>O</td>
-<td>32</td>
-<td>储存器读出数据</td>
-</tr>
-</tbody>
-</table>
+<li><p><strong>控制信号定义</strong><br>|序号|信号名|位宽|描述|触发指令（信号为1）|<br>|—-|——-|—-|——|——————-|<br>| 1    | MemToReg  | 1    | GRF中WD接口输入数据选择                                      |                     |<br>| 2    | MemWrite  | 1    | DM写入使能信号                                               |                     |<br>| 3    | ALUSrc    | 1    | ALU中Src_B接口输入数据选择                                   |                     |<br>| 4    | RegWrite  | 1    | GRF写入使能信号                                              |                     |<br>| 5    | SYSCALL   | 1    | syscall指令译码信号，GRF中A1接口输入数据选择                 |                     |<br>| 6    | SignedExt | 1    | 立即数符号扩展选择                                           |                     |<br>| 7    | RegDst    | 1    | GRF中A3接口输入数据选择                                      |                     |<br>| 8    | AddrToReg | 1    | 指令地址传递信号，选择是否将PC+4输入到GRF的WD端口            |                     |<br>| 9    | RaLink    | 1    | $ra寄存器写入选择信号，选择是否将$ra作为GRF的写入对象        |                     |<br>| 10   | VarShift  | 1    | 可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口 |                     |<br>| 11   | FlowJudge | 1    | 溢出判断选择信号                                             |                     |<br>| 12   | BranchOp  | 3    | B类指令选择信号                                              |                     |<br>| 13   | LSOp      | 3    | 访存操作选择信号                                             |                     |<br>| 14   | NPCOp     | 3    | next_pc输出选择信号                                          |                     |<br>| 15   | ALUOp     | 4    | ALU功能选择信号                                              |                     |</p>
 </li>
-</ul>
-<h4 id="branch-controlb类指令控制模块"><a class="markdownIt-Anchor" href="#branch-controlb类指令控制模块"></a> Branch Control（B类指令控制模块）</h4>
-<p>该模块跟据当前所执行的分支指令类型进行相应判断，并将判断结果输出。</p>
-<ul>
-<li><strong>端口定义</strong>
-<table>
-<thead>
-<tr>
-<th>cmp_data</th>
-<th>I</th>
-<th>32</th>
-<th>输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>equal</td>
-<td>I</td>
-<td>1</td>
-<td>相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne）</td>
-</tr>
-<tr>
-<td>BranchOp</td>
-<td>I</td>
-<td>3</td>
-<td>B类指令选择指令  0b000：beq指令  0b001：bgez，bltz  0b010：bgtz  0b011：blez  0b100：bne</td>
-</tr>
-<tr>
-<td>judge</td>
-<td>I</td>
-<td>1</td>
-<td>区别bgez，bltz两个指令</td>
-</tr>
-<tr>
-<td>result</td>
-<td>O</td>
-<td>1</td>
-<td>输出判断结果  1：B类指令转移条件成立  0：B类指令转移条件不成立</td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<h3 id="控制模块定义"><a class="markdownIt-Anchor" href="#控制模块定义"></a> 控制模块定义</h3>
-<p>在控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等15条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND Logic）和或逻辑（OR Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
-<ul>
-<li>
-<p><strong>控制信号定义</strong></p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>信号名</th>
-<th>位宽</th>
-<th>描述</th>
-<th>触发指令（信号为1）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>MemToReg</td>
-<td>1</td>
-<td>GRF中WD接口输入数据选择</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>MemWrite</td>
-<td>1</td>
-<td>DM写入使能信号</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>ALUSrc</td>
-<td>1</td>
-<td>ALU中Src_B接口输入数据选择</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>RegWrite</td>
-<td>1</td>
-<td>GRF写入使能信号</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>SYSCALL</td>
-<td>1</td>
-<td>syscall指令译码信号，GRF中A1接口输入数据选择</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>SignedExt</td>
-<td>1</td>
-<td>立即数符号扩展选择</td>
-<td></td>
-</tr>
-<tr>
-<td>7</td>
-<td>RegDst</td>
-<td>1</td>
-<td>GRF中A3接口输入数据选择</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td>AddrToReg</td>
-<td>1</td>
-<td>指令地址传递信号，选择是否将PC+4输入到GRF的WD端口</td>
-<td></td>
-</tr>
-<tr>
-<td>9</td>
-<td>RaLink</td>
-<td>1</td>
-<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>a</mi><mi mathvariant="normal">寄</mi><mi mathvariant="normal">存</mi><mi mathvariant="normal">器</mi><mi mathvariant="normal">写</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">选</mi><mi mathvariant="normal">择</mi><mi mathvariant="normal">信</mi><mi mathvariant="normal">号</mi><mi mathvariant="normal">，</mi><mi mathvariant="normal">选</mi><mi mathvariant="normal">择</mi><mi mathvariant="normal">是</mi><mi mathvariant="normal">否</mi><mi mathvariant="normal">将</mi></mrow><annotation encoding="application/x-tex">ra寄存器写入选择信号，选择是否将</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord cjk_fallback">寄</span><span class="mord cjk_fallback">存</span><span class="mord cjk_fallback">器</span><span class="mord cjk_fallback">写</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">选</span><span class="mord cjk_fallback">择</span><span class="mord cjk_fallback">信</span><span class="mord cjk_fallback">号</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">选</span><span class="mord cjk_fallback">择</span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">否</span><span class="mord cjk_fallback">将</span></span></span></span>ra作为GRF的写入对象</td>
-<td></td>
-</tr>
-<tr>
-<td>10</td>
-<td>VarShift</td>
-<td>1</td>
-<td>可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口</td>
-<td></td>
-</tr>
-<tr>
-<td>11</td>
-<td>FlowJudge</td>
-<td>1</td>
-<td>溢出判断选择信号</td>
-<td></td>
-</tr>
-<tr>
-<td>12</td>
-<td>BranchOp</td>
-<td>3</td>
-<td>B类指令选择信号</td>
-<td></td>
-</tr>
-<tr>
-<td>13</td>
-<td>LSOp</td>
-<td>3</td>
-<td>访存操作选择信号</td>
-<td></td>
-</tr>
-<tr>
-<td>14</td>
-<td>NPCOp</td>
-<td>3</td>
-<td>next_pc输出选择信号</td>
-<td></td>
-</tr>
-<tr>
-<td>15</td>
-<td>ALUOp</td>
-<td>4</td>
-<td>ALU功能选择信号</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>生成代码</p>
+<li><p>生成代码</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">assign</span> MemToReg       = <span class="number">_</span>lw | <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>lb | <span class="number">_</span>lbu;</span><br><span class="line">    <span class="keyword">assign</span> MemWrite       = <span class="number">_</span>sw | <span class="number">_</span>sh | <span class="number">_</span>sb;</span><br><span class="line">    <span class="keyword">assign</span> ALUSrc         = <span class="number">_</span>addi | <span class="number">_</span>addiu | <span class="number">_</span>andi | <span class="number">_</span>ori | <span class="number">_</span>xori | <span class="number">_</span>slti | <span class="number">_</span>sltiu | <span class="number">_</span>lw | <span class="number">_</span>sw | <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>sh | <span class="number">_</span>lb | <span class="number">_</span>lbu | <span class="number">_</span>sb | <span class="number">_</span>lui;</span><br><span class="line">    <span class="keyword">assign</span> RegWrite       = <span class="number">_</span>sll | <span class="number">_</span>sra | <span class="number">_</span>srl | <span class="number">_</span>add | <span class="number">_</span>addu | <span class="number">_</span>sub | <span class="number">_</span><span class="keyword">and</span> | <span class="number">_</span><span class="keyword">or</span> | <span class="number">_</span><span class="keyword">nor</span> | <span class="number">_</span>slt | <span class="number">_</span>sltu | <span class="number">_</span>jalr | <span class="number">_</span><span class="keyword">xor</span> | <span class="number">_</span>sllv | <span class="number">_</span>srav | <span class="number">_</span>srlv | <span class="number">_</span>subu | <span class="number">_</span>jal | <span class="number">_</span>addi | <span class="number">_</span>addiu | <span class="number">_</span>andi | <span class="number">_</span>ori | <span class="number">_</span>xori | <span class="number">_</span>slti | <span class="number">_</span>sltiu | <span class="number">_</span>lw | <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>lb | <span class="number">_</span>lbu | <span class="number">_</span>lui;</span><br><span class="line">    <span class="keyword">assign</span> SYSCALL        = <span class="number">_</span>syscall;</span><br><span class="line">    <span class="keyword">assign</span> SignedExt      = <span class="number">_</span>addi | <span class="number">_</span>addiu | <span class="number">_</span>slti | <span class="number">_</span>sltiu | <span class="number">_</span>lw | <span class="number">_</span>sw | <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>sh | <span class="number">_</span>lb | <span class="number">_</span>lbu | <span class="number">_</span>sb;</span><br><span class="line">    <span class="keyword">assign</span> RegDst         = <span class="number">_</span>sll | <span class="number">_</span>sra | <span class="number">_</span>srl | <span class="number">_</span>add | <span class="number">_</span>addu | <span class="number">_</span>sub | <span class="number">_</span><span class="keyword">and</span> | <span class="number">_</span><span class="keyword">or</span> | <span class="number">_</span><span class="keyword">nor</span> | <span class="number">_</span>slt | <span class="number">_</span>sltu | <span class="number">_</span>jalr | <span class="number">_</span><span class="keyword">xor</span> | <span class="number">_</span>sllv | <span class="number">_</span>srav | <span class="number">_</span>srlv | <span class="number">_</span>subu;</span><br><span class="line">    <span class="keyword">assign</span> AddrToReg      = <span class="number">_</span>jalr | <span class="number">_</span>jal;</span><br><span class="line">    <span class="keyword">assign</span> RaLink         = <span class="number">_</span>jal;</span><br><span class="line">    <span class="keyword">assign</span> VarShift       = <span class="number">_</span>sllv | <span class="number">_</span>srav | <span class="number">_</span>srlv;</span><br><span class="line">    <span class="keyword">assign</span> FlowJudge      = <span class="number">_</span>add | <span class="number">_</span>sub | <span class="number">_</span>addi;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">assign</span> NPCOp[<span class="number">2</span>]       = <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">assign</span> NPCOp[<span class="number">1</span>]       = <span class="number">_</span>jalr | <span class="number">_</span>jr | <span class="number">_</span>j | <span class="number">_</span>jal;</span><br><span class="line">    <span class="keyword">assign</span> NPCOp[<span class="number">0</span>]       = <span class="number">_</span>jalr | <span class="number">_</span>jr | <span class="number">_</span>beq | <span class="number">_</span>bne | <span class="number">_</span>bgez | <span class="number">_</span>bgtz | <span class="number">_</span>blez | <span class="number">_</span>bltz;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">assign</span> BranchOp[<span class="number">2</span>]    = <span class="number">_</span>bne;</span><br><span class="line">    <span class="keyword">assign</span> BranchOp[<span class="number">1</span>]    = <span class="number">_</span>bgtz | <span class="number">_</span>blez;</span><br><span class="line">    <span class="keyword">assign</span> BranchOp[<span class="number">0</span>]    = <span class="number">_</span>bgez | <span class="number">_</span>blez | <span class="number">_</span>bltz;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> LSOp[<span class="number">2</span>]        = <span class="number">_</span>sh | <span class="number">_</span>lb | <span class="number">_</span>lbu | <span class="number">_</span>sb;</span><br><span class="line">    <span class="keyword">assign</span> LSOp[<span class="number">1</span>]        = <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>lbu | <span class="number">_</span>sb;</span><br><span class="line">    <span class="keyword">assign</span> LSOp[<span class="number">0</span>]        = <span class="number">_</span>sw | <span class="number">_</span>lhu | <span class="number">_</span>lb | <span class="number">_</span>sb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> ALUOp[<span class="number">3</span>]       = <span class="number">_</span>sra | <span class="number">_</span>slt | <span class="number">_</span>sltu | <span class="number">_</span>srav | <span class="number">_</span>slti | <span class="number">_</span>sltiu | <span class="number">_</span>lui;</span><br><span class="line">    <span class="keyword">assign</span> ALUOp[<span class="number">2</span>]       = <span class="number">_</span>sll | <span class="number">_</span>srl | <span class="number">_</span><span class="keyword">nor</span> | <span class="number">_</span><span class="keyword">xor</span> | <span class="number">_</span>sllv | <span class="number">_</span>srlv | <span class="number">_</span>xori;</span><br><span class="line">    <span class="keyword">assign</span> ALUOp[<span class="number">1</span>]       = <span class="number">_</span>sll | <span class="number">_</span>srl | <span class="number">_</span><span class="keyword">and</span> | <span class="number">_</span><span class="keyword">or</span> | <span class="number">_</span>sltu | <span class="number">_</span>sllv | <span class="number">_</span>srlv | <span class="number">_</span>andi | <span class="number">_</span>ori | <span class="number">_</span>sltiu | <span class="number">_</span>lui;</span><br><span class="line"><span class="keyword">assign</span> ALUOp[<span class="number">0</span>]       = <span class="number">_</span>srl | <span class="number">_</span>sub | <span class="number">_</span><span class="keyword">or</span> | <span class="number">_</span><span class="keyword">nor</span> | <span class="number">_</span>slt | <span class="number">_</span>srlv | <span class="number">_</span>subu | <span class="number">_</span>ori | <span class="number">_</span>slti | <span class="number">_</span>lui;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="重要机制实现方法"><a class="markdownIt-Anchor" href="#重要机制实现方法"></a> 重要机制实现方法</h3>
-<h4 id="转移指令b类和j类实现方法"><a class="markdownIt-Anchor" href="#转移指令b类和j类实现方法"></a> 转移指令（B类和J类）实现方法</h4>
-<p>转移指令包括两种——B类和J类，这两类指令的地址转移功能均需要通过NPC的选择与计算将对应的PC地址传入PC寄存器（IFU模块中）。B类指令数量更多，转移条件的判断也更为复杂，因此我们将其封装成一个模块——BranchControl。该模块的接口定义已经给出，现在分析其内部实现逻辑。</p>
+<h3 id="重要机制实现方法"><a href="#重要机制实现方法" class="headerlink" title="重要机制实现方法"></a>重要机制实现方法</h3><h4 id="转移指令（B类和J类）实现方法"><a href="#转移指令（B类和J类）实现方法" class="headerlink" title="转移指令（B类和J类）实现方法"></a>转移指令（B类和J类）实现方法</h4><p>转移指令包括两种——B类和J类，这两类指令的地址转移功能均需要通过NPC的选择与计算将对应的PC地址传入PC寄存器（IFU模块中）。B类指令数量更多，转移条件的判断也更为复杂，因此我们将其封装成一个模块——BranchControl。该模块的接口定义已经给出，现在分析其内部实现逻辑。</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span> (BranchOp)</span><br><span class="line">            <span class="meta">`BRANCH_BEQ:            result = equal;</span></span><br><span class="line">            <span class="meta">`BRANCH_BNE:            result = ~equal;</span></span><br><span class="line">            <span class="meta">`BRANCH_BGEZ_OR_BLEZ:   result = (judge == 0) ? ($signed(cmp_data) &lt; 0) : ($signed(cmp_data) &gt;= 0);</span></span><br><span class="line">            <span class="meta">`BRANCH_BGTZ:           result = ($signed(cmp_data) &gt; 0);</span></span><br><span class="line">            <span class="meta">`BRANCH_BLEZ:           result = ($signed(cmp_data) &lt;= 0);</span></span><br><span class="line">            <span class="keyword">default</span>:                result = <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <ul>
-<li>
-<p>据判断逻辑不同，B类指令又可以分为两类——bne，beq和bltz，blez，bgtz，bgez。bne和beq指令需要将两个操作数进行比较，根据两者的值是否相等进一步判断是否执行跳转。“Equal”接口的信号正是两个操作数的比较结果。而bltz，blez，bgtz，bgez四个指令只需要将一个操作数和0进行比较。我们将这个操作数的值直接传入该模块，然后用四个比较器分别计算这四个指令的判断结果。</p>
+<li><p>据判断逻辑不同，B类指令又可以分为两类——bne，beq和bltz，blez，bgtz，bgez。bne和beq指令需要将两个操作数进行比较，根据两者的值是否相等进一步判断是否执行跳转。“Equal”接口的信号正是两个操作数的比较结果。而bltz，blez，bgtz，bgez四个指令只需要将一个操作数和0进行比较。我们将这个操作数的值直接传入该模块，然后用四个比较器分别计算这四个指令的判断结果。</p>
 </li>
-<li>
-<p>6个B类指令的判断结果已经得到，下面我们要做的是根据当前指令选择出其中一个判断结果进行输出，这就需要通过“BranchOp”（B类指令选择信号）进行选择</p>
-<table>
-<thead>
-<tr>
-<th>BranchOp</th>
-<th>对应指令</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0b000</td>
-<td>beq</td>
-</tr>
-<tr>
-<td>0b001</td>
-<td>bgez，bltz</td>
-</tr>
-<tr>
-<td>0b010</td>
-<td>bgtz</td>
-</tr>
-<tr>
-<td>0b011</td>
-<td>blez</td>
-</tr>
-<tr>
-<td>0b100</td>
-<td>bne</td>
-</tr>
-</tbody>
-</table>
+<li><p>6个B类指令的判断结果已经得到，下面我们要做的是根据当前指令选择出其中一个判断结果进行输出，这就需要通过“BranchOp”（B类指令选择信号）进行选择</p>
+<p>| BranchOp | 对应指令   |<br>| ———— | ————— |<br>| 0b000    | beq        |<br>| 0b001    | bgez，bltz |<br>| 0b010    | bgtz       |<br>| 0b011    | blez       |<br>| 0b100    | bne        |</p>
 </li>
-<li>
-<p>由上表可以发现，当“BranchOp”的值为0b001时，对应的指令有两个——bgez和bltz。原因是根据MIPS指令集，bgez和bgtz的Opcode完全一致（000001），无法仅通过Control Unit将这两个指令进行区分。因此，我们需要将指令的16~20位数据输入该模块（在该数据段中bgez指令的值为0b00001，bltz的值为0b00000），即“Judge”信号，将这两个指令的判断结果区分。这样分支指令的判断结果就可以得出，并传入NPC中。</p>
-</li>
+<li>由上表可以发现，当“BranchOp”的值为0b001时，对应的指令有两个——bgez和bltz。原因是根据MIPS指令集，bgez和bgtz的Opcode完全一致（000001），无法仅通过Control Unit将这两个指令进行区分。因此，我们需要将指令的16~20位数据输入该模块（在该数据段中bgez指令的值为0b00001，bltz的值为0b00000），即“Judge”信号，将这两个指令的判断结果区分。这样分支指令的判断结果就可以得出，并传入NPC中。</li>
 </ul>
 <p>下面我们介绍NPC中B类和J类指令的执行逻辑。</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span>       [<span class="number">31</span>:<span class="number">0</span>]       npc_1 = pc + <span class="number">32&#x27;d4</span>;</span><br><span class="line">    <span class="keyword">wire</span>       [<span class="number">31</span>:<span class="number">0</span>]       npc_2 = pc + <span class="number">32&#x27;d4</span> + (offset &lt;&lt; <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">wire</span>       [<span class="number">31</span>:<span class="number">0</span>]       npc_3 = &#123;pc[<span class="number">31</span>:<span class="number">28</span>], instr_26, <span class="number">2&#x27;b00</span>&#125;;</span><br><span class="line">    <span class="keyword">wire</span>       [<span class="number">31</span>:<span class="number">0</span>]       npc_4 = ra_data;、、</span><br><span class="line"><span class="keyword">assign</span> pc_plus_4 = npc_1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span> (NPCOp)</span><br><span class="line">            <span class="meta">`NPC_PC_PLUS_FOUR:       next_pc = npc_1;</span></span><br><span class="line">            <span class="meta">`NPC_BRANCH:             next_pc = (branch_judge) ? npc_2 : npc_1;</span></span><br><span class="line">            <span class="meta">`NPC_INSTR_26:           next_pc = npc_3;</span></span><br><span class="line">            <span class="meta">`NPC_RA_DATA:            next_pc = npc_4;</span></span><br><span class="line">             <span class="keyword">default</span>:                next_pc = next_pc;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -1194,47 +538,30 @@
 <li>我们需要先将输入的数据进行处理，转换为PC地址，包括对“Offset”（B类指令码中的地址偏移量）和“Instruction[25:0]”（j和jal指令码中储存地址的数据段）进行处理。然后通过“branch_jdudge”信号（Branch Control模块输出的结果）和“NPCOp”信号对之前得到的计算结果进行选择，最终将选择后的结果通过“next_pc”端口输出。</li>
 <li>此外，由于jal和jalr指令中需要将PC+4的值写入到某个寄存器中，因此需要将PC+4的值计算出来通过“PC+4”接口输出。在写入过程中，控制信号“RaLink”和“AddrTrans”起到了调节数据通路的作用。</li>
 </ul>
-<h4 id="访存指令实现方法"><a class="markdownIt-Anchor" href="#访存指令实现方法"></a> 访存指令实现方法</h4>
-<p>访存指令包含8个——lw，sw，lb，lbu，lh，lhu，sb，sh，均在DM模块中实现。由于我们的程序中DM为按字地址存储，所以我们无法直接对字节和半字进行操作，需要进行位的拼接。读储存器代码如下：</p>
+<h4 id="访存指令实现方法"><a href="#访存指令实现方法" class="headerlink" title="访存指令实现方法"></a>访存指令实现方法</h4><p>访存指令包含8个——lw，sw，lb，lbu，lh，lhu，sb，sh，均在DM模块中实现。由于我们的程序中DM为按字地址存储，所以我们无法直接对字节和半字进行操作，需要进行位的拼接。读储存器代码如下：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>]    temp         = data_memory[addr[<span class="number">11</span>:<span class="number">2</span>]];  <span class="comment">//get the whole word</span></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span>(LSOp)</span><br><span class="line">            <span class="meta">`LS_LW: read_data   = temp;</span></span><br><span class="line">            <span class="meta">`LS_LH: read_data   = (addr[1] == 1&#x27;b0) ? &#123;&#123;16&#123;temp[15]&#125;&#125;, temp[15:0]&#125; </span></span><br><span class="line">                                                        : &#123;&#123;<span class="number">16</span>&#123;temp[<span class="number">31</span>]&#125;&#125;, temp[<span class="number">31</span>:<span class="number">16</span>]&#125;;</span><br><span class="line">            <span class="meta">`LS_LHU: read_data  = (addr[1] == 1&#x27;b0) ? &#123;&#123;16&#123;1&#x27;b0&#125;&#125;, temp[15:0]&#125; </span></span><br><span class="line">                                                        : &#123;&#123;<span class="number">16</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;, temp[<span class="number">31</span>:<span class="number">16</span>]&#125;;</span><br><span class="line">            <span class="meta">`LS_LB: read_data   = (addr[1:0] == 2&#x27;b00) ? &#123;&#123;24&#123;temp[7]&#125;&#125;, temp[7:0]&#125; :</span></span><br><span class="line">                                    (addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b01</span>) ? &#123;&#123;<span class="number">24</span>&#123;temp[<span class="number">15</span>]&#125;&#125;, temp[<span class="number">15</span>:<span class="number">8</span>]&#125; : </span><br><span class="line">                                    (addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b10</span>) ? &#123;&#123;<span class="number">24</span>&#123;temp[<span class="number">23</span>]&#125;&#125;, temp[<span class="number">23</span>:<span class="number">16</span>]&#125;: </span><br><span class="line">                                                             &#123;&#123;<span class="number">24</span>&#123;temp[<span class="number">31</span>]&#125;&#125;, temp[<span class="number">31</span>:<span class="number">24</span>]&#125;;</span><br><span class="line">            <span class="meta">`LS_LBU: read_data  = (addr[1:0] == 2&#x27;b00) ? &#123;&#123;24&#123;1&#x27;b0&#125;&#125;, temp[7:0]&#125; :</span></span><br><span class="line">                                    (addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b01</span>) ? &#123;&#123;<span class="number">24</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;, temp[<span class="number">15</span>:<span class="number">8</span>]&#125; : </span><br><span class="line">                                    (addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b10</span>) ? &#123;&#123;<span class="number">24</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;, temp[<span class="number">23</span>:<span class="number">16</span>]&#125;: </span><br><span class="line">                                                             &#123;&#123;<span class="number">24</span>&#123;<span class="number">1&#x27;b0</span>&#125;&#125;, temp[<span class="number">31</span>:<span class="number">24</span>]&#125;;  </span><br><span class="line">            <span class="keyword">default</span>: read_data = temp;                 </span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>写储存器代码如下：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(reset) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">1024</span>; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                data_memory[i] &lt;= <span class="number">32&#x27;h0</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(MemWrite == <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(LSOp) </span><br><span class="line">                <span class="meta">`LS_SW: data_memory[addr[11:2]] &lt;= write_data;</span></span><br><span class="line">                <span class="meta">`LS_SH: data_memory[addr[11:2]] &lt;= </span></span><br><span class="line">		(addr[<span class="number">1</span>] == <span class="number">1&#x27;b0</span>) ?  &#123;temp[<span class="number">31</span>:<span class="number">16</span>], write_data[<span class="number">15</span>:<span class="number">0</span>]&#125; : </span><br><span class="line">				&#123;write_data[<span class="number">15</span>:<span class="number">0</span>], temp[<span class="number">15</span>:<span class="number">0</span>]&#125;;</span><br><span class="line">                <span class="meta">`LS_SB: data_memory[addr[11:2]] &lt;= </span></span><br><span class="line">		(addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b00</span>) ? &#123;temp[<span class="number">31</span>:<span class="number">8</span>], write_data[<span class="number">7</span>:<span class="number">0</span>]&#125; :</span><br><span class="line">		(addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b01</span>) ? &#123;temp[<span class="number">31</span>:<span class="number">16</span>], write_data[<span class="number">7</span>:<span class="number">0</span>], temp[<span class="number">7</span>:<span class="number">0</span>]&#125; : </span><br><span class="line">                       (addr[<span class="number">1</span>:<span class="number">0</span>] == <span class="number">2&#x27;b10</span>) ? &#123;temp[<span class="number">31</span>:<span class="number">24</span>], write_data[<span class="number">7</span>:<span class="number">0</span>], temp[<span class="number">15</span>:<span class="number">0</span>]&#125;: </span><br><span class="line">                                                 &#123;write_data[<span class="number">7</span>:<span class="number">0</span>], temp[<span class="number">23</span>:<span class="number">0</span>]&#125;;</span><br><span class="line">                <span class="keyword">default</span>: data_memory[addr[<span class="number">11</span>:<span class="number">2</span>]] &lt;= data_memory[addr[<span class="number">11</span>:<span class="number">2</span>]];</span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">else</span> data_memory[addr[<span class="number">11</span>:<span class="number">2</span>]] &lt;= data_memory[addr[<span class="number">11</span>:<span class="number">2</span>]];</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-<hr />
-<h2 id="测试方案"><a class="markdownIt-Anchor" href="#测试方案"></a> 测试方案</h2>
-<h3 id="典型测试样例"><a class="markdownIt-Anchor" href="#典型测试样例"></a> 典型测试样例</h3>
-<h4 id="运算指令测试"><a class="markdownIt-Anchor" href="#运算指令测试"></a> 运算指令测试</h4>
-<p>该部分测试通过随机数随机生成，以保证测试数据的任意性，然后与同学代码进行对拍，以确定正确性。（随机生成程序与对拍程序均由同学设计）<br />
-其中一组测试数据如下所示</p>
+<hr>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="典型测试样例"><a href="#典型测试样例" class="headerlink" title="典型测试样例"></a>典型测试样例</h3><h4 id="运算指令测试"><a href="#运算指令测试" class="headerlink" title="运算指令测试"></a>运算指令测试</h4><p>  该部分测试通过随机数随机生成，以保证测试数据的任意性，然后与同学代码进行对拍，以确定正确性。（随机生成程序与对拍程序均由同学设计）<br>  其中一组测试数据如下所示</p>
   <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">li  $<span class="number">0</span> -<span class="number">5646112</span></span><br><span class="line">li  $<span class="number">1</span>  <span class="number">123555</span></span><br><span class="line">……………………</span><br><span class="line"><span class="keyword">xor</span> $<span class="number">19</span>, $<span class="number">3</span>, $<span class="number">1</span></span><br><span class="line">addu $<span class="number">22</span>, $<span class="number">14</span>, $<span class="number">28</span></span><br><span class="line"><span class="keyword">nor</span> $<span class="number">8</span>, $<span class="number">17</span>, $<span class="number">29</span></span><br><span class="line">addu $<span class="number">19</span>, $<span class="number">8</span>, $<span class="number">4</span></span><br><span class="line">srlv $<span class="number">3</span>, $<span class="number">11</span>, $<span class="number">16</span></span><br><span class="line">sub $<span class="number">1</span>, $<span class="number">20</span>, $<span class="number">10</span></span><br><span class="line">add $<span class="number">15</span>, $<span class="number">25</span>, $<span class="number">6</span></span><br><span class="line"><span class="keyword">nor</span> $<span class="number">18</span>, $<span class="number">24</span>, $<span class="number">12</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">25</span>, $<span class="number">27</span>, $<span class="number">18</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">4</span>, $<span class="number">30</span>, $<span class="number">4</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">24</span>, $<span class="number">10</span>, $<span class="number">5</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">23</span>, $<span class="number">14</span>, $<span class="number">22</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">21</span>, $<span class="number">24</span>, $<span class="number">29</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">7</span>, $<span class="number">13</span>, $<span class="number">21</span></span><br><span class="line">sllv $<span class="number">24</span>, $<span class="number">25</span>, $<span class="number">19</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">16</span>, $<span class="number">31</span>, $<span class="number">7</span></span><br><span class="line">srlv $<span class="number">16</span>, $<span class="number">5</span>, $<span class="number">1</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">23</span>, $<span class="number">7</span>, $<span class="number">17</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">30</span>, $<span class="number">16</span>, $<span class="number">25</span></span><br><span class="line">sltu $<span class="number">0</span>, $<span class="number">4</span>, $<span class="number">14</span></span><br><span class="line">addu $<span class="number">1</span>, $<span class="number">10</span>, $<span class="number">30</span></span><br><span class="line">sllv $<span class="number">31</span>, $<span class="number">10</span>, $<span class="number">12</span></span><br><span class="line">srav $<span class="number">1</span>, $<span class="number">10</span>, $<span class="number">25</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">20</span>, $<span class="number">15</span>, $<span class="number">9</span></span><br><span class="line">sltu $<span class="number">23</span>, $<span class="number">8</span>, $<span class="number">24</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">17</span>, $<span class="number">22</span>, $<span class="number">0</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">7</span>, $<span class="number">24</span>, $<span class="number">4</span></span><br><span class="line">slt $<span class="number">20</span>, $<span class="number">13</span>, $<span class="number">17</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">7</span>, $<span class="number">3</span>, $<span class="number">21</span></span><br><span class="line">srav $<span class="number">12</span>, $<span class="number">29</span>, $<span class="number">11</span></span><br><span class="line">addu $<span class="number">1</span>, $<span class="number">27</span>, $<span class="number">16</span></span><br><span class="line">sltu $<span class="number">16</span>, $<span class="number">2</span>, $<span class="number">29</span></span><br><span class="line">subu $<span class="number">15</span>, $<span class="number">11</span>, $<span class="number">21</span></span><br><span class="line">srav $<span class="number">27</span>, $<span class="number">10</span>, $<span class="number">2</span></span><br><span class="line">add $<span class="number">18</span>, $<span class="number">31</span>, $<span class="number">24</span></span><br><span class="line">sltu $<span class="number">22</span>, $<span class="number">6</span>, $<span class="number">31</span></span><br><span class="line">srlv $<span class="number">3</span>, $<span class="number">28</span>, $<span class="number">0</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">10</span>, $<span class="number">4</span>, $<span class="number">6</span></span><br><span class="line">sllv $<span class="number">30</span>, $<span class="number">15</span>, $<span class="number">26</span></span><br><span class="line">add $<span class="number">1</span>, $<span class="number">19</span>, $<span class="number">18</span></span><br><span class="line">srlv $<span class="number">15</span>, $<span class="number">28</span>, $<span class="number">13</span></span><br><span class="line"><span class="keyword">or</span> $<span class="number">25</span>, $<span class="number">10</span>, $<span class="number">31</span></span><br><span class="line">add $<span class="number">2</span>, $<span class="number">13</span>, $<span class="number">2</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">1</span>, $<span class="number">24</span>, $<span class="number">26</span></span><br><span class="line">addu $<span class="number">19</span>, $<span class="number">23</span>, $<span class="number">20</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">30</span>, $<span class="number">3</span>, $<span class="number">28</span></span><br><span class="line"><span class="keyword">xor</span> $<span class="number">14</span>, $<span class="number">27</span>, $<span class="number">28</span></span><br><span class="line"><span class="keyword">and</span> $<span class="number">4</span>, $<span class="number">16</span>, $<span class="number">25</span></span><br><span class="line"><span class="keyword">nor</span> $<span class="number">26</span>, $<span class="number">23</span>, $<span class="number">4</span></span><br><span class="line">add $<span class="number">4</span>, $<span class="number">11</span>, $<span class="number">29</span></span><br><span class="line">srlv $<span class="number">30</span>, $<span class="number">3</span>, $<span class="number">2</span></span><br><span class="line">add $<span class="number">11</span>, $<span class="number">28</span>, $<span class="number">27</span></span><br><span class="line">sltu $<span class="number">6</span>, $<span class="number">28</span>, $<span class="number">23</span></span><br><span class="line">……………………</span><br></pre></td></tr></table></figure>
-<h4 id="转移指令b类和j类测试"><a class="markdownIt-Anchor" href="#转移指令b类和j类测试"></a> 转移指令（B类和J类）测试</h4>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">main:	</span><br><span class="line">li	$s0, <span class="number">0</span></span><br><span class="line">li	$s1, -<span class="number">1000</span></span><br><span class="line">li	$s2, <span class="number">1000</span></span><br><span class="line">lui	$s3, <span class="number">0</span>x8000	#s3 is  -<span class="number">2147483648</span></span><br><span class="line">lui	$s4, <span class="number">0</span>x8000</span><br><span class="line">ori	$s4, <span class="number">0</span>x0001	#s4 is  -<span class="number">2147483647</span></span><br><span class="line">lui	$s5, <span class="number">0</span>x7fff</span><br><span class="line">ori	$s5, <span class="number">0</span>xffff	#s5 is  <span class="number">2147483647</span></span><br><span class="line">lui	$s6, <span class="number">0</span>x7fff</span><br><span class="line">ori	$s6, <span class="number">0</span>xfffe	#s6 is <span class="number">2147483646</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">beq_1:	beq	$s0, $s0, beq_1_test</span><br><span class="line">beq_2:	beq	$s1, $s1, beq_2_test</span><br><span class="line">……</span><br><span class="line">beq_10:  beq	$s5, $s6, beq_10_test</span><br><span class="line">beq_end:</span><br><span class="line"></span><br><span class="line">bne_1:	bne	$s0, $s1, bne_1_test</span><br><span class="line">……</span><br><span class="line">bne_10:	bne	$s3, $s3, bne_10_test</span><br><span class="line">bne_end:</span><br><span class="line"></span><br><span class="line">blez_1: blez	$s0, blez_1_test</span><br><span class="line">……</span><br><span class="line">blez_10: blez	$s6, blez_10_test</span><br><span class="line">blez_end:</span><br><span class="line"></span><br><span class="line">bgtz_1:	 bgtz	$s2,bgtz_1_test</span><br><span class="line">……</span><br><span class="line">bgtz_10: bgtz	$s1,bgtz_10_test</span><br><span class="line">bgtz_end:</span><br><span class="line"></span><br><span class="line">jal_1:	jal	jal_1_test</span><br><span class="line">……</span><br><span class="line">jal_5:	jal	jal_5_test</span><br><span class="line">jal_end:</span><br><span class="line"></span><br><span class="line">jalr_1:	<span class="keyword">or</span>	$v0, $<span class="number">0</span>, <span class="number">12916</span></span><br><span class="line">	jalr	$v1, $v0</span><br><span class="line">……</span><br><span class="line">jalr_5:	<span class="keyword">or</span>	$v0, $<span class="number">0</span>, <span class="number">12948</span></span><br><span class="line">	jalr	$v1, $v0</span><br><span class="line"></span><br><span class="line">sw	$t0, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t1, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t2, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t3, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t4, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t5, <span class="number">0</span>($s0)</span><br><span class="line">li	$v0, <span class="number">10</span></span><br><span class="line">syscall</span><br><span class="line">	</span><br><span class="line">beq_1_test: addi	$t0,$t0, <span class="number">1</span></span><br><span class="line">	   j	beq_2</span><br><span class="line">……</span><br><span class="line">beq_10_test: addi	$t0,$t0, <span class="number">1</span></span><br><span class="line">	   j	beq_end</span><br><span class="line"></span><br><span class="line">bne_1_test: addi	$t1,$t1, <span class="number">1</span></span><br><span class="line">	   j	bne_2</span><br><span class="line">……</span><br><span class="line">bne_10_test:addi	$t1,$t1, <span class="number">1</span></span><br><span class="line">	   j	bne_end  	      	      	   </span><br><span class="line"></span><br><span class="line">blez_1_test:	addi	$t2,$t2, <span class="number">1</span></span><br><span class="line">		j	blez_2</span><br><span class="line">……</span><br><span class="line">blez_10_test:	addi	$t2,$t2, <span class="number">1</span></span><br><span class="line">		j	blez_end</span><br><span class="line"></span><br><span class="line">bgtz_1_test:	addi	$t3,$t3 <span class="number">1</span></span><br><span class="line">		j	bgtz_2</span><br><span class="line">……</span><br><span class="line">bgtz_10_test:	addi	$t3,$t3 <span class="number">1</span></span><br><span class="line">		j	bgtz_end</span><br><span class="line">		</span><br><span class="line">jal_1_test:	addi	$t4, $<span class="number">4</span>, <span class="number">1</span></span><br><span class="line">		jr	$ra</span><br><span class="line">……</span><br><span class="line">jal_5_test:	addi	$t4, $<span class="number">4</span>, <span class="number">1</span></span><br><span class="line">		jr	$ra</span><br><span class="line"></span><br><span class="line">jalr_1_test:	addi	$t5, $t5, <span class="number">1</span></span><br><span class="line">		jr	$v1</span><br><span class="line">……</span><br><span class="line">jalr_5_test:	addi	$t5, $t5, <span class="number">1</span></span><br><span class="line">		jr	$v1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="访存指令测试"><a class="markdownIt-Anchor" href="#访存指令测试"></a> 访存指令测试</h4>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">.text</span></span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>xABCF1234</span><br><span class="line">li	$s1, <span class="number">0</span>x1234ABCD</span><br><span class="line">li	$s2, <span class="number">0</span>xa1b2c3d4</span><br><span class="line">li	$s3, <span class="number">0</span>x7fff0000</span><br><span class="line"></span><br><span class="line">sb	$s1, <span class="number">100</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s2, <span class="number">103</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s3, <span class="number">105</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s4, <span class="number">107</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s4, <span class="number">108</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s3, <span class="number">110</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s2, <span class="number">112</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s1, <span class="number">114</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s1, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s2, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s3, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t1, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t2, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t3, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">16</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">20</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">24</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">28</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t0, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t1, <span class="number">7</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t2, <span class="number">11</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t3, <span class="number">13</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">32</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">36</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">40</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">44</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t0, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t1, <span class="number">7</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t2, <span class="number">11</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t3, <span class="number">13</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">48</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">52</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">56</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">60</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">64</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">68</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">72</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">76</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">6</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">80</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">84</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">88</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">92</span>($<span class="number">0</span>)</span><br><span class="line">li	$v0, <span class="number">10</span></span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
-<h3 id="自动测试工具"><a class="markdownIt-Anchor" href="#自动测试工具"></a> 自动测试工具</h3>
-<p>我们通过python程序将MIPS汇编程序（test.asm）编译并运行，形成16进制机器码（code.txt）和标准输出（mips_out.txt）。然后命令行运行ise，得到工程文件的输出（verilog_out.txt）.然后我们对两个输出文件进行比较，得出比较结果。若出现不同，还会输出错误日志文件（log_i.txt）。</p>
+<h4 id="转移指令（B类和J类）测试"><a href="#转移指令（B类和J类）测试" class="headerlink" title="转移指令（B类和J类）测试"></a>转移指令（B类和J类）测试</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">main:	</span><br><span class="line">li	$s0, <span class="number">0</span></span><br><span class="line">li	$s1, -<span class="number">1000</span></span><br><span class="line">li	$s2, <span class="number">1000</span></span><br><span class="line">lui	$s3, <span class="number">0</span>x8000	#s3 is  -<span class="number">2147483648</span></span><br><span class="line">lui	$s4, <span class="number">0</span>x8000</span><br><span class="line">ori	$s4, <span class="number">0</span>x0001	#s4 is  -<span class="number">2147483647</span></span><br><span class="line">lui	$s5, <span class="number">0</span>x7fff</span><br><span class="line">ori	$s5, <span class="number">0</span>xffff	#s5 is  <span class="number">2147483647</span></span><br><span class="line">lui	$s6, <span class="number">0</span>x7fff</span><br><span class="line">ori	$s6, <span class="number">0</span>xfffe	#s6 is <span class="number">2147483646</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">beq_1:	beq	$s0, $s0, beq_1_test</span><br><span class="line">beq_2:	beq	$s1, $s1, beq_2_test</span><br><span class="line">……</span><br><span class="line">beq_10:  beq	$s5, $s6, beq_10_test</span><br><span class="line">beq_end:</span><br><span class="line"></span><br><span class="line">bne_1:	bne	$s0, $s1, bne_1_test</span><br><span class="line">……</span><br><span class="line">bne_10:	bne	$s3, $s3, bne_10_test</span><br><span class="line">bne_end:</span><br><span class="line"></span><br><span class="line">blez_1: blez	$s0, blez_1_test</span><br><span class="line">……</span><br><span class="line">blez_10: blez	$s6, blez_10_test</span><br><span class="line">blez_end:</span><br><span class="line"></span><br><span class="line">bgtz_1:	 bgtz	$s2,bgtz_1_test</span><br><span class="line">……</span><br><span class="line">bgtz_10: bgtz	$s1,bgtz_10_test</span><br><span class="line">bgtz_end:</span><br><span class="line"></span><br><span class="line">jal_1:	jal	jal_1_test</span><br><span class="line">……</span><br><span class="line">jal_5:	jal	jal_5_test</span><br><span class="line">jal_end:</span><br><span class="line"></span><br><span class="line">jalr_1:	<span class="keyword">or</span>	$v0, $<span class="number">0</span>, <span class="number">12916</span></span><br><span class="line">	jalr	$v1, $v0</span><br><span class="line">……</span><br><span class="line">jalr_5:	<span class="keyword">or</span>	$v0, $<span class="number">0</span>, <span class="number">12948</span></span><br><span class="line">	jalr	$v1, $v0</span><br><span class="line"></span><br><span class="line">sw	$t0, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t1, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t2, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t3, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t4, <span class="number">0</span>($s0)</span><br><span class="line">sw	$t5, <span class="number">0</span>($s0)</span><br><span class="line">li	$v0, <span class="number">10</span></span><br><span class="line">syscall</span><br><span class="line">	</span><br><span class="line">beq_1_test: addi	$t0,$t0, <span class="number">1</span></span><br><span class="line">	   j	beq_2</span><br><span class="line">……</span><br><span class="line">beq_10_test: addi	$t0,$t0, <span class="number">1</span></span><br><span class="line">	   j	beq_end</span><br><span class="line"></span><br><span class="line">bne_1_test: addi	$t1,$t1, <span class="number">1</span></span><br><span class="line">	   j	bne_2</span><br><span class="line">……</span><br><span class="line">bne_10_test:addi	$t1,$t1, <span class="number">1</span></span><br><span class="line">	   j	bne_end  	      	      	   </span><br><span class="line"></span><br><span class="line">blez_1_test:	addi	$t2,$t2, <span class="number">1</span></span><br><span class="line">		j	blez_2</span><br><span class="line">……</span><br><span class="line">blez_10_test:	addi	$t2,$t2, <span class="number">1</span></span><br><span class="line">		j	blez_end</span><br><span class="line"></span><br><span class="line">bgtz_1_test:	addi	$t3,$t3 <span class="number">1</span></span><br><span class="line">		j	bgtz_2</span><br><span class="line">……</span><br><span class="line">bgtz_10_test:	addi	$t3,$t3 <span class="number">1</span></span><br><span class="line">		j	bgtz_end</span><br><span class="line">		</span><br><span class="line">jal_1_test:	addi	$t4, $<span class="number">4</span>, <span class="number">1</span></span><br><span class="line">		jr	$ra</span><br><span class="line">……</span><br><span class="line">jal_5_test:	addi	$t4, $<span class="number">4</span>, <span class="number">1</span></span><br><span class="line">		jr	$ra</span><br><span class="line"></span><br><span class="line">jalr_1_test:	addi	$t5, $t5, <span class="number">1</span></span><br><span class="line">		jr	$v1</span><br><span class="line">……</span><br><span class="line">jalr_5_test:	addi	$t5, $t5, <span class="number">1</span></span><br><span class="line">		jr	$v1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="访存指令测试"><a href="#访存指令测试" class="headerlink" title="访存指令测试"></a>访存指令测试</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">.text</span></span><br><span class="line"></span><br><span class="line">li	$s0, <span class="number">0</span>xABCF1234</span><br><span class="line">li	$s1, <span class="number">0</span>x1234ABCD</span><br><span class="line">li	$s2, <span class="number">0</span>xa1b2c3d4</span><br><span class="line">li	$s3, <span class="number">0</span>x7fff0000</span><br><span class="line"></span><br><span class="line">sb	$s1, <span class="number">100</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s2, <span class="number">103</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s3, <span class="number">105</span>($<span class="number">0</span>)</span><br><span class="line">sb	$s4, <span class="number">107</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s4, <span class="number">108</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s3, <span class="number">110</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s2, <span class="number">112</span>($<span class="number">0</span>)</span><br><span class="line">sh	$s1, <span class="number">114</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s1, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s2, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">sw	$s3, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t0, <span class="number">0</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t1, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t2, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lw	$t3, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">16</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">20</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">24</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">28</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t0, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t1, <span class="number">7</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t2, <span class="number">11</span>($<span class="number">0</span>)</span><br><span class="line">lb	$t3, <span class="number">13</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">32</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">36</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">40</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">44</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t0, <span class="number">3</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t1, <span class="number">7</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t2, <span class="number">11</span>($<span class="number">0</span>)</span><br><span class="line">lbu	$t3, <span class="number">13</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">48</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">52</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">56</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">60</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lh	$t0, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">64</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">68</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">72</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">76</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">2</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">6</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">8</span>($<span class="number">0</span>)</span><br><span class="line">lhu	$t0, <span class="number">12</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t0, <span class="number">80</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t1, <span class="number">84</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t2, <span class="number">88</span>($<span class="number">0</span>)</span><br><span class="line">sw	$t3, <span class="number">92</span>($<span class="number">0</span>)</span><br><span class="line">li	$v0, <span class="number">10</span></span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+<h3 id="自动测试工具"><a href="#自动测试工具" class="headerlink" title="自动测试工具"></a>自动测试工具</h3><p>我们通过python程序将MIPS汇编程序（test.asm）编译并运行，形成16进制机器码（code.txt）和标准输出（mips_out.txt）。然后命令行运行ise，得到工程文件的输出（verilog_out.txt）.然后我们对两个输出文件进行比较，得出比较结果。若出现不同，还会输出错误日志文件（log_i.txt）。</p>
   <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">p_road = <span class="string">&quot;D:\\Code\\Verilog\\homework_code\\P4_cpu_test&quot;</span></span><br><span class="line">run_time = <span class="string">&quot;200us&quot;</span></span><br><span class="line">xilinx_path = <span class="string">&quot;E:\\Xilinx\\14.7\\ISE_DS\\ISE&quot;</span></span><br><span class="line">error = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_mars</span>():</span></span><br><span class="line">    os.system(<span class="string">&quot;java -jar mars.jar mc CompactDataAtZero a dump .text HexText code.txt nc mips_code.asm&quot;</span>)</span><br><span class="line">    os.system(<span class="string">&quot;java -jar mars.jar mc CompactDataAtZero nc mips_code.asm &gt; mips_out.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_hex_code</span>():</span></span><br><span class="line">    list_temp = []</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;code.txt&quot;</span>, <span class="string">&quot;r+&quot;</span>) <span class="keyword">as</span> hex_code:</span><br><span class="line">        list_temp = hex_code.readlines()</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(p_road + <span class="string">&quot;\\code.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> file_to_IM:</span><br><span class="line">        file_to_IM.writelines(list_temp)</span><br><span class="line">    hex_code.close()</span><br><span class="line">    file_to_IM.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_ise</span>():</span></span><br><span class="line">    file_list = []</span><br><span class="line">    <span class="keyword">for</span> i, j ,k <span class="keyword">in</span> os.walk(p_road):</span><br><span class="line">        <span class="keyword">for</span> file <span class="keyword">in</span> k:</span><br><span class="line">            <span class="keyword">if</span> file.endswith(<span class="string">&quot;.v&quot;</span>):</span><br><span class="line">                file_list.append(file)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(p_road + <span class="string">&quot;\\mips.prj&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> prj:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(file_list)):</span><br><span class="line">            prj.write(<span class="string">&quot;Verilog work \&quot;&quot;</span> + p_road + <span class="string">&quot;\\&quot;</span> + file_list[i] + <span class="string">&quot;\&quot;\n&quot;</span>)           </span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(p_road + <span class="string">&quot;\mips.tcl&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> tcl:</span><br><span class="line">        tcl.write(<span class="string">&quot;run &quot;</span> + run_time +<span class="string">&quot;;\nexit&quot;</span>)</span><br><span class="line">    prj.close()</span><br><span class="line">    tcl.close()</span><br><span class="line">    os.environ[<span class="string">&quot;XILINX&quot;</span>] = xilinx_path</span><br><span class="line">    os.system(xilinx_path + <span class="string">&quot;\\bin\\nt64\\fuse -nodebug -prj &quot;</span> + p_road + <span class="string">&quot;\\mips.prj -o mips.exe mips_tb &gt; compile_log.txt&quot;</span>)</span><br><span class="line">    os.system(<span class="string">&quot;mips.exe -nolog -tclbatch &quot;</span> + p_road + <span class="string">&quot;\\mips.tcl&gt; verilog_out.txt&quot;</span>)</span><br><span class="line">    <span class="comment"># print(&quot;mips.exe -nolog -tclbatch &quot; + p_road + &quot;\\mips.tcl &gt; verilog_out.txt&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">copy_file</span>(<span class="params">name, target_road</span>):</span></span><br><span class="line">    f_1 = <span class="built_in">open</span>(name, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">    list_temp = f_1.readlines()</span><br><span class="line">    f_2 = <span class="built_in">open</span>(target_road + <span class="string">&quot;\\&quot;</span> + name, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">    f_2.writelines(list_temp)</span><br><span class="line">    f_1.close()</span><br><span class="line">    f_2.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_cmp</span>(<span class="params">test_order</span>):</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;mips_out.txt&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> out_1:</span><br><span class="line">        out_std = out_1.readlines()</span><br><span class="line">        out_std.remove(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;verilog_out.txt&quot;</span>, <span class="string">&quot;r+&quot;</span>) <span class="keyword">as</span> out_2:</span><br><span class="line">        out_test = out_2.readlines()[<span class="number">5</span>:]</span><br><span class="line">        out_2 = out_2.readlines()[<span class="number">5</span>:]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;.\\log.txt&quot;</span>.<span class="built_in">format</span>(test_order), <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> log:</span><br><span class="line">        flag = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">len</span>(out_std) &gt; <span class="built_in">len</span>(out_test)):</span><br><span class="line">            flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(out_std)):</span><br><span class="line">                <span class="keyword">if</span>(out_std[i] != out_test[i]):</span><br><span class="line">                    flag = <span class="number">1</span>;</span><br><span class="line">                    log.write(<span class="string">&quot;error in line &#123;&#125;\n expected output is &#123;&#125;\nyour outout is &#123;&#125;\n\n&quot;</span>.<span class="built_in">format</span>(i, out_std[i], out_test[i]))</span><br><span class="line">        <span class="keyword">if</span>(flag):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Wrong Answer!&quot;</span>)</span><br><span class="line">            os.makedirs(<span class="string">&quot;.\\test_log_file\\log_&#123;&#125;\\&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">            copy_file(<span class="string">&quot;log.txt&quot;</span>, <span class="string">&quot;.\\test_log_file\\log_&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">            copy_file(<span class="string">&quot;mips_code.asm&quot;</span>, <span class="string">&quot;.\\test_log_file\\log_&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">            copy_file(<span class="string">&quot;mips_out.txt&quot;</span>, <span class="string">&quot;.\\test_log_file\\log_&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">            copy_file(<span class="string">&quot;verilog_out.txt&quot;</span>, <span class="string">&quot;.\\test_log_file\\log_&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Accepted!&quot;</span>)</span><br><span class="line"><span class="comment">#### main</span></span><br><span class="line">test_times =<span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(test_times):</span><br><span class="line">    os.system(<span class="string">&quot;python D:\大学资料\大二上\计算机组成\实验上机\P4\自动化测试\code_generate.py&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i+<span class="number">1</span>, test_times))</span><br><span class="line">    run_mars()</span><br><span class="line">    load_hex_code()</span><br><span class="line">    run_ise()</span><br><span class="line">file_cmp(i+<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="思考题"><a class="markdownIt-Anchor" href="#思考题"></a> 思考题</h2>
-<ol>
-<li>
-<p>Q：根据你的理解，在下面给出的DM的输入示例中，地址信号addr位数为什么是[11:2]而不是[9:0]？这个addr信号又是从哪里来的？<br />
-<img src="p4Q1.png" alt="" /><br />
-A：因为MIPS架构cpu的指令存储器是按字节寻址，而我们在Verilog中构建的IM是按字寻址的，而且地址尾款为10位（[0:1024]）。因此应该对pc[9:0]进行左移2位的操作，相当于取pc[11:2].addr信号是来源于pc</p>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><ol>
+<li><p>Q：根据你的理解，在下面给出的DM的输入示例中，地址信号addr位数为什么是[11:2]而不是[9:0]？这个addr信号又是从哪里来的？<br> <img src="p4Q1.png" alt=""><br>A：因为MIPS架构cpu的指令存储器是按字节寻址，而我们在Verilog中构建的IM是按字寻址的，而且地址尾款为10位（[0:1024]）。因此应该对pc[9:0]进行左移2位的操作，相当于取pc[11:2].addr信号是来源于pc</p>
 </li>
-<li>
-<p>Q：思考Verilog语言设计控制器的译码方式，给出代码示例，并尝试对比各方式的优劣。<br />
-A：可以记录下 指令对应的控制信号如何取值，也可以记录下控制信号每种取值所对应的指令。如以下代码——</p>
+<li><p>Q：思考Verilog语言设计控制器的译码方式，给出代码示例，并尝试对比各方式的优劣。<br>A：可以记录下 指令对应的控制信号如何取值，也可以记录下控制信号每种取值所对应的指令。如以下代码——</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种方式</span></span><br><span class="line"><span class="keyword">always</span> @(*)<span class="keyword">begin</span></span><br><span class="line">	     <span class="keyword">if</span>(<span class="number">_</span>add == <span class="number">1</span>)<span class="keyword">begin</span></span><br><span class="line">			 Regwrite = <span class="number">1</span>;</span><br><span class="line">			 RegDst = <span class="number">1</span>;</span><br><span class="line">		 <span class="keyword">end</span></span><br><span class="line">		 <span class="keyword">else</span> <span class="keyword">if</span>(sub == <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">			 Regwrite = <span class="number">1</span>;</span><br><span class="line">			 RegDst = <span class="number">1</span>;</span><br><span class="line">			………………</span><br><span class="line">		 <span class="keyword">end</span></span><br><span class="line"><span class="comment">//第二种方式</span></span><br><span class="line"> <span class="keyword">assign</span> MemToReg       = <span class="number">_</span>lw | <span class="number">_</span>lh | <span class="number">_</span>lhu | <span class="number">_</span>lb | <span class="number">_</span>lbu;</span><br><span class="line"> <span class="keyword">assign</span> MemWrite       = <span class="number">_</span>sw | <span class="number">_</span>sh | <span class="number">_</span>sb;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>Q：在相应的部件中，reset的优先级比其他控制信号（不包括clk信号）都要高，且相应的设计都是同步复位。清零信号reset所驱动的部件具有什么共同特点<br />
-A：都具有寄存器类型，可以对数据进行存储，在运行中可读可写，如pc，DM，GRF。</p>
+</ol>
+<ol>
+<li><p>Q：在相应的部件中，reset的优先级比其他控制信号（不包括clk信号）都要高，且相应的设计都是同步复位。清零信号reset所驱动的部件具有什么共同特点<br>A：都具有寄存器类型，可以对数据进行存储，在运行中可读可写，如pc，DM，GRF。</p>
 </li>
-<li>
-<p>Q：C语言是一种弱类型程序设计语言。C语言中不对计算结果溢出进行处理，这意味着C语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持C语言，MIPS指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi与addiu是等价的，add与addu是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的Operation部分 。<br />
-A：英文指令集中，对于ADD的解释是: ADDU performs the same arithmetic operation but does not trap on overflow,也就是说，add和addu仅有溢出检测的区别。在忽略溢出的条件下，无论是否溢出，二者都将计算结果存入rd中，因此二者是等价的。Addi和addiu同理。</p>
+<li><p>Q：C语言是一种弱类型程序设计语言。C语言中不对计算结果溢出进行处理，这意味着C语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持C语言，MIPS指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi与addiu是等价的，add与addu是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的Operation部分 。<br>A：英文指令集中，对于ADD的解释是: ADDU performs the same arithmetic operation but does not trap on overflow,也就是说，add和addu仅有溢出检测的区别。在忽略溢出的条件下，无论是否溢出，二者都将计算结果存入rd中，因此二者是等价的。Addi和addiu同理。</p>
 </li>
-<li>
-<p>Q：根据自己的设计说明单周期处理器的优缺点。</p>
+<li><p>Q：根据自己的设计说明单周期处理器的优缺点。</p>
 <p>A：单周期的CPU会在一个时钟周期内完成所有的工作，既从指令取出，到得到结果，全部在一个时钟之内完成。优点是设计较为简单，指令与指令之间独立，缺点是cpu的时钟周期受关键路径限制，时钟周期较长，效率比较低。</p>
 </li>
 </ol>
@@ -1387,7 +714,7 @@ A：英文指令集中，对于ADD的解释是: ADDU performs the same arithmeti
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8D%95%E5%91%A8%E6%9C%9Fcpu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 单周期CPU设计方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> 设计概述</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%8C%87%E4%BB%A4%E8%AF%B4%E6%98%8E"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> 实现指令说明</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#r%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text"> R型指令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#j%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text"> J型指令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#i%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text"> I型指令</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> 数据通路模块定义</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#ifu%E5%8F%96%E6%8C%87%E4%BB%A4%E5%8D%95%E5%85%83"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text"> IFU（取指令单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#grf%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text"> GRF（通用寄存器组）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#npc%E4%B8%8B%E4%B8%80%E6%8C%87%E4%BB%A4%E8%AE%A1%E7%AE%97%E5%8D%95%E5%85%83"><span class="toc-nav-number">1.3.3.</span> <span class="toc-nav-text"> NPC（下一指令计算单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#alu%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E5%8D%95%E5%85%83"><span class="toc-nav-number">1.3.4.</span> <span class="toc-nav-text"> ALU（逻辑运算单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#dm-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-nav-number">1.3.5.</span> <span class="toc-nav-text"> DM （数据存储器）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#branch-controlb%E7%B1%BB%E6%8C%87%E4%BB%A4%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97"><span class="toc-nav-number">1.3.6.</span> <span class="toc-nav-text"> Branch Control（B类指令控制模块）</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> 控制模块定义</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%87%8D%E8%A6%81%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> 重要机制实现方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4b%E7%B1%BB%E5%92%8Cj%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text"> 转移指令（B类和J类）实现方法</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text"> 访存指令实现方法</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 测试方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%85%B8%E5%9E%8B%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 典型测试样例</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BF%90%E7%AE%97%E6%8C%87%E4%BB%A4%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.1.</span> <span class="toc-nav-text"> 运算指令测试</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4b%E7%B1%BB%E5%92%8Cj%E7%B1%BB%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.2.</span> <span class="toc-nav-text"> 转移指令（B类和J类）测试</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.3.</span> <span class="toc-nav-text"> 访存指令测试</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 自动测试工具</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 思考题</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">单周期CPU设计方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">设计概述</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%8C%87%E4%BB%A4%E8%AF%B4%E6%98%8E"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">实现指令说明</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#R%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">R型指令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#J%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">J型指令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#I%E5%9E%8B%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">I型指令</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">数据通路模块定义</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#IFU%EF%BC%88%E5%8F%96%E6%8C%87%E4%BB%A4%E5%8D%95%E5%85%83%EF%BC%89"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">IFU（取指令单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#GRF%EF%BC%88%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84%EF%BC%89"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">GRF（通用寄存器组）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#NPC%EF%BC%88%E4%B8%8B%E4%B8%80%E6%8C%87%E4%BB%A4%E8%AE%A1%E7%AE%97%E5%8D%95%E5%85%83%EF%BC%89"><span class="toc-nav-number">1.3.3.</span> <span class="toc-nav-text">NPC（下一指令计算单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#ALU%EF%BC%88%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E5%8D%95%E5%85%83%EF%BC%89"><span class="toc-nav-number">1.3.4.</span> <span class="toc-nav-text">ALU（逻辑运算单元）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#DM-%EF%BC%88%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%99%A8%EF%BC%89"><span class="toc-nav-number">1.3.5.</span> <span class="toc-nav-text">DM （数据存储器）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Branch-Control%EF%BC%88B%E7%B1%BB%E6%8C%87%E4%BB%A4%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97%EF%BC%89"><span class="toc-nav-number">1.3.6.</span> <span class="toc-nav-text">Branch Control（B类指令控制模块）</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">控制模块定义</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%87%8D%E8%A6%81%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">重要机制实现方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%EF%BC%88B%E7%B1%BB%E5%92%8CJ%E7%B1%BB%EF%BC%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text">转移指令（B类和J类）实现方法</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text">访存指令实现方法</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">测试方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%85%B8%E5%9E%8B%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">典型测试样例</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BF%90%E7%AE%97%E6%8C%87%E4%BB%A4%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.1.</span> <span class="toc-nav-text">运算指令测试</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%EF%BC%88B%E7%B1%BB%E5%92%8CJ%E7%B1%BB%EF%BC%89%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.2.</span> <span class="toc-nav-text">转移指令（B类和J类）测试</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">2.1.3.</span> <span class="toc-nav-text">访存指令测试</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">自动测试工具</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">思考题</span></a></li></ol>
         
         </div>
       </aside>

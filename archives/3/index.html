@@ -468,12 +468,9 @@
       北航《C++程序设计》课程第1节：主要讲授C++函数相比C函数的不同点，以及C++头文件写法等知识点。
     </h3>
     <div class="post-content-preview">
-       C++函数
- 函数重载(overloading)
-
+      C++函数函数重载(overloading)
 C++函数重载和Java类似，即“同名函数，不同参数”， 例如  12void print(int i) &#123;&#125;void print(char *i) &#123;&#125;
-
-“同名函数，相同参数，返回值不同”不能成为重载函数，例如  12int print() &#123;&#125;char* print() &......
+“同名函数，相同参数，返回值不同”不能成为重载函数，例如  12int print() &#123;&#125;char* print() &#123;......
     </div>
   </a>
   
@@ -514,14 +511,13 @@ C++函数重载和Java类似，即“同名函数，不同参数”， 例如  1
     <div class="post-content-preview">
       
 
- Maven项目构建的生命周期
-Maven的生命周期就是为了对所有的构建过程进行抽象和统一，这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤，由相互独立三套生命周期组成——
+Maven项目构建的生命周期Maven的生命周期就是为了对所有的构建过程进行抽象和统一，这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤，由相互独立三套生命周期组成——
 
 clean：清理项目
 default：构建项目
-site：构建项目站点
+site：构建项目站点 
 
-当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的......
+当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的其......
     </div>
   </a>
   
@@ -559,9 +555,7 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       
- pom.xml文件中的依赖声明
-所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。
-1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &......
+pom.xml文件中的依赖声明所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &lt;......
     </div>
   </a>
   
@@ -599,12 +593,10 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。 Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是 “通过pom.xml文件的配置获取jar包不用手动的去添加jar包”。该工具的原理图如下所示——
-
- 仓库
-仓库可以储存资源，包含各种jar包。仓库分为两种：本地仓库和远程仓库
+仓库仓库可以储存资源，包含各种jar包。仓库分为两种：本地仓库和远程仓库
 
 本地仓库：是在本机电脑上储存资源的仓库，可以从远程仓库中获取资源。
-远程仓库......
+远程仓库：非本......
     </div>
   </a>
   
@@ -642,11 +634,10 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       
- 包的定义
-
+包的定义
 在笔者看来，包其实就是一个 文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
 一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。
-包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（ann......
+包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（annot......
     </div>
   </a>
   
@@ -684,15 +675,13 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       
- 接口和类
-《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
- 接口与类的相似点
-
+接口和类《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
+接口与类的相似点
 接口中可以有多个方法（也仅限于方法）
 接口文件保存在 .java 结尾的文件中，文件名使用接口名，遵循类的命名方法。
 
- 接口与类的不同点
-......
+接口与类的不同点
+接口不能用......
     </div>
   </a>
   
@@ -733,10 +722,7 @@ site：构建项目站点
 重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。
 重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
 
- 重写父类中的方法
- 概念
-当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如
-1234567891011121314......
+重写父类中的方法概念当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如123456789101112131415161......
     </div>
   </a>
   
@@ -774,19 +760,17 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       
- 继承
- 语法和概念
-1修饰符 class 子类名 extends 父类名
+继承语法和概念1修饰符 class 子类名 extends 父类名
 
 子类从它的父类中继承所有的数据域和方法，也可以添加新的数据域和新的方法。
 如果类 B 从类 A 派生，或者说类 B 扩展自类 A，或者说类 B 继承类 A，
-
-称类 A 为&quot;父类&quot;，也称为超类、基类；
-称类 B 为&quot;子类&quot;，也称为次类、扩展类、派生类。
-
+称类 A 为”父类“，也称为超类、基类；
+称类 B 为”子类”，也称为次类、扩展类、派生类。
 
 
- 继承的注意点......
+
+继承的注意点
+子类不是父类的子集，子类一般比父类包含更多的数据域......
     </div>
   </a>
   
@@ -824,15 +808,10 @@ site：构建项目站点
     </h3>
     <div class="post-content-preview">
       
- 数组的创建的访问
- 一维数组的创建
-
+数组的创建的访问一维数组的创建
 一维数组的创建有以下几种方法——  1234567//先声明后定义int[] array;array = new int[100];//直接定义int[] array = new int[100];//列表定义int[] array = &#123;1, 2, 3, 4&#125;;
-
-
- 多维数组的创建
-
-下面以二维数组为例介绍多维数组的创建方法 ......
+多维数组的创建
+下面以二维数组为例介绍多维数组的创建方法  1234567......
     </div>
   </a>
   
@@ -876,10 +855,8 @@ StringBuild类
 StringBuffer类
 
 
- String类
- 对象创建
-
-例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27......
+String类对象创建
+例程  12345String s_1 = &quot;Hyggge&quot;;String s_2 = s_1;String s_3 = new String(&quot;Czh&quot;);char[] s_4 = &#123;&#x27;C&#......
     </div>
   </a>
   
@@ -941,6 +918,10 @@ StringBuffer类
     
     
     
+    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
+    
+    
+    
     <a href="/tags/#C++" title="C++" rel="8">C++</a>
     
     
@@ -949,27 +930,7 @@ StringBuffer类
     
     
     
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
     <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
-    
-    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
     
     
     
@@ -978,6 +939,22 @@ StringBuffer类
     
     
     <a href="/tags/#操作系统" title="操作系统" rel="7">操作系统</a>
+    
+    
+    
+    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
+    
+    
+    
+    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
+    
+    
+    
+    <a href="/tags/#Java" title="Java" rel="7">Java</a>
+    
+    
+    
+    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
     
     
   </div>
@@ -1095,32 +1072,16 @@ StringBuffer类
       <li>算法</li>
     </a>
     
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
     <a href="/categories/#ECS">
       <li>ECS</li>
     </a>
     
+    <a href="/categories/#C++">
+      <li>C++</li>
+    </a>
+    
     <a href="/categories/#Git">
       <li>Git</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-    <a href="/categories/#Letax">
-      <li>Letax</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
     </a>
     
     <a href="/categories/#面向对象">
@@ -1129,6 +1090,22 @@ StringBuffer类
     
     <a href="/categories/#操作系统">
       <li>操作系统</li>
+    </a>
+    
+    <a href="/categories/#Maven">
+      <li>Maven</li>
+    </a>
+    
+    <a href="/categories/#计算机组成">
+      <li>计算机组成</li>
+    </a>
+    
+    <a href="/categories/#Java">
+      <li>Java</li>
+    </a>
+    
+    <a href="/categories/#Letax">
+      <li>Letax</li>
     </a>
     
   </ul>
