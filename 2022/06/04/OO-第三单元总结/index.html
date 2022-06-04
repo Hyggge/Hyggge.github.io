@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag (contains Google-Analytics、Baidu-Tongji)-->
+<head>
+  <!-- Google Analytics -->
+  
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-xxxxxx-xx"></script>
+    <script type="text/javascript">
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-xxxxxx-xx');
+    </script>
+  
+
+  <!-- Baidu Tongji -->
+  
+    <script type="text/javascript">
+      // Originial
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  <!-- Baidu Push -->
+  
+    <script>
+      (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+      })();
+    </script>
+  
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  <meta name="google-site-verification" content="lxDfCplOZbIzjhG34NuQBgu2gdyRlAtMB4utP5AgEBc"/>
+  <meta name="baidu-site-verification" content="PpzM9WxOJU"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="It&#39;s a broad stage"/>
+  <meta name="keyword" content="Hyggge, BUAA, Undergraduate, CS, Photograph"/>
+  <link rel="shortcut icon" href="/img/avatar/head.jpg"/>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
+
+  
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/beantech.min.css"/>
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css"/>
+    <link rel="stylesheet" href="/css/widget.css"/>
+    <link rel="stylesheet" href="/css/rocket.css"/>
+    <link rel="stylesheet" href="/css/signature.css"/>
+    <link rel="stylesheet" href="/css/catalog.css"/>
+    <link rel="stylesheet" href="/css/livemylife.css"/>
+
+    
+      <!-- wave start -->
+      <link rel="stylesheet" href="/css/wave.css"/>
+      <!-- wave end -->
+    
+
+    
+      <!-- top start (article top hot config) -->
+      <link rel="stylesheet" href="/css/top.css"/>
+      <!-- top end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/scroll.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+      <!-- viewer start (Picture preview) -->
+      <link rel="stylesheet" href="/css/viewer.min.css"/>
+      <!-- viewer end -->
+    
+
+    
+      <!-- Search start -->
+      <link rel="stylesheet" href="/css/search.css"/>
+      <!-- Search end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/themecolor.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+
+    
+      <!-- gitalk start -->
+      <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"> -->
+      <link rel="stylesheet" href="/css/gitalk.css"/>
+      <!-- gitalk end -->
+    
+  
+
+  <!-- Custom Fonts -->
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+  <!-- Hux change font-awesome CDN to qiniu -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Hux Delete, sad but pending in China <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> <link
+  href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/ css'> -->
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
+
+  <!-- ga & ba script hoook -->
+  <link rel="canonical" href="http://example.com/2022/06/04/OO-第三单元总结/">
+  <title>
+    
+      「BUAA-OO」第三单元:规格化设计 - Hyggge‘s blog
+    
+  </title>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+
+	<body ontouchstart="" class="body--light body--light">
+
+
+		<!-- ThemeColor -->
+		
+		<!-- ThemeColor -->
+<style type="text/css">
+  .body--light {
+    --light-mode: none;
+    --dark-mode: block;
+  }
+  .body--dark {
+    --light-mode: block;
+    --dark-mode: none;
+  }
+  i.mdui-icon.material-icons.light-mode {
+    display: var(--light-mode);
+  }
+  i.mdui-icon.material-icons.dark-mode {
+    display: var(--dark-mode);
+  }
+</style>
+<div class="toggle" onclick="document.body.classList.toggle('body--dark')">
+  <i class="mdui-icon material-icons light-mode"></i>
+  <i class="mdui-icon material-icons dark-mode"></i>
+</div>
+<script>
+  //getCookieValue
+  function getCookieValue(a) {
+    var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b
+      ? b.pop()
+      : '';
+  }
+  let themeMode = 'light';
+  if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
+    let dbody = document.body.classList;
+    themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
+  }
+
+  //setCookieValue
+  var toggleBtn = document.querySelector(".toggle");
+  toggleBtn.addEventListener("click", function () {
+    var e = document.body.classList.contains("body--dark");
+    var cookieString = e
+      ? "dark"
+      : "light";
+    var exp = new Date();
+    exp.setTime(exp.getTime() + 3 * 24 * 60 * 60 * 1000); //3天过期
+    document.cookie = "sb-color-mode=" + cookieString + ";expires=" + exp.toGMTString() + ";path=/";
+  });
+</script>
+
+		
+
+		<!-- Gitter -->
+		
+		<!-- Gitter -->
+<!-- Docs:https://gitter.im/?utm_source=left-menu-logo -->
+<script>
+  ((window.gitter = {}).chat = {}).options = {
+    room: 'your-community/your-room'
+  };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+		
+
+		<!-- Navigation (contains search)-->
+		<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hyggge&#39;s Blog</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <!-- Known Issue, found by Hux: <nav>'s height woule be hold on by its content. so, when navbar scale out, the <nav> will cover tags. also mask any touch event of tags, unfortunately. -->
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/">HOME</a>
+          </li>
+
+          
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
+              
+              
+            </a>
+          </li>
+          
+          
+
+          
+          <li>
+            <a class="popup-trigger">
+              <span class="search-icon"></span>SEARCH</a>
+          </li>
+          
+
+          <!-- LangSelect -->
+          
+        </ul>
+      </div>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+<!-- progress -->
+<div id="progress">
+  <div class="line" style="width: 0%;"></div>
+</div>
+
+<script>
+  // Drop Bootstarp low-performance Navbar Use customize navbar with high-quality material design animation in high-perf jank-free CSS3 implementation
+  var $body = document.body;
+  var $toggle = document.querySelector('.navbar-toggle');
+  var $navbar = document.querySelector('#huxblog_navbar');
+  var $collapse = document.querySelector('.navbar-collapse');
+
+  $toggle.addEventListener('click', handleMagic)
+
+  function handleMagic(e) {
+    if ($navbar.className.indexOf('in') > 0) {
+      // CLOSE
+      $navbar.className = " ";
+      // wait until animation end.
+      setTimeout(function() {
+        // prevent frequently toggle
+        if ($navbar.className.indexOf('in') < 0) {
+          $collapse.style.height = "0px"
+        }
+      }, 400)
+    } else {
+      // OPEN
+      $collapse.style.height = "auto"
+      $navbar.className += " in";
+    }
+  }
+</script>
+
+
+		<!-- Post Header (contains intro-header、signature、wordcount、busuanzi、waveoverlay) -->
+		<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+
+  <style type="text/css">
+    .body--light {
+      /* intro-header */
+      --intro-header-background-image-url-home: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_china.jpg');
+    }
+    .body--dark {
+      --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_china.jpg');
+    }
+
+    header.intro-header {
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_china.jpg'); */
+      
+    }
+
+    
+      #signature {/*signature*/
+        background-image: url('/img/signature/vincent-white.png');
+      }
+    
+  </style>
+
+
+
+
+
+<header class="intro-header">
+  <!-- Signature -->
+  <div id="signature">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+              
+              <a class="tag" href="/tags/#面向对象" title="面向对象">面向对象</a>
+              
+            </div>
+            <h1>「BUAA-OO」第三单元:规格化设计</h1>
+            <h2 class="subheading">北航《面向对象设计与构造》课程第三单元：JML规格和契约式编程</h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-06-04
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">25</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">6k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- waveoverlay start -->
+  <div class="preview-overlay">
+    <svg class="preview-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+      </defs>
+      <g class="preview-parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill=var(--gentle-wave1)></use>
+        <use xlink:href="#gentle-wave" x="48" y="3" fill=var(--gentle-wave2)></use>
+        <use xlink:href="#gentle-wave" x="48" y="5" fill=var(--gentle-wave3)></use>
+        <use xlink:href="#gentle-wave" x="48" y="7" fill=var(--gentle-wave)></use>
+      </g>
+    </svg>
+  </div>
+  <!-- waveoverlay end -->
+  
+
+</header>
+
+
+
+		<!-- Main Content (Post contains
+	Pager、
+	tip、
+	socialshare、
+	gitalk、gitment、disqus-comment、
+	Catalog、
+	Sidebar、
+	Featured-Tags、
+	Friends Blog、
+	anchorjs、
+	) -->
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>第三单元的主题是“规格化设计”，要求我们学会理解JML规格语言，并能基于规格进行代码实现。总的来说，本单元的三次作业都比较简单，只需要根据课程组提供给的规格进行编程即可。但是，<strong>规格仅仅是一种契约</strong>，针对一种特定的规格可能会有很多实现方法，因此我们在编程时还需要特别注意代码运行的效率（否则很容易TLE）。</p>
+<p>我相信课程组开设这一单元的主要目的并不是要让我们学会使用JML这一语言（毕竟JML是真的冷门），而是想让我们在“面向规格编程”的过程中感受到“契约式编程”的魅力——<strong>高可靠性、高可复用性、便于测试…</strong></p>
+<hr>
+<h2 id="第一次作业分析"><a href="#第一次作业分析" class="headerlink" title="第一次作业分析"></a>第一次作业分析</h2><p><a href="">题目链接</a><br>第一次作业比较简单，只需要根据官方提供的Group、NetWork和Person这三个接口进行代码设计，实现简单社交关系的模拟和查询。</p>
+<h3 id="UML类图"><a href="#UML类图" class="headerlink" title="UML类图"></a>UML类图</h3><p><img src="1.svg" alt=""></p>
+<h3 id="代码架构分析"><a href="#代码架构分析" class="headerlink" title="代码架构分析"></a>代码架构分析</h3><p>这次作业我把重心放在代码效率的优化上，重点关注以下几个问题——</p>
+<ul>
+<li><strong>容器的选择</strong></li>
+<li><strong>计算类函数的优化</strong></li>
+<li><strong>并查集的优化</strong><h4 id="容器的选择"><a href="#容器的选择" class="headerlink" title="容器的选择"></a>容器的选择</h4>本次作业绝大多数指令都是通过<code>id</code>来寻找对应的<code>Group</code>或者<code>Person</code>。以<code>Person</code>为例，如果把所有的<code>Person</code>都放在一个<code>List</code>容器里，那么我们每次查找都需要遍历一遍容器，算法复杂度为$O(n)$，很容易出现TLE。</li>
+</ul>
+<p>最终，我选择了<code>HashMap</code>作为存储<code>Group</code>和<code>Person</code>的容器，将<code>id</code>作为键值，这样可以保证每次查询都能以$O(1)$的复杂度完成，大大降低超时的概率。</p>
+<h4 id="计算类函数的优化"><a href="#计算类函数的优化" class="headerlink" title="计算类函数的优化"></a>计算类函数的优化</h4><p>本次作业有三个计算类函数——<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*@ ensures \result == (\sum int i; 0 &lt;= i &amp;&amp; i &lt; people.length; </span></span><br><span class="line"><span class="comment">  @          (\sum int j; 0 &lt;= j &amp;&amp; j &lt; people.length &amp;&amp; </span></span><br><span class="line"><span class="comment">  @           people[i].isLinked(people[j]); people[i].queryValue(people[j])));</span></span><br><span class="line"><span class="comment">  @*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="comment">/*@ pure @*/</span> <span class="function"><span class="keyword">int</span> <span class="title">getValueSum</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*@ ensures \result == (people.length == 0? 0:</span></span><br><span class="line"><span class="comment">  @          ((\sum int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getAge()) / people.length));</span></span><br><span class="line"><span class="comment">  @*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="comment">/*@ pure @*/</span> <span class="function"><span class="keyword">int</span> <span class="title">getAgeMean</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*@ ensures \result == (people.length == 0? 0 : ((\sum int i; 0 &lt;= i &amp;&amp; i &lt; people.length; </span></span><br><span class="line"><span class="comment">  @          (people[i].getAge() - getAgeMean()) * (people[i].getAge() - getAgeMean())) / </span></span><br><span class="line"><span class="comment">  @           people.length));</span></span><br><span class="line"><span class="comment">  @*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="comment">/*@ pure @*/</span> <span class="function"><span class="keyword">int</span> <span class="title">getAgeVar</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure><br>为了进一步提高代码效率，我对这几个函数中需要计算的数据进行了维护。以getAgeMean()为例，我设置了一个<code>ageSum</code>用来表示group中所有人年龄总和，每次向<code>group</code>中加人时维护<code>ageSum</code>，在<code>getAgeMean</code>直接返回<code>ageSum/people.size()</code>即可。</p>
+<p>在函数<code>getAgeVar()</code>中还隐藏着一个坑——因为<code>getAgeMean()</code>的返回值已经被向下取整了，因此$\frac{\sum<em>{i = 1}^n(age_i - ageMean)^2}{n}$ 不恒等于 $\frac{(\sum</em>{i=1}^nage<em>i^2) - n\times ageMean^2}{n}$。正确的做法是将其拆解为$\frac{(\sum</em>{i=1}^nage<em>i^2) - 2\times ageMean \times(\sum</em>{i=1}^nage_i)+ n\times ageMean^2}{n}$，同时，我们还需要设置一个<code>agePowSum</code>变量表示年龄平方和，也是每次在加人的时候维护。这样在调用<code>getAgeVar()</code>函数时，我们只需要将<code>ageSum</code>和<code>agePowSum</code>代入即可，同样可以保证计算复杂度为$O(1)$。</p>
+<h4 id="并查集的优化"><a href="#并查集的优化" class="headerlink" title="并查集的优化"></a>并查集的优化</h4><p>本次作业中的<code>isLinked()</code>函数要求查询两个<code>Person</code>之间的连通性，对于这个问题，我们当然可以用<strong>dfs</strong>递归查询，复杂度并不算高，但也不算优秀。所以有没有有比dfs复杂度更低的方法呢？ 答案当然是有，<strong>我们可以采用并查集算法进行优化</strong>。（对于并查集算法的原理，<a target="_blank" rel="noopener" href="http://oo.buaa.edu.cn/assignment/344/discussion/1182">讨论区的教学帖</a>已经讲得很清楚了，此处不再赘述。）</p>
+<p>为了更好的符合“面向对象”的设计思想，我们可以将并查集封装成类，在类中用<code>HashMap</code>来存储结点的父子关系，用<code>find()</code>、<code>merge()</code>、<code>add()</code>等方法封装并查集的相关操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DisjointSet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; pre;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; rank;     <span class="comment">// 在“按秩合并”里用到</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DisjointSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.pre = <span class="keyword">new</span> HashMap&lt;&gt;(<span class="number">2048</span>);</span><br><span class="line">        <span class="keyword">this</span>.rank = <span class="keyword">new</span> HashMap&lt;&gt;(<span class="number">2048</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!pre.containsKey(id)) &#123;</span><br><span class="line">            pre.put(id, id);</span><br><span class="line">            rank.put(id, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;...&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> id1, <span class="keyword">int</span> id2)</span> </span>&#123;...&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>此外，为了进一步减小复杂度，我对并查集做了两种优化——</p>
+<ul>
+<li><p><strong>路径压缩:</strong></p>
+<p>  当我们查找一个元素所在集合的代表元时，可以将查找路径上所有元素的直接上级设为代表元。<br>  <img src="路径压缩.png" alt=""></p>
+<p>  我们可以直接在<code>find</code>函数里实现这个优化</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> rep = id; <span class="comment">//representation element</span></span><br><span class="line">    <span class="keyword">while</span> (rep != pre.get(rep)) &#123;</span><br><span class="line">        rep = pre.get(rep);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> now = id;</span><br><span class="line">    <span class="keyword">while</span> (now != rep) &#123;</span><br><span class="line">        <span class="keyword">int</span> fa = pre.get(now);</span><br><span class="line">        pre.put(now, rep);</span><br><span class="line">        now = fa;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：不能使用递归的方法来寻找代表元，否则很可能会爆栈。</p>
+</blockquote>
+</li>
+<li><p><strong>按秩合并:</strong></p>
+<p>  由于我们在找出一个元素所在集合的代表元时需要递归地找出它所在的树的根结点，所以为了减短查找路径，在合并两棵树时要尽量使合并后的树的高度降低，所以要将高度低的树指向高度更高的那棵。我们将树的高度称为秩，合并时将 <strong>“小秩”集合的代表元</strong>的直接上级设为 <strong>“大秩”集合的代表元</strong>。<br>  <img src="按秩合并.png" alt=""></p>
+<p>  我们需要在<code>merge</code>函数里实现这个优化</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> id1, <span class="keyword">int</span> id2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fa1 = find(id1);</span><br><span class="line">    <span class="keyword">int</span> fa2 = find(id2);</span><br><span class="line">    <span class="keyword">if</span> (fa1 == fa2) &#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> rank1 = rank.get(fa1);</span><br><span class="line">    <span class="keyword">int</span> rank2 = rank.get(fa2);</span><br><span class="line">    <span class="keyword">if</span> (rank1 &lt; rank2) &#123;</span><br><span class="line">        pre.put(fa1, fa2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (rank1 == rank2) &#123;</span><br><span class="line">            rank.put(fa1, rank1 + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        pre.put(fa2, fa1);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="第二次作业分析"><a href="#第二次作业分析" class="headerlink" title="第二次作业分析"></a>第二次作业分析</h2><p><a href="">题目链接</a><br>第二次作业新增了message类，要求我们根据规格进一步实现消息增加、消息发送等功能。</p>
+<h3 id="UML类图-1"><a href="#UML类图-1" class="headerlink" title="UML类图"></a>UML类图</h3><p><img src="2.svg" alt=""></p>
+<h3 id="代码架构分析-1"><a href="#代码架构分析-1" class="headerlink" title="代码架构分析"></a>代码架构分析</h3><p>这次作业又增加了几个查询指令，可以直接用第一次作业的方法来减小复杂度（选择map、设置变量维护等等）。除此之外，我们还需要特别关注<code>query_least_connection</code>这个指令。</p>
+<p>这个指令的JML描述实在是太冗长了，不过核心思想很简单，就是要求我们得到<strong>person_id所在联通分支的最小生成树</strong>，并算出最小生成树里所有边的权重和。一般来说，最小生成树的计算方法有两种——<strong>Kurskal算法和Prim算法</strong>，因为我在第一次作业已经封装好了并查集类<code>DisjointSet</code>，自然使用<strong>Kurskal算法</strong>会更方便一点。</p>
+<p>选择好了算法，我们还需要关注两个问题——</p>
+<ul>
+<li>如何获得<code>person_id</code>所在的连通分支？（只需获得连通分支里所有点和边即可）</li>
+<li>如何对算法进行优化？</li>
+</ul>
+<h4 id="联通分支的获取"><a href="#联通分支的获取" class="headerlink" title="联通分支的获取"></a>联通分支的获取</h4><p>在第一次作业中，我们已经实现了并查集，并且将<code>Network</code>里所有的点都加入到这个并查集里（我们姑且将这个并查集称为 <strong>“全局并查集”</strong>，把Kruskal算法实现里的并查集称为 <strong>“临时并查集”</strong>）。这样，我们就可以遍历所有的边，<strong>只要边的某个端点和person_id在一个连通分支里，那么这个边和它的两个端点都属于person_id所在的连通分支</strong>。具体遍历过程如下——</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">queryLeastConnection</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> PersonIdNotFoundException </span>&#123;</span><br><span class="line">    <span class="comment">//tempSet为临时并查集，存储联通分支里所有的点</span></span><br><span class="line">    DisjointSet tempSet = <span class="keyword">new</span> DisjointSet();</span><br><span class="line">    <span class="comment">//tempedges为临时点集，存储连通分支里所有的边</span></span><br><span class="line">    ArrayList&lt;Edge&gt; tempEdges = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//遍历所有的点</span></span><br><span class="line">    <span class="keyword">for</span> (Edge edge : edges) &#123;</span><br><span class="line">        <span class="keyword">int</span> id1 = edge.getId1();</span><br><span class="line">        <span class="keyword">int</span> id2 = edge.getId2();</span><br><span class="line">        <span class="keyword">if</span> (disjointSet.find(id1) == disjointSet.find(id)) &#123;</span><br><span class="line">            tempSet.add(id1);</span><br><span class="line">            tempSet.add(id2);</span><br><span class="line">            tempEdges.add(edge);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了方便，我将边单独封装成类（<code>Edge</code>），类中记录<code>Edge</code>的两端点id和边的权重，并在<code>Network</code>里设置<code>edges</code>来储存所有的<code>Edge</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Edge</span> <span class="keyword">implements</span> <span class="title">Comparable</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> value;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> id1;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> id2;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Kruskal算法优化"><a href="#Kruskal算法优化" class="headerlink" title="Kruskal算法优化"></a>Kruskal算法优化</h4><p>标准Kruskal算法需要先对连通分支里所有的边进行排序，然后遍历所有的边，每次选择一个权重最小的边加入生成树。对于这个过程，我们可以采用<strong>优先队列</strong>进行优化。只需要将前面维护的<code>tempSet</code>传入<code>PriorityQueue类</code>的构造方法里，就可以得到一个由边组成的优先队列，这样每次就可以从队首获取一个最小边。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">queryLeastConnection</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> PersonIdNotFoundException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!people.containsKey(id)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MyPersonIdNotFoundException(id);</span><br><span class="line">    &#125;</span><br><span class="line">    DisjointSet tempSet = <span class="keyword">new</span> DisjointSet();</span><br><span class="line">    ArrayList&lt;Edge&gt; tempEdges = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Edge edge : edges) &#123;</span><br><span class="line">        <span class="keyword">int</span> id1 = edge.getId1();</span><br><span class="line">        <span class="keyword">int</span> id2 = edge.getId2();</span><br><span class="line">        <span class="keyword">if</span> (disjointSet.find(id1) == disjointSet.find(id)) &#123;</span><br><span class="line">            tempSet.add(id1);</span><br><span class="line">            tempSet.add(id2);</span><br><span class="line">            tempEdges.add(edge);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> times = tempSet.getSize();</span><br><span class="line">    <span class="comment">//构造优先队列</span></span><br><span class="line">    PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(tempEdges);</span><br><span class="line">    <span class="comment">//遍历优先队列，每次从队首获取最小边</span></span><br><span class="line">    <span class="keyword">while</span> (!priorityQueue.isEmpty() &amp;&amp; times &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        Edge edge = priorityQueue.peek();</span><br><span class="line">        <span class="keyword">int</span> id1 = edge.getId1();</span><br><span class="line">        <span class="keyword">int</span> id2 = edge.getId2();</span><br><span class="line">        <span class="keyword">if</span> (tempSet.find(id1) != tempSet.find(id2)) &#123;</span><br><span class="line">            tempSet.merge(id1, id2);</span><br><span class="line">            ans += edge.getValue();</span><br><span class="line">            --times;</span><br><span class="line">        &#125;</span><br><span class="line">        priorityQueue.poll();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="第三次作业分析"><a href="#第三次作业分析" class="headerlink" title="第三次作业分析"></a>第三次作业分析</h2><p><a href="">题目链接</a><br>第三次作业将第二次作业中的<code>Message</code>进行了泛化，增加了继承自Message的许多新消息类型——<code>red_envelope_message</code>、<code>notice_message</code>和<code>emoji_message</code>。这些消息的增加和传递方式有所变化，只需要对照JML对代码稍作修改即可</p>
+<h3 id="UML类图-2"><a href="#UML类图-2" class="headerlink" title="UML类图"></a>UML类图</h3><p><img src="3.svg" alt=""></p>
+<h3 id="代码架构分析-2"><a href="#代码架构分析-2" class="headerlink" title="代码架构分析"></a>代码架构分析</h3><h4 id="迭代器删除"><a href="#迭代器删除" class="headerlink" title="迭代器删除"></a>迭代器删除</h4><p>本次作业中的<code>delete_code_emoji</code>指令涉及到了对容器内容进行删除，如果直接在遍历时删除，很可能会出现意想不到RE错误。但是，使用迭代器对容器内容进行遍历和删除操作则不会出现问题。</p>
+<p>在前几次作业里，我只用迭代器删除过<code>List</code>和<code>Set</code>里的元素。然而在这次作业里，为了减少时间复杂度我使用了<code>Map</code>作为容器，<strong>Map中键值对的删除操作与List、Set稍有不同</strong>——</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">deleteColdEmoji</span><span class="params">(<span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">    Iterator it;</span><br><span class="line">    it = emojis.entrySet().iterator();</span><br><span class="line">    <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">        Map.Entry entry = (Map.Entry) it.next();</span><br><span class="line">        <span class="keyword">if</span> ((Integer)(entry.getValue()) &lt; limit) &#123;</span><br><span class="line">            it.remove();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="最短路径的求解"><a href="#最短路径的求解" class="headerlink" title="最短路径的求解"></a>最短路径的求解</h4><p>前两次作业中都有和图论算法相关的问题，第三次作业作为压轴，自然也少不了。这次作业中<code>sendIndirectMessage</code>就是要求我们找一个最短路径，并将消息沿着该路径发送给指定的人，本质上就是一个 <strong>单源最短路径问题</strong>。</p>
+<p>谈到最短路径，我们首先想到的自然是<strong>以”松弛”为特色的Dijkstra算法</strong>。不过标准Dijstra算法的复杂度其实是$O(n^2)$，当图的规模比较大、查询指令比较多的时候很容易出现TLE。因此，我们还需要<strong>使用堆进行优化</strong>。</p>
+<p>我单独设置了一个函数来封装Dijstra算法的实现过程，该函数返回一个HashMap，key为person的id，value是出发点到person之间最短路径的长度。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; <span class="title">dijkstra</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 记录出发点到各个节点之间的距离</span></span><br><span class="line">    HashMap&lt;Integer, Integer&gt; dis = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">// 记录某个节点是否被访问过</span></span><br><span class="line">    HashMap&lt;Integer, Boolean&gt; vis = <span class="keyword">new</span> HashMap&lt;&gt;(); </span><br><span class="line">    <span class="comment">// 创建优先队列</span></span><br><span class="line">    PriorityQueue&lt;Node&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// dis和vis的初始化</span></span><br><span class="line">    <span class="keyword">for</span> (Integer i : people.keySet()) &#123;</span><br><span class="line">        dis.put(i, Integer.MAX_VALUE);</span><br><span class="line">        vis.put(i, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    dis.put(id, <span class="number">0</span>);</span><br><span class="line">    heap.add(<span class="keyword">new</span> Node(id, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 算法核心流程</span></span><br><span class="line">    <span class="keyword">while</span> (!heap.isEmpty()) &#123;</span><br><span class="line">        Node cur = heap.poll();</span><br><span class="line">        <span class="keyword">int</span> curId = cur.getTo();</span><br><span class="line">        <span class="keyword">if</span> (vis.get(curId)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        vis.put(curId, <span class="keyword">true</span>);</span><br><span class="line">        MyPerson person = (MyPerson) people.get(curId);</span><br><span class="line">        <span class="keyword">for</span> (Integer friendId : person.getFriends()) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = person.queryValueById(friendId);</span><br><span class="line">            <span class="keyword">if</span> (!vis.get(friendId) &amp;&amp; dis.get(curId) + w &lt; dis.get(friendId)) &#123;</span><br><span class="line">                dis.put(friendId, dis.get(curId) + w);</span><br><span class="line">                heap.add(<span class="keyword">new</span> Node(friendId, dis.get(friendId)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述代码中，优先队列中存储的是我封装好的<code>Node</code>类，<code>Node</code>类中存储dis容器中的键值对，同时还需要重写<code>compareTo</code>方法，以便于优先队列的创建和维护。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> to;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> to, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.to = to;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.value - o.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getTo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> to;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处还有一个优化思路，我们的<code>dijkstra()</code>函数返回的是一个存储“开始节点到所有节点的最短距离”的HashMap，然而我们在查询的时候仅访问了这个HashMap中的一个<strong>键值对</strong>，很显然是比较浪费的。因此，我们可以在全局维护一个<strong>存储若干HashMap的容器</strong>（当然这个容器也可以是HashMap），每次调用<code>dijkstra()</code>都将得到的结果存放这个容器里，以便重复使用。需要注意的是，每次在图里增添节点（即person）后，该容器里所有的HashMap都失效了，可以设置一个<code>dirty</code>变量来记录。</p>
+<hr>
+<h2 id="个人bug分析"><a href="#个人bug分析" class="headerlink" title="个人bug分析"></a>个人bug分析</h2><p>在三次作业的强测和互测中均没有出现bug。</p>
+<h2 id="关于测试"><a href="#关于测试" class="headerlink" title="关于测试"></a>关于测试</h2><p>本单元还是延续自动化测试的传统。</p>
+<p>因为对于每个指令都有唯一正确的输出，所以我们可以通过 <strong>“对拍+文本比较”</strong> 的方式对正确性进行验证。但是，如何编写数据生成器来生成高强度的数据呢？</p>
+<p>数据生成器这个东西，写起来说容易也容易，说难也难——容易在我们可以直接对照着数据指令的格式，使用随机数的方法无脑造数据，但是<strong>难在无法保证数据的强度</strong>。尤其是这一单元涉及到了图的建立，如果完全随机生成数据的话，图的复杂度可能会非常低（例如图中大多数都是孤立结点）。</p>
+<p>因此，我们不能完全依靠随机数生成指令。</p>
+<h3 id="采用数据结构存储状态"><a href="#采用数据结构存储状态" class="headerlink" title="采用数据结构存储状态"></a>采用数据结构存储状态</h3><p>为了提高数据的强度，我在数据生成器里设置一些数据结构，存储 <strong>“所有group、person、message的id”，”group和person之间的关联关系”、”当前生成的图的状态（如连通性）”</strong> 等等。每当需要生成一个指令，我们都需要参考数据结构，根据数据状态进行生成。此外，在生成指令时，我们还需要对相关数据结构进行维护。</p>
+<p>我的数据生成器里设置了如下几个数据结构——<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各个id的集合</span></span><br><span class="line">person_id_set = <span class="built_in">set</span>()</span><br><span class="line">group_id_set = <span class="built_in">set</span>()</span><br><span class="line">msg_id_set = <span class="built_in">set</span>()</span><br><span class="line">emoji_id_set = <span class="built_in">set</span>()</span><br><span class="line">money_msg_id_set = <span class="built_in">set</span>()</span><br><span class="line">emoji_msg_id_set = <span class="built_in">set</span>()</span><br><span class="line">notice_msg_id_set = <span class="built_in">set</span>()</span><br><span class="line"></span><br><span class="line">link_map = &#123;&#125;           <span class="comment"># 记录person之间的联通关系</span></span><br><span class="line">group_map = &#123;&#125;          <span class="comment"># 记录每个group下所有person的id</span></span><br><span class="line">msg_info_map = &#123;&#125;       <span class="comment"># 记录每个message的相关信息</span></span><br><span class="line">emoji_heat_map = &#123;&#125;     <span class="comment"># 记录所有emoji </span></span><br><span class="line"></span><br><span class="line">max_heat = <span class="number">0</span>            <span class="comment"># 记录emoji的最大热度</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="面向JML生成数据"><a href="#面向JML生成数据" class="headerlink" title="面向JML生成数据"></a>面向JML生成数据</h3><p>JML规格中已经描述了每个方法可能出现的各种正常、异常情况，我们在生成每个方法对应的指令时，一定要为每种情况设置一定的出现概率，而这也需要数据结构来保证。</p>
+<p>举个非常简单的例子，<code>add_person</code>方法要求我们向<code>Network</code>里加入一个<code>Person</code>，JML规格如下所示——<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*@ public normal_behavior</span></span><br><span class="line"><span class="comment">     @ requires !(\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].equals(person));</span></span><br><span class="line"><span class="comment">     @ assignable people;</span></span><br><span class="line"><span class="comment">     @ ensures people.length == \old(people.length) + 1;</span></span><br><span class="line"><span class="comment">     @ ensures (\forall int i; 0 &lt;= i &amp;&amp; i &lt; \old(people.length);</span></span><br><span class="line"><span class="comment">     @          (\exists int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j] == (\old(people[i]))));</span></span><br><span class="line"><span class="comment">     @ ensures (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i] == person);</span></span><br><span class="line"><span class="comment">     @ also</span></span><br><span class="line"><span class="comment">     @ public exceptional_behavior</span></span><br><span class="line"><span class="comment">     @ signals (EqualPersonIdException e) (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length;</span></span><br><span class="line"><span class="comment">     @                                     people[i].equals(person));</span></span><br><span class="line"><span class="comment">     @*/</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPerson</span><span class="params">(<span class="comment">/*@ non_null @*/</span>Person person)</span> <span class="keyword">throws</span> EqualPersonIdException</span>;</span><br></pre></td></tr></table></figure><br>通过JML规格可以看出，这个方法在执行时可能出现两种情况—— <strong>“Person以前不在Network里”</strong> 和 <strong>“Person本来就在Network里”</strong>。我们生成的数据需要涵盖这两种情况，而且要保证每种情况都有较大的出现概率（可以给每一情况分配0.5的概率）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_unexist_id</span>(<span class="params">id_set</span>) :</span>            <span class="comment"># 封装成函数，可以在生成其他指令时使用</span></span><br><span class="line">    <span class="built_in">id</span> = random.randint(<span class="built_in">min</span>, <span class="built_in">max</span>)</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">id</span> <span class="keyword">in</span> id_set) :</span><br><span class="line">        <span class="built_in">id</span> = random.randint(<span class="built_in">min</span>, <span class="built_in">max</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_exist_id</span>(<span class="params">id_set</span>) :</span>              <span class="comment"># 封装成函数，可以在在生成其他指令时使用</span></span><br><span class="line">    <span class="built_in">id</span> = random.choice(<span class="built_in">list</span>(id_set))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_person</span>() :</span></span><br><span class="line">    prob = random.uniform(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 50%的概率person在Network里</span></span><br><span class="line">    <span class="keyword">if</span> (prob &lt; <span class="number">0.5</span> <span class="keyword">and</span> person_id_set) :</span><br><span class="line">        <span class="built_in">id</span> = get_exist_id(person_id_set)</span><br><span class="line">        <span class="comment"># 维护数据结构</span></span><br><span class="line">        person_id_set.add(<span class="built_in">id</span>)</span><br><span class="line">        link_map[<span class="built_in">id</span>] = []</span><br><span class="line">        disjoint_set.add(<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 50%的概率person不在Network里</span></span><br><span class="line">    <span class="keyword">else</span> :</span><br><span class="line">        <span class="built_in">id</span> = get_unexist_id(person_id_set, <span class="built_in">min</span>, <span class="built_in">max</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ap &quot;</span> + <span class="built_in">id</span> + <span class="string">&quot; &quot;</span> + get_name() + <span class="string">&quot; &quot;</span> + get_age()</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>当然，有些方法涉及到的情况比较复杂。例如add_relation、add_to_group等许多方法需要获得 <strong>“两个person的id”</strong> 或者是 <strong>“一个person和一个group的id”</strong>，并根据两个id之间的关系进入不同的情况分支。</p>
+<p>为了更好的实现代码复用，我在数据生成器里设置了<code>get_double_person_id</code>和<code>get_person_group_id</code>两个函数来分别生成 <strong>“两个person的id”</strong> 或者是 <strong>“一个person和一个group的id”</strong>。</p>
+<p><code>get_double_person_id</code>中生成的两个personId的关系有以下四种</p>
+<ul>
+<li>person1和person2都不存在</li>
+<li>person1和person2只有一个存在</li>
+<li>person1和person2都存在，且两个person不邻接</li>
+<li>person1和person2都存在，且两个person邻接</li>
+</ul>
+<p><code>get_person_group_id</code>中生成的personId和groupId的关系有以下五种</p>
+<ul>
+<li>person不存在，group不存在</li>
+<li>person不存在，group存在</li>
+<li>person存在，group不存在</li>
+<li>person存在，group存在，person在group里面</li>
+<li>person存在，group存在，person不在在group里面</li>
+</ul>
+<p>我们可以通过查询数据结构来生成不同关系的id，但同样也需要设置概率来保证每一种关系的两个id都有可能被生成。</p>
+<h4 id="数据生成器整体架构"><a href="#数据生成器整体架构" class="headerlink" title="数据生成器整体架构"></a>数据生成器整体架构</h4><p>数据生成器的整体架构如下所示——<br><figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">instr_list = [<span class="string">&#x27;ap&#x27;</span>, <span class="string">&#x27;ar&#x27;</span>, <span class="string">&#x27;qv&#x27;</span>, <span class="string">&#x27;qps&#x27;</span>, <span class="string">&#x27;qci&#x27;</span>, <span class="string">&#x27;qbs&#x27;</span>, <span class="string">&#x27;ag&#x27;</span>, <span class="string">&#x27;atg&#x27;</span>, <span class="string">&#x27;dfg&#x27;</span>, </span><br><span class="line">                <span class="string">&#x27;qgps&#x27;</span>, <span class="string">&#x27;qgvs&#x27;</span>, <span class="string">&#x27;qgav&#x27;</span>, <span class="string">&#x27;am&#x27;</span>, <span class="string">&#x27;sm&#x27;</span>, <span class="string">&#x27;qsv&#x27;</span>, <span class="string">&#x27;qrm&#x27;</span>, <span class="string">&#x27;qlc&#x27;</span>, </span><br><span class="line">                <span class="string">&#x27;arem&#x27;</span>, <span class="string">&#x27;anm&#x27;</span>, <span class="string">&#x27;cn&#x27;</span>, <span class="string">&#x27;aem&#x27;</span>, <span class="string">&#x27;sei&#x27;</span>, <span class="string">&#x27;qp&#x27;</span>, <span class="string">&#x27;qm&#x27;</span>, <span class="string">&#x27;sim&#x27;</span>, <span class="string">&#x27;dce&#x27;</span>]</span><br><span class="line"></span><br><span class="line">def add_message()</span><br><span class="line">def add_relationship() </span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line">def get_instr(<span class="keyword">instr</span>) :</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">instr</span> == <span class="string">&#x27;ap&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_person()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;ar&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_relation()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qv&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_value()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qps&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_people_sum()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qci&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_circle()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qbs&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_block_sum()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;ag&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_group()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;atg&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_to_group()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;dfg&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> del_from_group()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qgps&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_group_people_sum()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qgvs&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_group_value_sum()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qgav&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_group_age_var() </span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;am&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_message()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;sm&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> send_message() </span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qsv&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_social_value()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qrm&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_received_messages()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qlc&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_least_connection()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;arem&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_red_envelope_messages()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;anm&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_notice_messages()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;cn&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> clean_notices()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;aem&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> add_emoji_messages()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;sei&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> store_emoji_id()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qp&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_popularity()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;dce&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> delete_cold_emoji()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;qm&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> query_money()</span><br><span class="line">    elif (<span class="keyword">instr</span> == <span class="string">&#x27;sim&#x27;</span>) :</span><br><span class="line">        <span class="keyword">return</span> send_indirect_message()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="meta"># f = open(<span class="meta-string">&quot;data.txt&quot;</span>, <span class="meta-string">&quot;w&quot;</span>)</span></span><br><span class="line">    <span class="meta"># sys.stdout = f</span></span><br><span class="line">    n = <span class="number">4999</span></span><br><span class="line">    <span class="keyword">for</span> i in range(n) :</span><br><span class="line">        instr_type = random.choice(instr_list)</span><br><span class="line">        <span class="keyword">instr</span> = get_instr(instr_type)</span><br><span class="line">        <span class="keyword">print</span>(<span class="keyword">instr</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>上面展示的仅仅是一个框架，在真正实现时还有很多细节需要注意。</p>
+<h2 id="Network扩展"><a href="#Network扩展" class="headerlink" title="Network扩展"></a>Network扩展</h2><p>假设出现了几种不同的Person</p>
+<ul>
+<li><strong>Advertiser</strong>：持续向外发送产品广告</li>
+<li><strong>Producer</strong>：产品生产商，通过Advertiser来销售产品</li>
+<li><strong>Customer</strong>：消费者，会关注广告并选择和自己偏好匹配的产品来购买 — 所谓购买，就是直接通过Advertiser给相应Producer发一个购买消息</li>
+<li><strong>Person</strong>：吃瓜群众，不发广告，不买东西，不卖东西</li>
+</ul>
+<p>如此Network可以支持市场营销，并能查询某种商品的销售额和销售路径等 请讨论如何对Network扩展，给出相关接口方法，并选择3个核心业务功能的接口方法撰写JML规格（借鉴所总结的JML规格模式）</p>
+<p>基于面向对象的思想，我们需要对Advertiser、Producer和Customer分别建类，并且这些类继承自Person。通过分析这几种Person的职责，我们可以发现他们之间有着很强的关联关系，如下所示——</p>
+<ul>
+<li>Advertiser可以向Customer发送广告消息，考虑到Advertiser可能和很多的Customer关联（即作为成员变量），我们可以采用观察者模式将信息传递出去。Customer接收到消息后，只需要将这个Advertiser作为自己成员变量即可。</li>
+<li>Customer想要购买某个商品时，需要把购买信息传递给Advertiser。在此之前，我们已经将Advertiser作为customer的成员变量了，那么只需调用Advertiser成员的相关方法来完成购买信息的传递。</li>
+<li>Advertiser在收到来自于Customer的购买消息时，需要立刻将这些消息传递给Producer。同样，我们可以提前将雇佣Advertiser的Producer作为Advertiser的成员变量，即建立关联关系，这样Advertiser只需要调用Producer的某个方法即可实现消息传递。</li>
+<li>Producer收到购买消息后，销售额需要减1<blockquote>
+<p>在此我们假定：一个Producer只生产一种产品；一个Advertiser只为一个Producer做广告，但是可以向多个Custormer宣传。</p>
+</blockquote>
+</li>
+</ul>
+<p>下面我对三个核心业务功能的接口方法编写JML规格——</p>
+<ul>
+<li>查询Producer的销售额——querySale<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> @ public normal_behavior</span></span><br><span class="line"><span class="comment"> @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Producer);</span></span><br><span class="line"><span class="comment"> @ assignable \nothing;</span></span><br><span class="line"><span class="comment"> @ ensures  (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; \results = people[i].sale);</span></span><br><span class="line"><span class="comment"> @ also</span></span><br><span class="line"><span class="comment"> @ public exceptional_behavior</span></span><br><span class="line"><span class="comment"> @ signals (PersonIdNotFoundException e) !(\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Producer)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="comment">/*@ pure @*/</span> <span class="function"><span class="keyword">int</span> <span class="title">querySale</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> PersonIdNotFoundException</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>发送广告——sendAllAd</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> @ public normal_behavior</span></span><br><span class="line"><span class="comment"> @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser &amp;&amp; </span></span><br><span class="line"><span class="comment">            (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j].getId() == id &amp;&amp; people[j] instanceof Customer &amp;&amp; </span></span><br><span class="line"><span class="comment">            (\forall int k; 0 &lt;= k &amp;&amp; k &lt; people[j].ads.length; people[j].ads[k].getId() != people[i].getAdId()))) ;</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> @ assignable people[*];</span></span><br><span class="line"><span class="comment"> @ ensures  (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser &amp;&amp; </span></span><br><span class="line"><span class="comment">            (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j].getId() == id &amp;&amp; people[j] instanceof Customer &amp;&amp; </span></span><br><span class="line"><span class="comment">            (\exists int k; 0 &lt;= k &amp;&amp; k &lt; people[j].ads.length; people[j].ads[k].getId() == people[i].getAdId()))) ;</span></span><br><span class="line"><span class="comment"> @ also</span></span><br><span class="line"><span class="comment"> @ public exceptional_behavior</span></span><br><span class="line"><span class="comment"> @ signals (PersonIdNotFoundException e) !(\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Producer);</span></span><br><span class="line"><span class="comment"> @ also</span></span><br><span class="line"><span class="comment"> @ public exceptional_behavior</span></span><br><span class="line"><span class="comment"> @ signals (AdIdNotFoundException e) (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser &amp;&amp; </span></span><br><span class="line"><span class="comment">                                     (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j].getId() == id &amp;&amp; people[j] instanceof Customer &amp;&amp; </span></span><br><span class="line"><span class="comment">                                     (\exists int k; 0 &lt;= k &amp;&amp; k &lt; people[j].ads.length; people[j].ads[k].getId() == people[i].getAdId()))) ;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="comment">/*@ pure @*/</span>  sendAd(<span class="keyword">int</span> id) <span class="keyword">throws</span> PersonIdNotFoundException, AdIdNotFoundException;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获得某个消费者收到的所有广告——queryAllAds</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> @ public normal_behavior</span></span><br><span class="line"><span class="comment"> @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser);</span></span><br><span class="line"><span class="comment"> @ assignable \nothing;</span></span><br><span class="line"><span class="comment"> @ ensures  (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser &amp;&amp;</span></span><br><span class="line"><span class="comment">            (\result.size() == people[i].ads.length) &amp;&amp;  </span></span><br><span class="line"><span class="comment">            (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people[i].ads.length; people[i].ads[j] == \result.get(j));</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="comment">/*@ pure @*/</span> <span class="function">List&lt;Ad&gt; <span class="title">queryAllAds</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> PersonIdNotFoundException</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="心得体会"><a href="#心得体会" class="headerlink" title="心得体会"></a>心得体会</h2></li>
+<li>在本单元，我学会了理解和书写JML规格，并初次接触到了<strong>“契约式编程”</strong>，感受到了按照契约编程的诸多优势——<strong>高可靠性、高可复用性、便于测试</strong>。不过，三次作业能够囊括的知识毕竟很少，我对”契约式编程”也只是浅尝辄止的程度，以后还要多多探索和使用。</li>
+<li>本单元的三次作业帮助我复习了很多图论算法——<strong>并查集、最小生成树、单源最短路径</strong>等等。此外，作业的性能要求也push我学会了很多优化方法，让我进一步体会到了算法的魅力。</li>
+<li>本单元同样也锻炼了我写数据生成器的能力。为了提高数据的强度，我需要一边看JML规格，一边编写数据生成器，而这个过程也让我加深了对JML的理解。</li>
+</ul>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2022/05/30/OS-Lab5函数解读/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab5函数解读">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OO」第三单元:规格化设计&body=Hi,I found this website and thought you might like it http://example.com/2022/06/04/OO-第三单元总结/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Sat Jun 04 2022 12:34:10 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BD%9C%E4%B8%9A%E5%88%86%E6%9E%90"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">第一次作业分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#UML%E7%B1%BB%E5%9B%BE"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">UML类图</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">代码架构分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">容器的选择</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E7%B1%BB%E5%87%BD%E6%95%B0%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">计算类函数的优化</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">并查集的优化</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A%E5%88%86%E6%9E%90"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">第二次作业分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#UML%E7%B1%BB%E5%9B%BE-1"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">UML类图</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90-1"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">代码架构分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%81%94%E9%80%9A%E5%88%86%E6%94%AF%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text">联通分支的获取</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Kruskal%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text">Kruskal算法优化</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AC%A1%E4%BD%9C%E4%B8%9A%E5%88%86%E6%9E%90"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">第三次作业分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#UML%E7%B1%BB%E5%9B%BE-2"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">UML类图</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90-2"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">代码架构分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%88%A0%E9%99%A4"><span class="toc-nav-number">4.2.1.</span> <span class="toc-nav-text">迭代器删除</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%9A%84%E6%B1%82%E8%A7%A3"><span class="toc-nav-number">4.2.2.</span> <span class="toc-nav-text">最短路径的求解</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%B8%AA%E4%BA%BAbug%E5%88%86%E6%9E%90"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">个人bug分析</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%85%B3%E4%BA%8E%E6%B5%8B%E8%AF%95"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">关于测试</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%87%87%E7%94%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%98%E5%82%A8%E7%8A%B6%E6%80%81"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">采用数据结构存储状态</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%9D%A2%E5%90%91JML%E7%94%9F%E6%88%90%E6%95%B0%E6%8D%AE"><span class="toc-nav-number">6.2.</span> <span class="toc-nav-text">面向JML生成数据</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E5%99%A8%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-nav-number">6.2.1.</span> <span class="toc-nav-text">数据生成器整体架构</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Network%E6%89%A9%E5%B1%95"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">Network扩展</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BF%83%E5%BE%97%E4%BD%93%E4%BC%9A"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">心得体会</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+            
+            <a class="tag" href="/tags/#面向对象" title="面向对象">面向对象</a>
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
+
+
+		<!-- Footer (contains ThemeColor、viewer) -->
+		<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center">
+          
+
+          
+            <li>
+              <a target="_blank" href="https://github.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+            <li>
+              <a target="_blank" href="http://weibo.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+        </ul>
+        <p class="copyright text-muted">
+          Copyright &copy;
+          Hyggge
+          2022
+          <br>
+          Theme by
+          <a target="_blank" rel="noopener" href="http://beantech.org">BeanTech</a>
+          <span style="display: inline-block; margin: 0 5px;">
+            <i class="fa fa-heart"></i>
+          </span>
+          re-Ported by
+          <a target="_blank" rel="noopener" href="https://v-vincen.life/">Live My Life</a>
+          |
+          <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=V-Vincen&repo=V-Vincen.github.io&type=star&count=true"></iframe>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a id="rocket" href="#top" class=""></a>
+
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <!-- Custom Theme JavaScript -->
+  <script type="text/javascript" src="/js/hux-blog.min.js"></script>
+  <!-- catalog -->
+  <script async="true" type="text/javascript" src="/js/catalog.js"></script>
+  <!-- totop(rocket) -->
+  <script async="true" type="text/javascript" src="/js/totop.js"></script>
+
+  
+    <!-- Busuanzi JavaScript -->
+    <script async="async" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <!-- Scroll start -->
+    <script async="async" type="text/javascript" src="/js/scroll.js"></script>
+    <!-- Scroll end -->
+  
+
+  
+
+  
+    <!-- Mouseclick -->
+    <script type="text/javascript" src="/js/mouseclick.js" content='The first step is as good as half over...,Laugh and grow fat...,Man proposes God disposes...,When all else is lost the future still remains...,Wasting time is robbing oneself...,Sharp tools make good work...,Cease to struggle and you cease to live...,A friend in need is a friend indeed...,Faith can move mountains...' color='#9933CC,#339933,#66CCCC,#FF99CC,#CCCCFF,#6666CC,#663399,#66CC99,#FF0033'></script>
+  
+
+  
+    <!-- ribbon -->
+    <script type="text/javascript" src="/js/ribbonDynamic.js"></script>
+  
+
+  
+
+
+
+
+
+
+  <!-- viewer start -->
+  <!-- viewer start (Picture preview) -->
+  
+    <script async="async" type="text/javascript" src="/js/viewer/viewer.min.js"></script>
+    <script async="async" type="text/javascript" src="/js/viewer/pic-viewer.js"></script>
+  
+
+  <!-- viewer end -->
+
+
+<script>
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function (e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  // fastClick.js
+  async ("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+    var $nav = document.querySelector("nav");
+    if ($nav)
+      FastClick.attach($nav);
+    }
+  )
+</script>
+
+<!-- Because of the native support for backtick-style fenced code blocks right within the Markdown is landed in Github Pages, From V1.6, There is no need for Highlight.js, so Huxblog drops it officially. -
+https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0 - https://help.github.com/articles/creating-and-highlighting-code-blocks/ -->
+<!-- <script> async ("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function () { hljs.initHighlightingOnLoad(); }) </script> <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet"> -->
+
+<!-- jquery.tagcloud.js -->
+<!-- <script> // only load tagcloud.js in tag.html if ($('#tag_cloud').length !== 0) { async ("http://example.com/js/jquery.tagcloud.js", function () { $.fn.tagcloud.defaults = { // size: { start: 1, end: 1, unit: 'em' }, color: {
+start: '#bbbbee', end: '#0085a1' } }; $('#tag_cloud a').tagcloud(); }) } </script> -->
+
+
+		<!-- Search -->
+		
+		<div class="popup search-popup local-search-popup">
+  <span class="popup-btn-close">
+    ESC
+  </span>
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-9 col-md-offset-1"> -->
+      <div class="col-lg-9 col-lg-offset-1 col-md-10 col-md-offset-1 local-search-content">
+
+        <div class="local-search-header clearfix">
+
+          <div class="local-search-input-wrapper">
+            <span class="search-icon">
+              <i class="fa fa-search fa-lg" style="margin: 25px 10px 25px 20px;"></i>
+            </span>
+            <input autocomplete="off" placeholder="SEARCH..." type="text" id="local-search-input">
+          </div>
+        </div>
+        <div id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    <script src="/js/ziploader.js"></script>
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    // monitor main search box;
+    var onPopupClose = function (e) {
+      $('.popup').fadeOut(300);
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $('.popup').fadeIn(300);
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+    // get search zip version
+    $.get('/searchVersion.json?t=' + (+new Date()), function (res) {
+      if (localStorage.getItem('searchVersion') !== res) {
+        localStorage.setItem('searchVersion', res);
+        initSearchJson();
+      }
+    });
+
+    function initSearchJson() {
+      initLoad(['/search.flv'], {
+        loadOptions: {
+          success: function (obj) {
+            localStorage.setItem('searchJson', obj['search.json'])
+          },
+          error: function (e) {
+            return console.log(e)
+          }
+        },
+        returnOptions: {
+          'json': TYPE_TEXT
+        },
+        mimeOptions: {
+          'json': 'application/json'
+        }
+      })
+    }
+    // search function;
+    var searchFunc = function (search_id, content_id) {
+      'use strict';
+      isfetched = true;
+      var datas = JSON.parse(localStorage.getItem('searchJson'));
+      // console.log(search_id)
+      var input = document.getElementById(search_id);
+      var resultContent = document.getElementById(content_id);
+      var inputEventFunction = function () {
+        var searchText = input.value.trim().toLowerCase();
+        var keywords = searchText.split(/[\s\-]+/);
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        var resultItems = [];
+        if (searchText.length > 0) {
+          // perform local searching
+          datas.forEach(function (data) {
+            var isMatch = false;
+            var hitCount = 0;
+            var searchTextCount = 0;
+            var title = data.title
+              ? data.title.trim()
+              : '';
+            var titleInLowerCase = title.toLowerCase();
+            var content = data.content
+              ? data.content.trim().replace(/<[^>]+>/g, "")
+              : '';
+            var contentInLowerCase = content.toLowerCase();
+            var articleUrl = decodeURIComponent(data.url);
+
+            var date = data.date;
+            var dateTime = date.replace(/T/, " ").replace(/.000Z/, "");
+            var imgUrl = data.header_img;
+            
+
+
+            var indexOfTitle = [];
+            var indexOfContent = [];
+            // only match articles with not empty titles
+            keywords.forEach(function (keyword) {
+              function getIndexByWord(word, text, caseSensitive) {
+                var wordLen = word.length;
+                if (wordLen === 0) {
+                  return [];
+                }
+                var startPosition = 0,
+                  position = [],
+                  index = [];
+                if (!caseSensitive) {
+                  text = text.toLowerCase();
+                  word = word.toLowerCase();
+                }
+                while ((position = text.indexOf(word, startPosition)) > -1) {
+                  index.push({position: position, word: word});
+                  startPosition = position + wordLen;
+                }
+                return index;
+              }
+              indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+              indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+            });
+            if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+              isMatch = true;
+              hitCount = indexOfTitle.length + indexOfContent.length;
+            }
+            // show search results
+            if (isMatch) {
+              // sort index by position of keyword
+              [indexOfTitle, indexOfContent].forEach(function (index) {
+                index.sort(function (itemLeft, itemRight) {
+                  if (itemRight.position !== itemLeft.position) {
+                    return itemRight.position - itemLeft.position;
+                  } else {
+                    return itemLeft.word.length - itemRight.word.length;
+                  }
+                });
+              });
+              // merge hits into slices
+              function mergeIntoSlice(text, start, end, index) {
+                var item = index[index.length - 1];
+                var position = item.position;
+                var word = item.word;
+                var hits = [];
+                var searchTextCountInSlice = 0;
+                while (position + word.length <= end && index.length != 0) {
+                  if (word === searchText) {
+                    searchTextCountInSlice++;
+                  }
+                  hits.push({position: position, length: word.length});
+                  var wordEnd = position + word.length;
+                  // move to next position of hit
+                  index.pop();
+                  while (index.length != 0) {
+                    item = index[index.length - 1];
+                    position = item.position;
+                    word = item.word;
+                    if (wordEnd > position) {
+                      index.pop();
+                    } else {
+                      break;
+                    }
+                  }
+                }
+                searchTextCount += searchTextCountInSlice;
+                return {hits: hits, start: start, end: end, searchTextCount: searchTextCountInSlice};
+              }
+              var slicesOfTitle = [];
+              if (indexOfTitle.length != 0) {
+                slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+              }
+              var slicesOfContent = [];
+              while (indexOfContent.length != 0) {
+                var item = indexOfContent[indexOfContent.length - 1];
+                var position = item.position;
+                var word = item.word;
+                // cut out 100 characters
+                var start = position - 20;
+                var end = position + 80;
+                if (start < 0) {
+                  start = 0;
+                }
+                if (end < position + word.length) {
+                  end = position + word.length;
+                }
+                if (end > content.length) {
+                  end = content.length;
+                }
+                slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+              }
+              // sort slices in content by search text's count and hits' count
+              slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                  return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                  return sliceRight.hits.length - sliceLeft.hits.length;
+                } else {
+                  return sliceLeft.start - sliceRight.start;
+                }
+              });
+              // select top N slices in content
+              var upperBound = parseInt('1');
+              if (upperBound >= 0) {
+                slicesOfContent = slicesOfContent.slice(0, upperBound);
+              }
+              // highlight title and content
+              function highlightKeyword(text, slice) {
+                var result = '';
+                var prevEnd = slice.start;
+                slice.hits.forEach(function (hit) {
+                  result += text.substring(prevEnd, hit.position);
+                  var end = hit.position + hit.length;
+                  result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                  prevEnd = end;
+                });
+                result += text.substring(prevEnd, slice.end);
+                return result;
+              }
+              var resultItem = '';
+
+              // if (slicesOfTitle.length != 0) {   resultItem += "<li><a target='_blank' href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>"; } else {   resultItem += "<li><a target='_blank' href='" +
+              // articleUrl + "' class='search-result-title'>" + title + "</a>"; } slicesOfContent.forEach(function (slice) {   resultItem += "<a target='_blank' href='" + articleUrl + "'><p class=\"search-result\">" + highlightKeyword(content, slice) +
+              // "...</p></a>"; }); resultItem += "</li>";
+
+              if (slicesOfTitle.length != 0) {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              } else {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + title + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              }
+              slicesOfContent.forEach(function (slice) {
+                resultItem += "<p class=\"search-result-content\">" + highlightKeyword(content, slice) + "...</p>";
+              });
+              resultItem += "</div><div class='search-result-right'><img class='media-image' src='" + imgUrl + "' width='64px' height='48px'></img></div></a>";
+
+              resultItems.push({item: resultItem, searchTextCount: searchTextCount, hitCount: hitCount, id: resultItems.length});
+            }
+          })
+        };
+
+        if (keywords.length === 1 && keywords[0] === "") {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else if (resultItems.length === 0) {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else {
+          resultItems.sort(function (resultLeft, resultRight) {
+            if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+              return resultRight.searchTextCount - resultLeft.searchTextCount;
+            } else if (resultLeft.hitCount !== resultRight.hitCount) {
+              return resultRight.hitCount - resultLeft.hitCount;
+            } else {
+              return resultRight.id - resultLeft.id;
+            }
+          });
+          var searchResultList = '<div class=\"search-result-list\">';
+          resultItems.forEach(function (result) {
+            searchResultList += result.item;
+          })
+          searchResultList += "</div>";
+          resultContent.innerHTML = searchResultList;
+        }
+      }
+      if ('auto' === 'auto') {
+        input.addEventListener('input', inputEventFunction);
+      } else {
+        $('.search-icon').click(inputEventFunction);
+        input.addEventListener('keypress', function (event) {
+          if (event.keyCode === 13) {
+            inputEventFunction();
+          }
+        });
+      }
+      // remove loading animation
+      $('body').css('overflow', '');
+      proceedsearch();
+    }
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function (e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc('local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function (e) {
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 && $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      var _con = document.querySelector(".local-search-content");
+      if (_con) {
+        if (!_con.contains(e.target)) {
+          onPopupClose();
+        }
+      }
+    });
+  </script>
+
+
+		
+	</body>
+</html>
