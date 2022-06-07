@@ -400,11 +400,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">5</span> Minutes
+              Estimated Reading Time <span class="post-count">6</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">1.6k</span> In Total
+              Words <span class="post-count">1.8k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -472,7 +472,8 @@
 <li><strong>调度的执行</strong>：调度时如何进行CPU上下文切换</li>
 <li><strong>调度的策略</strong>：按照什么原则选择一个就绪进程进行调度</li>
 </ul>
-<h2 id="调度的时机"><a href="#调度的时机" class="headerlink" title="调度的时机"></a>调度的时机</h2><p>当遇到下面几种情况时，可能会发生进程的调度——</p>
+<h2 id="调度的时机"><a class="markdownIt-Anchor" href="#调度的时机"></a> 调度的时机</h2>
+<p>当遇到下面几种情况时，可能会发生进程的调度——</p>
 <ul>
 <li><strong>当一个新的进程被创建时</strong></li>
 <li><strong>当一个进程运行完毕时</strong></li>
@@ -481,7 +482,8 @@
 <li><strong>在分时系统中，当一个时钟中断发生时</strong></li>
 <li><strong>当OS取得对CPU的控制时（例如用户系统调用、中断、陷阱）</strong></li>
 </ul>
-<h2 id="调度的执行"><a href="#调度的执行" class="headerlink" title="调度的执行"></a>调度的执行</h2><p>在进程上下文切换时，会执行以下步骤——</p>
+<h2 id="调度的执行"><a class="markdownIt-Anchor" href="#调度的执行"></a> 调度的执行</h2>
+<p>在进程上下文切换时，会执行以下步骤——</p>
 <ol>
 <li><strong>保存处理器的上下文，包括程序计数器（PC）和其它寄存器；保存内存镜像（页表信息）</strong></li>
 <li><strong>用新状态和其它相关信息更新正在运行进程的PCB</strong></li>
@@ -495,52 +497,60 @@
 <li><strong>中级调度：</strong> 储存器资源层面，即将进程的部分或全部换出到外存上，将当前所需部分换入到内存</li>
 <li><strong>低级调度：</strong> CPU资源层面，即对CPU计算资源（ALU等）进行分配，时间上通常是毫秒。</li>
 </ul>
-<h2 id="调度的策略"><a href="#调度的策略" class="headerlink" title="调度的策略"></a>调度的策略</h2><h3 id="调度策略的度量指标"><a href="#调度策略的度量指标" class="headerlink" title="调度策略的度量指标"></a>调度策略的度量指标</h3><p>衡量调度策略时通常采用以下几个常用的度量指标——</p>
+<h2 id="调度的策略"><a class="markdownIt-Anchor" href="#调度的策略"></a> 调度的策略</h2>
+<h3 id="调度策略的度量指标"><a class="markdownIt-Anchor" href="#调度策略的度量指标"></a> 调度策略的度量指标</h3>
+<p>衡量调度策略时通常采用以下几个常用的度量指标——</p>
 <ul>
-<li><strong>吞吐量：</strong> $作业数/总执行时间$</li>
-<li><strong>周转时间：</strong> $完成时间-提交时间$</li>
-<li><strong>带权周转时间：</strong>$周转时间/服务时间（执行时间$）</li>
-<li><strong>平均周转时间：</strong>$一组作业周转时间之和/作业数$</li>
-<li><strong>平均带权周转时间：</strong>$一组作业带权周转时间之和/作业数$</li>
+<li><strong>吞吐量：</strong>  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">总</mi><mi mathvariant="normal">执</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">作业数/总执行时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span><span class="mord">/</span><span class="mord cjk_fallback">总</span><span class="mord cjk_fallback">执</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span></li>
+<li><strong>周转时间：</strong>  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">完</mi><mi mathvariant="normal">成</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mo>−</mo><mi mathvariant="normal">提</mi><mi mathvariant="normal">交</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">完成时间-提交时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord cjk_fallback">完</span><span class="mord cjk_fallback">成</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord cjk_fallback">提</span><span class="mord cjk_fallback">交</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span></li>
+<li><strong>带权周转时间：</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">服</mi><mi mathvariant="normal">务</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">（</mi><mi mathvariant="normal">执</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi></mrow><annotation encoding="application/x-tex">周转时间/服务时间（执行时间</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord">/</span><span class="mord cjk_fallback">服</span><span class="mord cjk_fallback">务</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">（</span><span class="mord cjk_fallback">执</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span></span></span></span>）</li>
+<li><strong>平均周转时间：</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">一</mi><mi mathvariant="normal">组</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">之</mi><mi mathvariant="normal">和</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi></mrow><annotation encoding="application/x-tex">一组作业周转时间之和/作业数</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">组</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">之</span><span class="mord cjk_fallback">和</span><span class="mord">/</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span></span></span></span></li>
+<li><strong>平均带权周转时间：</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">一</mi><mi mathvariant="normal">组</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">带</mi><mi mathvariant="normal">权</mi><mi mathvariant="normal">周</mi><mi mathvariant="normal">转</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">间</mi><mi mathvariant="normal">之</mi><mi mathvariant="normal">和</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">作</mi><mi mathvariant="normal">业</mi><mi mathvariant="normal">数</mi></mrow><annotation encoding="application/x-tex">一组作业带权周转时间之和/作业数</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">组</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">带</span><span class="mord cjk_fallback">权</span><span class="mord cjk_fallback">周</span><span class="mord cjk_fallback">转</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">间</span><span class="mord cjk_fallback">之</span><span class="mord cjk_fallback">和</span><span class="mord">/</span><span class="mord cjk_fallback">作</span><span class="mord cjk_fallback">业</span><span class="mord cjk_fallback">数</span></span></span></span></li>
 </ul>
-<h3 id="调度策略的选择"><a href="#调度策略的选择" class="headerlink" title="调度策略的选择"></a>调度策略的选择</h3><p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以将进程分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
+<h3 id="调度策略的选择"><a class="markdownIt-Anchor" href="#调度策略的选择"></a> 调度策略的选择</h3>
+<p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以将进程分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
 <p>对于不同特性的进程，我们通常会采用不同的调度算法。</p>
 <p>根据 <strong>”是否在时钟中断作出调度决策“</strong>，我们将进程的调度分为<strong>非抢占式和抢占式</strong>。</p>
 <ul>
 <li><strong>非抢占式：</strong> 被调度进程会一直执行<strong>直到阻塞或主动放弃CPU</strong>，时钟中断时不会做调度决策</li>
 <li><strong>抢占式：</strong> 被调度程序运行一个固定的最大时间段（时间片），如果时间结束进程还在执行，挂起进程并进行切换（时钟中断时做调度决策）。</li>
 </ul>
-<p>对于不同的应用领域，我们会采用不同的调度策略，而这些策略也都离不开非抢占式和抢占式两种基本算法。常见的应用领域包括<strong>批处理系统、交互式系统、实时系统、多处理系统</strong>。<br><img src="进程调度.jpg" alt=""></p>
-<h4 id="批处理系统"><a href="#批处理系统" class="headerlink" title="批处理系统"></a><strong>批处理系统</strong></h4><p>批处理是指用户将一批作业提交给操作系统后就不再干预。在批处理系统中，一个作业需要长时间的占用CPU，因此我们一般采用<strong>非抢占式算法或分配长时间周期的抢占算法</strong>。</p>
+<p>对于不同的应用领域，我们会采用不同的调度策略，而这些策略也都离不开非抢占式和抢占式两种基本算法。常见的应用领域包括<strong>批处理系统、交互式系统、实时系统、多处理系统</strong>。<br />
+<img src="%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6.jpg" alt="" /></p>
+<h4 id="批处理系统"><a class="markdownIt-Anchor" href="#批处理系统"></a> <strong>批处理系统</strong></h4>
+<p>批处理是指用户将一批作业提交给操作系统后就不再干预。在批处理系统中，一个作业需要长时间的占用CPU，因此我们一般采用<strong>非抢占式算法或分配长时间周期的抢占算法</strong>。</p>
 <p>在策略选择时，我们主要关注<strong>吞吐量和周转时间</strong>这两个指标。常用策略——</p>
 <ul>
 <li>先来先服务（FCFS：First Come First Serve)</li>
 <li>最短作业优先（SJF：Shortest Job First)</li>
-<li>最短剩余时间优先（SRTN：Shortest Remaining Time Next）</li>
-<li>最高响应比优先（HRRN：Highest Response<br>Ratio Next）<h4 id="交互式系统"><a href="#交互式系统" class="headerlink" title="交互式系统"></a><strong>交互式系统</strong></h4>交互式计算机系统与操作人员以人机对话的方式一问一答，直至获得最后处理结果。这种系统服务于多个用户的环境，例如分时系统、手机系统，因此需要避免一个进程霸占CPU，一般使用<strong>抢占式算法</strong>。</li>
+<li>最短剩余时间优先（SRTN：Shortest Remaining Time Next）</li>
+<li>最高响应比优先（HRRN：Highest Response<br />
+Ratio Next）</li>
 </ul>
+<h4 id="交互式系统"><a class="markdownIt-Anchor" href="#交互式系统"></a> <strong>交互式系统</strong></h4>
+<p>交互式计算机系统与操作人员以人机对话的方式一问一答，直至获得最后处理结果。这种系统服务于多个用户的环境，例如分时系统、手机系统，因此需要避免一个进程霸占CPU，一般使用<strong>抢占式算法</strong>。</p>
 <p>在策略选择时，我们主要关注<strong>响应时间</strong>这个指标，并希望任务花费时间随着其复杂度应该线性增长。常用策略——</p>
 <ul>
 <li>时间片轮转(RR：Round Robin）</li>
 <li>优先级调度(Priority Scheduling)</li>
 <li>多级队列（MQ：Multi-level Queue）</li>
-<li>多级反馈队列（MFQ：Multi-level Feedback Queue ）</li>
+<li>多级反馈队列（MFQ：Multi-level Feedback Queue ）</li>
 <li>彩票调度（Lottery Scheduling）</li>
 </ul>
-<h4 id="实时系统"><a href="#实时系统" class="headerlink" title="实时系统"></a><strong>实时系统</strong></h4><p>实时系统是指计算的正确性不仅取决于程序的逻辑正确性，也取决于结果产生的时间。如果不满足确定性的截止时间需求，将会发生系统出错。因此我们<strong>主要采用抢占式算法，也可能非抢占式</strong>。</p>
-<p>  在策略选择时，我们主要关注 <strong>“截止时间是否可以得到满足”</strong>，并希望策略有一定可预测性和规律性。常用策略——</p>
+<h4 id="实时系统"><a class="markdownIt-Anchor" href="#实时系统"></a> <strong>实时系统</strong></h4>
+<p>实时系统是指计算的正确性不仅取决于程序的逻辑正确性，也取决于结果产生的时间。如果不满足确定性的截止时间需求，将会发生系统出错。因此我们<strong>主要采用抢占式算法，也可能非抢占式</strong>。</p>
+<p>在策略选择时，我们主要关注 <strong>“截止时间是否可以得到满足”</strong>，并希望策略有一定可预测性和规律性。常用策略——</p>
 <ul>
 <li>静态表调度（Static table-driven scheduling）</li>
-<li>单调速率调度（RMS：Rate Monotonic Scheduling）</li>
-<li>最早截止时间优先算法（EDF：Earliest Deadline First）</li>
+<li>单调速率调度（RMS：Rate Monotonic Scheduling）</li>
+<li>最早截止时间优先算法（EDF：Earliest Deadline First）</li>
 </ul>
-<h4 id="多处理系统"><a href="#多处理系统" class="headerlink" title="多处理系统"></a><strong>多处理系统</strong></h4><p>多处理系统指系统中有多个处理机同时进行工作，这种系统的调度更需要关注于系统整体的运行效率，调度单位广泛采用线程。</p>
-<p>多处理系统有两种，包括<strong>非对称式多处理系统(AMP)</strong>和<strong>对称式多处理系统(SMP)</strong>。</p>
+<h4 id="多处理系统"><a class="markdownIt-Anchor" href="#多处理系统"></a> <strong>多处理系统</strong></h4>
+<p>多处理系统指系统中有多个处理机同时进行工作，这种系统的调度更需要关注于系统整体的运行效率，调度单位广泛采用线程。</p>
+<p>多处理系统有两种，包括<strong>非对称式多处理系统(AMP)<strong>和</strong>对称式多处理系统(SMP)</strong>。</p>
 <ul>
-<li>AMP中各个处理器的地位不同，有“主从”之分——由主处理机管理一个公共就绪队列，并分派进程给从处理机执行，每个处理机都有固定的分工（执行OS的系统功能？处理I/O？）<ul>
-<li>SMP中各个处理器的地位是相同的。根据控制的方式的不同，SMP调度算法可分为集中控制和分散控制，前者主要包括<strong>静态分配(static assignment)</strong>和<strong>动态分配(dynamic assignment)</strong>，后者主要包括<strong>自调度（Self Scheduling）</strong>。</li>
-</ul>
-</li>
+<li>AMP中各个处理器的地位不同，有“主从”之分——由主处理机管理一个公共就绪队列，并分派进程给从处理机执行，每个处理机都有固定的分工（执行OS的系统功能？处理I/O？）</li>
+<li>SMP中各个处理器的地位是相同的。根据控制的方式的不同，SMP调度算法可分为集中控制和分散控制，前者主要包括<strong>静态分配(static assignment)<strong>和</strong>动态分配(dynamic assignment)</strong>，后者主要包括<strong>自调度（Self Scheduling）</strong>。</li>
 </ul>
 
 
@@ -691,7 +701,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">调度的时机</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">调度的执行</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E7%AD%96%E7%95%A5"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">调度的策略</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">调度策略的度量指标</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">调度策略的选择</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text">批处理系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text">交互式系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.3.</span> <span class="toc-nav-text">实时系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.4.</span> <span class="toc-nav-text">多处理系统</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 调度的时机</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 调度的执行</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%9A%84%E7%AD%96%E7%95%A5"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 调度的策略</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> 调度策略的度量指标</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 调度策略的选择</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text"> 批处理系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text"> 交互式系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.3.</span> <span class="toc-nav-text"> 实时系统</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-nav-number">3.2.4.</span> <span class="toc-nav-text"> 多处理系统</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -870,6 +880,9 @@
     <script type="text/javascript" src="/js/mouseclick.js" content='The first step is as good as half over...,Laugh and grow fat...,Man proposes God disposes...,When all else is lost the future still remains...,Wasting time is robbing oneself...,Sharp tools make good work...,Cease to struggle and you cease to live...,A friend in need is a friend indeed...,Faith can move mountains...' color='#9933CC,#339933,#66CCCC,#FF99CC,#CCCCFF,#6666CC,#663399,#66CC99,#FF0033'></script>
   
 
+  
+    <!-- ribbon -->
+    <script type="text/javascript" src="/js/ribbonDynamic.js"></script>
   
 
   
