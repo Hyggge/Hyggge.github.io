@@ -135,10 +135,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/archives/3/">
+  <link rel="canonical" href="http://example.com/2022/06/26/OS-Lab6实验报告/">
   <title>
     
-      Hyggge‘s blog
+      OS-Lab6实验报告 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -348,19 +348,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_china.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_china.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_china.jpg');
     }
 
     header.intro-header {
-       /*config*/
-        background-image: var(--intro-header-background-image-url-home);
-        /* background-image: url('/img/header_img/bg.png'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('/img/header_img/bg_china.jpg'); */
       
     }
 
@@ -382,10 +382,44 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Hyggge&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Be what you want to be, do what you want to do.</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+              
+              <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+              
+            </div>
+            <h1>OS-Lab6实验报告</h1>
+            <h2 class="subheading">管道与shell</h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-06-26
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">7</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">2k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -426,693 +460,290 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h2 id="实验思考题"><a href="#实验思考题" class="headerlink" title="实验思考题"></a>实验思考题</h2><h3 id="Thinking-6-1"><a href="#Thinking-6-1" class="headerlink" title="Thinking 6.1"></a>Thinking 6.1</h3><p><strong>Q：</strong> <strong>示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</strong><br><strong>A：</strong> 只需要调换父子进程操作的内容即可——<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in"><span class="keyword">switch</span></span> (fork()) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">-1</span> : </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Read end is unused */</span></span><br><span class="line">            <span class="built_in">write</span>(fildes[<span class="number">1</span>], <span class="string">&quot;Hello world\n&quot;</span>, <span class="number">12</span>); <span class="comment">/* Write data on pipe */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Child will see EOF */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">        <span class="keyword">default</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Write end is unused */</span></span><br><span class="line">            <span class="built_in">read</span>(fildes[<span class="number">0</span>], buf, <span class="number">100</span>); <span class="comment">/* Get data from pipe */</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;child-process read:%s&quot;</span>,buf); <span class="comment">/* Print the data */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Finished with pipe */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Thinking-6-2"><a href="#Thinking-6-2" class="headerlink" title="Thinking 6.2"></a>Thinking 6.2</h3><p><strong>Q：</strong> <strong>上面这种不同步修改 pp_ref 而导致的进程竞争问题在 user/fd.c 中的 dup 函数中也存在。请结合代码模仿上述情景，分析一下我们的 dup 函数中为什么会出现预想之外的情况？</strong><br><strong>A：</strong> <code>dup</code>函数的作用时将<code>oldfdnum</code>所代表的文件描述符的指向的数据完全复制给<code>newfdnum</code>文件描述符，一共包含两个过程——</p>
+<ul>
+<li>将<code>newfd</code>所在的虚拟页映射到<code>oldfd</code>所在的物理页</li>
+<li>将<code>newfd</code>的数据所在的虚拟页映射到<code>oldfd</code>的数据所在的物理页</li>
+</ul>
+<p>考虑如下代码段<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子进程</span></span><br><span class="line">    <span class="built_in">read</span>(p[<span class="number">0</span>], buf, <span class="built_in"><span class="keyword">sizeof</span></span>(buf));</span><br><span class="line"><span class="comment">// 父进程    </span></span><br><span class="line">    <span class="built_in">dup</span>(p[<span class="number">0</span>], newfd);</span><br><span class="line">    <span class="built_in">write</span>(p[<span class="number">1</span>], <span class="string">&quot;Hello&quot;</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure><br>分析过程如下：</p>
+<ul>
+<li>fork结束后，子进程先进行。但是在<code>read</code>之前发生了时钟中断，此时父进程开始进行进行。</li>
+<li>父进程在<code>dup(p[0])</code>中，已经完成了对<code>p[0</code>]的映射，这个时候发生了中断，还没有来得及完成对<code>pipe</code>的映射。</li>
+<li>此时回到子进程，进入<code>read</code>函数，结果发现<code>ref(p[0]) == ref(pipe) == 2</code>, 认为此时写进程关闭。</li>
+</ul>
+<h3 id="Thinking-6-3"><a href="#Thinking-6-3" class="headerlink" title="Thinking 6.3"></a>Thinking 6.3</h3><p><strong>Q：</strong> <strong>阅读上述材料并思考：为什么系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。希望能结合相关代码进行分析。</strong><br><strong>A：</strong> 在 <code>syscall</code> 对应的异常处理程序 <code>handle_sys</code> 中，我们使用了汇编宏 <code>CLI</code> 来禁用全局中断，因此系统调用时不会被中断，是原子操作。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NESTED</span>(handle_sys,TF_SIZE, sp)</span><br><span class="line">    SAVE_ALL                            <span class="comment">// Macro used to save trapframe</span></span><br><span class="line">    CLI                                 <span class="comment">// Clean Interrupt Mask</span></span><br><span class="line">    nop</span><br><span class="line">    .set at                             <span class="comment">// Resume use of $at</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="built_in">END</span>(handle_sys)</span><br></pre></td></tr></table></figure></p>
+<h3 id="Thinking-6-4"><a href="#Thinking-6-4" class="headerlink" title="Thinking 6.4"></a>Thinking 6.4</h3><p><strong>Q：</strong> <strong>仔细阅读上面这段话，并思考下列问题</strong></p>
+<ul>
+<li><strong>按照上述说法控制 pipeclose 中 fd 和 pipe unmap 的顺序，是否可以解决上述场景的进程竞争问题？给出你的分析过程。</strong></li>
+<li><strong>我们只分析了 close 时的情形，在 fd.c 中有一个 dup 函数，用于复制文件内容。试想，如果要复制的是一个管道，那么是否会出现与 close 类似的问题？请模仿上述材料写写你的理解。</strong>         </li>
+</ul>
+<p><strong>A：</strong> 分析如下</p>
+<ul>
+<li>可以解决。由于<code>ref(p[0])</code>始终小于<code>ref(pipe)</code>, 因此如果先解除<code>p[0]</code>的映射，则<code>ref(p[0])</code>更要小于<code>ref(pipe)</code>，永远不会出现<code>ref(p[0]) == ref(pipe)</code>。</li>
+<li><code>dup</code>函数也会出现与<code>close</code>类似的问题，<code>pipe</code>的引用次数总比<code>fd</code>要高。当管道的<code>dup</code>进行到一半时， 若先映射<code>fd</code>，再映射 <code>pipe</code> ，就会使得<code>fd</code>的引用次数的+1先于<code>pipe</code>。这就导致在两个<code>map</code>的间隙，会出现<code>pageref(pipe) == pageref(fd)</code>的情况。这个问题也可以通过调换两个map的顺序来解决。</li>
+</ul>
+<h3 id="Thinking-6-5"><a href="#Thinking-6-5" class="headerlink" title="Thinking 6.5"></a>Thinking 6.5</h3><p><strong>Q：</strong> <strong>bss 在 ELF 中并不占空间，但 ELF 加载进内存后， bss 段的数据占据了空间，并且初始值都是 0。请回答你设计的函数是如何实现上面这点的？</strong><br><strong>A：</strong> 对于bss段中和text&amp;data段共同占据一个页面的部分，就使用<code>user_bzero</code>将这一部分置零；对于bss段其它部分，仅使用<code>syscall_mem_malloc</code>分配页面而不映射到任何内容。</p>
+<h3 id="Thinking-6-6"><a href="#Thinking-6-6" class="headerlink" title="Thinking 6.6"></a>Thinking 6.6</h3><p><strong>Q：</strong> <strong>为什么我们的 *.b 的 text 段偏移值都是一样的，为固定值？</strong><br><strong>A：</strong> 因为在<code>user.lds</code>文件中将所有.b文件的text段偏移量都设置为0x00400000。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">. = <span class="number">0x00400000</span>;</span><br><span class="line">_text = .;			<span class="comment">/* Text and read-only data */</span></span><br><span class="line">.text : &#123;</span><br><span class="line">	*(.text)</span><br><span class="line">	*(.fixup)</span><br><span class="line">	*(.gnu.warning)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Thinking-6-7"><a href="#Thinking-6-7" class="headerlink" title="Thinking 6.7"></a>Thinking 6.7</h3><p><strong>Q：</strong>  <strong>在 shell 中执行的命令分为内置命令和外部命令。在执行内置命令时 shell 不需要 fork 一个子 shell，如 Linux 系统中的 cd 指令。在执行外部命令时 shell需要 fork 一个子 shell，然后子 shell 去执行这条命令。据此判断，在 MOS 中我们用到的 shell 命令是内置命令还是外部命令？请思考为什么 Linux 的 cd 指令是内部指令而不是外部指令？</strong><br><strong>A：</strong> 分析如下</p>
+<ul>
+<li>shell命令是外部命令，因为在执行shell命令时，当前进程通过<code>fork</code>产生一个子进程，也就是子shell，然后这个子shell来运行该命令所对应的可执行文件。</li>
+<li>linux中的内部命令实际上是shell程序的一部分，其中包含的是一些比较简单的linux系统命令，这些命令由shell程序识别并在shell程序内部完成运行，通常在linux系统加载运行时shell就被加载并驻留在系统内存中。因为<code>cd</code>指令非常简单，将其作为内部命令写在bashy源码里面的，可以避免每次执行都需要fork并加载程序，提高执行效率。</li>
+</ul>
+<h3 id="Thinking-6-8"><a href="#Thinking-6-8" class="headerlink" title="Thinking 6.8"></a>Thinking 6.8</h3><p><strong>Q：</strong> <strong>在哪步， 0 和 1 被 “安排” 为标准输入和标准输出？请分析代码执行流程，给出答案。</strong><br><strong>A：</strong> 在<code>init.c</code>的<code>umain</code>函数中将0和1分别被设置为了标准输入和标准输出。相关代码如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将0关闭，随后使用opencons函数打开的文件描述符编号就被设置为零为0</span></span><br><span class="line"><span class="built_in">close</span>(<span class="number">0</span>); </span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">opencons</span>()) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;opencons: %e&quot;</span>, r);</span><br><span class="line"><span class="keyword">if</span> (r != <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;first opencons used fd %d&quot;</span>, r);</span><br><span class="line"><span class="comment">// 然后通过dup函数把1设置为标准输出</span></span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">dup</span>(<span class="number">0</span>, <span class="number">1</span>)) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;dup: %d&quot;</span>, r);</span><br></pre></td></tr></table></figure></p>
+<h3 id="Thinking-6-9"><a href="#Thinking-6-9" class="headerlink" title="Thinking 6.9"></a>Thinking 6.9</h3><p><strong>Q：</strong>  <strong>在你的 shell 中输入指令 ls.b | cat.b &gt; motd。</strong></p>
+<ul>
+<li><strong>请问你可以在你的 shell 中观察到几次 spawn？分别对应哪个进程？</strong></li>
+<li><strong>请问你可以在你的 shell 中观察到几次进程销毁？分别对应哪个进程？</strong></li>
+</ul>
+<p><strong>A：</strong> 通过增加调试信息可以看出</p>
+<ul>
+<li>shell中进行了2次<code>spawn</code>，这两次生成的子进程分别用于执行<code>ls.b</code>和<code>cat.b</code></li>
+<li>shell中进行了2次进程销毁，这2个进程分别是shell执行<code>ls.b</code>和<code>cat.b</code>时通过<code>spawn</code>生成的子进程。</li>
+</ul>
+<h2 id="实验难点图示"><a href="#实验难点图示" class="headerlink" title="实验难点图示"></a>实验难点图示</h2><p>我认为该实验的难点主要包含两个难点——和管道相关的内存分配、spawn函数的处理流程</p>
+<h3 id="和管道相关的内存分配"><a href="#和管道相关的内存分配" class="headerlink" title="和管道相关的内存分配"></a>和管道相关的内存分配</h3><p>子进程和父进程的内存空间中都分为写端fd和读端fd分配了一个虚拟页，但是子进程和父进程的读端所在的虚拟页映射到了同一个物理页，同样他们的写端所在的虚拟也也都映射到了同一个物理页。</p>
+<p>此外，父子进程中这四个fd所对应的文件数据都位于同一个物理页。所以，一个管道实际上只需要占用3个物理页。图示如下——<br><img src="mm.svg" alt=""></p>
+<h3 id="spawn函数的处理流程"><a href="#spawn函数的处理流程" class="headerlink" title="spawn函数的处理流程"></a>spawn函数的处理流程</h3><p><code>spawn</code>函数的处理流程如下图所示<br><img src="spwan.svg" alt=""></p>
+<h2 id="体会与感想"><a href="#体会与感想" class="headerlink" title="体会与感想"></a>体会与感想</h2><p>Lab6要求我们完成pipe机制和实现一个简单的shell，实验任务比较简单，但是与之相关的很多函数理解起来还是有点困难。不过，OS实验课总算是告一段落了，通过自己动手实现一个简单的操作系统，不仅让我们收获了很多成就感，同时也让我们对理论课知识有了更深刻的理解。</p>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2022/06/26/OO-第四单元总结/" data-toggle="tooltip" data-placement="top" title="「BUAA-OO」第四单元：UML建模语言">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=OS-Lab6实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/06/26/OS-Lab6实验报告/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Sun Jun 26 2022 21:59:08 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-1"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Thinking 6.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-2"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">Thinking 6.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-3"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">Thinking 6.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-4"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">Thinking 6.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-5"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">Thinking 6.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-6"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">Thinking 6.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-7"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">Thinking 6.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-8"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">Thinking 6.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-9"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text">Thinking 6.9</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%92%8C%E7%AE%A1%E9%81%93%E7%9B%B8%E5%85%B3%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">和管道相关的内存分配</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#spawn%E5%87%BD%E6%95%B0%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">spawn函数的处理流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">体会与感想</span></a></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-
-
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/03/21/OS-Lab0实验报告/">
-    <h2 class="post-title">
-      「BUAA-OS」 Lab0实验报告
-    </h2>
-    <h3 class="post-subtitle">
-      熟悉操作系统实验环境和基本工具
-    </h3>
-    <div class="post-content-preview">
-      实验思考题Thinking 0.1Q： 使用 cat Modified.txt ，观察它和第一次 add 之前的 status 一样吗，思考一下为什么？A： 这两个status不一样。第一次add之前是的status是Untracked files, 修改README.txt之后的status是Changes not staged for commit，并提示modified: README......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-03-21
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
-    
-    <a href="/tags/#操作系统" title="操作系统">操作系统</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/03/20/Cpp-Progranming-Lec-3/">
-    <h2 class="post-title">
-      「BUAA-C++」Lec3:引用和拷贝构造
-    </h2>
-    <h3 class="post-subtitle">
-      北航《C++程序设计》课程第3节：主要讲授C++中的引用和拷贝构造。
-    </h3>
-    <div class="post-content-preview">
-      引用（reference）
-引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。
-引用必须初始化, 和C语言中野指针不同
-  123int b = 0;int &amp;a; //errorint &amp;a = b;
-引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。  12int &amp;a = b;a = c; ......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-03-20
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#C++" title="C++">C++</a>
-    
-    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/03/10/Cpp-Progranming-Lec-2/">
-    <h2 class="post-title">
-      「BUAA-C++」Lec2:C++的类
-    </h2>
-    <h3 class="post-subtitle">
-      北航《C++程序设计》课程第2节：主要讲授C结构体和C++类的联系和区别，以及C++类的特性。
-    </h3>
-    <div class="post-content-preview">
-      C++面向对象
-封装（一个类）
-继承（多类之间的父子关系）
-多态（行为关系）
-
-C结构体—-&gt;C++类C语言只可以封装，struct关键字可以建立结构体
-
-结构体的最小内存单元以内存最大的成员类型为准  1234567struct Student &#123;    int i;    int j;    double d;    char c;&#125;;// sizeof(str......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-03-10
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#C++" title="C++">C++</a>
-    
-    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/03/04/ECS服务器使用-文件传输和新终端建立/">
-    <h2 class="post-title">
-      「ECS服务器」文件传输和新终端建立
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      本篇博客介绍一下如何使用pscp在本地（Windows）和ECS服务器之间进行文件传输，以及如何在服务器中建立新终端。
-前言今天想把OO第一次作业的自动评测程序放到在阿里云ECS服务器上运行，以减轻笔记本CPU的压力（避免过早更换电脑）。但是理想很丰满，现实很骨感，在一开始便遇到了两个问题——
-
-如何将本地的文件传到服务器上？
-如何使程序在服务器后台运行？（一旦关闭服务器前端网页，在当前终端......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-03-04
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#ECS" title="ECS">ECS</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/03/02/Cpp-Programing-Lec-1/">
-    <h2 class="post-title">
-      「BUAA-C++」Lec1:C++函数的特性和常用的宏
-    </h2>
-    <h3 class="post-subtitle">
-      北航《C++程序设计》课程第1节：主要讲授C++函数相比C函数的不同点，以及C++头文件写法等知识点。
-    </h3>
-    <div class="post-content-preview">
-       C++函数
- 函数重载(overloading)
-
-函数重载就是允许在同一作用域中声明几个类似的同名函数，这些同名函数的形参列表（参数个数，类型，顺序）必须不同，即“同名函数，不同参数”， 例如  12void print(int i) &#123;&#125;void print(char *i) &#123;&#125;
-
-“同名函数，相同参数，返回值不同”不能成为重载函数，例如  1......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-03-02
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#C++" title="C++">C++</a>
-    
-    <a href="/tags/#BUAA" title="BUAA">BUAA</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/25/Maven-生命周期与插件/">
-    <h2 class="post-title">
-      「Maven」生命周期与插件
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-
-Maven项目构建的生命周期Maven的生命周期就是为了对所有的构建过程进行抽象和统一，这个生命周期包含了项目的清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成等几乎所有构建步骤，由相互独立三套生命周期组成——
-
-clean：清理项目
-default：构建项目
-site：构建项目站点 
-
-当执行某一独立的生命周期的一个阶段时，实际上在该阶段之间的、和该阶段在同一生命周期的其......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-25
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Maven" title="Maven">Maven</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/25/Maven-依赖与依赖管理/">
-    <h2 class="post-title">
-      「Maven」依赖与依赖管理
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-pom.xml文件中的依赖声明所有的依赖写在&lt;dependnecies&gt;框架中，每当声名一个新的依赖时，需要新建一个&lt;dependnecy&gt;，中间至少包含三个内容——groupId artifactId version,可以直接在官网中查找。1234567891011&lt;dependencies&gt;    &lt;!--具体的依赖--&gt;    &lt;......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-25
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Maven" title="Maven">Maven</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/24/Maven-基础知识/">
-    <h2 class="post-title">
-      「Maven」基础知识
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      Maven 是一个项目管理工具，可以对 Java 项目进行构建、依赖管理。 Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是 “通过pom.xml文件的配置获取jar包不用手动的去添加jar包”。该工具的原理图如下所示——
-仓库仓库可以储存资源，包含各种jar包。仓库分为两种：本地仓库和远程仓库
-
-本地仓库：是在本机电脑上储存资源的仓库，可以从远程仓库中获取资源。
-远程仓库：非本......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-24
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Maven" title="Maven">Maven</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/24/Java学习笔记-包-Package/">
-    <h2 class="post-title">
-      「Java SE」包(Package)
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-包的定义
-在笔者看来，包其实就是一个 文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
-一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。
-包的作用：防止命名冲突，访问控制，提供搜索和定位类（class）、接口(interface)、枚举（enumerations）和注释（annot......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-24
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2022/01/23/Java学习笔记-接口/">
-    <h2 class="post-title">
-      「Java SE」接口
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      
-接口和类《Thinking in Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
-接口与类的相似点
-接口中可以有多个方法（也仅限于方法）
-接口文件保存在 .java 结尾的文件中，文件名使用接口名，遵循类的命名方法。
-
-接口与类的不同点
-接口不能用......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2022-01-23
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Java" title="Java">Java</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-
-  <!-- Pager -->
-  <ul class="pager">
-    
-    <li class="previous">
-      <a href="/archives/2/">&larr; Older Posts</a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/archives/4/">Newer Posts &rarr;</a>
-    </li>
-    
-  </ul>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
+            
+            <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#算法" title="算法" rel="1">算法</a>
-    
-    
-    
-    <a href="/tags/#图论" title="图论" rel="1">图论</a>
-    
-    
-    
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
-    <a href="/tags/#C++" title="C++" rel="8">C++</a>
-    
-    
-    
-    <a href="/tags/#BUAA" title="BUAA" rel="19">BUAA</a>
-    
-    
-    
-    <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
-    
-    <a href="/tags/#面向对象" title="面向对象" rel="4">面向对象</a>
-    
-    
-    
-    <a href="/tags/#操作系统" title="操作系统" rel="9">操作系统</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
-    
-    
-    
-    <a href="/tags/#计算机组成" title="计算机组成" rel="15">计算机组成</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="7">Java</a>
-    
-    
-    
-    <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
-    
-    
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/head.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>Fat people have no future, either thin or die...</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="http://weibo.com/Hyggge">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../2022/06/26/OS-Lab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>OS-Lab6实验报告</li>
-    </a>
-    
-    <a href="../../2022/06/26/OO-%E7%AC%AC%E5%9B%9B%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
-      <li>「BUAA-OO」第四单元：UML建模语言</li>
-    </a>
-    
-    <a href="../../2022/06/04/OS-Lab5%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>「BUAA-OS」 Lab5实验报告</li>
-    </a>
-    
-    <a href="../../2022/06/04/OO-%E7%AC%AC%E4%B8%89%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
-      <li>「BUAA-OO」第三单元:规格化设计</li>
-    </a>
-    
-    <a href="../../2022/05/30/OS-Lab5%E5%87%BD%E6%95%B0%E8%A7%A3%E8%AF%BB/">
-      <li>「BUAA-OS」 Lab5函数解读</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/06/">June 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/05/">May 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/04/">April 2022</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#算法">
-      <li>算法</li>
-    </a>
-    
-    <a href="/categories/#ECS">
-      <li>ECS</li>
-    </a>
-    
-    <a href="/categories/#C++">
-      <li>C++</li>
-    </a>
-    
-    <a href="/categories/#Git">
-      <li>Git</li>
-    </a>
-    
-    <a href="/categories/#面向对象">
-      <li>面向对象</li>
-    </a>
-    
-    <a href="/categories/#操作系统">
-      <li>操作系统</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
-    </a>
-    
-    <a href="/categories/#计算机组成">
-      <li>计算机组成</li>
-    </a>
-    
-    <a href="/categories/#Java">
-      <li>Java</li>
-    </a>
-    
-    <a href="/categories/#Letax">
-      <li>Letax</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
