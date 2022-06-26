@@ -135,10 +135,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/2022/06/04/OS-Lab5实验报告/">
+  <link rel="canonical" href="http://example.com/2022/06/26/OO-第四单元总结/">
   <title>
     
-      「BUAA-OS」 Lab5实验报告 - Hyggge‘s blog
+      「BUAA-OO」第四单元：UML建模语言 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -387,14 +387,14 @@
               
               <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
               
-              <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+              <a class="tag" href="/tags/#面向对象" title="面向对象">面向对象</a>
               
             </div>
-            <h1>「BUAA-OS」 Lab5实验报告</h1>
-            <h2 class="subheading">文件系统</h2>
+            <h1>「BUAA-OO」第四单元：UML建模语言</h1>
+            <h2 class="subheading">北航《面向对象设计与构造》课程第四单元：UML建模语言和元模型</h2>
             <span class="meta">
               Posted by Hyggge on
-              2022-06-04
+              2022-06-26
             </span>
 
 
@@ -402,11 +402,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">14</span> Minutes
+              Estimated Reading Time <span class="post-count">15</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">3.9k</span> In Total
+              Words <span class="post-count">4.1k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -468,189 +468,91 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
-<h3 id="thinking-51"><a class="markdownIt-Anchor" href="#thinking-51"></a> Thinking 5.1</h3>
-<p><strong>Q：</strong> <strong>查阅资料，了解 Linux/Unix 的 /proc 文件系统是什么？有什么作用？ Windows 操作系统又是如何实现这些功能的？proc 文件系统这样的设计有什么好处和可以改进的地方？</strong></p>
-<p><strong>A：</strong> <code>/proc</code>是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，<strong>用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态</strong>。</p>
-<p>这样设计可以让用户以访问文件的方式访问进程信息，方便了用户的使用。此外，它只存在内存当中，而不占用外存空间，省去了访问一般文件时将数据从外存加载入内存的时间开销，访问速度非常快。但是正因如此，它会占用很多的内存空间。</p>
-<p><strong>Windows系统是通过使用<code>WMI</code>来实现相似功能的</strong>——<code>WMI</code>是可伸缩的系统管理结构，该规范采用⼀个统一、基于标准且可扩展的面向对象接口。它提供与系统管理员信息和基础<code>WMI API</code>交互的标准方法，主要由系统管理应用程序开发⼈员和系统管理员⽤来访问和操作系统管理信息；它可用来生成组织和管理系统信息的工具，使系统管理⼈员能够更密切的监视系统活动。</p>
-<h3 id="thinking-52"><a class="markdownIt-Anchor" href="#thinking-52"></a> Thinking 5.2</h3>
-<p><strong>Q：</strong> <strong>如果我们通过 kseg0 读写设备，我们对于设备的写入会缓存到 Cache 中。通过 kseg0 访问设备是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请你思考：这么做这会引起什么问题？对于不同种类的设备（如我们提到的串口设备和 IDE 磁盘）的操作会有差异吗？可以从缓存的性质和缓存刷新的策略来考虑。</strong></p>
-<p><strong>A：</strong> 当外部设备自身更新数据时，如果此时CPU写入外设的数据还只在缓存中，<strong>则缓存的那部分数据就只能在外设自身更新后再写入外设</strong>（只有缓存块将要被新进入的数据取代时，缓存数据才会被写入内存），这样就会发生错误的行为。</p>
-<p>串口设备读写频繁，而IDE磁盘读写频率相对较小，因此串口设备发生错误的概率要远大于IDE磁盘。</p>
-<h3 id="thinking-53"><a class="markdownIt-Anchor" href="#thinking-53"></a> Thinking 5.3</h3>
-<p><strong>Q：</strong> <strong>比较 MOS 操作系统的文件控制块和 Unix/Linux 操作系统的 inode 及相关概念，试述二者的不同之处。</strong></p>
-<p><strong>A：</strong> 文件控制块和inode都是记录已打开文件的相关信息，但是两者又有很多不同。</p>
-<ol>
-<li>
-<p>存储内容不同,文件控制块中的内容有——</p>
-<ul>
-<li>文件名</li>
-<li>文件大小</li>
-<li>文件类型</li>
-<li>文件数据块的直接指针列表</li>
-<li>储存文件数据块指针的间接磁盘块指针</li>
-<li>文件所在目录的指针</li>
-</ul>
-<p>而inode中的内容包括——</p>
-<ul>
-<li>文件的字节数，块数</li>
-<li>文件拥有者的User ID</li>
-<li>文件的Group ID</li>
-<li>文件的读、写、执行权限</li>
-<li>文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。</li>
-<li>链接数，即有多少文件名指向这个inode</li>
-<li>文件数据block的位置</li>
-<li>inode编号</li>
-</ul>
-</li>
-<li>
-<p>文件控制块顺次排列在目录文件中，而在Linux系统中，目录文件是由一系列目录项组成，每个目录项由文件名和指向inode的指针组成，占用空间远远小于文件控制块，查找操作的系统开销也大大减小。</p>
-</li>
-<li>
-<p>MOS中的文件控制块仅支持一级间接指针域，也只有一个；而Linux中的inode支持多级间接指针域，可以存储更大的文件。</p>
-</li>
-</ol>
-<h3 id="thinking-54"><a class="markdownIt-Anchor" href="#thinking-54"></a> Thinking 5.4</h3>
-<p><strong>Q：</strong> <strong>查找代码中的相关定义，试回答一个磁盘块中最多能存储多少个文件 控制块？一个目录下最多能有多少个文件？我们的文件系统支持的单个文件最大为 多大？</strong></p>
-<p><strong>A：</strong> 通过查看文件控制块的定义，我们可以发现，每个文件控制块都被数组<code>f_pad</code>强制对齐为<strong>256B</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">File</span> &#123;</span></span><br><span class="line">	u_char f_name[MAXNAMELEN];	</span><br><span class="line">	u_int f_size;			</span><br><span class="line">	u_int f_type;			</span><br><span class="line">	u_int f_direct[NDIRECT];</span><br><span class="line">	u_int f_indirect;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">File</span> *<span class="title">f_dir</span>;</span>		</span><br><span class="line">    <span class="comment">//BY2FILE = 256</span></span><br><span class="line">	u_char f_pad[BY2FILE - MAXNAMELEN - <span class="number">4</span> - <span class="number">4</span> - NDIRECT * <span class="number">4</span> - <span class="number">4</span> - <span class="number">4</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>一个磁盘块的容量为4KB，因此最多可以容纳16个文件控制块。<br />
-一个目录文件最多可以使用1024个磁盘块存储数据，因此一个目录下最多1024*16 = 16384个文件。<br />
-一个文件最多可以使用1024个磁盘块存储数据，因此一个文件最大容量为1024*4KB = 4MB。</p>
-<h3 id="thinking-55"><a class="markdownIt-Anchor" href="#thinking-55"></a> Thinking 5.5</h3>
-<p><strong>Q：</strong> <strong>请思考，在满足磁盘块缓存的设计的前提下，我们实验使用的内核支持的最大磁盘大小是多少？</strong></p>
-<p><strong>A：</strong> 块缓存所在的地址空间为<code>[0x10000000, 0x50000000)</code>,因此我们的内核能够支持的磁盘大小为<code>0x40000000</code>,也就是1GB。</p>
-<h3 id="thinking-56"><a class="markdownIt-Anchor" href="#thinking-56"></a> Thinking 5.6</h3>
-<p><strong>Q：</strong> <strong>如果将 DISKMAX 改成 0xC0000000, 超过用户空间，我们的文件系统还能正常工作吗？为什么？</strong><br />
-<strong>A：</strong> 不可以正常工作。如果<code>DISHMAX</code>值为<code>0xC0000000</code>，则有一部分块缓存会在内核空间中。而我们的文件系统属于文件用户态进程，无法访问内核空间的数据（访问内核空间数据时会出现<code>TOO LOW</code>报错）。</p>
-<h3 id="thinking-57"><a class="markdownIt-Anchor" href="#thinking-57"></a> Thinking 5.7</h3>
-<p><strong>Q：</strong> <strong>在 lab5 中，fs/fs.h、include/fs.h 等文件中出现了许多结构体和宏定义，写出你认为比较重要或难以理解的部分，并进行解释。</strong></p>
-<p><strong>A：</strong> 文件控制块（<code>File</code>）定位文件数据的方式比较重要，需要特别关注。每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块有<code>10</code>个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。示意图可见”实验难点图示“部分。</p>
-<h3 id="thinking-58"><a class="markdownIt-Anchor" href="#thinking-58"></a> Thinking 5.8</h3>
-<p><strong>Q：</strong> <strong>阅读 user/file.c，你会发现很多函数中都会将一个 struct Fd* 型的 指针转换为 struct Filefd* 型的指针，请解释为什么这样的转换可行。</strong></p>
-<p><strong>A：</strong> 首先，每个文件描述符fd都独占一页的，远大于struct Fd和<code>struct Filefd</code>的大小，因此将<code>struct Fd*</code>强制转换为<code>struct Filefd*</code>不会访问其他不相关的数据。<br />
-其次，每个<code>strcut Filefd</code>的开头都包含一个<code>struct File</code>，将<code>struct Fd*</code>强制转换为<code>struct Filefd*</code>后，同样可以通过<code>p-&gt;f_fd</code>来访问原先<code>struct Fd</code>中数据。这和面向对象中基类和派生类的关系十分相似，如果将<code>struct Fd</code>想象成基类，<code>struct File</code>想象成派生类，将基类的指针&quot;向下转型&quot;到派生类的指针是没有任何问题的。</p>
-<h3 id="thinking-59"><a class="markdownIt-Anchor" href="#thinking-59"></a> Thinking 5.9</h3>
-<p><strong>Q：</strong>  <strong>在lab4 的实验中我们实现了极为重要的fork 函数。那么fork 前后的父子进程是否会共享文件描述符和定位指针呢？请在完成练习5.8和5.9的基础上编写一个程序进行验证。</strong></p>
-<p><strong>A：</strong> 一个进程所有的文件描述符都存储在<code>[FDTABLE, FILEBASE)</code>这一地址空间中。在<code>fork</code>函数执行时，会将这父进程页表中映射一部分地址的页表项拷贝到子进程的页表中，因此<code>fork</code>前后的父子进程会共享文件描述符和定位指针。</p>
-<h3 id="thinking-510"><a class="markdownIt-Anchor" href="#thinking-510"></a> Thinking 5.10</h3>
-<p><strong>Q：</strong>  <strong>请解释Fd, Filefd, Open 结构体及其各个域的作用。比如各个结构体会在哪些过程中被使用，是否对应磁盘上的物理实体还是单纯的内存数据等。说明形式自定，要求简洁明了，可大致勾勒出文件系统数据结构与物理实体的对应关系与设计框架。</strong></p>
-<p><strong>A：</strong></p>
-<ul>
-<li>
-<p><strong>Fd结构体定义及各个域的作用如下所示</strong></p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Fd</span> &#123;</span></span><br><span class="line">	u_int fd_dev_id;    <span class="comment">//文件对应的设备id</span></span><br><span class="line">	u_int fd_offset;    <span class="comment">//文件指针所指向的位置</span></span><br><span class="line">	u_int fd_omode;     <span class="comment">//文件打开模式</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>该结构体主要用于记录已打开文件的状态，便于用户直接使用文件描述符对文件进行操作、申请服务等等。由于文件描述符主要是为用户所使用，因此它对应的是磁盘映射到内存中的数据。</p>
-</li>
-<li>
-<p><strong>Filefd的结构体定义及各个域的作用如下所示</strong></p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Filefd</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Fd</span> <span class="title">f_fd</span>;</span>     <span class="comment">//文件描述符结构体</span></span><br><span class="line">	u_int f_fileid;     <span class="comment">//文件id，表示该文件在opentab中的位置</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">File</span> <span class="title">f_file</span>;</span> <span class="comment">//文件控制块</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>文件描述符中存储的数据毕竟是有限的，有的时候我们需要将<code>Fd*</code>强制转换为<code>Filefd*</code>从而获取到文件控制块，从而获得更多文件信息，比如文件大小等等。</p>
-</li>
-<li>
-<p><strong>Open结构体定义及各个域的作用如下所示</strong></p>
-  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Open</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">File</span> *<span class="title">o_file</span>;</span>	<span class="comment">// 文件控制块指针</span></span><br><span class="line">	u_int o_fileid;		    <span class="comment">// 文件id</span></span><br><span class="line">	<span class="keyword">int</span> o_mode;		        <span class="comment">// 文件打开方式</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Filefd</span> *<span class="title">o_ff</span>;</span>	<span class="comment">// Filefd结构体</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这个结构体主要被文件系统服务进程使用，用于记录所有进程中被打开的文件。每个被打开的文件都对应一个<code>Open</code>结构体，所有的结构体依次排列在数组<code>opentab[MAXOPEN]</code>，每次我们只需要通过<code>file_id</code>来查找即可。</p>
-</li>
-</ul>
-<h3 id="thinking-511"><a class="markdownIt-Anchor" href="#thinking-511"></a> Thinking 5.11</h3>
-<p><strong>Q：</strong>  <strong>UML时序图中有多种不同形式的箭头，请结合UML 时序图的规范，解释这些不同箭头的差别，并思考我们的操作系统是如何实现对应类型的进程间通信的。</strong></p>
-<p><strong>A：</strong> UML时序图中有以下几种箭头——</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">消息类型</th>
-<th style="text-align:center">表示</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">同步消息</td>
-<td style="text-align:center">用黑三角箭头搭配黑实线表示</td>
-</tr>
-<tr>
-<td style="text-align:center">异步消息</td>
-<td style="text-align:center">用两条小线的开箭头和黑色实线表示</td>
-</tr>
-<tr>
-<td style="text-align:center">返回消息</td>
-<td style="text-align:center">用黑三角箭头搭配黑色虚线表示</td>
-</tr>
-<tr>
-<td style="text-align:center">创建消息</td>
-<td style="text-align:center">用开三角箭头搭配黑实线表示，其下面特别注明 <code>&lt;&lt;create&gt;&gt;</code></td>
-</tr>
-<tr>
-<td style="text-align:center">摧毁消息</td>
-<td style="text-align:center">用黑三角箭头搭配黑实线表示，其下面特别注明 <code>&lt;&lt;destroy&gt;&gt;</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Lost and Found Message</td>
-<td style="text-align:center">用一个黑色实心的点和黑色实心三角箭头黑实线表示</td>
-</tr>
-</tbody>
-</table>
-<p>我们的操作系统是通过IPC来实现进程间通信的，这种方式传递的信息本质上是一种同步消息。具体流程是：发送方先调用<code>ipc_send</code>函数，该函数通过一个死循环来不断向接收方信息。当接收方成功接收到消息时，<code>ipc_send</code>函数跳出循环并结束，这时发送方再调用<code>ipc_recv</code>函数主动放弃CPU，等待接收返回信息。</p>
-<p>整个流程在函数<code>fsipc</code>里得到体现</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fsipc</span><span class="params">(u_int type, <span class="keyword">void</span> *fsreq, u_int dstva, u_int *perm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	u_int whom;</span><br><span class="line">	<span class="built_in">ipc_send</span>(envs[<span class="number">1</span>].env_id, type, (u_int)fsreq, PTE_V | PTE_R);</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">ipc_recv</span>(&amp;whom, dstva, perm);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="thinking-512"><a class="markdownIt-Anchor" href="#thinking-512"></a> Thinking 5.12</h3>
-<p><strong>Q：</strong>  <strong>阅读serv.c/serve函数的代码，我们注意到函数中包含了一个死循环<code>for (;;) &#123;...&#125;</code>，为什么这段代码不会导致整个内核进入panic 状态？</strong></p>
-<p><strong>A：</strong> 这个死循环并不会导致CPU的轮询，原因是每次循环会调用<code>ipc_recv</code>函数。在这个函数被调用后，文件系统服务进程就会主动让出CPU（进程状态被标记为<code>NOT_RANNABLE</code>），直到用户进程向该进程申请服务（调用<code>ipc_send</code>）时才会被唤醒，进而为用户进程提供服务。因此，循环的次数始终等于文件系统服务进程提供服务的次数，并不会导致内核进入<code>panic</code>状态。</p>
-<h2 id="实验难点图示"><a class="markdownIt-Anchor" href="#实验难点图示"></a> 实验难点图示</h2>
-<p>我认为本次实验主要包含以下难点——</p>
-<ul>
-<li><strong>文件数据块的定位方式</strong></li>
-<li><strong>fsformat.c中函数的调用关系</strong></li>
-<li><strong>文件系统的地址空间布局</strong></li>
-<li><strong>用户进程和文件系统服务进程的交互</strong></li>
-</ul>
-<h3 id="文件数据块的定位方式"><a class="markdownIt-Anchor" href="#文件数据块的定位方式"></a> 文件数据块的定位方式</h3>
-<p>每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块中有10个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。</p>
-<p>假设某文件是一个目录文件，则其定位数据块的方式如下图所示<br />
-<img src="file_data.drawio.svg" alt="" /></p>
-<h3 id="fsformatc中函数的调用关系"><a class="markdownIt-Anchor" href="#fsformatc中函数的调用关系"></a> fsformat.c中函数的调用关系</h3>
-<p>在本次实验中，我们需要通过<code>fsformat.c</code>文件创建磁盘镜像<code>gxemul/fs.img</code>，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。<br />
-<code>fsformat.c</code>中函数的调用关系如下所示——</p>
-<p><img src="fsformat.drawio.svg" alt="" /></p>
-<h3 id="文件系统的地址空间布局"><a class="markdownIt-Anchor" href="#文件系统的地址空间布局"></a> 文件系统的地址空间布局</h3>
-<p>文件系统的正常工作也需要占用一定的内存空间。</p>
-<ul>
-<li>文件服务进程需要占用<code>[0x10000000, 0x50000000)</code>这一1GB空间作为块缓存。</li>
-<li>用户进程还需要占用<code>[0x5fc00000, 0x600000000)</code>这一4MB空间来储存文件描述符。
-<blockquote>
-<p>因为用户进程最多只能开32个文件描述符，每个文件描述符占用一页，因此实际上这一空间是无法占满的，最多占用32*4KB=128KB。</p>
-</blockquote>
-</li>
-<li>用户进程需要占用<code>[0x60000000, 0x680000000)</code>这一128MB空间作为文件内容缓存区。缓存区的每个页面都和文件服务进程中的对应块缓存映射到同一个物理页，并标记为<code>PTE_LIBARAY</code>。
-<blockquote>
-<p>因为用户进程最多只能有32个文件描述符，因此只能同时打开32个文件，每个文件最多占用4MB空间，因此用户进程缓存区大小为32*4MB=128MB。</p>
-</blockquote>
-</li>
-</ul>
-<p>地址空间布局如下所示<br />
-<img src="map.drawio.svg" alt="" /></p>
-<h3 id="用户进程和文件系统服务进程的交互"><a class="markdownIt-Anchor" href="#用户进程和文件系统服务进程的交互"></a> 用户进程和文件系统服务进程的交互</h3>
-<p>用户进程通过文件系统的用户接口申请服务，该请求会通过IPC机制告知文件系统服务进程（<code>fsipc.c</code>），然后由文件系统服务进程提供服务（<code>serve.c</code>）。不同用户接口及其服务的流程如下所示——<br />
-<img src="process.drawio.svg" alt="" /></p>
-<h2 id="体会与感想"><a class="markdownIt-Anchor" href="#体会与感想"></a> 体会与感想</h2>
-<p>本次实验的代码填写比较简单，根据代码注释和指导书的提示就可以轻松完成，评测拿到满分并不困难。</p>
-<p>尽管实验任务比较简单，但是这次实验涉及的代码文件更多，新增代码多达千余行，新增结构体也有十几个，给代码的理解带来了很多困难。因此，要想真正理解每个函数的作用、函数之间的调用关系以及用户申请文件系统服务的流程，还需要下一番功夫。</p>
+        <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>在学习这一单元之前，我们仅仅是将UML当作一种&quot;画图工具&quot;，仅仅知道它能帮助我们画出各种各样的类图、顺序图、状态图等等。但是，这样我们只是看到了UML的表象，却没有深刻理解其“统一建模语言”的本质。<strong>既然UML是一种语言，那它就应该既有&quot;词汇&quot;，又有&quot;语法&quot;</strong>。通过理论课的学习我们已经知道，UML中的&quot;词汇&quot;就是一个个元模型（例如UMLClass、UMLRegion等等），而“语法”就是各个UML元模型之间的层次关系和组合关系。而本单元的三次作业，就是围绕着UML的&quot;词汇&quot;和&quot;语法&quot;进行展开，要求我们准确理解类图、顺序图和状态图中各个元模型和它们之间的关系，并在此基础上进行建模，实现一个功能较为完备的UML解析器。</p>
 <hr />
-<p>附录：<a href="">Lab 5 函数解读</a></p>
+<h2 id="作业架构分析"><a class="markdownIt-Anchor" href="#作业架构分析"></a> 作业架构分析</h2>
+<h3 id="自建myelement类"><a class="markdownIt-Anchor" href="#自建myelement类"></a> 自建MyElement类</h3>
+<p>本单元的三次作业都是要求我们实现官方包<code>UserApi</code>接口中的方法，但是这并不意味着我们只需要写一个<code>MyImplementation</code>类就可以了（毕竟课程组怎么可能会这么温柔呢bushi）。尽管官方包已经将输入的json字符串解析并封装成了<code>UMLClass</code>、<code>UMLInterface</code>等类，但是这些类中的信息仅仅是从json中迁移过来，对于完成作业来说还是远远不够的。</p>
+<p>由此，我们可以自己新建<code>MyClass</code>、<code>MyInterface</code>等类，里面不仅包含<code>UMLClass</code>、<code>UMLInterface</code>等类的内容，还可以根据需要添加新的信息。例如，<code>MyClass</code>可以添加&quot;继承的所有类的集合&quot;、“实现的所有接口的集合”，“所有成员变量的集合”，“所有成员方法的集合”, “继承深度&quot;等等；<code>MyRegion</code>中可以添加&quot;拥有的所有状态的集合”；<code>MyLifeline</code>中可以添加&quot;所有发出的lost message的集合&quot;，&quot;所有收到的found message的集合&quot;等等。为了让自建类可以包含官方包已经封装好的类中的内容，我们可以通过&quot;组合&quot;的方式实现——</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> depth;</span><br><span class="line">    <span class="keyword">private</span> UmlClass umlClass;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; fatherSet;          <span class="comment">//继承的所有类</span></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; sonSet;             <span class="comment">//被继承的所有类</span></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; interfaceSet;       <span class="comment">//实现所有接口</span></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; attributeSet;       <span class="comment">//所有成员变量</span></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; operationSet;       <span class="comment">//所有成员方法</span></span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; associationEndSet;  <span class="comment">//所有拥有的</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;String&gt; allClasses;</span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; allInterfaces;</span><br><span class="line">    <span class="keyword">private</span> HashSet&lt;String&gt; allAttributes;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="层次化建模"><a class="markdownIt-Anchor" href="#层次化建模"></a> 层次化建模</h3>
+<p>因为输入的json字符串的顺序无法得到保证，所以可能出现<code>UMLGeneration</code>和<code>UMLInterfaceRealization</code>等元模型的出现时间要早于<code>UMLClass</code>和<code>UMLInterface</code>和其他类似的情况，这给我们封装自建类带来的困难。一个比较好的解决办法是多次遍历<code>elements</code>，根据不同元模型之间的依赖关系来先后解析不同的<code>UMLElement</code>、并封装成<code>MyElement</code>。</p>
+<p>经过三次作业的迭代，我们最终可以通过5次遍历来解析所有的元模型——</p>
+<ul>
+<li><strong>Loop1:  UMLClass、UMLInterface、UMLStateMachine、UMLCollaboration</strong></li>
+<li><strong>Loop2: UMLOperation、UMLAttribute、UMLGeneralization、UMLInterfaceRealization、UMLAssociation、UMLInteraction、UMLRegion</strong></li>
+<li><strong>Loop3: UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPseudostate、UMLFinalState</strong></li>
+<li><strong>Loop4: UMLMessage、UMLTransition</strong></li>
+<li><strong>Loop5: UMLEvent、UMLOpaqueBehavior</strong></li>
+</ul>
+<p>这5次遍历可以直接在<code>MyImplementation</code>里进行。而为了防止因为行数过长而被StyleChecker制裁，我单独设置了一个<code>Loop</code>类来封装所有的遍历过程。·</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MyImplementation</span><span class="params">(UmlElement... elements)</span> </span>&#123;</span><br><span class="line">    Dict.getInstance().init();</span><br><span class="line">    Loop.loop1(elements);</span><br><span class="line">    Loop.loop2(elements);</span><br><span class="line">    Loop.loop3(elements);</span><br><span class="line">    Loop.loop4(elements);</span><br><span class="line">    Loop.loop5(elements);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="字典类"><a class="markdownIt-Anchor" href="#字典类"></a> 字典类</h3>
+<p>可以发现，MyClass中<code>fatherSet</code>、<code>sonSet</code>等容器类存放的都是<code>String</code>类型的对象，很显然这些字符串都是表示元模型的id。因为每个元模型的id都是不同的，所以这样做既有操作上的便利性，也有实现上的可行性和安全性。<strong>但是——我们怎么通过id来找到对应的<code>MyElement</code>或者<code>UMLElement</code>呢？</strong>（有些UMLElement实际上不需要添加心得内容，因此不需要新建对应的MyElement）</p>
+<p>为了解决这个问题，我新建了一个字典类——<code>Dict</code>，这个类中存放着所有的MyElement或者UMLElement。同时为了实现&quot;根据id查找&quot;和&quot;根据name进行查找&quot;，我使用了HashMap作为容器来存放。</p>
+<p>此外，Dict实际相当于全局的&quot;recorder&quot;和&quot;seacher&quot;，为了保证在整个项目中只有一个实例，我还在Dict类中应用了单例模式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dict</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Dict DICT = <span class="keyword">new</span> Dict();</span><br><span class="line">    <span class="comment">// Class Diagram</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyClass&gt; classMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyInterface&gt; interfaceMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyOperation&gt; operationMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyAttribute&gt; attributeMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyParameter&gt; parameterMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyAssociation&gt; associationMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, UmlAssociationEnd&gt; associationEndMap;</span><br><span class="line">    <span class="comment">// Sequence Diagram</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyInteraction&gt; interactionMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyLifeline&gt; lifelineMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, UmlEndpoint&gt; endpointMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, UmlMessage&gt; messageMap;</span><br><span class="line">    <span class="comment">// State Diagrame</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyStateMachine&gt; stateMachineMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyRegion&gt; regionMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyState&gt; stateMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyPseudoState&gt; pseudoStateMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyFinalState&gt; finalStateMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, MyTransition&gt; transitionMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, UmlEvent&gt; triggerMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, UmlOpaqueBehavior&gt; effectMap;</span><br><span class="line">    <span class="comment">// map for ’searching by name‘</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, HashSet&lt;MyClass&gt;&gt; classNameMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, HashSet&lt;MyInteraction&gt;&gt; interactionNameMap;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, HashSet&lt;MyStateMachine&gt;&gt; stateMachineNameMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Dict</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Dict <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> DICT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// functions for add</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addClass</span><span class="params">(UmlClass umlClass)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterface</span><span class="params">(UmlInterface umlInterface)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLifeline</span><span class="params">(UmlLifeline umlLifeline)</span></span>;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// functions for searching by id</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyClass <span class="title">getClassById</span><span class="params">(String id)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyInterface <span class="title">getInterfaceById</span><span class="params">(String id)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyLifeline <span class="title">getLifelineById</span><span class="params">(String id)</span></span>;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// functions for searching by name</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> HashSet&lt;MyClass&gt; <span class="title">getClassByName</span><span class="params">(String name)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HashSet&lt;MyInteraction&gt; <span class="title">getInteractionByName</span><span class="params">(String name)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">public</span> HashSet&lt;MyStateMachine&gt; <span class="title">getStateMachineByName</span><span class="params">(String name)</span></span>;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在进行<code>elements</code>的五次遍历时，我们可以将遍历到的 <code>UMLElement</code> 通过<code>Dict</code>类的add方法加入到对应的容器中。需要注意的是，对于那些需要扩展的 <code>UMLElement</code> ，<code>Dict</code>会先调用自建类的构造方法将其转化成<code>MyElement</code>，然后再加入对应的容器。</p>
+<h2 id="架构设计思维和oo方法理解的演进"><a class="markdownIt-Anchor" href="#架构设计思维和oo方法理解的演进"></a> 架构设计思维和OO方法理解的演进</h2>
+<ul>
+<li>
+<p><strong>第一单元的主题是&quot;表达式展开&quot;</strong>，主要是想让我们初步接触面向对象的思想，感受OO方法的魅力。OO的世界观就是&quot;一切皆是对象&quot;，但是要真正理解这句话，还需要学会如何从一个具体问题中抽象出若干对象。第一个单元恰好给我们提供了一个具体情境——表达式展开问题，需要我们从中抽象出一系列对象来帮助我们解决问题。从全局来看，表达式本身可以看作对象；站在表达式的角度，表达式由一个个项通过 + 或者 - 来连接，因此项也能看作对象；站在项的角度，项是由一个个因子通过 * 来链接，因此因子也是对象。这个单元的训练让我们深刻体会到了面向对象编程的优势——通过从问题中抽象出一系列对象，我们可以建立一个层次化、模块化的结构，从而降低了问题的复杂度。</p>
+</li>
+<li>
+<p><strong>第二单元的主题是&quot;电梯调度&quot;</strong>，要求我们将关注点从&quot;对象的行为&quot;转移到&quot;对象的交互&quot;。所有的对象都不是孤立存在的，只有和其他的对象建立联系、进行交互，才可以实现一个更大的功能。但是在多线程的场景下，对象之间的交互时机、交互结果都具有了不确定性，带来了很大的安全隐患。因此，我们需要结合实际场景对线程安全问题进行分析和解决——哪些对象之间的交互存在着安全隐患？如何合理的加锁既能防止死锁，又能保证效率? 只有解决了线程安全问题，才能保证对象之间的交互&quot;乱中有序&quot;、符合预期。</p>
+</li>
+<li>
+<p><strong>第三单元的主题是&quot;JML规格&quot;</strong>，要求我们能够理解JML规格语言，并能基于规格进行代码实现。但是我相信课程组开设这一单元的主要目的并不是要让我们学会使用JML（毕竟JML是真的冷门），而是想让我们在&quot;面向规格编程&quot;的过程中感受到“契约式编程”的魅力——高可靠性、高复用性、便于测试。此外这个单元的三次作业也让我体会到——契约仅仅是对程序的功能做出了限制，在不违背契约的前提下，还需要重点关注如何高效的实现契约，这就很考验我们设计算法的能力了。</p>
+</li>
+<li>
+<p><strong>第四单元的主题是&quot;UML建模语言&quot;</strong>，要求我们深入理解UML语言中各个元模型和它们之间的关系，据此为每一个元模型建立对象，并使所有对象形成一个层次化结构，最终实现对UML的解析。这个单元使我们进一步感受到UML语言的&quot;面向对象&quot;本质，进一步加深对面向对象思想的理解。</p>
+</li>
+</ul>
+<h2 id="测试的理解和实践"><a class="markdownIt-Anchor" href="#测试的理解和实践"></a> 测试的理解和实践</h2>
+<p>在这四个单元中我都是采用了 <strong>“单元测试+随机测试+边缘数据测试”</strong> 的测试流程。</p>
+<ul>
+<li>
+<p><strong>单元测试主要是在 “coding” 阶段进行的。</strong> 每当写完一个(或几个)可以实现特定功能的类后，我会先在test文件夹下新建一个测试类，然后使用junit对这个（或这些）类的各个方法进行测试。如果测试没有问题，再去实现其他功能。这是以前用SprintBoot开发后端时养成的习惯，这样做可以尽早将一些不必要的bug定位出来，减轻后期整体测试时的工作量。</p>
+</li>
+<li>
+<p><strong>当我们将整个项目写完后，需要对其进行完整、系统的测试，以确定我们的设计是否符合要求，输出是否合法。</strong> 我主要采用了自动化随机测试的方法进行整体测试，而这就需要评测机来发挥作用了。整个评测机主要包含两个部分——数据生成器和正确性检查，这样进行分离可以使得评测机拥有很好的可扩展性，降低迭代时的复杂度。<br />
+ <br />
+<strong>在第一单元，我仍然是按照作业中&quot;递归下降&quot;的思想来生成数据，并设置变量对递归次数、系数大小进行控制，从而保证可以生成不同复杂度的数据，提高覆盖率。</strong> 因为有了Python中 sympy 库的加持，我们可以直接对代码输出进行正确性判断，提高了测试的可靠性。但是后面几个单元都没有了标准答案可供参考，因此只能通过对拍的方式进行评测。<br />
+ <br />
+<strong>在第二单元</strong>，我也是采是用随机数的方式来生成乘客请求，但是请求不能任其随机分布，还需要对某楼层或者某楼座进行压力测试，即只针对一楼层（座）生成大量请求。另外，我们可能还需要仅对横向电梯测试或者仅对纵向电梯测试。<strong>为了满足多样性的需求，我为数据生成器增加了许多“模式”可以选择。这样可以检查在不同情境下代码的性能表现和运行结果，更好的排查死锁和电梯灵异现象。</strong> 当然在设计数据生成器时还需要注意指导书上的一些&quot;数据规范&quot;，我们可以通过设置常量进行限制，如果直接将数据限制在代码里写死，将不利于评测机的修改和迭代。本单元的正确性检查主要采用对拍的方式，但由于代码需要模拟电梯运行的时间延迟，每次跑一个数据可能会耗时一两分钟，如果所有对拍的代码都采用串行的方式运行，测试效率将会受到极大的限制，因此我们可以使用python的 subprocess 函数创建多个子进程，实现对不同测试者的代码&quot;同时&quot;进行测试，充分利用并发的优势，提高测试效率。<br />
+ <br />
+<strong>在第三单元</strong>，作业内容涉及到了图的建立，<strong>如果完全随机生成数据的话，图的复杂度可能会非常低（例如图中大多数都是孤立结点）。为了提高数据的强度，我在数据生成器里设置一些数据结构</strong>，用来存储 “所有group、person、message的id”，“group和person之间的关联关系”、“当前生成的图的状态（如连通性）” 等等。每当需要生成一个指令，我们都需要参考数据结构，根据数据状态进行生成。此外，JML规格中已经描述了每个方法可能出现的各种正常、异常情况，我们在生成每个方法对应的指令时，一定要为每种情况设置一定的出现概率，而这也需要数据结构来保证。<br />
+ <br />
+<strong>在第四单元</strong>涉及到了不同元模型之间的复杂关系，我们同样可以通过设置数据结构来保证数据的强度。<strong>但是，由于和作业相关的元模型数量很多，关系也错综复杂，如何仍然采用面向过程来设计数据生成器，将会使复杂度变得不可控，同时也会影响生成数据的正确性和强度。因此，本单元我主要采用了面向对象的思维来设计数据生成器。</strong> 尽管代码行数显著增多（迭代到第三次作业时已经达到1300余行），但是设计和实现的过程并不复杂，同时还能在 coding 的过程中加深对UML元模型及其关系的理解。<br />
+ </p>
+</li>
+<li>
+<p><strong>边缘化数据测试是整个测试过程中最关键、也是最容易发现bug的阶段。</strong> 受限于随机数的偶然性和数据生成器的生成算法，自动化随机测试不能够保证能够覆盖到所有的情况。对于一些特殊的情况，我们还是需要采取&quot;手撸&quot;的方式构造一些有针对性的、刁钻的数据，从而弥补随机测试的短板，提高测试的全面性。</p>
+</li>
+</ul>
+<h2 id="课程收获"><a class="markdownIt-Anchor" href="#课程收获"></a> 课程收获</h2>
+<ul>
+<li>学会了Java语言，初步建立了面向对象的思想，并且掌握了很多基本的设计模式，感受到了设计方法论的魅力。</li>
+<li>学习了很多测试方法（junit单元测试、基于JML规格的测试），同时也提高了写数据生成器和测评机的能力，并且在此过程中学会了很多python、shell技能。</li>
+<li>在做作业的过程中逐渐养成了&quot;先充分设计再动手实现&quot;的习惯，不再像大一时那样拿过题目就直接coding。</li>
+<li>在架构讨论和对拍测试的过程中认识了很多新朋友，也充分感受到了团队合作的力量。</li>
+</ul>
+<h2 id="改进建议"><a class="markdownIt-Anchor" href="#改进建议"></a> 改进建议</h2>
+<ul>
+<li>希望在预习课程或者第一单元博客周增设&quot;多线程系统学习栏目&quot;，让同学们尽早地接触多线程的基本思想和基本方法，以减轻第二单元的压力。</li>
+<li>希望互测和公测的数据限制保持一致（本地能够用公测数据hack人，但是却交不上去的感觉真的很难受），同时希望在提交了不合法数据时，评测机提供一些错误信息，以便提交者对数据进行修改。</li>
+<li>希望在实验课中增加提交反馈或者在课后公布答案，让同学们清楚在实验课中暴露出的问题，以便在课后及时弥补。</li>
+</ul>
 
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
           
-          <li class="previous">
-            <a href="/2022/06/26/OO-第四单元总结/" data-toggle="tooltip" data-placement="top" title="「BUAA-OO」第四单元：UML建模语言">&larr; Previous Post</a>
-          </li>
-          
           
           <li class="next">
-            <a href="/2022/06/04/OO-第三单元总结/" data-toggle="tooltip" data-placement="top" title="「BUAA-OO」第三单元:规格化设计">Next Post &rarr;</a>
+            <a href="/2022/06/04/OS-Lab5实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab5实验报告">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -699,7 +601,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OS」 Lab5实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/06/04/OS-Lab5实验报告/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OO」第四单元：UML建模语言&body=Hi,I found this website and thought you might like it http://example.com/2022/06/26/OO-第四单元总结/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -734,7 +636,7 @@
       repo: 'hyggge.github.io',
       owner: 'Hyggge',
       admin: 'Hyggge',
-      id: 'Sat Jun 04 2022 13:21:26 GMT+0800', // Ensure uniqueness and length less than 50
+      id: 'Sun Jun 26 2022 12:21:05 GMT+0800', // Ensure uniqueness and length less than 50
       distractionFreeMode: false, // Facebook-like distraction free mode
       perPage: 10,
       pagerDirection: 'last',
@@ -787,7 +689,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-51"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> Thinking 5.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-52"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> Thinking 5.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-53"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> Thinking 5.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-54"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> Thinking 5.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-55"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> Thinking 5.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-56"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text"> Thinking 5.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-57"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text"> Thinking 5.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-58"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text"> Thinking 5.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-59"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text"> Thinking 5.9</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-510"><span class="toc-nav-number">1.10.</span> <span class="toc-nav-text"> Thinking 5.10</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-511"><span class="toc-nav-number">1.11.</span> <span class="toc-nav-text"> Thinking 5.11</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-512"><span class="toc-nav-number">1.12.</span> <span class="toc-nav-text"> Thinking 5.12</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%9D%97%E7%9A%84%E5%AE%9A%E4%BD%8D%E6%96%B9%E5%BC%8F"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 文件数据块的定位方式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#fsformatc%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> fsformat.c中函数的调用关系</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%B8%83%E5%B1%80"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 文件系统的地址空间布局</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text"> 用户进程和文件系统服务进程的交互</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%9C%E4%B8%9A%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 作业架构分析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%87%AA%E5%BB%BAmyelement%E7%B1%BB"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 自建MyElement类</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B1%82%E6%AC%A1%E5%8C%96%E5%BB%BA%E6%A8%A1"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 层次化建模</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AD%97%E5%85%B8%E7%B1%BB"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> 字典类</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%E5%92%8Coo%E6%96%B9%E6%B3%95%E7%90%86%E8%A7%A3%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 架构设计思维和OO方法理解的演进</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%B5%8B%E8%AF%95%E7%9A%84%E7%90%86%E8%A7%A3%E5%92%8C%E5%AE%9E%E8%B7%B5"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 测试的理解和实践</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%AF%BE%E7%A8%8B%E6%94%B6%E8%8E%B7"><span class="toc-nav-number">5.</span> <span class="toc-nav-text"> 课程收获</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%94%B9%E8%BF%9B%E5%BB%BA%E8%AE%AE"><span class="toc-nav-number">6.</span> <span class="toc-nav-text"> 改进建议</span></a></li></ol>
         
         </div>
       </aside>
@@ -812,7 +714,7 @@
             
             <a class="tag" href="/tags/#BUAA" title="BUAA">BUAA</a>
             
-            <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
+            <a class="tag" href="/tags/#面向对象" title="面向对象">面向对象</a>
             
           </div>
         </section>
