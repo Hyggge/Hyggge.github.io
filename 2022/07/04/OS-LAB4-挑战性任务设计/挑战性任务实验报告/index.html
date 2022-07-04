@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag (contains Google-Analytics、Baidu-Tongji)-->
+<head>
+  <!-- Google Analytics -->
+  
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-xxxxxx-xx"></script>
+    <script type="text/javascript">
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-xxxxxx-xx');
+    </script>
+  
+
+  <!-- Baidu Tongji -->
+  
+    <script type="text/javascript">
+      // Originial
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  <!-- Baidu Push -->
+  
+    <script>
+      (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+      })();
+    </script>
+  
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  <meta name="google-site-verification" content="lxDfCplOZbIzjhG34NuQBgu2gdyRlAtMB4utP5AgEBc"/>
+  <meta name="baidu-site-verification" content="PpzM9WxOJU"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="It&#39;s a broad stage"/>
+  <meta name="keyword" content="Hyggge, BUAA, Undergraduate, CS, Photograph"/>
+  <link rel="shortcut icon" href="/img/avatar/head.jpg"/>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
+
+  
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/beantech.min.css"/>
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css"/>
+    <link rel="stylesheet" href="/css/widget.css"/>
+    <link rel="stylesheet" href="/css/rocket.css"/>
+    <link rel="stylesheet" href="/css/signature.css"/>
+    <link rel="stylesheet" href="/css/catalog.css"/>
+    <link rel="stylesheet" href="/css/livemylife.css"/>
+
+    
+      <!-- wave start -->
+      <link rel="stylesheet" href="/css/wave.css"/>
+      <!-- wave end -->
+    
+
+    
+      <!-- top start (article top hot config) -->
+      <link rel="stylesheet" href="/css/top.css"/>
+      <!-- top end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/scroll.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+
+    
+      <!-- Search start -->
+      <link rel="stylesheet" href="/css/search.css"/>
+      <!-- Search end -->
+    
+
+    
+      <!-- ThemeColor start -->
+      <link rel="stylesheet" href="/css/themecolor.css"/>
+      <!-- ThemeColor end -->
+    
+
+    
+
+    
+      <!-- gitalk start -->
+      <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"> -->
+      <link rel="stylesheet" href="/css/gitalk.css"/>
+      <!-- gitalk end -->
+    
+  
+
+  <!-- Custom Fonts -->
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+  <!-- Hux change font-awesome CDN to qiniu -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Hux Delete, sad but pending in China <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> <link
+  href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/ css'> -->
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
+
+  <!-- ga & ba script hoook -->
+  <link rel="canonical" href="http://example.com/2022/07/04/OS-LAB4-挑战性任务设计/挑战性任务实验报告/">
+  <title>
+    
+      Hyggge‘s blog
+    
+  </title>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+
+	<body ontouchstart="" class="body--light body--light">
+
+
+		<!-- ThemeColor -->
+		
+		<!-- ThemeColor -->
+<style type="text/css">
+  .body--light {
+    --light-mode: none;
+    --dark-mode: block;
+  }
+  .body--dark {
+    --light-mode: block;
+    --dark-mode: none;
+  }
+  i.mdui-icon.material-icons.light-mode {
+    display: var(--light-mode);
+  }
+  i.mdui-icon.material-icons.dark-mode {
+    display: var(--dark-mode);
+  }
+</style>
+<div class="toggle" onclick="document.body.classList.toggle('body--dark')">
+  <i class="mdui-icon material-icons light-mode"></i>
+  <i class="mdui-icon material-icons dark-mode"></i>
+</div>
+<script>
+  //getCookieValue
+  function getCookieValue(a) {
+    var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+    return b
+      ? b.pop()
+      : '';
+  }
+  let themeMode = 'light';
+  if (getCookieValue('sb-color-mode') && (getCookieValue('sb-color-mode') !== themeMode)) {
+    let dbody = document.body.classList;
+    themeMode === 'dark' ? dbody.remove('body--dark') : dbody.add('body--dark');
+  }
+
+  //setCookieValue
+  var toggleBtn = document.querySelector(".toggle");
+  toggleBtn.addEventListener("click", function () {
+    var e = document.body.classList.contains("body--dark");
+    var cookieString = e
+      ? "dark"
+      : "light";
+    var exp = new Date();
+    exp.setTime(exp.getTime() + 3 * 24 * 60 * 60 * 1000); //3天过期
+    document.cookie = "sb-color-mode=" + cookieString + ";expires=" + exp.toGMTString() + ";path=/";
+  });
+</script>
+
+		
+
+		<!-- Gitter -->
+		
+		<!-- Gitter -->
+<!-- Docs:https://gitter.im/?utm_source=left-menu-logo -->
+<script>
+  ((window.gitter = {}).chat = {}).options = {
+    room: 'your-community/your-room'
+  };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+		
+
+		<!-- Navigation (contains search)-->
+		<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hyggge&#39;s Blog</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <!-- Known Issue, found by Hux: <nav>'s height woule be hold on by its content. so, when navbar scale out, the <nav> will cover tags. also mask any touch event of tags, unfortunately. -->
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/">HOME</a>
+          </li>
+
+          
+          
+          
+          
+          <li>
+            <a href="/archive/">
+              
+              ARCHIVES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/about/">
+              
+              ABOUT
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/tags/">
+              
+              TAGS
+              
+              
+            </a>
+          </li>
+          
+          
+
+          
+          <li>
+            <a class="popup-trigger">
+              <span class="search-icon"></span>SEARCH</a>
+          </li>
+          
+
+          <!-- LangSelect -->
+          
+        </ul>
+      </div>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+<!-- progress -->
+<div id="progress">
+  <div class="line" style="width: 0%;"></div>
+</div>
+
+<script>
+  // Drop Bootstarp low-performance Navbar Use customize navbar with high-quality material design animation in high-perf jank-free CSS3 implementation
+  var $body = document.body;
+  var $toggle = document.querySelector('.navbar-toggle');
+  var $navbar = document.querySelector('#huxblog_navbar');
+  var $collapse = document.querySelector('.navbar-collapse');
+
+  $toggle.addEventListener('click', handleMagic)
+
+  function handleMagic(e) {
+    if ($navbar.className.indexOf('in') > 0) {
+      // CLOSE
+      $navbar.className = " ";
+      // wait until animation end.
+      setTimeout(function() {
+        // prevent frequently toggle
+        if ($navbar.className.indexOf('in') < 0) {
+          $collapse.style.height = "0px"
+        }
+      }, 400)
+    } else {
+      // OPEN
+      $collapse.style.height = "auto"
+      $navbar.className += " in";
+    }
+  }
+</script>
+
+
+		<!-- Post Header (contains intro-header、signature、wordcount、busuanzi、waveoverlay) -->
+		<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+
+  <style type="text/css">
+    .body--light {
+      /* intro-header */
+      --intro-header-background-image-url-home: url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: url('');
+      --intro-header-background-image-url-page: url('/img/header_img/bg.png');
+    }
+    .body--dark {
+      --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
+    }
+
+    header.intro-header {
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url(''); */
+      
+    }
+
+    
+      #signature {/*signature*/
+        background-image: url('/img/signature/vincent-white.png');
+      }
+    
+  </style>
+
+
+
+
+
+<header class="intro-header">
+  <!-- Signature -->
+  <div id="signature">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          
+          <div class="post-heading">
+            <div class="tags">
+              
+            </div>
+            <h1></h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Hyggge on
+              2022-07-04
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">37</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">8k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- waveoverlay start -->
+  <div class="preview-overlay">
+    <svg class="preview-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+      </defs>
+      <g class="preview-parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill=var(--gentle-wave1)></use>
+        <use xlink:href="#gentle-wave" x="48" y="3" fill=var(--gentle-wave2)></use>
+        <use xlink:href="#gentle-wave" x="48" y="5" fill=var(--gentle-wave3)></use>
+        <use xlink:href="#gentle-wave" x="48" y="7" fill=var(--gentle-wave)></use>
+      </g>
+    </svg>
+  </div>
+  <!-- waveoverlay end -->
+  
+
+</header>
+
+
+
+		<!-- Main Content (Post contains
+	Pager、
+	tip、
+	socialshare、
+	gitalk、gitment、disqus-comment、
+	Catalog、
+	Sidebar、
+	Featured-Tags、
+	Friends Blog、
+	anchorjs、
+	) -->
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h1 id="lab4-挑战性任务实验报告"><a class="markdownIt-Anchor" href="#lab4-挑战性任务实验报告"></a> Lab4 挑战性任务实验报告</h1>
+<h2 id="任务简介"><a class="markdownIt-Anchor" href="#任务简介"></a> 任务简介</h2>
+<p>Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进行修改，实现线程相关机制，将作业调度的粒度缩小到线程，提高MOS的并发能力。此外，同一进程中的所有线程都共享进程中的资源，因此难免会出现资源竞争的现象。为了更好的控制线程之间的同步互斥关系，我们还需要实现信号量机制，从而保证各个线程能够按照我们的预期运行。</p>
+<p>最终，我在任务中实现了以下用户态函数，并成功通过了自己的测试样例，达到了预期效果。</p>
+<ul>
+<li><strong>线程相关函数</strong>
+<ul>
+<li><strong>pthread_create</strong></li>
+<li><strong>pthread_exit</strong></li>
+<li><strong>pthread_cancel</strong></li>
+<li><strong>pthread_join</strong></li>
+<li><strong>pthread_testcancel</strong></li>
+<li><strong>pthread_self</strong></li>
+<li><strong>pthread_detach</strong></li>
+<li><strong>pthread_setcanceltype</strong><br />
+ </li>
+</ul>
+</li>
+<li><strong>信号量相关函数</strong>
+<ul>
+<li><strong>sem_init</strong></li>
+<li><strong>sem_destroy</strong></li>
+<li><strong>sem_wait</strong></li>
+<li><strong>sem_trywait</strong></li>
+<li><strong>sem_post</strong></li>
+<li><strong>sem_getvalue</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="线程相关机制"><a class="markdownIt-Anchor" href="#线程相关机制"></a> 线程相关机制</h2>
+<h3 id="数据结构"><a class="markdownIt-Anchor" href="#数据结构"></a> 数据结构</h3>
+<h4 id="线程控制块的设置"><a class="markdownIt-Anchor" href="#线程控制块的设置"></a> 线程控制块的设置</h4>
+<p>首先，我们需要引入记录线程相关状态的数据结构，从而实现对线程的控制。这个数据结构就是线程控制块——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> &#123;</span></span><br><span class="line">    u_int thread_id;        </span><br><span class="line">    u_int thread_pri;       </span><br><span class="line">    u_int thread_tag;       </span><br><span class="line">    u_int thread_status;    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Trapframe</span> <span class="title">thread_tf</span>;</span></span><br><span class="line">    <span class="built_in">LIST_ENTRY</span>(Thread) thread_sched_link;</span><br><span class="line">    <span class="keyword">void</span>* thread_retval;</span><br><span class="line">    <span class="keyword">void</span>** thread_retval_ptr;</span><br><span class="line">    u_int thread_join_caller;</span><br><span class="line">    u_int thread_cancel_type;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>thread_id</code>是线程的<code>id</code>。<code>thread_id</code>包括两部分，0-4位表示该线程是所属进程中的第几号线程（每个进程中最多同时运行32个线程），4-31位记录线程所属进程的<code>envid</code>；</li>
+<li><code>thread_pri</code>是线程的优先级。线程通过优先级来确定时间片的大小，属于同一进程的所有线程优先级相同。</li>
+<li><code>thread_tag</code>是线程的标志位集合。这里采用状态压缩的方式，每一位分别表示不同的标志位。  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_TAG_CANCELED    1    <span class="comment">// bit0为1表示线程已经被cancel</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_TAG_JOINED      2    <span class="comment">// bit1为1表示线程已经被joined</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_TAG_EXITED      4    <span class="comment">// bit2为1表示线程已经调用过pthread_exit函数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_TAG_DETACHED    8    <span class="comment">// bit3为1表示线程已经是分离状态</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><code>thread_status</code>表示线程的运行状态，可取值有<code>THREAD_FREE</code>，<code>THREAD_RUNNABLE</code>，<code>THREAD_NOT_RUNNABLE</code>。  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_FREE	            0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_RUNNABLE		    1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_NOT_RUNNABLE	    2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><code>thread_tf</code>是用来存储寄存器现场的数据结构。在线程调出时，内核会将上下文存入其中，等到线程重新获得处理机资源时再恢复。</li>
+<li><code>thread_retval</code>用来保存线程返回值。</li>
+<li><code>thread_retval_ptr</code>是指向线程返回值的指针。该指针的拥有者是&quot;调用join的线程&quot;，指针指向的是&quot;被join作用的线程的返回值&quot;。</li>
+<li><code>thread_join_caller</code>保存的是&quot;调用join的线程&quot;，而拥有这个变量的是&quot;join作用的线程&quot;。当某个线程结束时，如果它本身是被join的，则会将自身返回值<code>thread_retval</code>存储到<code>*(caller-&gt;thread_retval_ptr)</code>中。</li>
+<li><code>thread_cancel_type</code>表示线程的撤销类型，可以取<code>THREAD_CANCEL_DEFREERD</code>和<code>THREAD_CANCEL_ASYNCHRONOUS</code>两个值。如果是前者，则表示被cancel作用后不立刻结束，需等待取消点的到来；如果是后者，则被cancel作用后会立即结束。  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_CANCEL_DEFERRED          0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_CANCEL_ASYNCHRONOUS	1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="进程控制块的修改"><a class="markdownIt-Anchor" href="#进程控制块的修改"></a> 进程控制块的修改</h4>
+<p>引入线程之后，进程的作用和地位就发生了改变，进程只作为系统资源的分配单元。因此，原来进程控制块中与调度相关的数据就不再需要了，例如<code>env_pop_tf</code>和<code>env_status</code>，取而代之的是和线程控制相关的数据。更改之后的进程控制块如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Env</span> &#123;</span></span><br><span class="line">    <span class="comment">// struct Trapframe env_tf;         // Saved registers</span></span><br><span class="line">    <span class="built_in">LIST_ENTRY</span>(Env) env_link;           <span class="comment">// Free list</span></span><br><span class="line">    u_int env_id;                       <span class="comment">// Unique environment identifier</span></span><br><span class="line">    u_int env_parent_id;                <span class="comment">// env_id of this env&#x27;s parent</span></span><br><span class="line">    <span class="comment">// u_int env_status;                // Status of the environment</span></span><br><span class="line">    Pde  *env_pgdir;                    <span class="comment">// Kernel virtual address of page dir</span></span><br><span class="line">    u_int env_cr3;</span><br><span class="line">    u_int env_pri;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">LIST_ENTRY</span>(Env) env_sched_link;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lab 4 IPC</span></span><br><span class="line">    u_int env_ipc_value;                <span class="comment">// data value sent to us </span></span><br><span class="line">    u_int env_ipc_from;                 <span class="comment">// envid of the sender  </span></span><br><span class="line">    u_int env_ipc_recving;              <span class="comment">// env is blocked receiving</span></span><br><span class="line">    u_int env_ipc_dstva;		<span class="comment">// va at which to map received page</span></span><br><span class="line">    u_int env_ipc_perm;		        <span class="comment">// perm of page mapping received</span></span><br><span class="line">    u_int env_ipc_dst_thread;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lab 4 fault handling</span></span><br><span class="line">    u_int env_pgfault_handler;          <span class="comment">// page fault state</span></span><br><span class="line">    u_int env_xstacktop;                <span class="comment">// top of exception stack</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lab 6 scheduler counts</span></span><br><span class="line">    u_int env_runs;			<span class="comment">// number of times been env_run&#x27;ed</span></span><br><span class="line">    u_int env_nop;                      <span class="comment">// align to avoid mul instruction</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lab 4 challenge</span></span><br><span class="line">    u_int env_thread_bitmap;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> <span class="title">env_threads</span>[32];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以发现，删除<code>env_pop_tf</code>和<code>env_status</code>后，我们又新增了三个数据——<code>env_ipc_dst_thread</code>，<code>env_thread_bitmap</code>和<code>env_therads</code>。</p>
+<ul>
+<li><code>env_ipc_dst_thread</code>保存IPC交互过程中&quot;读线程&quot;的id。</li>
+<li><code>env_thread_bitmap</code>是用来记录线程使用状态的位图。一个进程中最多有32个线程，正好对应整数的32个位。1表示线程已经被分配出去，状态可能是<code>RUNNABLE</code>或者<code>NOT_RUNNABLE</code>；0表示线程仍然是<code>FREE</code>状态，可以被申请。</li>
+<li><code>env_threads</code>中存储被该进程管理的32个线程的线程控制块。</li>
+</ul>
+<h3 id="线程的创建和销毁"><a class="markdownIt-Anchor" href="#线程的创建和销毁"></a> 线程的创建和销毁</h3>
+<p>每个进程的0号线程是该进程的主线程，主线程的PC初始值是用户程序镜像中的<code>entry point</code>，从而保证线程运行时直接执行用户程序中的<code>main</code>函数。每当创建一个新的进程时，该进程的主线程也随之被分配出去了。为了保证进程及其主线程同时创建、以及主线程能够从正确的PC开始运行，我们需要对原来的<code>env_alloc</code>、<code>env_create_priority</code>、<code>load_icode</code>等函数进行修改。</p>
+<p>进程中的1-31号线程都是通过<code>pthread_create</code>函数创建出来的，我们姑且把这些线程称为子线程。子线程的运行入口是某个由用户创建的&quot;线程运行函数&quot;（相当于Java中的<code>run</code>方法），而并非是<code>main</code>函数，这是子线程和主线程的根本区别。</p>
+<p>不论是子线程和主线程，在运行时都需要一定的栈空间。为了保证每个线程都拥有独立的栈空间，同时尽量避免不同线程的栈之间发生冲突，我从<code>USTACKTOP</code>开始为0-31号线程依次划分了4MB大小的空间，<code>USTACKTOP</code>是0号线程的栈顶，<code>USTACKTOP+4M</code>是1号线程的栈顶…以此类推。</p>
+<p><img src="" alt="" /></p>
+<p>接下来我们就可以编写进程的创建函数，从进程控制块中申请一个线程控制块，并对这个线程可控制块进行初始化。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">thread_alloc</span><span class="params">(struct Env *e, struct Thread **<span class="keyword">new</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line">    u_int thread_id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 申请一个线程控制块</span></span><br><span class="line">    thread_id = <span class="built_in">mkthreadid</span>(e);                      <span class="comment">//申请一个新的id</span></span><br><span class="line">    t = &amp;e-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];   <span class="comment">//根据id从进程控制块中获取新的线程控制块</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[1;33;40m&gt;&gt;&gt; thread %d is alloced ... (threads[%d] of env %d) &lt;&lt;&lt;\033[0m\n&quot;</span>, </span><br><span class="line">                thread_id, <span class="built_in">THREAD2INDEX</span>(thread_id), <span class="built_in">THREAD2ENVID</span>(thread_id));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 进程控制初始化</span></span><br><span class="line">    t-&gt;thread_id = thread_id;</span><br><span class="line">    t-&gt;thread_pri = e-&gt;env_pri;</span><br><span class="line">    t-&gt;thread_tag = <span class="number">0</span>;</span><br><span class="line">    t-&gt;thread_status = THREAD_RUNNABLE;             <span class="comment">//将线程的状态设置为runnable</span></span><br><span class="line">    t-&gt;thread_retval = <span class="number">0</span>;</span><br><span class="line">    t-&gt;thread_retval_ptr = <span class="number">0</span>;</span><br><span class="line">    t-&gt;thread_join_caller = <span class="number">0</span>;</span><br><span class="line">    t-&gt;thread_cancel_type = <span class="number">0</span>;</span><br><span class="line">    t-&gt;thread_tf.cp0_status = <span class="number">0x1000100c</span>; </span><br><span class="line">    t-&gt;thread_tf.regs[<span class="number">29</span>] = USTACKTOP - <span class="number">1024</span> * BY2PG * <span class="built_in">THREAD2INDEX</span>(thread_id);   <span class="comment">// 栈空间分配  </span></span><br><span class="line"></span><br><span class="line">    *<span class="keyword">new</span> = t;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在线程运行函数正常结束，或者线程自己调用<code>pthread_exit</code>退出，或者线程被<code>join</code>作用时，需要释放相应的线程控制块，我们通过<code>thread_free</code>和<code>thread_destroy</code>函数实现。前者主要是将线程控制块标记成<code>FREE</code>，并在修改对应进程控制块的位图。后者在调用前者的基础上，判断进程中所有的线程是否都已经结束，如果是，则顺便调用<code>env_free</code>将进程也释放掉，随后直接<code>sched_yield</code>进行切换。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread_free</span><span class="params">(struct Thread *t)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Env</span> *<span class="title">e</span>;</span></span><br><span class="line">    e = envs + <span class="built_in">ENVX</span>(<span class="built_in">THREAD2ENVID</span>(t-&gt;thread_id));</span><br><span class="line">    <span class="built_in">thread_index_free</span>(e, <span class="built_in">THREAD2INDEX</span>(t-&gt;thread_id));</span><br><span class="line">    t-&gt;thread_status = THREAD_FREE;</span><br><span class="line">    <span class="built_in">LIST_REMOVE</span>(t, thread_sched_link);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread_destroy</span><span class="params">(struct Thread *t)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Env</span> *<span class="title">e</span> =</span> envs + <span class="built_in">ENVX</span>(<span class="built_in">THREAD2ENVID</span>(t-&gt;thread_id));</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">thread_free</span>(t);</span><br><span class="line">    <span class="keyword">if</span> (curthread == t) curthread = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">bcopy</span>(KERNEL_SP - <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe), TIMESTACK - <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe), </span><br><span class="line">                <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[1;35;40m&gt;&gt;&gt; thread %d is killed ... (threads[%d] of env %d) &lt;&lt;&lt;\033[0m\n&quot;</span>, </span><br><span class="line">                t-&gt;thread_id, <span class="built_in">THREAD2INDEX</span>(t-&gt;thread_id), <span class="built_in">THREAD2ENVID</span>(t-&gt;thread_id)); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 随后判断进程中所用的线程是不是已经结束</span></span><br><span class="line">    <span class="keyword">if</span> (e-&gt;env_thread_bitmap == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">env_free</span>(e);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[1;35;40m&gt;&gt;&gt; env %d is killed ...  &lt;&lt;&lt;\033[0m\n&quot;</span>, e-&gt;env_id);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sched_yield</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="线程的调度"><a class="markdownIt-Anchor" href="#线程的调度"></a> 线程的调度</h3>
+<p>线程创建出来后，还需要对其进行调度。线程的调度完全仿照进程的调度方法：<strong>采用两个队列（<code>thread_shced_list[2]</code>），用来存放可以被调度的线程的控制块。每创建出一个新的线程，我们就将该线程加入第一个队列的队首。在需要进行调度时，我们把当前已经用完时间片的线程放入另一个队列的队尾，并从当前队列的队首获取一个状态为<code>THREAD_RUNNABLE</code>的线程，让这个线程占用处理机资源。</strong></p>
+<p>为了实现线程调度机制，我们需要对<code>sched_yield</code>函数进行修改。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sched.c</span></span><br><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span>* <span class="title">curthread</span>;</span></span><br><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">Thread_list</span> <span class="title">thread_sched_list</span>[];</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sched_yield</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> point = <span class="number">0</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span> =</span> curthread;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">0</span> || t == <span class="literal">NULL</span> || t-&gt;thread_status != THREAD_RUNNABLE) &#123;</span><br><span class="line">       	<span class="keyword">if</span> (t != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="built_in">LIST_REMOVE</span>(t, thread_sched_link);</span><br><span class="line">            <span class="built_in">LIST_INSERT_TAIL</span>(&amp;thread_sched_list[<span class="number">1</span>-point], t, thread_sched_link);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">LIST_EMPTY</span>(&amp;thread_sched_list[point])) &#123;</span><br><span class="line">                point = <span class="number">1</span> - point;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            t = <span class="built_in">LIST_FIRST</span>(&amp;thread_sched_list[point]);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (t-&gt;thread_status == THREAD_RUNNABLE) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">LIST_REMOVE</span>(t, thread_sched_link);</span><br><span class="line">                <span class="built_in">LIST_INSERT_TAIL</span>(&amp;thread_sched_list[<span class="number">1</span>-point], t, thread_sched_link);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        count = t-&gt;thread_pri;</span><br><span class="line">    &#125;</span><br><span class="line">    count--;</span><br><span class="line">    <span class="built_in">thread_run</span>(t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应的，我们仿照<code>env_run</code>函数编写一个<code>thread_run</code>函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// thread.c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">thread_run</span><span class="params">(struct Thread *t)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Env</span> *<span class="title">e</span>;</span></span><br><span class="line">    e = envs + <span class="built_in">ENVX</span>(<span class="built_in">THREAD2ENVID</span>(t-&gt;thread_id));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (curthread != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">Trapframe</span> *<span class="title">old</span>;</span></span><br><span class="line">        old = (struct Trapframe *)(TIMESTACK - <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line">        <span class="built_in">bcopy</span>(old, &amp;(curthread-&gt;thread_tf), <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line">        curthread-&gt;thread_tf.pc = old-&gt;cp0_epc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (curenv != e) &#123;</span><br><span class="line">        curenv = e;</span><br><span class="line">        <span class="built_in">lcontext</span>(curenv-&gt;env_pgdir);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 和curenv类似，我们设置一个全局变量curthread来指向当前运行的线程的线程控制块</span></span><br><span class="line">    curthread = t;   </span><br><span class="line">    <span class="built_in">env_pop_tf</span>(&amp;t-&gt;thread_tf, <span class="built_in">GET_ENV_ASID</span>(e-&gt;env_id));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有一个细节需要注意，如果换出的线程和换入的线程同属于一个进程，那我们不需要使用<code>lcontext</code>更换页表，这也就是线程切换比进程间的原因（线程很长一段时间被称作轻量级进程）。我们的MOS是运行在gxemul模拟器上的，虚实地址的转换也是采用软件模拟的（并没有采用硬件MMU）。当发生tlb中断时，模拟器会根据全局变量<code>context</code>中存储的页表地址来找到页表，并找到对应的页表项。因此，进程间切换时只需要把新进程页表的物理地址传给<code>context</code>变量即可，开销看上去也不大。<strong>但是如果运行在真正的硬件上，进程间切换时还涉及到进程页表从主存和内存之间的换入和换出，以及MMU的相关调整，时间开销就会比较大</strong>。</p>
+<h3 id="相关系统调用"><a class="markdownIt-Anchor" href="#相关系统调用"></a> 相关系统调用</h3>
+<p>为了便于用户态函数的实现，我们需要设置一些系统调用函数提供内核服务——包括<strong>申请新的线程控制块、销毁线程控制块、获得当前运行线程的id、将线程加入或移出调度队列</strong>等等。线程操作相关的系统调用包括——</p>
+<ul>
+<li>
+<p><strong>syscall_thread_alloc</strong>：该函数用于申请新的线程控制块，直接调用<code>thread_alloc</code>函数即可。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_thread_alloc</span><span class="params">(<span class="keyword">int</span> sysno)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line"></span><br><span class="line">    ret = <span class="built_in">thread_alloc</span>(curenv, &amp;t); </span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) <span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> t-&gt;thread_id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>syscall_thread_destroy</strong>：该函数在线程运行函数正常结束、线程自己调用exit退出、线程被join作用时被调用，释放线程占用的资源。需要注意的是，如果被结束的线程拥有<code>THREAD_TAG_CANCELED</code>这一标志位，还需要将自身的返回值&quot;告知&quot;join函数的调用者。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_thread_destroy</span><span class="params">(<span class="keyword">int</span> sysno, u_int threadid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line"></span><br><span class="line">    ret = <span class="built_in">id2thread</span>(threadid, &amp;t);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) <span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (t-&gt;thread_status == THREAD_FREE) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_INVAL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((t-&gt;thread_tag &amp; THREAD_TAG_JOINED) != <span class="number">0</span>) &#123;</span><br><span class="line">        u_int caller_id = t-&gt;thread_join_caller;     </span><br><span class="line">        <span class="comment">// 找到join函数的调用线程   </span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> * <span class="title">caller</span> =</span> &amp;curenv-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(caller_id)];    </span><br><span class="line">        <span class="keyword">if</span> (caller-&gt;thread_retval_ptr != <span class="literal">NULL</span>) &#123;     </span><br><span class="line">            <span class="comment">// 将自身的返回值&quot;告知&quot;join函数的调用者     </span></span><br><span class="line">            *(caller-&gt;thread_retval_ptr) = t-&gt;thread_retval;    </span><br><span class="line">        &#125;</span><br><span class="line">        caller-&gt;thread_status = THREAD_RUNNABLE;</span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">thread_destroy</span>(t);  <span class="comment">// 调用thread_destory函数来释放其他的内容</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>syscall_set_thread_status</code>：设置线程的运行状态，同时根据状态的改变将线程控制块加入或者移出调度队列。具体实现和<code>syscall_set_env_status</code>完全一样，照葫芦画瓢即可。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_set_thread_status</span><span class="params">(<span class="keyword">int</span> sysno, u_int threadid, u_int status)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status != THREAD_RUNNABLE &amp;&amp; status != THREAD_FREE &amp;&amp; status != THREAD_NOT_RUNNABLE) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_INVAL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ret = <span class="built_in">id2thread</span>(threadid, &amp;t);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) <span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status == THREAD_RUNNABLE &amp;&amp; t-&gt;thread_status != THREAD_RUNNABLE) &#123;</span><br><span class="line">        <span class="built_in">LIST_INSERT_HEAD</span>(&amp;thread_sched_list[<span class="number">0</span>], t, thread_sched_link);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status != THREAD_RUNNABLE &amp;&amp; t-&gt;thread_status == THREAD_RUNNABLE) &#123;</span><br><span class="line">        <span class="built_in">LIST_REMOVE</span>(t, thread_sched_link);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    t-&gt;thread_status = status;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>syscall_get_thread_id</code>：获取当前运行的线程的id，直接调用从<code>curthread</code>指向的线程控制块中找即可。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_get_thread_id</span><span class="params">(<span class="keyword">int</span> sysno)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> curthread-&gt;thread_id;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="用户接口的实现"><a class="markdownIt-Anchor" href="#用户接口的实现"></a> 用户接口的实现</h3>
+<p>编写好系统调用之后，我们就可以利用它们实现用户态的接口函数。</p>
+<ul>
+<li>
+<p><strong>pthread_create</strong>：通过<code>syscall_thread_alloc</code>申请一个线程，然后对<code>pc</code>、<code>a0</code>、<code>sp</code>、<code>ra</code>等寄存器进行赋值，保证新创建的子线程能够正确的进入线程运行函数，并最终进入<code>exit</code>函数结束。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *thread, <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">void</span> * (*start_rountine)(<span class="keyword">void</span> *), <span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    u_int thread_id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line">    </span><br><span class="line">    thread_id = <span class="built_in">syscall_thread_alloc</span>();</span><br><span class="line">    <span class="keyword">if</span> (thread_id &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        *thread = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> thread_id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    t = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];</span><br><span class="line">    t-&gt;thread_tf.pc = start_rountine;   <span class="comment">// 保证子线程能够进入线程运行函数</span></span><br><span class="line">    t-&gt;thread_tf.regs[<span class="number">4</span>] = arg;         <span class="comment">// 传递参数</span></span><br><span class="line">    t-&gt;thread_tf.regs[<span class="number">29</span>] -= <span class="number">4</span>;         <span class="comment">// 在栈上预留空间，符合MIPS函数调用的规范</span></span><br><span class="line">    t-&gt;thread_tf.regs[<span class="number">31</span>] = exit;       <span class="comment">// 保证子线程退出线程运行函数后，能够进入exit函数释放进程控制块。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">syscall_set_thread_status</span>(thread_id, THREAD_RUNNABLE);</span><br><span class="line">    *thread = thread_id;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_exit</strong>：调用这个函数会把线程本身中止，如果需要返回某个值，只需要将返回值作为参数传给该函数即可。这个函数首先获得当前运行的线程的线程控制块，然后把返回值复制给<code>thread_retval</code>，并标记上<code>THREAD_TAG_EXITED</code>，最后直接调用<code>exit</code>返回即可。当某个线程调用了join函数，而且join的目标时该进程，则它会从该线程的<code>thread_retval</code>中获得（在系统调用<code>sys_thread_destroy</code>中有这个机制）。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *retval)</span> </span>&#123;</span><br><span class="line">    u_int thread_id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">cur</span>;</span></span><br><span class="line">    thread_id = <span class="built_in">syscall_get_thread_id</span>();</span><br><span class="line">    cur = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];</span><br><span class="line">    </span><br><span class="line">    cur-&gt;thread_retval = retval;</span><br><span class="line">    cur-&gt;thread_tag |= THREAD_TAG_EXITED;</span><br><span class="line">    <span class="built_in">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_cancel</strong>：该函数可以将指定的线程撤销，不过还需要对目标线程的标志位进行检查。对于处于<code>FREE</code>状态的线程、处于分离状态的线程、已经被撤销过的线程、已经调用<code>pthread_exit</code>自杀的线程（自杀但是没来的及destroy），我们不能通过该函数取消它们。else里的内容才是正常情况下做出的操作——</p>
+<ul>
+<li>将目标线程标记为THREAD_TAG_CANCELED</li>
+<li>将PTHREAD_CANCELED设置为返回值（笔者将其设置为666）</li>
+<li>如果目标线程的撤销类型时THREAD_CANCEL_ASYNCHRONOUS，我们需要让目标线程在下一次被调度时直接进入exit函数。</li>
+</ul>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line">    t = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread)];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (t-&gt;thread_id != thread || t-&gt;thread_status == THREAD_FREE) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_NOT_FOUND;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((t-&gt;thread_tag &amp; THREAD_TAG_DETACHED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_DETACHED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((t-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_CANCELED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((t-&gt;thread_tag &amp; THREAD_TAG_EXITED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_EXITED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        t-&gt;thread_tag |= THREAD_TAG_CANCELED;       <span class="comment">// 将目标线程标记为THREAD_TAG_CANCELED</span></span><br><span class="line">        t-&gt;thread_retval = PTHREAD_CANCELED;        <span class="comment">// 将PTHREAD_CANCELED设置为返回值</span></span><br><span class="line">        <span class="keyword">if</span> (t-&gt;thread_cancel_type == THREAD_CANCEL_ASYNCHRONOUS) &#123;</span><br><span class="line">            <span class="keyword">if</span> (thread == <span class="built_in">syscall_get_thread_id</span>()) &#123;</span><br><span class="line">                <span class="built_in">exit</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> t-&gt;thread_tf.pc = exit;            <span class="comment">// 结束该进程 </span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_join</strong>：调用该函数后，会将当前线程阻塞至目标线程结束。</p>
+<ul>
+<li>对于已经处于分离状态、或者已经被join的线程，我们无法对其调用join。</li>
+<li>对于已经处于<code>FREE</code>状态、已经结束了的线程，我们不需要将join调用者阻塞，直接从目标线程的<code>thread_retval</code>中获取返回值即可。</li>
+<li>对于其他线程，我们可以对其调用join，但是调用线程必须等待。注意<code>curthread-&gt;thread_retval_ptr = retval_ptr</code>这步比较关键——将指针<code>retval_ptr</code>赋值给调用者的<code>thread_retval_ptr</code>，当目标进程结束后，会直接将返回值写入<code>*(调用者-&gt;thread_retval_ptr)</code>，这和写入<code>*retval_ptr</code>是等价的（在<code>sys_thread_destroy</code>中有相关机制）。</li>
+</ul>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval_ptr)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">dst</span>;</span></span><br><span class="line">    dst = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread)];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (dst-&gt;thread_id != thread) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_NOT_FOUND;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_DETACHED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_DETACHED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_JOINED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_JOINED;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (dst-&gt;thread_status == THREAD_FREE) &#123;</span><br><span class="line">        <span class="keyword">if</span> (retval_ptr != <span class="literal">NULL</span>)</span><br><span class="line">            *retval_ptr = dst-&gt;thread_retval;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dst-&gt;thread_tag |= THREAD_TAG_JOINED;               <span class="comment">// 将目标线程标记上THREAD_TAG_JOINED</span></span><br><span class="line">    dst-&gt;thread_join_caller = curthread-&gt;thread_id;     <span class="comment">// 把调用者的id记录在目标线程的线程控制块中</span></span><br><span class="line">    curthread-&gt;thread_retval_ptr = retval_ptr;          <span class="comment">// 将传入的指针retval_ptr赋值给thread_retval_ptr</span></span><br><span class="line">    curthread-&gt;thread_status = THREAD_NOT_RUNNABLE;     <span class="comment">// 将当前线程阻塞</span></span><br><span class="line">    <span class="built_in">syscall_yield</span>();                                    <span class="comment">// 切换线程</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_detach</strong>：将目标线程设置为分离状态，对于处于分离状态的线程，其他线程无法对其使用join、detach、cancel等函数。此外，我们不能对已经是<code>FREE</code>状态的、或者已经处于分离状态、或者已经被join的线程使用该函数。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">dst</span>;</span></span><br><span class="line">    dst = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread)];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dst-&gt;thread_id != thread  || dst-&gt;thread_status == THREAD_FREE) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_NOT_FOUND;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_DETACHED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_DETACHED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_JOINED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_JOINED;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dst-&gt;thread_tag |= THREAD_TAG_DETACHED;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_setcanceltype</strong>：默认情况下，线程的cancel type都是<code>THREAD_CANCEL_DEFERRED</code>，而该函数修改进程的<code>cancel type</code>，并通过<code>oldtype</code>获得原值。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setcanceltype</span><span class="params">(<span class="keyword">int</span> type, <span class="keyword">int</span> *oldtype)</span> </span>&#123;</span><br><span class="line">    u_int thread_id = <span class="built_in">syscall_get_thread_id</span>();</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">cur</span> =</span> &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (oldtype) &#123;</span><br><span class="line">        *oldtype = cur-&gt;thread_cancel_type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cur-&gt;thread_cancel_type = type;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_teatcancel</strong>：对于<code>cancel type</code>是<code>THREAD_CANCEL_DEFERRED</code>的线程来说，被cancel函数作用后并不会立刻结束，而是到达某一个&quot;取消点&quot;才会结束自己。而这个函数可以帮助手动设置取消点，当某一个线程运行到该函数时，如果满足条件就直接进入exit函数退出。必须满足条件有两个——</p>
+<ul>
+<li>当前进程必须join函数作用过，即存在<code>THREAD_CANCEL_DEFERRED</code>标记。</li>
+<li>当前进程的<code>cancel type</code>必须是<code>THREAD_CANCEL_DEFERRED</code>，即默认状态。</li>
+</ul>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_testcancel</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    u_int thread_id;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">cur</span>;</span></span><br><span class="line"></span><br><span class="line">    thread_id = <span class="built_in">syscall_get_thread_id</span>();</span><br><span class="line">    cur = &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];</span><br><span class="line">    <span class="keyword">if</span> ((cur-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != <span class="number">0</span> &amp;&amp;</span><br><span class="line">            cur-&gt;thread_cancel_type == THREAD_CANCEL_DEFERRED) &#123;</span><br><span class="line">        <span class="built_in">exit</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>pthread_self</strong>：该函数可以让线程获得自己的id，只需要调用<code>syscall_get_thread_id</code>即可。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pthread_t</span> <span class="title">pthread_self</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_get_thread_id</span>();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="其他细节"><a class="markdownIt-Anchor" href="#其他细节"></a> 其他细节</h3>
+<h4 id="exit"><a class="markdownIt-Anchor" href="#exit"></a> exit</h4>
+<p>所有正常或者非正常结束的线程最后都会进入<code>exit</code>函数，而这个函数也有很多细节需要注意。笔者改写的<code>exit</code>函数如下图所示</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span></span><br><span class="line"><span class="built_in">exit</span>(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//	writef(&quot;enter exit!&quot;);</span></span><br><span class="line">	<span class="comment">//close_all();</span></span><br><span class="line">	<span class="keyword">void</span> *retval = <span class="built_in">get_retval</span>();</span><br><span class="line">	<span class="keyword">int</span> thread_id = <span class="built_in">syscall_get_thread_id</span>();</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">cur_thread</span> =</span> &amp;env-&gt;env_threads[<span class="built_in">THREAD2INDEX</span>(thread_id)];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// THREAD2INDEX(thread_id)表示&quot;该线程是所属进程的第几号线程</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">THREAD2INDEX</span>(thread_id) == <span class="number">0</span>) &#123; </span><br><span class="line">		cur_thread-&gt;thread_retval = <span class="number">0</span>;</span><br><span class="line">		<span class="built_in">syscall_thread_destroy</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">syscall_thread_destroy</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_EXITED) != <span class="number">0</span>)</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		cur_thread-&gt;thread_retval = retval;</span><br><span class="line">		<span class="built_in">syscall_thread_destroy</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对于0号线程，也就是主线程，它先执行<code>umain</code>函数然后再进入<code>exit</code>，由于<code>umain</code>函数是没有返回值的，因此我们需要手动将<code>0</code>作为主线程返回值。但是实际上，一般不会出现&quot;子线程获取主线程的返回值&quot;，所以这里可有可无。</li>
+<li>对于标志位有<code>THREAD_TAG_CANCELED</code>或者<code>THREAD_TAG_EXITED</code>的子线程，这些线程都是通过exit或者cancel函数非正常结束的，而且在这两个函数中都已经把&quot;返回值&quot;赋值给<code>thread_retval</code>，所以在这里只需要调用<code>syscall_thread_destroy</code>释放线程资源即可。</li>
+<li>对于正常结束的子线程，尽管是有返回值，但是由于执行完&quot;线程运行函数&quot;后直接跳转到了<code>exit</code>，&quot;线程运行函数&quot;的返回值我们无法直接获取。为此，笔者特地写了一个汇编函数<code>get_retval</code>来获得&quot;线程运行函数&quot;的返回值。  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">LEAF</span>(get_retval)</span><br><span class="line"> j	 ra</span><br><span class="line"><span class="built_in">END</span>(get_retval)</span><br></pre></td></tr></table></figure>
+我们把<code>get_retval</code>作为<code>exit</code>中运行的第一个函数，由于<code>get_retval</code>没有修改<code>v0寄</code>存器，因此它的返回值和&quot;线程运行函数&quot;的返回值一致。</li>
+</ul>
+<h4 id="pthread_join的线程安全"><a class="markdownIt-Anchor" href="#pthread_join的线程安全"></a> pthread_join的线程安全</h4>
+<p>上面介绍的<code>pthread_join</code>函数的实现是在用户态中实现的，但是笔者在测试中发现，由于线程执行顺序的随机性会带来一些线程安全问题。</p>
+<p>假设线程A调用join函数，并作用于线程B。</p>
+<ul>
+<li>当线程A执行<code>if (dst-&gt;thread_status == THREAD_FREE)</code>时，发现线程B并不是FREE状态，接着发生时钟中断，切换到了线程B。</li>
+<li>线程B执行完并正常退出，状态变成了<code>FREE</code>，然后切换到了线程A。</li>
+<li>线程A由于此前判断出&quot;线程B不是<code>FREE</code>状态&quot;，因此跳过了if，执行后续操作（被阻塞）。</li>
+<li>线程A被阻塞了，但是线程B早就执行完<code>syscall_thread_destroy</code>恢复清白之身了，无法唤醒线程A</li>
+</ul>
+<p>为了解决这个问题，笔者将<code>pthread_join</code>函数中的操作封装成了系统调用——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval_ptr)</span> </span>&#123;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_thread_join</span>(thread, retval_ptr);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新增系统调用函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_thread_join</span><span class="params">(<span class="keyword">int</span> sysno, u_int thread_id, <span class="keyword">void</span> **retval_ptr)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">dst</span>;</span></span><br><span class="line">    <span class="keyword">int</span> ret = <span class="built_in">id2thread</span>(thread_id, &amp;dst);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) <span class="keyword">return</span> ret; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dst-&gt;thread_id != thread_id) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_NOT_FOUND;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_DETACHED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_DETACHED;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((dst-&gt;thread_tag &amp; THREAD_TAG_JOINED) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_THREAD_JOINED;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dst-&gt;thread_status == THREAD_FREE) &#123;</span><br><span class="line">        <span class="keyword">if</span> (retval_ptr != <span class="literal">NULL</span>)</span><br><span class="line">            *retval_ptr = dst-&gt;thread_retval;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dst-&gt;thread_tag |= THREAD_TAG_JOINED;</span><br><span class="line">    dst-&gt;thread_join_caller = curthread-&gt;thread_id;</span><br><span class="line">    curthread-&gt;thread_retval_ptr = retval_ptr;</span><br><span class="line">    curthread-&gt;thread_status = THREAD_NOT_RUNNABLE;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Trapframe</span> *<span class="title">tf</span> =</span> (struct Trapframe *)(KERNEL_SP - <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line">    tf-&gt;regs[<span class="number">2</span>] = <span class="number">0</span>;    <span class="comment">// 设置返回值为0</span></span><br><span class="line">    <span class="built_in">sys_yield</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="信号量机制"><a class="markdownIt-Anchor" href="#信号量机制"></a> 信号量机制</h2>
+<h3 id="数据结构-2"><a class="markdownIt-Anchor" href="#数据结构-2"></a> 数据结构</h3>
+<p>信号量机制的实现同样离不开一定的数据结构。笔者编写了<code>Semaphore</code>这一结构体，并将其作为信号量的类型(sem_t)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Semaphore</span> &#123;</span></span><br><span class="line">    u_int sem_perm;</span><br><span class="line">    <span class="keyword">int</span> sem_value;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span>* <span class="title">sem_wait_queue</span>[32];</span></span><br><span class="line">    u_int sem_queue_head;</span><br><span class="line">    u_int sem_queue_tail;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sem_perm</code>是信号量的标志位集合，同样采用了状态压缩的方式，<code>bit0</code>是信号量的&quot;有效位&quot;，<code>bit1</code>是信号量的&quot;共享位&quot;。  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SEM_PERM_VALID          1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SEM_PERM_SHARE          2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><code>sem_value</code>是信号量的当前值。</li>
+<li><code>sem_wait_queue</code>是存储被阻塞线程的环形队列，因为进程最多只能同时运行32个线程，因此唤醒队列的长度也是32</li>
+<li><code>sem_queue_head</code>是环形队列的队首下标</li>
+<li><code>sem_queue_tail</code>是环形队列的队尾下标</li>
+</ul>
+<h3 id="用户接口函数的实现"><a class="markdownIt-Anchor" href="#用户接口函数的实现"></a> 用户接口函数的实现</h3>
+<p>信号量的使用是为了解决线程高并发带来的同步互斥问题，因此信号量本身的各种操作也必须是原子的。为了保证原子性，笔者为每一个用户接口函数设置了对应的系统调用函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span> <span class="params">(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_init</span>(sem, pshared, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_destroy</span> <span class="params">(<span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_destroy</span>(sem);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span> <span class="params">(<span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_wait</span>(sem);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_trywait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_trywait</span>(sem);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span> <span class="params">(<span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_post</span>(sem);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_getvalue</span> <span class="params">(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> *valp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">syscall_sem_getvalue</span>(sem, valp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>各个系统调用的实现如下——</p>
+<ul>
+<li>
+<p><strong>sys_sem_init</strong>：这个函数主要是对信号量进行初始化，需要将参数赋值给<code>sem_value</code>，设置标志位，并将其他数据成员的值设为0。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_init</span> <span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sem == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_NOT_FOUND;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sem-&gt;sem_value = value;</span><br><span class="line">    sem-&gt;sem_queue_head = <span class="number">0</span>; </span><br><span class="line">    sem-&gt;sem_queue_tail = <span class="number">0</span>;</span><br><span class="line">    sem-&gt;sem_perm |= SEM_PERM_VALID;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pshared) &#123;</span><br><span class="line">        sem-&gt;sem_perm |= SEM_PERM_SHARE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">        sem-&gt;sem_wait_queue[i] = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>sys_sem_destroy</strong>：该函数需要销毁信号量，只需要将信号量的<code>VALID</code>标志位设置位0即可。但是需要注意的是，如果目前还有阻塞在信号量上的线程，则信号量无法被销毁。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_destroy</span> <span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((sem-&gt;sem_perm &amp; SEM_PERM_VALID) == <span class="number">0</span>) &#123;    <span class="comment">// 无法销毁无效的信号量</span></span><br><span class="line">        <span class="keyword">return</span> -E_SEM_INVALID;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (sem-&gt;sem_queue_head != sem-&gt;sem_queue_tail) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_DESTROY_FAIL;         </span><br><span class="line">    &#125;</span><br><span class="line">    sem-&gt;sem_perm &amp;= ~SEM_PERM_VALID;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>sys_sem_wait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会将调用者加入信号量的阻塞队列中，并将该线程状态设置为<code>THREAD_NOT_RUNNABLE</code>，实现阻塞。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_wait</span> <span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((sem-&gt;sem_perm &amp; SEM_PERM_VALID) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_INVALID;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sem-&gt;sem_value--;</span><br><span class="line">    <span class="keyword">if</span> (sem-&gt;sem_value &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if sem_value &lt; 0 </span></span><br><span class="line">    <span class="keyword">if</span> (sem-&gt;sem_value &lt; <span class="number">-32</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_WAIT_MAX;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// must wait</span></span><br><span class="line">    sem-&gt;sem_wait_queue[sem-&gt;sem_queue_tail] = curthread;</span><br><span class="line">    sem-&gt;sem_queue_tail = (sem-&gt;sem_queue_tail + <span class="number">1</span>)	% <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line">    curthread-&gt;thread_status = THREAD_NOT_RUNNABLE;     <span class="comment">//阻塞线程</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Trapframe</span> *<span class="title">tf</span> =</span> </span><br><span class="line">        (struct Trapframe *)(KERNEL_SP - <span class="built_in"><span class="keyword">sizeof</span></span>(struct Trapframe));</span><br><span class="line">    tf-&gt;regs[<span class="number">2</span>] = <span class="number">0</span>;        <span class="comment">// 将返回值设置为0</span></span><br><span class="line">    <span class="built_in">sys_yield</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>sys_sem_trywait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会返回错误码，不会对调用者产生任何阻塞效果。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_trywait</span><span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((sem-&gt;sem_perm &amp; SEM_PERM_VALID) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_INVALID;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sem-&gt;sem_value--;</span><br><span class="line">    <span class="keyword">if</span> (sem-&gt;sem_value &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -E_SEM_TRYWAIT_FAIL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>sys_sem_post</strong>：调用该函数后，<code>sem_value</code>会自增。如果自增之后<code>sem_value</code>的值是小于等于0，则说明当前有阻塞在该信号量上的线程，我们需要从队首获得一个线程并将其唤醒。</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_post</span> <span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Thread</span> *<span class="title">t</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((sem-&gt;sem_perm &amp; SEM_PERM_VALID) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_INVALID;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sem-&gt;sem_value++; </span><br><span class="line">    <span class="keyword">if</span> (sem-&gt;sem_value &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        t = sem-&gt;sem_wait_queue[sem-&gt;sem_queue_head];</span><br><span class="line">        sem-&gt;sem_queue_head = (sem-&gt;sem_queue_head + <span class="number">1</span>) % <span class="number">32</span>;</span><br><span class="line">        t-&gt;thread_status = THREAD_RUNNABLE;  <span class="comment">// 唤醒线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>sys_sem_getvalue</strong>：该函数可以返回目标信号量的当前值，直接返回<code>sem_value</code>即可。对于没有被初始化的信号量，也就是<code>VALID</code>位是0的信号量，直接返回错误码</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_sem_getvalue</span> <span class="params">(<span class="keyword">int</span> sysno, <span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> *valp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((sem-&gt;sem_perm &amp; SEM_PERM_VALID) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> -E_SEM_INVALID;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (valp) &#123;</span><br><span class="line">        *valp = sem-&gt;sem_value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="关于测试"><a class="markdownIt-Anchor" href="#关于测试"></a> 关于测试</h2>
+<h3 id="线程创建-等待-返回值测试"><a class="markdownIt-Anchor" href="#线程创建-等待-返回值测试"></a> 线程创建、等待、返回值测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">print_message_function</span><span class="params">( <span class="keyword">void</span> *ptr )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> id = <span class="built_in">pthread_self</span>();</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m thread %d received : &#x27;%s&#x27; \033[0m\n&quot;</span>, id, (<span class="keyword">char</span> *)ptr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (id == t1) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">umain</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">char</span> *message1 = <span class="string">&quot;I love BUAA!&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *message2 = <span class="string">&quot;I love CS!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span>  ret1, ret2;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>( &amp;t1, <span class="literal">NULL</span>, print_message_function, (<span class="keyword">void</span>*) message1);</span><br><span class="line">    <span class="built_in">pthread_create</span>( &amp;t2, <span class="literal">NULL</span>, print_message_function, (<span class="keyword">void</span>*) message2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>( t1, &amp;ret1);</span><br><span class="line">    <span class="built_in">pthread_join</span>( t2, &amp;ret2); </span><br><span class="line"></span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m thread %d returns: %d \033[0m\n&quot;</span>, t1, ret1);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m thread %d returns: %d \033[0m\n&quot;</span>, t2, ret2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0.jpg" alt="" /></p>
+<h3 id="pthread_exit测试"><a class="markdownIt-Anchor" href="#pthread_exit测试"></a> pthread_exit测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">print_message_function</span><span class="params">( <span class="keyword">void</span> *ptr )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> id = <span class="built_in">pthread_self</span>();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40m thread %d received : &#x27;%s&#x27; \033[0m\n&quot;</span>, id, (<span class="keyword">char</span> *)ptr);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m before `pthread_exit` ...\033[0m\n&quot;</span>, id);</span><br><span class="line">    <span class="keyword">if</span> (id == t1) <span class="built_in">pthread_exit</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">pthread_exit</span>(<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m after `pthread_exit` ...\033[0m\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (id == t1) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">umain</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">char</span> *message1 = <span class="string">&quot;I love BUAA!&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *message2 = <span class="string">&quot;I love CS!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span>  ret1, ret2;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>( &amp;t1, <span class="literal">NULL</span>, print_message_function, (<span class="keyword">void</span>*) message1);</span><br><span class="line">    <span class="built_in">pthread_create</span>( &amp;t2, <span class="literal">NULL</span>, print_message_function, (<span class="keyword">void</span>*) message2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>( t1, &amp;ret1);</span><br><span class="line">    <span class="built_in">pthread_join</span>( t2, &amp;ret2); </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40m thread %d returns: %d \033[0m\n&quot;</span>, t1, ret1);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40m thread %d returns: %d \033[0m\n&quot;</span>, t2, ret2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="exit%E6%B5%8B%E8%AF%95.jpg" alt="" /></p>
+<h3 id="cancel测试"><a class="markdownIt-Anchor" href="#cancel测试"></a> cancel测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"><span class="keyword">pthread_t</span> t3;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">499999</span> &amp;&amp; *((<span class="keyword">int</span> *)arg) == <span class="number">12345</span>) &#123;</span><br><span class="line">                <span class="built_in">pthread_cancel</span>(t3);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> *str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun2</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">pthread_exit</span>(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> a1 = <span class="number">12345</span>;</span><br><span class="line">    <span class="keyword">int</span> a2 = <span class="number">10088</span>;</span><br><span class="line">    <span class="keyword">int</span> a3 = <span class="number">3381</span>;</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, fun1, &amp;a1);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, fun2, &amp;a2);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t3, <span class="literal">NULL</span>, fun1, &amp;a3);</span><br><span class="line">    <span class="keyword">void</span> *temp_1;</span><br><span class="line">    <span class="keyword">void</span> *temp_2;</span><br><span class="line">    <span class="keyword">void</span> *temp_3;</span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, &amp;temp_1);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40mthread 1 is finished!\033[0m\n&quot;</span>);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, &amp;temp_2);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40mthread 2 return the ptr of: %s\033[0m\n&quot;</span>, (<span class="keyword">char</span> *)temp_2);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t3, &amp;temp_3);</span><br><span class="line">    <span class="keyword">if</span> (temp_3 == PTHREAD_CANCELED) &#123;</span><br><span class="line">            <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40mthread 3 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40mthread 3 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="%E6%B5%8B%E8%AF%95cancel.jpg" alt="" /></p>
+<h3 id="cancel返回值测试"><a class="markdownIt-Anchor" href="#cancel返回值测试"></a> cancel返回值测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40mreciving &#x27;%s&#x27;\033[0m\n&quot;</span>, (<span class="keyword">char</span> *)arg);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m %d \033[0m\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m fun1 end !!!\033[0m\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line">    <span class="built_in">pthread_cancel</span>(t1);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, &amp;ret);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t1 return the value of: %d\033[0m\n&quot;</span>, ret);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret == PTHREAD_CANCELED) &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m t1 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40m t1 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="cancel%E8%BF%94%E5%9B%9E%E5%80%BC%E6%B5%8B%E8%AF%95.jpg" alt="" /></p>
+<h3 id="cancel-point测试"><a class="markdownIt-Anchor" href="#cancel-point测试"></a> cancel point测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40mreciving &#x27;%s&#x27;\033[0m\n&quot;</span>, (<span class="keyword">char</span> *)arg);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5</span>) &#123;</span><br><span class="line">            <span class="built_in">pthread_testcancel</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m %d \033[0m\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m fun1 end !!!\033[0m\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ret1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ret2 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_cancel</span>(t1);</span><br><span class="line">    <span class="built_in">pthread_cancel</span>(t2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, &amp;ret1);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, &amp;ret2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t1 return the value of: %d\033[0m\n&quot;</span>, ret1);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t2 return the value of: %d\033[0m\n&quot;</span>, ret2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret1 == PTHREAD_CANCELED) &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m t1 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40m t1 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret2 == PTHREAD_CANCELED) &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m t2 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40m t2 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="cancel%20point%20%E6%B5%8B%E8%AF%95.jpg" alt="" /></p>
+<h3 id="asynchronous-cancel测试-1"><a class="markdownIt-Anchor" href="#asynchronous-cancel测试-1"></a> asynchronous cancel测试 1</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40mreciving &#x27;%s&#x27;\033[0m\n&quot;</span>, (<span class="keyword">char</span> *)arg);</span><br><span class="line">        <span class="keyword">int</span> oldtype;</span><br><span class="line">        <span class="built_in">pthread_setcanceltype</span>(THREAD_CANCEL_ASYNCHRONOUS, &amp;oldtype);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40mthread %d old_cancel_ype is &#x27;%d&#x27;, new_cancel_type is &#x27;%d&#x27;\033[0m\n&quot;</span>, </span><br><span class="line">                    <span class="built_in">pthread_self</span>(), oldtype, THREAD_CANCEL_ASYNCHRONOUS);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">5</span>) &#123;</span><br><span class="line">            <span class="built_in">pthread_cancel</span>(<span class="built_in">pthread_self</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m %d \033[0m\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m fun1 end !!!\033[0m\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ret1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ret2 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, &amp;ret1);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, &amp;ret2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t1 return the value of: %d\033[0m\n&quot;</span>, ret1);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t2 return the value of: %d\033[0m\n&quot;</span>, ret2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret1 == PTHREAD_CANCELED) &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m t1 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40m t1 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret2 == PTHREAD_CANCELED) &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;32;40m t2 was canceled successfully!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">writef</span>(<span class="string">&quot;\033[0;31;40m t2 return with wrong value!\033[0m\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="asys%20cancel%E6%B5%8B%E8%AF%951.jpg" alt="" /></p>
+<h3 id="asynchronous-cancel测试-2"><a class="markdownIt-Anchor" href="#asynchronous-cancel测试-2"></a> asynchronous cancel测试 2</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun1</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40mthread %d reciving &#x27;%s&#x27;\033[0m\n&quot;</span>, <span class="built_in">pthread_self</span>(), (<span class="keyword">char</span> *)arg);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_setcanceltype</span>(THREAD_CANCEL_ASYNCHRONOUS, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m %d \033[0m\n&quot;</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m fun1 end !!!\033[0m\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fun2</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40mthread %d reciving &#x27;%s&#x27;\033[0m\n&quot;</span>, <span class="built_in">pthread_self</span>(), (<span class="keyword">char</span> *)arg);</span><br><span class="line">    <span class="built_in">syscall_yield</span>();    </span><br><span class="line">    <span class="built_in">pthread_cancel</span>(t1);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ret1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ret2 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, fun1, str);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, fun2, str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, &amp;ret1);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, &amp;ret2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t1 return the value of: %d\033[0m\n&quot;</span>, ret1);</span><br><span class="line">    <span class="built_in">writef</span>(<span class="string">&quot;\033[0;34;40m t2 return the value of: %d\033[0m\n&quot;</span>, ret2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="asys%20cancel%E6%B5%8B%E8%AF%952.jpg" alt="" /></p>
+<h3 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p>![]</p>
+<h3 id="信号量创建-取值-销毁测试"><a class="markdownIt-Anchor" href="#信号量创建-取值-销毁测试"></a> 信号量创建、取值、销毁测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1;</span><br><span class="line"><span class="keyword">pthread_t</span> t2;</span><br><span class="line"><span class="keyword">pthread_t</span> t3;</span><br><span class="line"></span><br><span class="line"><span class="keyword">sem_t</span> s1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">func</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> value = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    ret = <span class="built_in">sem_trywait</span>(&amp;s1);</span><br><span class="line">            <span class="built_in">sem_getvalue</span>(&amp;s1, &amp;value);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40m thread %d call the `sem_trywait`, retval is %d, s1&#x27;s value is %d\033[0m\n&quot;</span>, </span><br><span class="line">                <span class="built_in">pthread_self</span>(), ret, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> msg = <span class="string">&quot;hello, world&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> value = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;s1, <span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m after init, s1 perm is %d\033[0m\n&quot;</span>, s1.sem_perm);</span><br><span class="line">    <span class="keyword">if</span> (s1.sem_perm == SEM_PERM_VALID) </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    \033[0;34;40m s1 is valid! \033[0m\n&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">sem_getvalue</span>(&amp;s1, &amp;value);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m s1 value is %d\033[0m\n&quot;</span>, s1.sem_value);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, func, msg);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, func, msg);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// wait for t1</span></span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">sem_destroy</span>(&amp;s1);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m s1 after destroy, perm is %d\033[0m\n&quot;</span>, s1.sem_perm);</span><br><span class="line">    <span class="keyword">if</span> (s1.sem_perm != SEM_PERM_VALID) </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\033[0;34;40m s1 is invalid! \033[0m\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong></p>
+<p><img src="sem%E5%9F%BA%E7%A1%80%E6%B5%8B%E8%AF%95.jpg" alt="" /></p>
+<h3 id="生产者消费者模型测试"><a class="markdownIt-Anchor" href="#生产者消费者模型测试"></a> 生产者消费者模型测试</h3>
+<p><strong>测试例程</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lib.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> t1, t2;</span><br><span class="line"><span class="keyword">sem_t</span> mutex, empty, full;</span><br><span class="line"><span class="keyword">int</span> max = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">prodecer</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;empty);</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;mutex);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;32;40m produce successfully, no count is %d \033[0m\n&quot;</span>, count);</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;full);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">consumer</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;full);</span><br><span class="line">        <span class="built_in">sem_wait</span>(&amp;mutex);</span><br><span class="line">        count--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\033[0;31;40m consume successfully, no count is %d \033[0m\n&quot;</span>, count);</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">sem_post</span>(&amp;empty);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">umain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;mutex, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;empty, <span class="number">0</span>, max);</span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;full, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t1, <span class="literal">NULL</span>, prodecer, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;t2, <span class="literal">NULL</span>, consumer, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">pthread_join</span>(t1, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">pthread_join</span>(t2, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>测试结果</strong><br />
+<img src="%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85.jpg" alt="" /></p>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2022/07/04/OS-LAB4-挑战性任务设计/temp/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=&body=Hi,I found this website and thought you might like it http://example.com/2022/07/04/OS-LAB4-挑战性任务设计/挑战性任务实验报告/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: '481492850cb554535a57',
+      clientSecret: 'a6c365621ee4cadf996fb3ac437668d1ba17747b',
+      repo: 'hyggge.github.io',
+      owner: 'Hyggge',
+      admin: 'Hyggge',
+      id: 'Mon Jul 04 2022 11:45:43 GMT+0800', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'en, zh-CN',
+      proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
+
+
+		<!-- Footer (contains ThemeColor、viewer) -->
+		<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center">
+          
+
+          
+            <li>
+              <a target="_blank" href="https://github.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+            <li>
+              <a target="_blank" href="http://weibo.com/Hyggge">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          
+
+        </ul>
+        <p class="copyright text-muted">
+          Copyright &copy;
+          Hyggge
+          2022
+          <br>
+          Theme by
+          <a target="_blank" rel="noopener" href="http://beantech.org">BeanTech</a>
+          <span style="display: inline-block; margin: 0 5px;">
+            <i class="fa fa-heart"></i>
+          </span>
+          re-Ported by
+          <a target="_blank" rel="noopener" href="https://v-vincen.life/">Live My Life</a>
+          |
+          <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=V-Vincen&repo=V-Vincen.github.io&type=star&count=true"></iframe>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a id="rocket" href="#top" class=""></a>
+
+
+  <!-- jQuery -->
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <!-- Custom Theme JavaScript -->
+  <script type="text/javascript" src="/js/hux-blog.min.js"></script>
+  <!-- catalog -->
+  <script async="true" type="text/javascript" src="/js/catalog.js"></script>
+  <!-- totop(rocket) -->
+  <script async="true" type="text/javascript" src="/js/totop.js"></script>
+
+  
+    <!-- Busuanzi JavaScript -->
+    <script async="async" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <!-- Scroll start -->
+    <script async="async" type="text/javascript" src="/js/scroll.js"></script>
+    <!-- Scroll end -->
+  
+
+  
+
+  
+    <!-- Mouseclick -->
+    <script type="text/javascript" src="/js/mouseclick.js" content='The first step is as good as half over...,Laugh and grow fat...,Man proposes God disposes...,When all else is lost the future still remains...,Wasting time is robbing oneself...,Sharp tools make good work...,Cease to struggle and you cease to live...,A friend in need is a friend indeed...,Faith can move mountains...' color='#9933CC,#339933,#66CCCC,#FF99CC,#CCCCFF,#6666CC,#663399,#66CC99,#FF0033'></script>
+  
+
+  
+
+  
+
+
+
+
+
+
+
+<script>
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function (e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  // fastClick.js
+  async ("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+    var $nav = document.querySelector("nav");
+    if ($nav)
+      FastClick.attach($nav);
+    }
+  )
+</script>
+
+<!-- Because of the native support for backtick-style fenced code blocks right within the Markdown is landed in Github Pages, From V1.6, There is no need for Highlight.js, so Huxblog drops it officially. -
+https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0 - https://help.github.com/articles/creating-and-highlighting-code-blocks/ -->
+<!-- <script> async ("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function () { hljs.initHighlightingOnLoad(); }) </script> <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet"> -->
+
+<!-- jquery.tagcloud.js -->
+<!-- <script> // only load tagcloud.js in tag.html if ($('#tag_cloud').length !== 0) { async ("http://example.com/js/jquery.tagcloud.js", function () { $.fn.tagcloud.defaults = { // size: { start: 1, end: 1, unit: 'em' }, color: {
+start: '#bbbbee', end: '#0085a1' } }; $('#tag_cloud a').tagcloud(); }) } </script> -->
+
+
+		<!-- Search -->
+		
+		<div class="popup search-popup local-search-popup">
+  <span class="popup-btn-close">
+    ESC
+  </span>
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-9 col-md-offset-1"> -->
+      <div class="col-lg-9 col-lg-offset-1 col-md-10 col-md-offset-1 local-search-content">
+
+        <div class="local-search-header clearfix">
+
+          <div class="local-search-input-wrapper">
+            <span class="search-icon">
+              <i class="fa fa-search fa-lg" style="margin: 25px 10px 25px 20px;"></i>
+            </span>
+            <input autocomplete="off" placeholder="SEARCH..." type="text" id="local-search-input">
+          </div>
+        </div>
+        <div id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    <script src="/js/ziploader.js"></script>
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.json";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    // monitor main search box;
+    var onPopupClose = function (e) {
+      $('.popup').fadeOut(300);
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $('.popup').fadeIn(300);
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+    // get search zip version
+    $.get('/searchVersion.json?t=' + (+new Date()), function (res) {
+      if (localStorage.getItem('searchVersion') !== res) {
+        localStorage.setItem('searchVersion', res);
+        initSearchJson();
+      }
+    });
+
+    function initSearchJson() {
+      initLoad(['/search.flv'], {
+        loadOptions: {
+          success: function (obj) {
+            localStorage.setItem('searchJson', obj['search.json'])
+          },
+          error: function (e) {
+            return console.log(e)
+          }
+        },
+        returnOptions: {
+          'json': TYPE_TEXT
+        },
+        mimeOptions: {
+          'json': 'application/json'
+        }
+      })
+    }
+    // search function;
+    var searchFunc = function (search_id, content_id) {
+      'use strict';
+      isfetched = true;
+      var datas = JSON.parse(localStorage.getItem('searchJson'));
+      // console.log(search_id)
+      var input = document.getElementById(search_id);
+      var resultContent = document.getElementById(content_id);
+      var inputEventFunction = function () {
+        var searchText = input.value.trim().toLowerCase();
+        var keywords = searchText.split(/[\s\-]+/);
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        var resultItems = [];
+        if (searchText.length > 0) {
+          // perform local searching
+          datas.forEach(function (data) {
+            var isMatch = false;
+            var hitCount = 0;
+            var searchTextCount = 0;
+            var title = data.title
+              ? data.title.trim()
+              : '';
+            var titleInLowerCase = title.toLowerCase();
+            var content = data.content
+              ? data.content.trim().replace(/<[^>]+>/g, "")
+              : '';
+            var contentInLowerCase = content.toLowerCase();
+            var articleUrl = decodeURIComponent(data.url);
+
+            var date = data.date;
+            var dateTime = date.replace(/T/, " ").replace(/.000Z/, "");
+            var imgUrl = data.header_img;
+            
+
+
+            var indexOfTitle = [];
+            var indexOfContent = [];
+            // only match articles with not empty titles
+            keywords.forEach(function (keyword) {
+              function getIndexByWord(word, text, caseSensitive) {
+                var wordLen = word.length;
+                if (wordLen === 0) {
+                  return [];
+                }
+                var startPosition = 0,
+                  position = [],
+                  index = [];
+                if (!caseSensitive) {
+                  text = text.toLowerCase();
+                  word = word.toLowerCase();
+                }
+                while ((position = text.indexOf(word, startPosition)) > -1) {
+                  index.push({position: position, word: word});
+                  startPosition = position + wordLen;
+                }
+                return index;
+              }
+              indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+              indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+            });
+            if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+              isMatch = true;
+              hitCount = indexOfTitle.length + indexOfContent.length;
+            }
+            // show search results
+            if (isMatch) {
+              // sort index by position of keyword
+              [indexOfTitle, indexOfContent].forEach(function (index) {
+                index.sort(function (itemLeft, itemRight) {
+                  if (itemRight.position !== itemLeft.position) {
+                    return itemRight.position - itemLeft.position;
+                  } else {
+                    return itemLeft.word.length - itemRight.word.length;
+                  }
+                });
+              });
+              // merge hits into slices
+              function mergeIntoSlice(text, start, end, index) {
+                var item = index[index.length - 1];
+                var position = item.position;
+                var word = item.word;
+                var hits = [];
+                var searchTextCountInSlice = 0;
+                while (position + word.length <= end && index.length != 0) {
+                  if (word === searchText) {
+                    searchTextCountInSlice++;
+                  }
+                  hits.push({position: position, length: word.length});
+                  var wordEnd = position + word.length;
+                  // move to next position of hit
+                  index.pop();
+                  while (index.length != 0) {
+                    item = index[index.length - 1];
+                    position = item.position;
+                    word = item.word;
+                    if (wordEnd > position) {
+                      index.pop();
+                    } else {
+                      break;
+                    }
+                  }
+                }
+                searchTextCount += searchTextCountInSlice;
+                return {hits: hits, start: start, end: end, searchTextCount: searchTextCountInSlice};
+              }
+              var slicesOfTitle = [];
+              if (indexOfTitle.length != 0) {
+                slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+              }
+              var slicesOfContent = [];
+              while (indexOfContent.length != 0) {
+                var item = indexOfContent[indexOfContent.length - 1];
+                var position = item.position;
+                var word = item.word;
+                // cut out 100 characters
+                var start = position - 20;
+                var end = position + 80;
+                if (start < 0) {
+                  start = 0;
+                }
+                if (end < position + word.length) {
+                  end = position + word.length;
+                }
+                if (end > content.length) {
+                  end = content.length;
+                }
+                slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+              }
+              // sort slices in content by search text's count and hits' count
+              slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                  return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                  return sliceRight.hits.length - sliceLeft.hits.length;
+                } else {
+                  return sliceLeft.start - sliceRight.start;
+                }
+              });
+              // select top N slices in content
+              var upperBound = parseInt('1');
+              if (upperBound >= 0) {
+                slicesOfContent = slicesOfContent.slice(0, upperBound);
+              }
+              // highlight title and content
+              function highlightKeyword(text, slice) {
+                var result = '';
+                var prevEnd = slice.start;
+                slice.hits.forEach(function (hit) {
+                  result += text.substring(prevEnd, hit.position);
+                  var end = hit.position + hit.length;
+                  result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                  prevEnd = end;
+                });
+                result += text.substring(prevEnd, slice.end);
+                return result;
+              }
+              var resultItem = '';
+
+              // if (slicesOfTitle.length != 0) {   resultItem += "<li><a target='_blank' href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>"; } else {   resultItem += "<li><a target='_blank' href='" +
+              // articleUrl + "' class='search-result-title'>" + title + "</a>"; } slicesOfContent.forEach(function (slice) {   resultItem += "<a target='_blank' href='" + articleUrl + "'><p class=\"search-result\">" + highlightKeyword(content, slice) +
+              // "...</p></a>"; }); resultItem += "</li>";
+
+              if (slicesOfTitle.length != 0) {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              } else {
+                resultItem += "<a target='_blank' href='" + articleUrl + "' class='search-result'><div class='search-result-left'><div class='search-result-title'>" + title + "</div><time class='search-result-date'>" + dateTime + "</time>";
+              }
+              slicesOfContent.forEach(function (slice) {
+                resultItem += "<p class=\"search-result-content\">" + highlightKeyword(content, slice) + "...</p>";
+              });
+              resultItem += "</div><div class='search-result-right'><img class='media-image' src='" + imgUrl + "' width='64px' height='48px'></img></div></a>";
+
+              resultItems.push({item: resultItem, searchTextCount: searchTextCount, hitCount: hitCount, id: resultItems.length});
+            }
+          })
+        };
+
+        if (keywords.length === 1 && keywords[0] === "") {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else if (resultItems.length === 0) {
+          resultContent.innerHTML = '<div id="no-result"></div>'
+        } else {
+          resultItems.sort(function (resultLeft, resultRight) {
+            if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+              return resultRight.searchTextCount - resultLeft.searchTextCount;
+            } else if (resultLeft.hitCount !== resultRight.hitCount) {
+              return resultRight.hitCount - resultLeft.hitCount;
+            } else {
+              return resultRight.id - resultLeft.id;
+            }
+          });
+          var searchResultList = '<div class=\"search-result-list\">';
+          resultItems.forEach(function (result) {
+            searchResultList += result.item;
+          })
+          searchResultList += "</div>";
+          resultContent.innerHTML = searchResultList;
+        }
+      }
+      if ('auto' === 'auto') {
+        input.addEventListener('input', inputEventFunction);
+      } else {
+        $('.search-icon').click(inputEventFunction);
+        input.addEventListener('keypress', function (event) {
+          if (event.keyCode === 13) {
+            inputEventFunction();
+          }
+        });
+      }
+      // remove loading animation
+      $('body').css('overflow', '');
+      proceedsearch();
+    }
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function (e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc('local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function (e) {
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 && $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      var _con = document.querySelector(".local-search-content");
+      if (_con) {
+        if (!_con.contains(e.target)) {
+          onPopupClose();
+        }
+      }
+    });
+  </script>
+
+
+		
+	</body>
+</html>

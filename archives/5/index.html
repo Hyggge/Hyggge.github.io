@@ -247,9 +247,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -258,9 +258,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/about/">
               
-              TAGS
+              ABOUT
               
               
             </a>
@@ -280,9 +280,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
               
               
             </a>
@@ -456,6 +456,45 @@
   <!-- top end -->
   
 
+  <a href="/2021/11/26/CO_P6_流水线cpu（Plus）/">
+    <h2 class="post-title">
+      「BUAA-CO」P6_流水线cpu（Plus）
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+       流水线CPU设计方案
+ 设计概述
+​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2021-11-26
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
   <a href="/2021/11/15/CO_P5_流水线cpu（Basic）/">
     <h2 class="post-title">
       「BUAA-CO」P5_流水线cpu（Basic）
@@ -464,7 +503,9 @@
       
     </h3>
     <div class="post-content-preview">
-      流水线CPU设计方案设计概述​        本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对......
+       流水线CPU设计方案
+ 设计概述
+​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个......
     </div>
   </a>
   
@@ -501,9 +542,10 @@
       
     </h3>
     <div class="post-content-preview">
-      单周期CPU设计方案设计概述本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。
-
-实现指......
+       单周期CPU设计方案
+ 设计概述
+本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。
+......
     </div>
   </a>
   
@@ -540,7 +582,9 @@
       
     </h3>
     <div class="post-content-preview">
-      单周期CPU设计方案设计概述&emsp;本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branch Control，LS Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能......
+       单周期CPU设计方案
+ 设计概述
+ 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branch Control，LS Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部......
     </div>
   </a>
   
@@ -577,15 +621,24 @@
       
     </h3>
     <div class="post-content-preview">
-      MIPS架构（RISC）CPU执行程序的过程
+       MIPS架构（RISC）
+ CPU执行程序的过程
+
 读取指令
 分析指令
-执行指令RISC的设计思想：CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
+执行指令
+
+ RISC的设计思想：
+CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
+
 加速大概率事件
 简单意味着更容易设计、电路频率更高
-简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）RISC的设计策略
-指令定长：所有指令都占用32位（1个字）降低了从存储器中读取指令的复杂度
-简化指令寻......
+简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）
+
+ RISC的设计策略
+
+指令定长：所有指令都占用32位（1个字）
+降低了从存储器中......
     </div>
   </a>
   
@@ -622,7 +675,9 @@
       
     </h3>
     <div class="post-content-preview">
-      算数右移符号&gt;&gt;&gt;我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号assi......
+       算数右移符号&gt;&gt;&gt;
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+12345wire [15:0] A, B, C;assign C = (A &gt;&gt;&gt; B);assign C = (A &gt;&gt;&gt; 3&#x27;b011);//右操作数无符号a......
     </div>
   </a>
   
@@ -659,12 +714,64 @@
       
     </h3>
     <div class="post-content-preview">
-      定义和实例化模块时reg的使用
+       定义和实例化模块时reg的使用
+
+
 在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
+
+
 在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。
 定义输出端口时，我们可以直接定义成reg类型
 1output reg a;
-或者在模块内部声明reg寄存器，然后通过assign语句将寄存......
+
+
+或者在模块内部声明reg寄存器，然后通过assi......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by Hyggge on
+    2021-10-26
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+  
+  <!-- top start (article top hot config) -->
+  
+  <div class="top">
+    <div class="iconfont icon-hot animated infinite tada"></div>
+  </div>
+  
+  <!-- top end -->
+  
+
+  <a href="/2021/10/26/CO_P1_Verilog状态机设计/">
+    <h2 class="post-title">
+      「BUAA-CO」P1_Verilog状态机设计
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
+
+
+逻辑抽象，得出状态转换图。
+
+
+状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。
+
+
+状态分配，也就是状态编码。通常有很多种编码方式，比如 Gr......
     </div>
   </a>
   
@@ -734,88 +841,6 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
   <!-- top end -->
   
 
-  <a href="/2021/10/26/CO_P1_Verilog状态机设计/">
-    <h2 class="post-title">
-      「BUAA-CO」P1_Verilog状态机设计
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
-
-逻辑抽象，得出状态转换图。
-
-状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。
-
-状态分配，也就是状态编码。通常有很多种编码方式，比如 Gray ......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-10-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
-  <a href="/2021/10/26/CO_P1_Verilog阻塞和非阻塞赋值的讨论/">
-    <h2 class="post-title">
-      「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论
-    </h2>
-    <h3 class="post-subtitle">
-      
-    </h3>
-    <div class="post-content-preview">
-      概念区别
-阻塞赋值操作符用等号(即 = )表示。“阻塞”是指在进程语句（initial和always）中，当前的赋值语句阻断了其后的语句，也就是说后面的语句必须等到当前的赋值语句执行完毕才能执行。而且阻塞赋值可以看成是一步完成的，即：计算等号右边的值并同时赋给左边变量。
- 也就是说：赋值时先计算等号右手方向（RHS）部分的值，这时赋值语句不允许任何别的Verilog语句的干扰，直到现行的赋值......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by Hyggge on
-    2021-10-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#计算机组成" title="计算机组成">计算机组成</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-  
-  <!-- top start (article top hot config) -->
-  
-  <div class="top">
-    <div class="iconfont icon-hot animated infinite tada"></div>
-  </div>
-  
-  <!-- top end -->
-  
-
   <a href="/2021/10/26/CO_P1_Verilog边沿检测总结/">
     <h2 class="post-title">
       「BUAA-CO」P1_Verilog边沿检测总结
@@ -824,8 +849,11 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       
     </h3>
     <div class="post-content-preview">
-      上升沿（或下降沿）检测如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
-1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0] ped......
+       上升沿（或下降沿）检测
+如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
+
+只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
+1234567891011121314module top_module (    input clk,    input [7:0] in,    output [7:0]......
     </div>
   </a>
   
@@ -887,31 +915,15 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
     
     
     
-    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
-    
-    
-    
     <a href="/tags/#C++" title="C++" rel="8">C++</a>
     
     
     
-    <a href="/tags/#BUAA" title="BUAA" rel="19">BUAA</a>
+    <a href="/tags/#BUAA" title="BUAA" rel="20">BUAA</a>
     
     
     
-    <a href="/tags/#Git" title="Git" rel="3">Git</a>
-    
-    
-    
-    <a href="/tags/#面向对象" title="面向对象" rel="4">面向对象</a>
-    
-    
-    
-    <a href="/tags/#操作系统" title="操作系统" rel="9">操作系统</a>
-    
-    
-    
-    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
+    <a href="/tags/#ECS" title="ECS" rel="1">ECS</a>
     
     
     
@@ -923,7 +935,23 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
     
     
     
+    <a href="/tags/#Git" title="Git" rel="3">Git</a>
+    
+    
+    
     <a href="/tags/#Letax" title="Letax" rel="1">Letax</a>
+    
+    
+    
+    <a href="/tags/#Maven" title="Maven" rel="3">Maven</a>
+    
+    
+    
+    <a href="/tags/#面向对象" title="面向对象" rel="4">面向对象</a>
+    
+    
+    
+    <a href="/tags/#操作系统" title="操作系统" rel="10">操作系统</a>
     
     
   </div>
@@ -995,24 +1023,24 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
 <div class="widget">
   <ul>
     
+    <a href="../../2022/07/04/OS-LAB4-%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1/%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+      <li>(no title)</li>
+    </a>
+    
+    <a href="../../2022/07/04/OS-LAB4-%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1/temp/">
+      <li>(no title)</li>
+    </a>
+    
+    <a href="../../2022/07/04/OS-LAB4-%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1/">
+      <li>「BUAA-OS」 Lab4 Challenge：线程和信号量</li>
+    </a>
+    
     <a href="../../2022/06/26/OS-Lab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>OS-Lab6实验报告</li>
+      <li>「BUAA-OS」 Lab6：管道和shell</li>
     </a>
     
     <a href="../../2022/06/26/OO-%E7%AC%AC%E5%9B%9B%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
       <li>「BUAA-OO」第四单元：UML建模语言</li>
-    </a>
-    
-    <a href="../../2022/06/04/OS-Lab5%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
-      <li>「BUAA-OS」 Lab5实验报告</li>
-    </a>
-    
-    <a href="../../2022/06/04/OO-%E7%AC%AC%E4%B8%89%E5%8D%95%E5%85%83%E6%80%BB%E7%BB%93/">
-      <li>「BUAA-OO」第三单元:规格化设计</li>
-    </a>
-    
-    <a href="../../2022/05/30/OS-Lab5%E5%87%BD%E6%95%B0%E8%A7%A3%E8%AF%BB/">
-      <li>「BUAA-OS」 Lab5函数解读</li>
     </a>
     
   </ul>
@@ -1025,7 +1053,7 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
 
 <h5><a href="/archives/">archives</a></h5>
 <div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/06/">June 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/05/">May 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/04/">April 2022</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
+  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../2022/07/">July 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/06/">June 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/05/">May 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/04/">April 2022</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/03/">March 2022</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2022/01/">January 2022</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/12/">December 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/11/">November 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../2021/10/">October 2021</a><span class="archive-list-count">9</span></li></ul>
 </div>
 
 
@@ -1041,28 +1069,12 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       <li>算法</li>
     </a>
     
-    <a href="/categories/#ECS">
-      <li>ECS</li>
-    </a>
-    
     <a href="/categories/#C++">
       <li>C++</li>
     </a>
     
-    <a href="/categories/#Git">
-      <li>Git</li>
-    </a>
-    
-    <a href="/categories/#面向对象">
-      <li>面向对象</li>
-    </a>
-    
-    <a href="/categories/#操作系统">
-      <li>操作系统</li>
-    </a>
-    
-    <a href="/categories/#Maven">
-      <li>Maven</li>
+    <a href="/categories/#ECS">
+      <li>ECS</li>
     </a>
     
     <a href="/categories/#计算机组成">
@@ -1073,8 +1085,24 @@ integer类型也是一种寄存器数据类型，integer类型的变量为有符
       <li>Java</li>
     </a>
     
+    <a href="/categories/#Git">
+      <li>Git</li>
+    </a>
+    
     <a href="/categories/#Letax">
       <li>Letax</li>
+    </a>
+    
+    <a href="/categories/#Maven">
+      <li>Maven</li>
+    </a>
+    
+    <a href="/categories/#面向对象">
+      <li>面向对象</li>
+    </a>
+    
+    <a href="/categories/#操作系统">
+      <li>操作系统</li>
     </a>
     
   </ul>

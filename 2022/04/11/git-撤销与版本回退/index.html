@@ -247,9 +247,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -258,9 +258,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/about/">
               
-              TAGS
+              ABOUT
               
               
             </a>
@@ -280,9 +280,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
               
               
             </a>
@@ -466,7 +466,7 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="查看修改"><a href="#查看修改" class="headerlink" title="查看修改"></a>查看修改</h2><div class="table-container">
+        <h2 id="查看修改"><a class="markdownIt-Anchor" href="#查看修改"></a> 查看修改</h2>
 <table>
 <thead>
 <tr>
@@ -485,8 +485,7 @@
 </tr>
 </tbody>
 </table>
-</div>
-<h2 id="撤销指令"><a href="#撤销指令" class="headerlink" title="撤销指令"></a>撤销指令</h2><div class="table-container">
+<h2 id="撤销指令"><a class="markdownIt-Anchor" href="#撤销指令"></a> 撤销指令</h2>
 <table>
 <thead>
 <tr>
@@ -505,11 +504,10 @@
 </tr>
 </tbody>
 </table>
-</div>
 <ul>
-<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>“</li>
+<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>”</li>
 </ul>
-<h2 id="删除指令"><a href="#删除指令" class="headerlink" title="删除指令"></a>删除指令</h2><div class="table-container">
+<h2 id="删除指令"><a class="markdownIt-Anchor" href="#删除指令"></a> 删除指令</h2>
 <table>
 <thead>
 <tr>
@@ -532,10 +530,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）</p>
+<h2 id="版本回退"><a class="markdownIt-Anchor" href="#版本回退"></a> 版本回退</h2>
+<p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）</p>
 <p>确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -558,7 +555,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p>如果想要重返未来，则需要先使用<code>git relog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard &lt;hashcode&gt;</code>进行重返。</p>
 
 
@@ -709,7 +705,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">查看修改</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%92%A4%E9%94%80%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">撤销指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">删除指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">版本回退</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 查看修改</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%92%A4%E9%94%80%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 撤销指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 删除指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 版本回退</span></a></li></ol>
         
         </div>
       </aside>

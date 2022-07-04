@@ -138,7 +138,7 @@
   <link rel="canonical" href="http://example.com/2022/06/26/OS-Lab6实验报告/">
   <title>
     
-      OS-Lab6实验报告 - Hyggge‘s blog
+      「BUAA-OS」 Lab6：管道和shell - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -247,9 +247,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -258,9 +258,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/about/">
               
-              TAGS
+              ABOUT
               
               
             </a>
@@ -280,9 +280,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
               
               
             </a>
@@ -390,8 +390,8 @@
               <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
               
             </div>
-            <h1>OS-Lab6实验报告</h1>
-            <h2 class="subheading">管道与shell</h2>
+            <h1>「BUAA-OS」 Lab6：管道和shell</h1>
+            <h2 class="subheading"></h2>
             <span class="meta">
               Posted by Hyggge on
               2022-06-26
@@ -468,38 +468,61 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="实验思考题"><a href="#实验思考题" class="headerlink" title="实验思考题"></a>实验思考题</h2><h3 id="Thinking-6-1"><a href="#Thinking-6-1" class="headerlink" title="Thinking 6.1"></a>Thinking 6.1</h3><p><strong>Q：</strong> <strong>示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</strong><br><strong>A：</strong> 只需要调换父子进程操作的内容即可——<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in"><span class="keyword">switch</span></span> (fork()) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">-1</span> : </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Read end is unused */</span></span><br><span class="line">            <span class="built_in">write</span>(fildes[<span class="number">1</span>], <span class="string">&quot;Hello world\n&quot;</span>, <span class="number">12</span>); <span class="comment">/* Write data on pipe */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Child will see EOF */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">        <span class="keyword">default</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Write end is unused */</span></span><br><span class="line">            <span class="built_in">read</span>(fildes[<span class="number">0</span>], buf, <span class="number">100</span>); <span class="comment">/* Get data from pipe */</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;child-process read:%s&quot;</span>,buf); <span class="comment">/* Print the data */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Finished with pipe */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Thinking-6-2"><a href="#Thinking-6-2" class="headerlink" title="Thinking 6.2"></a>Thinking 6.2</h3><p><strong>Q：</strong> <strong>上面这种不同步修改 pp_ref 而导致的进程竞争问题在 user/fd.c 中的 dup 函数中也存在。请结合代码模仿上述情景，分析一下我们的 dup 函数中为什么会出现预想之外的情况？</strong><br><strong>A：</strong> <code>dup</code>函数的作用时将<code>oldfdnum</code>所代表的文件描述符的指向的数据完全复制给<code>newfdnum</code>文件描述符，一共包含两个过程——</p>
+        <h2 id="实验思考题"><a class="markdownIt-Anchor" href="#实验思考题"></a> 实验思考题</h2>
+<h3 id="thinking-61"><a class="markdownIt-Anchor" href="#thinking-61"></a> Thinking 6.1</h3>
+<p><strong>Q：</strong> <strong>示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</strong><br />
+<strong>A：</strong> 只需要调换父子进程操作的内容即可——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in"><span class="keyword">switch</span></span> (fork()) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">-1</span> : </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Read end is unused */</span></span><br><span class="line">            <span class="built_in">write</span>(fildes[<span class="number">1</span>], <span class="string">&quot;Hello world\n&quot;</span>, <span class="number">12</span>); <span class="comment">/* Write data on pipe */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Child will see EOF */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">        <span class="keyword">default</span> :</span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">1</span>]); <span class="comment">/* Write end is unused */</span></span><br><span class="line">            <span class="built_in">read</span>(fildes[<span class="number">0</span>], buf, <span class="number">100</span>); <span class="comment">/* Get data from pipe */</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;child-process read:%s&quot;</span>,buf); <span class="comment">/* Print the data */</span></span><br><span class="line">            <span class="built_in">close</span>(fildes[<span class="number">0</span>]); <span class="comment">/* Finished with pipe */</span></span><br><span class="line">            <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="thinking-62"><a class="markdownIt-Anchor" href="#thinking-62"></a> Thinking 6.2</h3>
+<p><strong>Q：</strong> <strong>上面这种不同步修改 pp_ref 而导致的进程竞争问题在 user/fd.c 中的 dup 函数中也存在。请结合代码模仿上述情景，分析一下我们的 dup 函数中为什么会出现预想之外的情况？</strong><br />
+<strong>A：</strong> <code>dup</code>函数的作用时将<code>oldfdnum</code>所代表的文件描述符的指向的数据完全复制给<code>newfdnum</code>文件描述符，一共包含两个过程——</p>
 <ul>
 <li>将<code>newfd</code>所在的虚拟页映射到<code>oldfd</code>所在的物理页</li>
 <li>将<code>newfd</code>的数据所在的虚拟页映射到<code>oldfd</code>的数据所在的物理页</li>
 </ul>
-<p>考虑如下代码段<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子进程</span></span><br><span class="line">    <span class="built_in">read</span>(p[<span class="number">0</span>], buf, <span class="built_in"><span class="keyword">sizeof</span></span>(buf));</span><br><span class="line"><span class="comment">// 父进程    </span></span><br><span class="line">    <span class="built_in">dup</span>(p[<span class="number">0</span>], newfd);</span><br><span class="line">    <span class="built_in">write</span>(p[<span class="number">1</span>], <span class="string">&quot;Hello&quot;</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure><br>分析过程如下：</p>
+<p>考虑如下代码段</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子进程</span></span><br><span class="line">    <span class="built_in">read</span>(p[<span class="number">0</span>], buf, <span class="built_in"><span class="keyword">sizeof</span></span>(buf));</span><br><span class="line"><span class="comment">// 父进程    </span></span><br><span class="line">    <span class="built_in">dup</span>(p[<span class="number">0</span>], newfd);</span><br><span class="line">    <span class="built_in">write</span>(p[<span class="number">1</span>], <span class="string">&quot;Hello&quot;</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<p>分析过程如下：</p>
 <ul>
 <li>fork结束后，子进程先进行。但是在<code>read</code>之前发生了时钟中断，此时父进程开始进行进行。</li>
 <li>父进程在<code>dup(p[0])</code>中，已经完成了对<code>p[0</code>]的映射，这个时候发生了中断，还没有来得及完成对<code>pipe</code>的映射。</li>
 <li>此时回到子进程，进入<code>read</code>函数，结果发现<code>ref(p[0]) == ref(pipe) == 2</code>, 认为此时写进程关闭。</li>
 </ul>
-<h3 id="Thinking-6-3"><a href="#Thinking-6-3" class="headerlink" title="Thinking 6.3"></a>Thinking 6.3</h3><p><strong>Q：</strong> <strong>阅读上述材料并思考：为什么系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。希望能结合相关代码进行分析。</strong><br><strong>A：</strong> 在 <code>syscall</code> 对应的异常处理程序 <code>handle_sys</code> 中，我们使用了汇编宏 <code>CLI</code> 来禁用全局中断，因此系统调用时不会被中断，是原子操作。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NESTED</span>(handle_sys,TF_SIZE, sp)</span><br><span class="line">    SAVE_ALL                            <span class="comment">// Macro used to save trapframe</span></span><br><span class="line">    CLI                                 <span class="comment">// Clean Interrupt Mask</span></span><br><span class="line">    nop</span><br><span class="line">    .set at                             <span class="comment">// Resume use of $at</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="built_in">END</span>(handle_sys)</span><br></pre></td></tr></table></figure></p>
-<h3 id="Thinking-6-4"><a href="#Thinking-6-4" class="headerlink" title="Thinking 6.4"></a>Thinking 6.4</h3><p><strong>Q：</strong> <strong>仔细阅读上面这段话，并思考下列问题</strong></p>
+<h3 id="thinking-63"><a class="markdownIt-Anchor" href="#thinking-63"></a> Thinking 6.3</h3>
+<p><strong>Q：</strong> <strong>阅读上述材料并思考：为什么系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。希望能结合相关代码进行分析。</strong><br />
+<strong>A：</strong> 在 <code>syscall</code> 对应的异常处理程序 <code>handle_sys</code> 中，我们使用了汇编宏 <code>CLI</code> 来禁用全局中断，因此系统调用时不会被中断，是原子操作。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NESTED</span>(handle_sys,TF_SIZE, sp)</span><br><span class="line">    SAVE_ALL                            <span class="comment">// Macro used to save trapframe</span></span><br><span class="line">    CLI                                 <span class="comment">// Clean Interrupt Mask</span></span><br><span class="line">    nop</span><br><span class="line">    .set at                             <span class="comment">// Resume use of $at</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="built_in">END</span>(handle_sys)</span><br></pre></td></tr></table></figure>
+<h3 id="thinking-64"><a class="markdownIt-Anchor" href="#thinking-64"></a> Thinking 6.4</h3>
+<p><strong>Q：</strong> <strong>仔细阅读上面这段话，并思考下列问题</strong></p>
 <ul>
 <li><strong>按照上述说法控制 pipeclose 中 fd 和 pipe unmap 的顺序，是否可以解决上述场景的进程竞争问题？给出你的分析过程。</strong></li>
-<li><strong>我们只分析了 close 时的情形，在 fd.c 中有一个 dup 函数，用于复制文件内容。试想，如果要复制的是一个管道，那么是否会出现与 close 类似的问题？请模仿上述材料写写你的理解。</strong>         </li>
+<li><strong>我们只分析了 close 时的情形，在 fd.c 中有一个 dup 函数，用于复制文件内容。试想，如果要复制的是一个管道，那么是否会出现与 close 类似的问题？请模仿上述材料写写你的理解。</strong></li>
 </ul>
 <p><strong>A：</strong> 分析如下</p>
 <ul>
 <li>可以解决。由于<code>ref(p[0])</code>始终小于<code>ref(pipe)</code>, 因此如果先解除<code>p[0]</code>的映射，则<code>ref(p[0])</code>更要小于<code>ref(pipe)</code>，永远不会出现<code>ref(p[0]) == ref(pipe)</code>。</li>
 <li><code>dup</code>函数也会出现与<code>close</code>类似的问题，<code>pipe</code>的引用次数总比<code>fd</code>要高。当管道的<code>dup</code>进行到一半时， 若先映射<code>fd</code>，再映射 <code>pipe</code> ，就会使得<code>fd</code>的引用次数的+1先于<code>pipe</code>。这就导致在两个<code>map</code>的间隙，会出现<code>pageref(pipe) == pageref(fd)</code>的情况。这个问题也可以通过调换两个map的顺序来解决。</li>
 </ul>
-<h3 id="Thinking-6-5"><a href="#Thinking-6-5" class="headerlink" title="Thinking 6.5"></a>Thinking 6.5</h3><p><strong>Q：</strong> <strong>bss 在 ELF 中并不占空间，但 ELF 加载进内存后， bss 段的数据占据了空间，并且初始值都是 0。请回答你设计的函数是如何实现上面这点的？</strong><br><strong>A：</strong> 对于bss段中和text&amp;data段共同占据一个页面的部分，就使用<code>user_bzero</code>将这一部分置零；对于bss段其它部分，仅使用<code>syscall_mem_malloc</code>分配页面而不映射到任何内容。</p>
-<h3 id="Thinking-6-6"><a href="#Thinking-6-6" class="headerlink" title="Thinking 6.6"></a>Thinking 6.6</h3><p><strong>Q：</strong> <strong>为什么我们的 *.b 的 text 段偏移值都是一样的，为固定值？</strong><br><strong>A：</strong> 因为在<code>user.lds</code>文件中将所有.b文件的text段偏移量都设置为0x00400000。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">. = <span class="number">0x00400000</span>;</span><br><span class="line">_text = .;			<span class="comment">/* Text and read-only data */</span></span><br><span class="line">.text : &#123;</span><br><span class="line">	*(.text)</span><br><span class="line">	*(.fixup)</span><br><span class="line">	*(.gnu.warning)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Thinking-6-7"><a href="#Thinking-6-7" class="headerlink" title="Thinking 6.7"></a>Thinking 6.7</h3><p><strong>Q：</strong>  <strong>在 shell 中执行的命令分为内置命令和外部命令。在执行内置命令时 shell 不需要 fork 一个子 shell，如 Linux 系统中的 cd 指令。在执行外部命令时 shell需要 fork 一个子 shell，然后子 shell 去执行这条命令。据此判断，在 MOS 中我们用到的 shell 命令是内置命令还是外部命令？请思考为什么 Linux 的 cd 指令是内部指令而不是外部指令？</strong><br><strong>A：</strong> 分析如下</p>
+<h3 id="thinking-65"><a class="markdownIt-Anchor" href="#thinking-65"></a> Thinking 6.5</h3>
+<p><strong>Q：</strong> <strong>bss 在 ELF 中并不占空间，但 ELF 加载进内存后， bss 段的数据占据了空间，并且初始值都是 0。请回答你设计的函数是如何实现上面这点的？</strong><br />
+<strong>A：</strong> 对于bss段中和text&amp;data段共同占据一个页面的部分，就使用<code>user_bzero</code>将这一部分置零；对于bss段其它部分，仅使用<code>syscall_mem_malloc</code>分配页面而不映射到任何内容。</p>
+<h3 id="thinking-66"><a class="markdownIt-Anchor" href="#thinking-66"></a> Thinking 6.6</h3>
+<p><strong>Q：</strong> *<em>为什么我们的 <em>.b 的 text 段偏移值都是一样的，为固定值？</em></em><br />
+<strong>A：</strong> 因为在<code>user.lds</code>文件中将所有.b文件的text段偏移量都设置为0x00400000。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">. = <span class="number">0x00400000</span>;</span><br><span class="line">_text = .;			<span class="comment">/* Text and read-only data */</span></span><br><span class="line">.text : &#123;</span><br><span class="line">	*(.text)</span><br><span class="line">	*(.fixup)</span><br><span class="line">	*(.gnu.warning)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="thinking-67"><a class="markdownIt-Anchor" href="#thinking-67"></a> Thinking 6.7</h3>
+<p><strong>Q：</strong>  <strong>在 shell 中执行的命令分为内置命令和外部命令。在执行内置命令时 shell 不需要 fork 一个子 shell，如 Linux 系统中的 cd 指令。在执行外部命令时 shell需要 fork 一个子 shell，然后子 shell 去执行这条命令。据此判断，在 MOS 中我们用到的 shell 命令是内置命令还是外部命令？请思考为什么 Linux 的 cd 指令是内部指令而不是外部指令？</strong><br />
+<strong>A：</strong> 分析如下</p>
 <ul>
 <li>shell命令是外部命令，因为在执行shell命令时，当前进程通过<code>fork</code>产生一个子进程，也就是子shell，然后这个子shell来运行该命令所对应的可执行文件。</li>
 <li>linux中的内部命令实际上是shell程序的一部分，其中包含的是一些比较简单的linux系统命令，这些命令由shell程序识别并在shell程序内部完成运行，通常在linux系统加载运行时shell就被加载并驻留在系统内存中。因为<code>cd</code>指令非常简单，将其作为内部命令写在bashy源码里面的，可以避免每次执行都需要fork并加载程序，提高执行效率。</li>
 </ul>
-<h3 id="Thinking-6-8"><a href="#Thinking-6-8" class="headerlink" title="Thinking 6.8"></a>Thinking 6.8</h3><p><strong>Q：</strong> <strong>在哪步， 0 和 1 被 “安排” 为标准输入和标准输出？请分析代码执行流程，给出答案。</strong><br><strong>A：</strong> 在<code>init.c</code>的<code>umain</code>函数中将0和1分别被设置为了标准输入和标准输出。相关代码如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将0关闭，随后使用opencons函数打开的文件描述符编号就被设置为零为0</span></span><br><span class="line"><span class="built_in">close</span>(<span class="number">0</span>); </span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">opencons</span>()) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;opencons: %e&quot;</span>, r);</span><br><span class="line"><span class="keyword">if</span> (r != <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;first opencons used fd %d&quot;</span>, r);</span><br><span class="line"><span class="comment">// 然后通过dup函数把1设置为标准输出</span></span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">dup</span>(<span class="number">0</span>, <span class="number">1</span>)) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;dup: %d&quot;</span>, r);</span><br></pre></td></tr></table></figure></p>
-<h3 id="Thinking-6-9"><a href="#Thinking-6-9" class="headerlink" title="Thinking 6.9"></a>Thinking 6.9</h3><p><strong>Q：</strong>  <strong>在你的 shell 中输入指令 ls.b | cat.b &gt; motd。</strong></p>
+<h3 id="thinking-68"><a class="markdownIt-Anchor" href="#thinking-68"></a> Thinking 6.8</h3>
+<p><strong>Q：</strong> <strong>在哪步， 0 和 1 被 “安排” 为标准输入和标准输出？请分析代码执行流程，给出答案。</strong><br />
+<strong>A：</strong> 在<code>init.c</code>的<code>umain</code>函数中将0和1分别被设置为了标准输入和标准输出。相关代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将0关闭，随后使用opencons函数打开的文件描述符编号就被设置为零为0</span></span><br><span class="line"><span class="built_in">close</span>(<span class="number">0</span>); </span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">opencons</span>()) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;opencons: %e&quot;</span>, r);</span><br><span class="line"><span class="keyword">if</span> (r != <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;first opencons used fd %d&quot;</span>, r);</span><br><span class="line"><span class="comment">// 然后通过dup函数把1设置为标准输出</span></span><br><span class="line"><span class="keyword">if</span> ((r = <span class="built_in">dup</span>(<span class="number">0</span>, <span class="number">1</span>)) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">user_panic</span>(<span class="string">&quot;dup: %d&quot;</span>, r);</span><br></pre></td></tr></table></figure>
+<h3 id="thinking-69"><a class="markdownIt-Anchor" href="#thinking-69"></a> Thinking 6.9</h3>
+<p><strong>Q：</strong>  <strong>在你的 shell 中输入指令 ls.b | cat.b &gt; motd。</strong></p>
 <ul>
 <li><strong>请问你可以在你的 shell 中观察到几次 spawn？分别对应哪个进程？</strong></li>
 <li><strong>请问你可以在你的 shell 中观察到几次进程销毁？分别对应哪个进程？</strong></li>
@@ -509,16 +532,26 @@
 <li>shell中进行了2次<code>spawn</code>，这两次生成的子进程分别用于执行<code>ls.b</code>和<code>cat.b</code></li>
 <li>shell中进行了2次进程销毁，这2个进程分别是shell执行<code>ls.b</code>和<code>cat.b</code>时通过<code>spawn</code>生成的子进程。</li>
 </ul>
-<h2 id="实验难点图示"><a href="#实验难点图示" class="headerlink" title="实验难点图示"></a>实验难点图示</h2><p>我认为该实验的难点主要包含两个难点——和管道相关的内存分配、spawn函数的处理流程</p>
-<h3 id="和管道相关的内存分配"><a href="#和管道相关的内存分配" class="headerlink" title="和管道相关的内存分配"></a>和管道相关的内存分配</h3><p>子进程和父进程的内存空间中都分为写端fd和读端fd分配了一个虚拟页，但是子进程和父进程的读端所在的虚拟页映射到了同一个物理页，同样他们的写端所在的虚拟也也都映射到了同一个物理页。</p>
-<p>此外，父子进程中这四个fd所对应的文件数据都位于同一个物理页。所以，一个管道实际上只需要占用3个物理页。图示如下——<br><img src="mm.svg" alt=""></p>
-<h3 id="spawn函数的处理流程"><a href="#spawn函数的处理流程" class="headerlink" title="spawn函数的处理流程"></a>spawn函数的处理流程</h3><p><code>spawn</code>函数的处理流程如下图所示<br><img src="spwan.svg" alt=""></p>
-<h2 id="体会与感想"><a href="#体会与感想" class="headerlink" title="体会与感想"></a>体会与感想</h2><p>Lab6要求我们完成pipe机制和实现一个简单的shell，实验任务比较简单，但是与之相关的很多函数理解起来还是有点困难。不过，OS实验课总算是告一段落了，通过自己动手实现一个简单的操作系统，不仅让我们收获了很多成就感，同时也让我们对理论课知识有了更深刻的理解。</p>
+<h2 id="实验难点图示"><a class="markdownIt-Anchor" href="#实验难点图示"></a> 实验难点图示</h2>
+<p>我认为该实验的难点主要包含两个难点——和管道相关的内存分配、spawn函数的处理流程</p>
+<h3 id="和管道相关的内存分配"><a class="markdownIt-Anchor" href="#和管道相关的内存分配"></a> 和管道相关的内存分配</h3>
+<p>子进程和父进程的内存空间中都分为写端fd和读端fd分配了一个虚拟页，但是子进程和父进程的读端所在的虚拟页映射到了同一个物理页，同样他们的写端所在的虚拟也也都映射到了同一个物理页。</p>
+<p>此外，父子进程中这四个fd所对应的文件数据都位于同一个物理页。所以，一个管道实际上只需要占用3个物理页。图示如下——<br />
+<img src="mm.svg" alt="" /></p>
+<h3 id="spawn函数的处理流程"><a class="markdownIt-Anchor" href="#spawn函数的处理流程"></a> spawn函数的处理流程</h3>
+<p><code>spawn</code>函数的处理流程如下图所示<br />
+<img src="spwan.svg" alt="" /></p>
+<h2 id="体会与感想"><a class="markdownIt-Anchor" href="#体会与感想"></a> 体会与感想</h2>
+<p>Lab6要求我们完成pipe机制和实现一个简单的shell，实验任务比较简单，但是与之相关的很多函数理解起来还是有点困难。不过，OS实验课总算是告一段落了，通过自己动手实现一个简单的操作系统，不仅让我们收获了很多成就感，同时也让我们对理论课知识有了更深刻的理解。</p>
 
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2022/07/04/OS-LAB4-挑战性任务设计/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab4 Challenge：线程和信号量">&larr; Previous Post</a>
+          </li>
           
           
           <li class="next">
@@ -571,7 +604,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=OS-Lab6实验报告&body=Hi,I found this website and thought you might like it http://example.com/2022/06/26/OS-Lab6实验报告/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「BUAA-OS」 Lab6：管道和shell&body=Hi,I found this website and thought you might like it http://example.com/2022/06/26/OS-Lab6实验报告/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -659,7 +692,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-1"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Thinking 6.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-2"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">Thinking 6.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-3"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">Thinking 6.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-4"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">Thinking 6.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-5"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">Thinking 6.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-6"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">Thinking 6.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-7"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">Thinking 6.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-8"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">Thinking 6.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Thinking-6-9"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text">Thinking 6.9</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%92%8C%E7%AE%A1%E9%81%93%E7%9B%B8%E5%85%B3%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">和管道相关的内存分配</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#spawn%E5%87%BD%E6%95%B0%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">spawn函数的处理流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">体会与感想</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 实验思考题</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-61"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text"> Thinking 6.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-62"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text"> Thinking 6.2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-63"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text"> Thinking 6.3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-64"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text"> Thinking 6.4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-65"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text"> Thinking 6.5</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-66"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text"> Thinking 6.6</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-67"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text"> Thinking 6.7</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-68"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text"> Thinking 6.8</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#thinking-69"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text"> Thinking 6.9</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9%E5%9B%BE%E7%A4%BA"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 实验难点图示</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%92%8C%E7%AE%A1%E9%81%93%E7%9B%B8%E5%85%B3%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 和管道相关的内存分配</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#spawn%E5%87%BD%E6%95%B0%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> spawn函数的处理流程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%93%E4%BC%9A%E4%B8%8E%E6%84%9F%E6%83%B3"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 体会与感想</span></a></li></ol>
         
         </div>
       </aside>

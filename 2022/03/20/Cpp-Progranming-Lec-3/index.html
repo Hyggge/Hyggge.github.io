@@ -247,9 +247,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -258,9 +258,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/about/">
               
-              TAGS
+              ABOUT
               
               
             </a>
@@ -280,9 +280,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
               
               
             </a>
@@ -468,22 +468,37 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="引用（reference）"><a href="#引用（reference）" class="headerlink" title="引用（reference）"></a>引用（reference）</h2><ul>
-<li>引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。</li>
-<li><p>引用必须初始化, 和C语言中<strong>野指针</strong>不同</p>
-  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;a; <span class="comment">//error</span></span><br><span class="line"><span class="keyword">int</span> &amp;a = b;</span><br></pre></td></tr></table></figure></li>
-<li>引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> &amp;a = b;</span><br><span class="line">a = c; <span class="comment">//error</span></span><br></pre></td></tr></table></figure></li>
-<li>引用不可以完全取代指针，例如在<code>malloc</code>和<code>new</code>中返回值只能是指针。<blockquote>
+        <h2 id="引用reference"><a class="markdownIt-Anchor" href="#引用reference"></a> 引用（reference）</h2>
+<ul>
+<li>
+<p>引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。</p>
+</li>
+<li>
+<p>引用必须初始化, 和C语言中<strong>野指针</strong>不同</p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;a; <span class="comment">//error</span></span><br><span class="line"><span class="keyword">int</span> &amp;a = b;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。</p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> &amp;a = b;</span><br><span class="line">a = c; <span class="comment">//error</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>引用不可以完全取代指针，例如在<code>malloc</code>和<code>new</code>中返回值只能是指针。</p>
+</li>
+</ul>
+<blockquote>
 <p><strong>补充：内存分区问题</strong></p>
 <ul>
 <li><strong>代码区</strong>：储存我们写的代码，只读常量，无法修改。</li>
 <li><strong>全局变量区（静态区）</strong>：在程序运行开始，程序在内存中开辟一段区域，把这段区域全部置为0，用于存储全局变量。这也是就为什么全局变量不初始化值自动变为0。全局变量的初始化在main函数运行之前。</li>
-<li><strong>运行内存区（runtime memory）</strong>：包括栈区和堆区<ul>
-<li>栈区：用于局部变量<ul>
+<li><strong>运行内存区（runtime memory）</strong>：包括栈区和堆区
+<ul>
+<li>栈区：用于局部变量
+<ul>
 <li>栈区内存是连续的</li>
 </ul>
 </li>
-<li>堆区：用于动态内存分配（<code>malloc</code>和<code>new</code>时）。<ul>
+<li>堆区：用于动态内存分配（<code>malloc</code>和<code>new</code>时）。
+<ul>
 <li>堆区内存是离散的，理论上来无限次使用<code>malloc</code>会导致程序崩溃</li>
 <li>应用场景：1.不能确定内存分配大小需要在运行时确定（例如链表            建立）；2.需要人为控制变量的生命周期。</li>
 </ul>
@@ -492,9 +507,9 @@
 </li>
 </ul>
 </blockquote>
-</li>
-</ul>
-<h2 id="拷贝构造"><a href="#拷贝构造" class="headerlink" title="拷贝构造"></a>拷贝构造</h2><p>C++的类默认支持用一个已存在的类初始化一个新建的类。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Student</span>* <span class="title">a</span> =</span> <span class="keyword">new</span> <span class="built_in">Student</span>();</span><br><span class="line">    <span class="function">struct Student <span class="title">b</span><span class="params">(*a)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="拷贝构造"><a class="markdownIt-Anchor" href="#拷贝构造"></a> 拷贝构造</h2>
+<p>C++的类默认支持用一个已存在的类初始化一个新建的类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Student</span>* <span class="title">a</span> =</span> <span class="keyword">new</span> <span class="built_in">Student</span>();</span><br><span class="line">    <span class="function">struct Student <span class="title">b</span><span class="params">(*a)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>C++中有拷贝有两种类型——</p>
 <ul>
 <li><code>bitwise copy</code>（浅拷贝）</li>
@@ -502,7 +517,10 @@
 </ul>
 <p>拷贝构造时默认是<strong>浅拷贝</strong>，即把对象<code>a</code>所在内存空间中所有数据<strong>以字节的形式</strong>拷贝给新建的b对象。如果a对象中有指针成员，则<strong>只会把指针的值拷贝给<code>b</code></strong>，这样会出现<code>a</code>,<code>b</code>两个对象的指针成员指向同一块内存。（编译时不报错，非常恐怖！！！）</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> *b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi);</span><br><span class="line">&#125;;</span><br><span class="line">Student::<span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;a = ai;</span><br><span class="line">    <span class="keyword">this</span>-&gt;b = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(bi);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Student <span class="title">mem1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">    <span class="function">Student <span class="title">mem2</span><span class="params">(mem1)</span></span>;</span><br><span class="line">    cout &lt;&lt; mem1.b &lt;&lt; <span class="string">&quot;\n&quot;</span> &lt;&lt; mem2.b &lt;&lt; endl; <span class="comment">//两者指针值值一样的，即值指向同一块内存</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>为了避免这种情况，我们需要自定义一个拷贝构造函数从而实现 <strong>深拷贝</strong>，主要写法为<code>Object::Object(const Object &amp;a) &#123;&#125;</code>,具体例子如下所示<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> *b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi);</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;a = s.a;</span><br><span class="line">    <span class="keyword">this</span>-&gt;b = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(*(s.b));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Student <span class="title">mem1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">    <span class="function">Student <span class="title">mem2</span><span class="params">(mem1)</span></span>;</span><br><span class="line">    cout &lt;&lt; mem1.b &lt;&lt; <span class="string">&quot;\n&quot;</span> &lt;&lt; mem2.b &lt;&lt; endl; <span class="comment">//这样两者指针值就是不一样的了</span></span><br><span class="line">    <span class="built_in">func</span>(mem1);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>在C/C++中，“<strong>只要传值，就是一次拷贝构造</strong>”，当我们向一个函数传递<strong>实参</strong>，且这个函数的<strong>形参不是引用类型</strong>，此时程序会自动调用<strong>实参类型的拷贝构造函数</strong>。例如<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> *b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi);</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s) &#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;调用自定义拷贝构造函数&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">this</span>-&gt;a = s.a;</span><br><span class="line">    <span class="keyword">this</span>-&gt;b = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(*(s.b));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(Student s)</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;实参调用&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">func</span>(mem1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">以上程序执行结果为——</span></span><br><span class="line"><span class="comment">调用自定义拷贝构造函数</span></span><br><span class="line"><span class="comment">实参调用</span></span><br><span class="line"><span class="comment">/</span></span><br></pre></td></tr></table></figure></p>
+<p>为了避免这种情况，我们需要自定义一个拷贝构造函数从而实现 <strong>深拷贝</strong>，主要写法为<code>Object::Object(const Object &amp;a) &#123;&#125;</code>,具体例子如下所示</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> *b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi);</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;a = s.a;</span><br><span class="line">    <span class="keyword">this</span>-&gt;b = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(*(s.b));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Student <span class="title">mem1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">    <span class="function">Student <span class="title">mem2</span><span class="params">(mem1)</span></span>;</span><br><span class="line">    cout &lt;&lt; mem1.b &lt;&lt; <span class="string">&quot;\n&quot;</span> &lt;&lt; mem2.b &lt;&lt; endl; <span class="comment">//这样两者指针值就是不一样的了</span></span><br><span class="line">    <span class="built_in">func</span>(mem1);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在C/C++中，“<strong>只要传值，就是一次拷贝构造</strong>”，当我们向一个函数传递<strong>实参</strong>，且这个函数的<strong>形参不是引用类型</strong>，此时程序会自动调用<strong>实参类型的拷贝构造函数</strong>。例如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> *b;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">int</span> ai, <span class="keyword">int</span> bi);</span><br><span class="line">    <span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Student::<span class="built_in">Student</span>(<span class="keyword">const</span> Student &amp; s) &#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;调用自定义拷贝构造函数&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">this</span>-&gt;a = s.a;</span><br><span class="line">    <span class="keyword">this</span>-&gt;b = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(*(s.b));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(Student s)</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;实参调用&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">func</span>(mem1);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">以上程序执行结果为——</span></span><br><span class="line"><span class="comment">调用自定义拷贝构造函数</span></span><br><span class="line"><span class="comment">实参调用</span></span><br><span class="line"><span class="comment">/</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p><strong>什么使用需要深拷贝？？？</strong></p>
 <ul>
@@ -510,12 +528,12 @@
 <li>构造函数中没有new也不一定不需要深拷贝，有可能在其他位置出现new或者malloc</li>
 </ul>
 </blockquote>
-<h2 id="函数参数问题"><a href="#函数参数问题" class="headerlink" title="函数参数问题"></a>函数参数问题</h2><ul>
+<h2 id="函数参数问题"><a class="markdownIt-Anchor" href="#函数参数问题"></a> 函数参数问题</h2>
+<ul>
 <li><strong>Pass by value ？</strong></li>
 <li><strong>Pass by address ？</strong></li>
 </ul>
 <p>传值和传地址在功能、性能和其他方面的比较如下——</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -542,7 +560,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p><strong>结论</strong>：不要使用<code>pass by value</code>!!!</p>
 
 
@@ -551,7 +568,7 @@
         <ul class="pager">
           
           <li class="previous">
-            <a href="/2022/03/21/OS-Lab0实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab0实验报告">&larr; Previous Post</a>
+            <a href="/2022/03/21/OS-Lab0实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab0：Linux基础操作">&larr; Previous Post</a>
           </li>
           
           
@@ -693,7 +710,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BC%95%E7%94%A8%EF%BC%88reference%EF%BC%89"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">引用（reference）</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">拷贝构造</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E9%97%AE%E9%A2%98"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">函数参数问题</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BC%95%E7%94%A8reference"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 引用（reference）</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 拷贝构造</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E9%97%AE%E9%A2%98"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 函数参数问题</span></a></li></ol>
         
         </div>
       </aside>

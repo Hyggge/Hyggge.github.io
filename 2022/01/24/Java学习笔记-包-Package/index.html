@@ -247,9 +247,9 @@
           
           
           <li>
-            <a href="/about/">
+            <a href="/archive/">
               
-              ABOUT
+              ARCHIVES
               
               
             </a>
@@ -258,9 +258,9 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/about/">
               
-              TAGS
+              ABOUT
               
               
             </a>
@@ -280,9 +280,9 @@
           
           
           <li>
-            <a href="/archive/">
+            <a href="/tags/">
               
-              ARCHIVES
+              TAGS
               
               
             </a>
@@ -466,59 +466,97 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <hr>
-<h2 id="包的定义"><a href="#包的定义" class="headerlink" title="包的定义"></a>包的定义</h2><ul>
+        <hr />
+<h2 id="包的定义"><a class="markdownIt-Anchor" href="#包的定义"></a> 包的定义</h2>
+<ul>
 <li>在笔者看来，包其实就是一个 <strong>文件夹</strong>，包含者我们定义的<strong>功能相似或相关</strong>的<strong>类、接口、枚举和注释</strong>，可以看成一种<strong>特殊的封装</strong>。</li>
 <li>一个包中的类名字是<strong>不同的</strong>，不同的包中的类的名字是可以<strong>相同的</strong>，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。</li>
 <li><strong>包的作用</strong>：防止命名冲突，访问控制，提供搜索和定位类（<code>class</code>）、接口(<code>interface</code>)、枚举（<code>enumerations</code>）和注释（<code>annotation</code>）等。</li>
 </ul>
-<hr>
-<h2 id="包的创建（package）"><a href="#包的创建（package）" class="headerlink" title="包的创建（package）"></a>包的创建（package）</h2><p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.sun.test;</span><br></pre></td></tr></table></figure></p>
-<h3 id="包的命名规范"><a href="#包的命名规范" class="headerlink" title="包的命名规范"></a>包的命名规范</h3><p>本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br>Java的包名都有小写单词组成，应该避免使用与系统发生冲突的名字，如java.lang、java.swing等。多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀（如上例）。<br><strong>个人和组织包命名规则如下：</strong></p>
+<hr />
+<h2 id="包的创建package"><a class="markdownIt-Anchor" href="#包的创建package"></a> 包的创建（package）</h2>
+<p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.sun.test;</span><br></pre></td></tr></table></figure>
+<h3 id="包的命名规范"><a class="markdownIt-Anchor" href="#包的命名规范"></a> 包的命名规范</h3>
+<p>本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br />
+Java的包名都有小写单词组成，应该避免使用与系统发生冲突的名字，如java.lang、java.swing等。多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀（如上例）。<br />
+<strong>个人和组织包命名规则如下：</strong></p>
 <ul>
-<li><p><strong>indi</strong> ：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。<br>包名为“indi.发起者名.项目名.模块名.……”。</p>
+<li>
+<p><strong>indi</strong> ：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。<br />
+包名为“indi.发起者名.项目名.模块名.……”。</p>
 </li>
-<li><p><strong>pers</strong> ：个人项目，指个人发起，独自完成，可分享的项目，copyright主要属于个人。<br>包名为“pers.个人名.项目名.模块名.……”。</p>
+<li>
+<p><strong>pers</strong> ：个人项目，指个人发起，独自完成，可分享的项目，copyright主要属于个人。<br />
+包名为“pers.个人名.项目名.模块名.……”。</p>
 </li>
-<li><p><strong>priv</strong> ：私有项目，指个人发起，独自完成，非公开的私人使用的项目，copyright属于个人。<br>包名为“priv.个人名.项目名.模块名.……”。</p>
+<li>
+<p><strong>priv</strong> ：私有项目，指个人发起，独自完成，非公开的私人使用的项目，copyright属于个人。<br />
+包名为“priv.个人名.项目名.模块名.……”。</p>
 </li>
-<li><p><strong>onem</strong> ：与“indi”相同，推荐使用“indi”。</p>
+<li>
+<p><strong>onem</strong> ：与“indi”相同，推荐使用“indi”。</p>
 </li>
-<li><p><strong>team</strong> ：团队项目，指由团队发起，并由该团队开发的项目，copyright属于该团队所有。<br>包名为“team.团队名.项目名.模块名.……”。</p>
+<li>
+<p><strong>team</strong> ：团队项目，指由团队发起，并由该团队开发的项目，copyright属于该团队所有。<br />
+包名为“team.团队名.项目名.模块名.……”。</p>
 </li>
-<li><p><strong>com</strong> ：公司项目，copyright由项目发起的公司所有。<br>包名为“com.公司名.项目名.模块名.……”。</p>
+<li>
+<p><strong>com</strong> ：公司项目，copyright由项目发起的公司所有。<br />
+包名为“com.公司名.项目名.模块名.……”。</p>
 </li>
 </ul>
-<h3 id="空包"><a href="#空包" class="headerlink" title="空包"></a>空包</h3><p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
-<hr>
-<h2 id="包的导入（import）"><a href="#包的导入（import）" class="headerlink" title="包的导入（import）"></a>包的导入（import）</h2><h3 id="不同包之间的导入"><a href="#不同包之间的导入" class="headerlink" title="不同包之间的导入"></a>不同包之间的导入</h3><p>不同包之间的使用通常有以下3种方法——</p>
+<h3 id="空包"><a class="markdownIt-Anchor" href="#空包"></a> 空包</h3>
+<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
+<hr />
+<h2 id="包的导入import"><a class="markdownIt-Anchor" href="#包的导入import"></a> 包的导入（import）</h2>
+<h3 id="不同包之间的导入"><a class="markdownIt-Anchor" href="#不同包之间的导入"></a> 不同包之间的导入</h3>
+<p>不同包之间的使用通常有以下3种方法——</p>
 <ol>
-<li>使用全名 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">com.hyggge.Animal ani = <span class="keyword">new</span> com.hyggge.Animal()</span><br></pre></td></tr></table></figure></li>
-<li>导入该类 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.hyggge.Animal;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Animal ani = <span class="keyword">new</span> Animal();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>使用全名 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">com.hyggge.Animal ani = <span class="keyword">new</span> com.hyggge.Animal()</span><br></pre></td></tr></table></figure>
+</li>
+<li>导入该类 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.hyggge.Animal;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Animal ani = <span class="keyword">new</span> Animal();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
 <li>导入整个包(使用通配符<code>*</code>) <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.hyggge.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Animal ani = <span class="keyword">new</span> Animal();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<strong>注意点</strong><ul>
-<li>如果两个包（<code>com.hyggge</code> 和 <code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.hyggge.*;</span><br><span class="line"><span class="keyword">import</span> com.czh.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    com.hyggge.Animal ani = <span class="keyword">new</span> com.hyggge.Animal();</span><br><span class="line">    com.Animal ani = <span class="keyword">new</span> com.czh.Animal();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。</li>
-</ul>
 </li>
 </ol>
-<h3 id="有包的类和无包的类互相访问"><a href="#有包的类和无包的类互相访问" class="headerlink" title="有包的类和无包的类互相访问"></a>有包的类和无包的类互相访问</h3><p>有包的类和无包的类互相访问有以下规则：</p>
+<p><strong>注意点</strong></p>
+<ul>
+<li>如果两个包（<code>com.hyggge</code> 和 <code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.hyggge.*;</span><br><span class="line"><span class="keyword">import</span> com.czh.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    com.hyggge.Animal ani = <span class="keyword">new</span> com.hyggge.Animal();</span><br><span class="line">    com.Animal ani = <span class="keyword">new</span> com.czh.Animal();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。</li>
+</ul>
+<h3 id="有包的类和无包的类互相访问"><a class="markdownIt-Anchor" href="#有包的类和无包的类互相访问"></a> 有包的类和无包的类互相访问</h3>
+<p>有包的类和无包的类互相访问有以下规则：</p>
 <ol>
 <li><strong>无包的类可以访问有包的类</strong>, 直接导入即可；</li>
 <li>2.有包的类无法访问无包的类, 直接访问是找同一个包中的, 由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；</li>
 <li>在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</li>
 </ol>
-<h3 id="包的无等级性"><a href="#包的无等级性" class="headerlink" title="包的无等级性"></a>包的无等级性</h3><p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">impot com.hyggge.*;</span><br><span class="line">impot com.hyggge.czh.*;</span><br></pre></td></tr></table></figure></p>
-<h3 id="静态导入"><a href="#静态导入" class="headerlink" title="静态导入"></a>静态导入</h3><p>当我们需要频繁的访问某个类的常量或静态方法时，可以采用静态导入，即使用<code>import static</code>将类中的常量和静态方法导入。见下例（摘自该<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_30973431/article/details/82386978?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164298826316780265425850%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164298826316780265425850&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-6-82386978.pc_search_result_cache&amp;utm_term=Java%E5%8C%85&amp;spm=1018.2226.3001.4187">博客</a>）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.PI;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.cos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImportTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> r = Math.cos(Math.PI * <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">double</span> r1 = Math.cos(PI * <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">double</span> r2 = cos(PI * <span class="number">2</span>);</span><br><span class="line">        System.out.println(r+<span class="string">&quot; &quot;</span>+r1+<span class="string">&quot; &quot;</span>+r2);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>也可以使用通配符<code>*</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.*;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="包的路径"><a href="#包的路径" class="headerlink" title="包的路径"></a>包的路径</h2><ul>
-<li>包的中<strong>java源文件的目录</strong>和<strong>编译后class文件的目录</strong>应该和包的名字对应起来，但是并不要求两者路径一样，可以分开来安排。如下所示—— <figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;path-one&gt;<span class="symbol">\s</span>ources<span class="symbol">\c</span>om<span class="symbol">\r</span>unoob<span class="symbol">\t</span>est<span class="symbol">\R</span>unoob.java</span><br><span class="line">&lt;path-two&gt;<span class="symbol">\c</span>lasses<span class="symbol">\c</span>om<span class="symbol">\r</span>unoob<span class="symbol">\t</span>est<span class="symbol">\G</span>oogle.class</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<h3 id="包的无等级性"><a class="markdownIt-Anchor" href="#包的无等级性"></a> 包的无等级性</h3>
+<p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">impot com.hyggge.*;</span><br><span class="line">impot com.hyggge.czh.*;</span><br></pre></td></tr></table></figure>
+<h3 id="静态导入"><a class="markdownIt-Anchor" href="#静态导入"></a> 静态导入</h3>
+<p>当我们需要频繁的访问某个类的常量或静态方法时，可以采用静态导入，即使用<code>import static</code>将类中的常量和静态方法导入。见下例（摘自该<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_30973431/article/details/82386978?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164298826316780265425850%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164298826316780265425850&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-6-82386978.pc_search_result_cache&amp;utm_term=Java%E5%8C%85&amp;spm=1018.2226.3001.4187">博客</a>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.PI;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.cos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImportTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> r = Math.cos(Math.PI * <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">double</span> r1 = Math.cos(PI * <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">double</span> r2 = cos(PI * <span class="number">2</span>);</span><br><span class="line">        System.out.println(r+<span class="string">&quot; &quot;</span>+r1+<span class="string">&quot; &quot;</span>+r2);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以使用通配符<code>*</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.Math.*;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="包的路径"><a class="markdownIt-Anchor" href="#包的路径"></a> 包的路径</h2>
 <ul>
-<li>类的目录的绝对路径叫做 <code>class path</code>。设置在系统变量 <code>CLASSPATH</code> 中。编辑器和java虚拟机将 <code>package</code> 名字加到<code>class path</code> 后来构造 .class 文件的路径</li>
-<li>设置CLASSPATT系统变量，方法见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42361112/article/details/114421658?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164299544416780264048339%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164299544416780264048339&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-114421658.pc_search_result_cache&amp;utm_term=%E8%AE%BE%E7%BD%AE+CLASSPATH+%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8Fjavaa&amp;spm=1018.2226.3001.4187">博客</a></li>
-<li>如果我们的文件都在运行目录下时，也可以不设置<code>CLASSPATH</code>。也就是说在没有配置<code>CLASSPATH</code>环境变量时，java命令在找class文件时是默认在当前目录下寻找的。</li>
+<li>
+<p>包的中<strong>java源文件的目录</strong>和<strong>编译后class文件的目录</strong>应该和包的名字对应起来，但是并不要求两者路径一样，可以分开来安排。如下所示——</p>
+ <figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;path-one&gt;<span class="symbol">\s</span>ources<span class="symbol">\c</span>om<span class="symbol">\r</span>unoob<span class="symbol">\t</span>est<span class="symbol">\R</span>unoob.java</span><br><span class="line">&lt;path-two&gt;<span class="symbol">\c</span>lasses<span class="symbol">\c</span>om<span class="symbol">\r</span>unoob<span class="symbol">\t</span>est<span class="symbol">\G</span>oogle.class</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>类的目录的绝对路径叫做 <code>class path</code>。设置在系统变量 <code>CLASSPATH</code> 中。编辑器和java虚拟机将 <code>package</code> 名字加到<code>class path</code> 后来构造 .class 文件的路径</p>
+</li>
+<li>
+<p>设置CLASSPATT系统变量，方法见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42361112/article/details/114421658?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164299544416780264048339%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164299544416780264048339&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-114421658.pc_search_result_cache&amp;utm_term=%E8%AE%BE%E7%BD%AE+CLASSPATH+%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8Fjavaa&amp;spm=1018.2226.3001.4187">博客</a></p>
+</li>
+<li>
+<p>如果我们的文件都在运行目录下时，也可以不设置<code>CLASSPATH</code>。也就是说在没有配置<code>CLASSPATH</code>环境变量时，java命令在找class文件时是默认在当前目录下寻找的。</p>
+</li>
 </ul>
 
 
@@ -669,7 +707,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">包的定义</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%88%9B%E5%BB%BA%EF%BC%88package%EF%BC%89"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">包的创建（package）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">包的命名规范</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%A9%BA%E5%8C%85"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">空包</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%AF%BC%E5%85%A5%EF%BC%88import%EF%BC%89"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">包的导入（import）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%8D%E5%90%8C%E5%8C%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%AF%BC%E5%85%A5"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">不同包之间的导入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%89%E5%8C%85%E7%9A%84%E7%B1%BB%E5%92%8C%E6%97%A0%E5%8C%85%E7%9A%84%E7%B1%BB%E4%BA%92%E7%9B%B8%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">有包的类和无包的类互相访问</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E6%97%A0%E7%AD%89%E7%BA%A7%E6%80%A7"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">包的无等级性</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%9D%99%E6%80%81%E5%AF%BC%E5%85%A5"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">静态导入</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">包的路径</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 包的定义</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%88%9B%E5%BB%BApackage"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 包的创建（package）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> 包的命名规范</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%A9%BA%E5%8C%85"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> 空包</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E5%AF%BC%E5%85%A5import"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 包的导入（import）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%8D%E5%90%8C%E5%8C%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%AF%BC%E5%85%A5"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text"> 不同包之间的导入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%89%E5%8C%85%E7%9A%84%E7%B1%BB%E5%92%8C%E6%97%A0%E5%8C%85%E7%9A%84%E7%B1%BB%E4%BA%92%E7%9B%B8%E8%AE%BF%E9%97%AE"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text"> 有包的类和无包的类互相访问</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E6%97%A0%E7%AD%89%E7%BA%A7%E6%80%A7"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text"> 包的无等级性</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%9D%99%E6%80%81%E5%AF%BC%E5%85%A5"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text"> 静态导入</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8C%85%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 包的路径</span></a></li></ol>
         
         </div>
       </aside>
