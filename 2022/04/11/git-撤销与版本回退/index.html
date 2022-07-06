@@ -400,11 +400,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">1</span> Minutes
+              Estimated Reading Time <span class="post-count">3</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">501</span> In Total
+              Words <span class="post-count">939</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -476,15 +476,30 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git diff &lt;file&gt;</code></td>
-<td style="text-align:center">查看工作区中某文件的修改</td>
+<td style="text-align:center"><strong>git diff &lt;file&gt;</strong></td>
+<td style="text-align:center">查看工作区中某文件的修改。</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git diff HEAD -- &lt;file&gt;</code></td>
-<td style="text-align:center">查看工作区文件和版本库最新版本的区别</td>
+<td style="text-align:center"><strong>git diff --cached &lt;file&gt;</strong> 或<br>  <strong>git diff staged &lt;file&gt;</strong></td>
+<td style="text-align:center">显示暂存区(已add但未commit文件)和最后一次commit(HEAD)之间的所有不相同文件的增删改</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git diff HEAD -- &lt;file&gt;</strong></td>
+<td style="text-align:center">查看工作区文件（没有add到暂存区）和版本库最后一次commit之间的区别</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git diff HEAD~X -- &lt;file&gt;</strong></td>
+<td style="text-align:center">查看最近一次提交的版本与往过去时间线前数<code>X</code>个的版本之间的差别</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git diff &lt;branch1&gt; &lt;branch2&gt;</strong></td>
+<td style="text-align:center">比较两个分支最后一次commit的内容的差别</td>
 </tr>
 </tbody>
 </table>
+<ul>
+<li>对<code>git diff &lt;file&gt;</code>指令：当工作区有改动、暂存区为空时，比较的是工作区和最后一次commit提交；当工作区有改动、暂存区不为空时，比较的是工作区和暂存区。</li>
+</ul>
 <h2 id="撤销指令"><a class="markdownIt-Anchor" href="#撤销指令"></a> 撤销指令</h2>
 <table>
 <thead>
@@ -495,17 +510,31 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git checkout -- &lt;file&gt;</code></td>
+<td style="text-align:center"><strong>git checkout -- &lt;file&gt;</strong></td>
 <td style="text-align:center">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git reset HEAD &lt;file&gt;</code></td>
-<td style="text-align:center">将暂存区文件撤销到工作区</td>
+<td style="text-align:center"><strong>git checkout HEAD -- &lt;file&gt;</strong></td>
+<td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git reset HEAD &lt;file&gt;</strong></td>
+<td style="text-align:center">将暂存区和HEAD的提交保持一致</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git reset --hard HEAD</strong></td>
+<td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>”</li>
+<li><code>git checkout HEAD -- &lt;file&gt;</code>和<code>git reset --hard HEAD &lt;file&gt;</code> 作用相似，都是可以使&quot;工作区、暂存区和HEAD的提交保持一致&quot;。但是两者并不完全一样：
+<ul>
+<li>首先，<code>git checkout HEAD -- &lt;file&gt;</code>可以指定文件，但是<code>git reset -- hard HEAD</code>之呢个作用于所有的文件。</li>
+<li>其次，如果使用<code>git checkout HEAD -- .</code>时，不会对没有commit的新增文件起作用；但如果我们使用的是<code>git reset --head HEAD</code>，因为新增文件没有commit，即在版本库中找不到，所以执行该命令后未commmit新文件会消失（相比<code>git checkouit HEAD -- .</code>更加彻底）。具体示例可参考这篇<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59339986/is-there-a-difference-between-git-checkout-head-and-git-reset-hard-head">博客</a>。</li>
+</ul>
+</li>
 </ul>
 <h2 id="删除指令"><a class="markdownIt-Anchor" href="#删除指令"></a> 删除指令</h2>
 <table>
@@ -517,22 +546,21 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git rm &lt;file&gt;</code></td>
-<td style="text-align:center">工作区和暂存区的该文件都会被删除。再使用<code>git commit</code>就可以将该文件从版本库中删除</td>
+<td style="text-align:center"><strong>git rm &lt;file&gt;</strong></td>
+<td style="text-align:center">工作区和暂存区的该文件都会被删除。<br>再使用<code>git commit</code>就可以将该文件从版本库中删除</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git rm --cached &lt;file&gt;</code></td>
-<td style="text-align:center">从暂存区删去该文件，而工作区不删除。此时使用<code>git commit</code>可以将该文件从版本库中删除，但是工作区仍然不会被删</td>
+<td style="text-align:center"><strong>git rm --cached &lt;file&gt;</strong></td>
+<td style="text-align:center">从暂存区删去该文件，而工作区不删除。<br>此时使用<code>git commit</code>可以将该文件从版本库中删除，但工作区不会被删</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git clean &lt;file&gt; -f</code></td>
+<td style="text-align:center"><strong>git clean &lt;file&gt; -f</strong></td>
 <td style="text-align:center">删除工作区中没有被追踪的文件</td>
 </tr>
 </tbody>
 </table>
 <h2 id="版本回退"><a class="markdownIt-Anchor" href="#版本回退"></a> 版本回退</h2>
-<p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）</p>
-<p>确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
+<p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
 <table>
 <thead>
 <tr>
@@ -542,20 +570,23 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git reset --hard HEAD^</code></td>
+<td style="text-align:center"><strong>git reset --hard HEAD^</strong></td>
 <td style="text-align:center">回退到上一个版本，<code>^</code>的个数表示回滚的次数</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git reset --hard HEAD~100</code></td>
+<td style="text-align:center"><strong>git reset --hard HEAD~100</strong></td>
 <td style="text-align:center">回滚100次，<code>~</code>后的数字表示回滚的次数</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git reset --hard &lt;hashcode&gt;</code></td>
+<td style="text-align:center"><strong>git reset --hard &lt;hashcode&gt;</strong></td>
 <td style="text-align:center">回滚到<code>&lt;hashcode&gt;</code>表示的版本</td>
 </tr>
 </tbody>
 </table>
-<p>如果想要重返未来，则需要先使用<code>git relog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard &lt;hashcode&gt;</code>进行重返。</p>
+<p>如果想要重返未来，则需要先使用<code>git relog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard [hashcode]</code>进行重返。</p>
+<blockquote>
+<p>执行回退指令之后，不仅HEAD指针发生了变化，而且工作区和暂存区也都和指定版本保持一致，类似于<code>git reset --hard HEAD &lt;file&gt;</code>指令</p>
+</blockquote>
 
 
         <hr>
@@ -563,7 +594,7 @@
         <ul class="pager">
           
           <li class="previous">
-            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用及常见问题">&larr; Previous Post</a>
+            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用">&larr; Previous Post</a>
           </li>
           
           

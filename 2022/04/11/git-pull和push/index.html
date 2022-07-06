@@ -138,7 +138,7 @@
   <link rel="canonical" href="http://example.com/2022/04/11/git-pull和push/">
   <title>
     
-      「Git」pull和push的使用及常见问题 - Hyggge‘s blog
+      「Git」pull和push的使用 - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -388,7 +388,7 @@
               <a class="tag" href="/tags/#Git" title="Git">Git</a>
               
             </div>
-            <h1>「Git」pull和push的使用及常见问题</h1>
+            <h1>「Git」pull和push的使用</h1>
             <h2 class="subheading"></h2>
             <span class="meta">
               Posted by Hyggge on
@@ -476,15 +476,15 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git remote add origin &lt;ssh&gt;</code></td>
+<td style="text-align:center"><strong>git remote add origin &lt;ssh&gt;</strong></td>
 <td style="text-align:center">将远程仓库关联到本地版本库,并将<code>origin</code>作为远程库的名字</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git clone &lt;ssh&gt;</code></td>
+<td style="text-align:center"><strong>git clone &lt;ssh&gt;</strong></td>
 <td style="text-align:center">直接将远程仓库克隆到本地</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git remote rm origin</code></td>
+<td style="text-align:center"><strong>git remote rm origin</strong></td>
 <td style="text-align:center">删除<code>origin</code>代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用<code>git remote -v</code>来查看远程库的信息</td>
 </tr>
 </tbody>
@@ -502,35 +502,35 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git push origin master:master</code></td>
+<td style="text-align:center"><strong>git push origin master:master</strong></td>
 <td style="text-align:center">使用完整性形式，表示用本地master分支来更新远程仓库origin的master分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push origin master</code></td>
+<td style="text-align:center"><strong>git push origin master</strong></td>
 <td style="text-align:center">省略了远程分支名，表示将本地master本支推送到origin的master分支，如果后者不存在，则会被新建</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push -u origin master</code></td>
+<td style="text-align:center"><strong>git push -u origin master</strong></td>
 <td style="text-align:center">作用同<code>git push origin master</code>，同时指定origin为默认远程仓库，以后就可以直接使用<code>git push</code>而不用带其他参数了</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push origin :master</code></td>
+<td style="text-align:center"><strong>git push origin :master</strong></td>
 <td style="text-align:center">省略了本地分支名，表示用空分支来跟新origin的master分支，其实是删除了远程origin的master分支。该指令相当于<code>git push origin --delete master</code></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push origin</code></td>
+<td style="text-align:center"><strong>git push origin</strong></td>
 <td style="text-align:center">省略了远程分支名和本地分支名，只有在当前分支（HEAD指向的分支）和远程仓库中某分支存在追踪关系的时候才可以使用（一般是分支名相同）</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push</code></td>
+<td style="text-align:center"><strong>git push</strong></td>
 <td style="text-align:center">不带任何参数，默认只推送当前分支到默认远程仓库</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push --all origin</code></td>
+<td style="text-align:center"><strong>git push --all origin</strong></td>
 <td style="text-align:center">将所有的本地分支都推送到origin远程仓库</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git push --force origin</code></td>
+<td style="text-align:center"><strong>git push --force origin</strong></td>
 <td style="text-align:center">如果远程仓库的版本比本地新，git会报错，如果一定要推送，则可以使用该指令强制推送</td>
 </tr>
 </tbody>
@@ -548,11 +548,11 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git pull origin master:master</code></td>
+<td style="text-align:center"><strong>git pull origin master:master</strong></td>
 <td style="text-align:center">使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git pull origin master</code></td>
+<td style="text-align:center"><strong>git pull origin master</strong></td>
 <td style="text-align:center">省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）</td>
 </tr>
 </tbody>
@@ -625,7 +625,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Git」pull和push的使用及常见问题&body=Hi,I found this website and thought you might like it http://example.com/2022/04/11/git-pull和push/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Git」pull和push的使用&body=Hi,I found this website and thought you might like it http://example.com/2022/04/11/git-pull和push/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>

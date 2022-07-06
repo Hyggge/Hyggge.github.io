@@ -476,43 +476,43 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>git branch</code></td>
+<td style="text-align:center"><strong>git branch</strong></td>
 <td style="text-align:center">查看本地分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git branch -a</code></td>
+<td style="text-align:center"><strong>git branch -a</strong></td>
 <td style="text-align:center">可以查看本地和远程仓库的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git branch &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git branch &lt;name&gt;</strong></td>
 <td style="text-align:center">创建分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git checkout &lt;name&gt;</code><br><code>git switch &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git checkout &lt;name&gt;</strong><br><strong>git switch&lt;name&gt;</strong></td>
 <td style="text-align:center">切换到已有的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git checkout -b &lt;name&gt;</code><br><code>git switch -c &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git checkout -b &lt;name&gt;</strong><br><strong>git switch -c &lt;name&gt;</strong></td>
 <td style="text-align:center">创建并切换分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git merge &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git merge &lt;name&gt;</strong></td>
 <td style="text-align:center">将某个分支合并到当前的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git branch -d &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git branch -d &lt;name&gt;</strong></td>
 <td style="text-align:center">删除分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git branch -D &lt;name&gt;</code></td>
+<td style="text-align:center"><strong>git branch -D &lt;name&gt;</strong></td>
 <td style="text-align:center">强制删除分支（如果删除一个没有被合并的分支，只能用该指令而不能用-d）</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git checkout -b &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</code></td>
+<td style="text-align:center"><strong>git checkout -b &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
 <td style="text-align:center">在本地创建一个和远程仓库origin中某分支相关联的分支（名字最好是一样的）</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>git branch --set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</code></td>
+<td style="text-align:center"><strong>git branch --set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
 <td style="text-align:center">将本地已经存在的某分支和远程库的某分支建立关联</td>
 </tr>
 </tbody>
@@ -528,7 +528,7 @@
 <h3 id="position-2"><a class="markdownIt-Anchor" href="#position-2"></a> Position 2</h3>
 <p>接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br />
 <img src="3.png" alt="" /><br />
-如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用<code>git merge --no-ff -m &quot;msg&quot; dev</code>即可。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
+如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
 <h3 id="position-3"><a class="markdownIt-Anchor" href="#position-3"></a> Position 3</h3>
 <p>我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
 <ul>
@@ -563,7 +563,7 @@
           
           
           <li class="next">
-            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用及常见问题">Next Post &rarr;</a>
+            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用">Next Post &rarr;</a>
           </li>
           
         </ul>
