@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2022/07/06/git-little-tips/</loc>
+    <lastmod>2022-07-06</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2022/07/06/git-stash%E5%91%BD%E4%BB%A4/</loc>
+    <lastmod>2022-07-06</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2022/07/04/OS-LAB4-%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1/%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</loc>
     <lastmod>2022-07-04</lastmod>
   </url>
@@ -201,11 +209,11 @@
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E5%85%B6%E4%BB%96tips/</loc>
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>
-    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E5%85%B6%E4%BB%96tips/</loc>
+    <loc>http://example.com/2021/10/26/CO_P1_Verilog%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1/</loc>
     <lastmod>2021-10-26</lastmod>
   </url>
   <url>

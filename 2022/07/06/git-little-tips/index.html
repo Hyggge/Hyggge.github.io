@@ -135,10 +135,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://example.com/2022/04/10/Letax-数学符号/">
+  <link rel="canonical" href="http://example.com/2022/07/06/git-little-tips/">
   <title>
     
-      「Letax」Letax Mathematical Symbols - Hyggge‘s blog
+      「Git」Little Tips - Hyggge‘s blog
     
   </title>
 <!-- hexo injector head_end start -->
@@ -348,19 +348,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: url('/img/header_img/bg_12.jpg');
-      --intro-header-background-image-url-page: url('//img/header_img/bg_12.jpg');
+      --intro-header-background-image-url-post: url('/img/header_img/bg_6.jpg');
+      --intro-header-background-image-url-page: url('//img/header_img/bg_6.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg.png');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_12.jpg');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_12.jpg');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/bg_6.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('//img/header_img/bg_6.jpg');
     }
 
     header.intro-header {
        /*post*/
         background-image: var(--intro-header-background-image-url-post);
-        /* background-image: url('/img/header_img/bg_12.jpg'); */
+        /* background-image: url('/img/header_img/bg_6.jpg'); */
       
     }
 
@@ -385,14 +385,14 @@
           <div class="post-heading">
             <div class="tags">
               
-              <a class="tag" href="/tags/#Letax" title="Letax">Letax</a>
+              <a class="tag" href="/tags/#Git" title="Git">Git</a>
               
             </div>
-            <h1>「Letax」Letax Mathematical Symbols</h1>
-            <h2 class="subheading">Letax 特殊数学符号</h2>
+            <h1>「Git」Little Tips</h1>
+            <h2 class="subheading"></h2>
             <span class="meta">
               Posted by Hyggge on
-              2022-04-10
+              2022-07-06
             </span>
 
 
@@ -404,7 +404,7 @@
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">14</span> In Total
+              Words <span class="post-count">393</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -466,28 +466,29 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <ul>
-<li>源文档<a target="_blank" rel="noopener" href="https://www.caam.rice.edu/~heinken/latex/symbols.pdf">下载链接</a></li>
-<li><a target="_blank" rel="noopener" href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols">表格版符号大全</a></li>
+        <p><strong>Git中还有很多实用并且常用的小技巧，适当的使用可以提高我们的工作效率。但因为这些Tips比较琐碎，无法将它们归档到特定的主题下，于是我便整理到这里了——</strong></p>
+<h3 id="git-commit-a"><a class="markdownIt-Anchor" href="#git-commit-a"></a> git commit -a</h3>
+<p><code>git commit -a</code>指令可以自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 <code>git add</code> 步骤。</p>
+<h3 id="git-status-选项"><a class="markdownIt-Anchor" href="#git-status-选项"></a> git status 选项</h3>
+<ul>
+<li><code>git status</code>命令的输出十分详细，但其用语有些繁琐。 但是如果使用 <code>git status -s</code> 命令或 <code>git status --short</code> 命令，我们将得到一种格式更为紧凑的输出</li>
 </ul>
-<hr />
-<p><img src="1.png" alt="" /><br />
-<img src="2.png" alt="" /><br />
-<img src="3.png" alt="" /><br />
-<img src="4.png" alt="" /></p>
+<h3 id="git-log-选项"><a class="markdownIt-Anchor" href="#git-log-选项"></a> git log 选项</h3>
+<ul>
+<li><code>git log --patch</code>：也可以简写成<code>-p</code>，它会显示每次提交所引入的差异（按 补丁 的格式输出）。 我们也可以限制显示的日志条目数量，例如使用 <code>-2</code> 选项来只显示最近的两次提交。</li>
+<li><code>git log --stat</code>： 显示每次提交的简略统计信息，包括有几个文件修改、有几个文件删除等等。</li>
+<li><code>git log --pretty</code>：这个选项可以使用不同于默认格式的方式展示提交历史。 这个选项有一些内建的子选项供你使用，比如 <code>git log --pretty=oneline</code> 会将每个提交放在一行显示，在浏览大量的提交时非常有用。 另外还有 <code>short</code>，<code>full</code> 和 <code>fuller</code> 选项，它们展示信息的格式基本一致，但是详尽程度不一。</li>
+<li><code>git log --graph</code>：可以在日志旁以 ASCII 图形显示分支与合并历史</li>
+</ul>
 
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
           
-          <li class="previous">
-            <a href="/2022/04/11/git-撤销与版本回退/" data-toggle="tooltip" data-placement="top" title="「Git」撤销、删除与版本回退">&larr; Previous Post</a>
-          </li>
-          
           
           <li class="next">
-            <a href="/2022/04/03/OS-Lab1实验报告/" data-toggle="tooltip" data-placement="top" title="「BUAA-OS」 Lab1：内核、Boot和Print">Next Post &rarr;</a>
+            <a href="/2022/07/06/git-stash命令/" data-toggle="tooltip" data-placement="top" title="「Git」stash命令">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -536,7 +537,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Letax」Letax Mathematical Symbols&body=Hi,I found this website and thought you might like it http://example.com/2022/04/10/Letax-数学符号/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=「Git」Little Tips&body=Hi,I found this website and thought you might like it http://example.com/2022/07/06/git-little-tips/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -571,7 +572,7 @@
       repo: 'hyggge.github.io',
       owner: 'Hyggge',
       admin: 'Hyggge',
-      id: 'Sun Apr 10 2022 10:41:57 GMT+0800', // Ensure uniqueness and length less than 50
+      id: 'Wed Jul 06 2022 17:02:38 GMT+0800', // Ensure uniqueness and length less than 50
       distractionFreeMode: false, // Facebook-like distraction free mode
       perPage: 10,
       pagerDirection: 'last',
@@ -619,6 +620,17 @@
       <!-- Catalog: Tabe of Content -->
       <!-- Table of Contents -->
 
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#git-commit-a"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> git commit -a</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#git-status-%E9%80%89%E9%A1%B9"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> git status 选项</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#git-log-%E9%80%89%E9%A1%B9"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> git log 选项</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
 
 
       <!-- Sidebar Container -->
@@ -636,7 +648,7 @@
           </h5>
           <div class="tags">
             
-            <a class="tag" href="/tags/#Letax" title="Letax">Letax</a>
+            <a class="tag" href="/tags/#Git" title="Git">Git</a>
             
           </div>
         </section>

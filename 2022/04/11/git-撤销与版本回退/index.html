@@ -247,17 +247,6 @@
           
           
           <li>
-            <a href="/archive/">
-              
-              ARCHIVES
-              
-              
-            </a>
-          </li>
-          
-          
-          
-          <li>
             <a href="/about/">
               
               ABOUT
@@ -269,9 +258,9 @@
           
           
           <li>
-            <a href="/categories/">
+            <a href="/tags/">
               
-              CATEGORIES
+              TAGS
               
               
             </a>
@@ -280,9 +269,20 @@
           
           
           <li>
-            <a href="/tags/">
+            <a href="/archive/">
               
-              TAGS
+              ARCHIVES
+              
+              
+            </a>
+          </li>
+          
+          
+          
+          <li>
+            <a href="/categories/">
+              
+              CATEGORIES
               
               
             </a>
@@ -400,11 +400,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">3</span> Minutes
+              Estimated Reading Time <span class="post-count">4</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">939</span> In Total
+              Words <span class="post-count">1.1k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -500,6 +500,24 @@
 <ul>
 <li>对<code>git diff &lt;file&gt;</code>指令：当工作区有改动、暂存区为空时，比较的是工作区和最后一次commit提交；当工作区有改动、暂存区不为空时，比较的是工作区和暂存区。</li>
 </ul>
+<h2 id="重命名指令"><a class="markdownIt-Anchor" href="#重命名指令"></a> 重命名指令</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>git mv &lt;name1&gt; &lt;name2&gt;</strong></td>
+<td style="text-align:center">将名为<code>name1</code>的文件重命名为<code>name2</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>使用<code>git mv</code>指令后，工作区和暂存区的文件名都被修改。以<code>git mv file1.txt file2.txt</code>为例，它其实相当于三条指令——<code>mv file1.txt file2.txt</code>、<code>git rm file1.txt</code>、<code>git add file2.txt</code></li>
+</ul>
 <h2 id="撤销指令"><a class="markdownIt-Anchor" href="#撤销指令"></a> 撤销指令</h2>
 <table>
 <thead>
@@ -510,20 +528,24 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><strong>git checkout -- &lt;file&gt;</strong></td>
+<td style="text-align:center"><strong>git checkout – &lt;file&gt;</strong></td>
 <td style="text-align:center">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git checkout HEAD -- &lt;file&gt;</strong></td>
+<td style="text-align:center"><strong>git checkout HEAD – &lt;file&gt;</strong></td>
 <td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
 </tr>
 <tr>
 <td style="text-align:center"><strong>git reset HEAD &lt;file&gt;</strong></td>
-<td style="text-align:center">将暂存区和HEAD的提交保持一致</td>
+<td style="text-align:center">将暂存区和HEAD的提交保持一致（达到取消暂存的效果）</td>
 </tr>
 <tr>
 <td style="text-align:center"><strong>git reset --hard HEAD</strong></td>
 <td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git commit --amend</strong></td>
+<td style="text-align:center">如果提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了， 可以用该命令来重新提交将暂存区中的文件提交，并覆盖上一次提交信息。</td>
 </tr>
 </tbody>
 </table>
@@ -736,7 +758,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 查看修改</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%92%A4%E9%94%80%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 撤销指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 删除指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 版本回退</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BF%AE%E6%94%B9"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 查看修改</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%87%8D%E5%91%BD%E5%90%8D%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 重命名指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%92%A4%E9%94%80%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"> 撤销指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"> 删除指令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-nav-number">5.</span> <span class="toc-nav-text"> 版本回退</span></a></li></ol>
         
         </div>
       </aside>
