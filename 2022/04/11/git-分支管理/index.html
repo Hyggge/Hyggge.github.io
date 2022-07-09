@@ -400,11 +400,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">3</span> Minutes
+              Estimated Reading Time <span class="post-count">5</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">843</span> In Total
+              Words <span class="post-count">1.6k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -466,7 +466,8 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h2 id="分支基本操作"><a class="markdownIt-Anchor" href="#分支基本操作"></a> 分支基本操作</h2>
+        <hr>
+<h2 id="分支基本操作"><a href="#分支基本操作" class="headerlink" title="分支基本操作"></a>分支基本操作</h2><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -484,27 +485,31 @@
 <td style="text-align:center">可以查看本地和远程仓库的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git branch &lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git branch -vv</strong></td>
+<td style="text-align:center">将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。一般需要先<code>git fetch --all</code>更新远程数据</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>git branch \<name></strong></td>
 <td style="text-align:center">创建分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git checkout &lt;name&gt;</strong><br><strong>git switch&lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git checkout \<name></strong><br><strong>git switch\<name></strong></td>
 <td style="text-align:center">切换到已有的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git checkout -b &lt;name&gt;</strong><br><strong>git switch -c &lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git checkout -b \<name></strong><br><strong>git switch -c \<name></strong></td>
 <td style="text-align:center">创建并切换分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git merge &lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git merge \<name></strong></td>
 <td style="text-align:center">将某个分支合并到当前的分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git branch -d &lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git branch -d \<name></strong></td>
 <td style="text-align:center">删除分支</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git branch -D &lt;name&gt;</strong></td>
+<td style="text-align:center"><strong>git branch -D \<name></strong></td>
 <td style="text-align:center">强制删除分支（如果删除一个没有被合并的分支，只能用该指令而不能用-d）</td>
 </tr>
 <tr>
@@ -512,35 +517,42 @@
 <td style="text-align:center">在本地创建一个和远程仓库origin中某分支相关联的分支（名字最好是一样的）</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>git branch --set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
+<td style="text-align:center"><strong>git branch —set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
 <td style="text-align:center">将本地已经存在的某分支和远程库的某分支建立关联</td>
 </tr>
 </tbody>
 </table>
-<h2 id="分支合并及冲突"><a class="markdownIt-Anchor" href="#分支合并及冲突"></a> 分支合并及冲突</h2>
-<p>将使用<code>git merge &lt;name&gt;</code>进行分支合并时，有的时候需要解决冲突，举下面三个例子。</p>
-<h3 id="position-1"><a class="markdownIt-Anchor" href="#position-1"></a> Position 1</h3>
-<p>如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br />
-<img src="2.png" alt="" /><br />
-此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br />
-<img src="1.png" alt="" /><br />
-这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
-<h3 id="position-2"><a class="markdownIt-Anchor" href="#position-2"></a> Position 2</h3>
-<p>接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br />
-<img src="3.png" alt="" /><br />
-如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
-<h3 id="position-3"><a class="markdownIt-Anchor" href="#position-3"></a> Position 3</h3>
-<p>我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
+</div>
+<hr>
+<h2 id="分支合并——merge"><a href="#分支合并——merge" class="headerlink" title="分支合并——merge"></a>分支合并——merge</h2><p>将使用<code>git merge &lt;name&gt;</code>进行分支合并时，有的时候需要解决冲突，举下面三个例子。</p>
+<h3 id="Position-1"><a href="#Position-1" class="headerlink" title="Position 1"></a>Position 1</h3><p>如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br><img src="2.png" alt=""><br>此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br><img src="1.png" alt=""><br>这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
+<h3 id="Position-2"><a href="#Position-2" class="headerlink" title="Position 2"></a>Position 2</h3><p>接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br><img src="3.png" alt=""><br>如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
+<h3 id="Position-3"><a href="#Position-3" class="headerlink" title="Position 3"></a>Position 3</h3><p>我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
 <ul>
 <li>之后我们切换到在<code>dev</code>分支上，在<code>readme.txt</code>的第一行添加了一句 <strong>“dev modify it!”</strong>, 保存之后commit到本地仓库。</li>
 <li>然后我们在切换到<code>master</code>分支上，此时<code>readme.txt</code>还是一个空文件。我们在<code>readme.txt</code>的第一行添加了一句 <strong>“master modify it!”</strong>, 保存之后也commit到本地仓库</li>
 </ul>
-<p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——<br />
-<img src="4.png" alt="" /></p>
+<p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——<br><img src="4.png" alt=""></p>
 <p>这种情况下，如果在<code>master</code>分支中使用指令<code>git merge dev</code>，则可能产生冲突。因为我们在两个分支上同时对<code>readme.txt</code>加了一行，但是内容不同，Git并不知道该保存哪个。此时使用<code>merge</code>命令后，Git会提示我们 <strong>“Automatic merge failed; fix conflicts and then commit the result.”</strong> 也就是说自动给合并失败了，需要我们手动结局冲突后再次提交。</p>
-<p>我们打开<code>readme.txt</code>,会发现内容变成了</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">master modify it！</span><br><span class="line">=======</span><br><span class="line">dev modify it！</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span><br></pre></td></tr></table></figure>
-<p>此时我们手动修改之后再<code>commit</code>即可。</p>
+<p>我们打开<code>readme.txt</code>,会发现内容变成了<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">master modify it！</span><br><span class="line">=======</span><br><span class="line">dev modify it！</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span><br></pre></td></tr></table></figure><br>此时我们手动修改之后再<code>commit</code>即可。</p>
+<hr>
+<h2 id="分支变基——rebase"><a href="#分支变基——rebase" class="headerlink" title="分支变基——rebase"></a>分支变基——rebase</h2><h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><p>变基命令的一般格式为——<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase &lt;basebranch&gt; &lt;topicbranch&gt;</span><br></pre></td></tr></table></figure><br>其中<code>basebranch</code>是作为新基底的分支，<code>topicbranch</code>是待变基的分支。当然，如果你想让当前所在的分支作为<code>topicbranch</code>，可以直接使用<code>git rebase &lt;basebranch&gt;</code>。</p>
+<h3 id="用法解释"><a href="#用法解释" class="headerlink" title="用法解释"></a>用法解释</h3><p><code>git rebase</code>的官方解释是——“<strong>当执行rebase操作时，git会从两个分支的共同祖先开始提取待变基分支上的修改，然后将待变基分支指向基分支的最新提交，最后将刚才提取的修改应用到基分支的最新提交的后面。</strong>“我们用下面的例子来分析</p>
+<p><img src="合并前.jpg" alt=""></p>
+<p>此时<code>master</code>指向的是<code>C4</code>，<code>dev</code>指向的是<code>C6</code>，它们的公共祖先是<code>C2</code>。此时我们在<code>dev</code>分支上调用命令<code>git rebase master</code>，Git就会比较<code>C5</code>、<code>C6</code>和<code>C2</code>之间的区别，然后将<code>C5</code>、<code>C6</code>较<code>C2</code>的修改应用在<code>C4</code>上（即<code>C4</code>作为新的基底），形成新的提交<code>C5&#39;</code>和<code>C6&#39;</code>，最后再将原先的<code>C5</code>和<code>C6</code>删掉。其效果相当于将<code>dev</code>上的两个提交记录（<code>C5</code>和<code>C6</code>）拿下来，安到master的最新提交（<code>C4</code>）上。</p>
+<p>操作结果如下图所示——</p>
+<p><img src="变基后.jpg" alt=""></p>
+<p>可以发现，变基实际上就是更改历史，使得提交历史成为一条直线而没有分叉。这样做的好处是能够保持提交历史的整洁性，但是缺点也很明显——丢弃了一些提交记录，如果你的同伴是基于这些记录进行开发，那就会使事情变得很麻烦。</p>
+<p>因此，如果正在和同伴协作开发，应该尽量避免使用<code>rebase</code>。如果真出现了”<strong>有人推送了经过变基的提交，并丢弃了你的本地开发所基于的一些提交</strong>“,我们可以通过两种方法解决（具体可参见《<em>Pro Git</em>》的相关章节）</p>
+<ul>
+<li><strong>第一种</strong>：先使用<code>get fetch --all</code>获取同伴使用变基后的提交记录，然后使用<code>get rebase origin/master</code>（也就是用变基解决变基）。</li>
+<li><strong>第二种</strong>：在下拉时使用<code>git pull --rebase</code>，而不是使用<code>git pull</code>。</li>
+</ul>
+<hr>
+<h2 id="分支拣选——cherry-pick"><a href="#分支拣选——cherry-pick" class="headerlink" title="分支拣选——cherry-pick"></a>分支拣选——cherry-pick</h2><p>Git 中的拣选类似于对特定的某次提交的变基。 它会提取该提交的补丁，之后尝试将其重新应用到当前分支上。 这种方式在你只想引入<strong>某个分支中的某个提交</strong>，或者<strong>某个分支中只有一个提交，而你不想运行变基</strong>时很有用。假设你的项目提交历史如下图所示——</p>
+<p><img src="拣选前.jpg" alt=""></p>
+<p>此时如果想要将提交<code>e43a6</code>拉去到<code>master</code>分支，我们可以先切换到<code>master</code>分支，然后使用命令<code>git cherry-pick e43a6</code>。这样一来，<code>master</code>分支会新增一个提交，结果如下——</p>
+<p><img src="拣选后.jpg" alt=""></p>
 
 
         <hr>
@@ -553,7 +565,7 @@
           
           
           <li class="next">
-            <a href="/2022/04/11/git-pull和push/" data-toggle="tooltip" data-placement="top" title="「Git」pull和push的使用">Next Post &rarr;</a>
+            <a href="/2022/04/11/git-远程仓库/" data-toggle="tooltip" data-placement="top" title="「Git」远程仓库">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -690,7 +702,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-nav-number">1.</span> <span class="toc-nav-text"> 分支基本操作</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%8F%8A%E5%86%B2%E7%AA%81"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"> 分支合并及冲突</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-1"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text"> Position 1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-2"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text"> Position 2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#position-3"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text"> Position 3</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">分支基本操作</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E2%80%94%E2%80%94merge"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">分支合并——merge</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-1"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Position 1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-2"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Position 2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Position-3"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Position 3</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E5%8F%98%E5%9F%BA%E2%80%94%E2%80%94rebase"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">分支变基——rebase</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%91%BD%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">命令格式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%94%A8%E6%B3%95%E8%A7%A3%E9%87%8A"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">用法解释</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E6%94%AF%E6%8B%A3%E9%80%89%E2%80%94%E2%80%94cherry-pick"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">分支拣选——cherry-pick</span></a></li></ol>
         
         </div>
       </aside>

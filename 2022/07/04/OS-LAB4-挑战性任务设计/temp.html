@@ -1,42 +1,41 @@
-<pre class="highlight"><code class="c++"><span class="hljs-function"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">int</span> <span class="hljs-title">get_retval</span><span class="hljs-params">()</span></span>;
+<pre><code class="lang-c++">extern int get_retval();
 
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">exit</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
-</span>{
-    <span class="hljs-keyword">void</span> *retval = get_retval();
-    <span class="hljs-keyword">int</span> thread_id = syscall_get_thread_id();
-    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Thread</span> *<span class="hljs-title">cur_thread</span> = &amp;<span class="hljs-title">env</span>-&gt;<span class="hljs-title">env_threads</span>[<span class="hljs-title">THREAD2INDEX</span>(<span class="hljs-title">thread_id</span>)];</span>
+void exit(void)
+{
+    void *retval = get_retval();
+    int thread_id = syscall_get_thread_id();
+    struct Thread *cur_thread = &amp;env-&gt;env_threads[THREAD2INDEX(thread_id)];
 
-    <span class="hljs-keyword">if</span> (THREAD2INDEX(thread_id) == <span class="hljs-number">0</span>) {
-        cur_thread-&gt;thread_retval = <span class="hljs-number">0</span>;
-        syscall_thread_destroy(<span class="hljs-number">0</span>);
+    if (THREAD2INDEX(thread_id) == 0) {
+        cur_thread-&gt;thread_retval = 0;
+        syscall_thread_destroy(0);
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != <span class="hljs-number">0</span>) {
-        syscall_thread_destroy(<span class="hljs-number">0</span>);
+    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != 0) {
+        syscall_thread_destroy(0);
     }
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_EXITED) != <span class="hljs-number">0</span>) {
-        syscall_thread_destroy(<span class="hljs-number">0</span>);
+    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_EXITED) != 0) {
+        syscall_thread_destroy(0);
     }
-    <span class="hljs-keyword">else</span> {
+    else {
         cur_thread-&gt;thread_retval = retval;
-        syscall_thread_destroy(<span class="hljs-number">0</span>);
+        syscall_thread_destroy(0);
     }
 }
 
 
-<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">env</span>;</span>
+struct Env *env;
 
-<span class="hljs-function"><span class="hljs-keyword">void</span>
-<span class="hljs-title">libmain</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> **argv)</span>
-</span>{
-    env = <span class="hljs-number">0</span>;	<span class="hljs-comment">// Your code here.</span>
-    <span class="hljs-keyword">int</span> envid;
+void
+libmain(int argc, char **argv)
+{
+    env = 0;    // Your code here.
+    int envid;
     envid = syscall_getenvid();
     envid = ENVX(envid);
     env = &amp;envs[envid];
-    <span class="hljs-comment">// call user main routine</span>
+    // call user main routine
     umain(argc, argv);
-    <span class="hljs-comment">// exit gracefully</span>
-    <span class="hljs-built_in">exit</span>();
+    // exit gracefully
+    exit();
 }
-
 </code></pre>

@@ -682,7 +682,8 @@ Q1： 请从可重用性的角度，阐述用宏来......
       
     </h3>
     <div class="post-content-preview">
-       分支基本操作
+      
+分支基本操作
 
 
 
@@ -700,15 +701,15 @@ git branch -a
 可以查看本地和远程仓库的分支
 
 
-git branch &lt;name&gt;
+git branch -vv
+将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。一般需要先git fetch --all更新远程数据
+
+
+git branch \
 创建分支
 
 
-git checkout &lt;name&gt;git switch&lt;name&gt;
-切换到已有的分支
-
-
-git checkout -b &lt;name&gt;git swi......
+git ch......
     </div>
   </a>
   
@@ -737,15 +738,16 @@ git checkout -b &lt;name&gt;git swi......
   <!-- top end -->
   
 
-  <a href="/2022/04/11/git-pull和push/">
+  <a href="/2022/04/11/git-远程仓库/">
     <h2 class="post-title">
-      「Git」pull和push的使用
+      「Git」远程仓库
     </h2>
     <h3 class="post-subtitle">
       
     </h3>
     <div class="post-content-preview">
-       远程库的关联、克隆和删除
+      
+远程仓库操作
 
 
 
@@ -755,16 +757,19 @@ git checkout -b &lt;name&gt;git swi......
 
 
 
-git remote add origin &lt;ssh&gt;
+git remote add origin \
 将远程仓库关联到本地版本库,并将origin作为远程库的名字
 
 
-git clone &lt;ssh&gt;
+git clone \
 直接将远程仓库克隆到本地
 
 
 git remote rm origin
-删除origin代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用git......
+删除origin代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用git remote -v来查看远程库的信息
+
+
+git ......
     </div>
   </a>
   
@@ -801,7 +806,8 @@ git remote rm origin
       
     </h3>
     <div class="post-content-preview">
-       查看修改
+      
+查看修改
 
 
 
@@ -811,15 +817,16 @@ git remote rm origin
 
 
 
-git diff &lt;file&gt;
+git diff \
 查看工作区中某文件的修改。
 
 
-git diff --cached &lt;file&gt; 或  git diff staged &lt;file&gt;
+git diff —cached \ 或  git diff staged \
 显示暂存区(已add但未commit文件)和最后一次commit(HEAD)之间的所有不相同文件的增删改
 
 
-git diff HEAD -- &lt;f......
+git diff HEAD -- \
+查看工作区文件（没有add到暂存区）和版本库最后一次commit之间的区别......
     </div>
   </a>
   
