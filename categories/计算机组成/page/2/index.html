@@ -376,10 +376,10 @@
                 </a>
                 
                 
-                <a href="/categories/%E7%BC%96%E8%AF%91/" title="编译: 1">
+                <a href="/categories/ECS/" title="ECS: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #E8F8F5;">编译
+                            style="background-color: #E8F8F5;">ECS
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -394,19 +394,10 @@
                 </a>
                 
                 
-                <a href="/categories/ECS/" title="ECS: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            style="background-color: #F8F9F9;">ECS
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/categories/Java/" title="Java: 7">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #82E0AA;">Java
+                            style="background-color: #F8F9F9;">Java
                         <span class="tag-length">7</span>
                     </span>
                 </a>
@@ -415,7 +406,7 @@
                 <a href="/categories/Letax/" title="Letax: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #D7BDE2;">Letax
+                            style="background-color: #82E0AA;">Letax
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -424,8 +415,17 @@
                 <a href="/categories/Linux/" title="Linux: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #A3E4D7;">Linux
+                            style="background-color: #D7BDE2;">Linux
                         <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/Maven/" title="Maven: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #A3E4D7;">Maven
+                        <span class="tag-length">3</span>
                     </span>
                 </a>
                 
@@ -439,11 +439,11 @@
                 </a>
                 
                 
-                <a href="/categories/Maven/" title="Maven: 3">
+                <a href="/categories/%E7%BC%96%E8%AF%91/" title="编译: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F8C471;">Maven
-                        <span class="tag-length">3</span>
+                            style="background-color: #F8C471;">编译
+                        <span class="tag-length">1</span>
                     </span>
                 </a>
                 
@@ -479,23 +479,22 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/10/26/co/co-p1-verilog-bian-yan-jian-ce-zong-jie/">
+                    <a href="/2021/10/26/co/co-p1-verilog-zu-sai-he-fei-zu-sai-fu-zhi-de-tao-lun/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="「BUAA-CO」P1_Verilog边沿检测总结">
+                            <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论">
                             
-                            <span class="card-title">「BUAA-CO」P1_Verilog边沿检测总结</span>
+                            <span class="card-title">「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                上升沿（或下降沿）检测
-如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
+                                概念区别
 
-只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
-module top_
+
+阻塞赋值操作符用等号(即 = )表示。“阻塞”是指在进程语句（initial和always）中，当前的赋值语句阻断了其后的语句，也就是说后面的语句必须等到当前的赋值语句执行完毕才能执行。而且阻塞赋值可以看成是一步完成的，即：计
                             
                         </div>
                         <div class="publish-info">
@@ -533,22 +532,23 @@ module top_
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2021/10/26/co/co-p1-verilog-zu-sai-he-fei-zu-sai-fu-zhi-de-tao-lun/">
+                    <a href="/2021/10/26/co/co-p1-verilog-bian-yan-jian-ce-zong-jie/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论">
+                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="「BUAA-CO」P1_Verilog边沿检测总结">
                             
-                            <span class="card-title">「BUAA-CO」P1_Verilog阻塞和非阻塞赋值的讨论</span>
+                            <span class="card-title">「BUAA-CO」P1_Verilog边沿检测总结</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                概念区别
+                                上升沿（或下降沿）检测
+如图所示，当检测到上升沿时，out会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。
 
-
-阻塞赋值操作符用等号(即 = )表示。“阻塞”是指在进程语句（initial和always）中，当前的赋值语句阻断了其后的语句，也就是说后面的语句必须等到当前的赋值语句执行完毕才能执行。而且阻塞赋值可以看成是一步完成的，即：计
+只需要设定一个临时reg类型变量来储存上一次的in值，然后在下一上升沿进行识别即可，代码如下
+module top_
                             
                         </div>
                         <div class="publish-info">
