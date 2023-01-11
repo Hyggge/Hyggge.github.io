@@ -1,0 +1,2195 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「BUAA-CO」P3_单周期cpu（Logisim实现）, Hyggge&#39;s Blog">
+    <meta name="description" content="单周期CPU设计方案
+设计概述
+ 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branc">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「BUAA-CO」P3_单周期cpu（Logisim实现） | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「BUAA-CO」P3_单周期cpu（Logisim实现）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/BUAA/">
+                                <span class="chip bg-color">BUAA</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                <span class="chip bg-color">计算机组成</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                计算机组成
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-11-01
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    24 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="单周期CPU设计方案">单周期CPU设计方案</h2>
+<h3 id="设计概述">设计概述</h3>
+<p> 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branch Control，LS Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。<br>
+<img src="CPU.png" alt=""></p>
+<h3 id="实现指令说明">实现指令说明</h3>
+<p> 本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。</p>
+<h4 id="R型指令">R型指令</h4>
+<ul>
+<li>算数/位运算指令：add, addu, sub, subu, and, or, nor, xor</li>
+<li>移位指令：sll, srl, sra, sllv, srlv, srav</li>
+<li>置位指令：slt, sltu</li>
+<li>跳转指令：jr, jalr</li>
+<li>系统调用：syscall</li>
+</ul>
+<h4 id="J型指令">J型指令</h4>
+<ul>
+<li>跳转指令：j, jal</li>
+</ul>
+<h4 id="I型指令">I型指令</h4>
+<ul>
+<li>算数/位运算指令： addi, andi, addiu, ori, xori, lui</li>
+<li>B类指令：beq, bne, bgtz, bgez, blez, bltz</li>
+<li>置位指令：slti, sltiu</li>
+<li>访存指令：lw, sw, lh, lhu, lb, lbu, sh, sb</li>
+</ul>
+<h3 id="数据通路模块定义">数据通路模块定义</h3>
+<h4 id="IFU（取指令单元）">IFU（取指令单元）</h4>
+<p>  该模块内部包含PC（程序计数器）和IM（指令存储器），PC通过Logism内置的32位寄存器实现， IM通过Logisim内置的ROM实现（容量为32*32bit）。可以根据PC的值从IM取出对应的指令，并具有异步复位的功能。<br>
+<img src="IFU.png" alt=""></p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>Stop</td>
+<td>I</td>
+<td>1</td>
+<td>停止信号</td>
+</tr>
+<tr>
+<td>Next_PC</td>
+<td>I</td>
+<td>32</td>
+<td>下一条要被执行的指令的地址</td>
+</tr>
+<tr>
+<td>PC</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令的地址</td>
+</tr>
+<tr>
+<td>Instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>功能定义</strong>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>当Reset信号有效时，将PC寄存器中的值置为0x00000000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>停止</td>
+<td>当Stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写PC寄存器</td>
+<td>当Stop信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入PC寄存器</td>
+</tr>
+<tr>
+<td>4</td>
+<td>取指令</td>
+<td>根据当前PC的值从IM（指令存储器）中读出对应的指令到Instr端口</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="GRF（通用寄存器组）">GRF（通用寄存器组）</h4>
+<p>  该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能）。GRF可以实现异步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。<br>
+<img src="GRF.png" alt=""></p>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
+</tr>
+<tr>
+<td>A1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入失效</td>
+</tr>
+<tr>
+<td>RD1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的32位数据</td>
+</tr>
+<tr>
+<td>RD2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的32位数据</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>功能定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>Reset信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出A1，A2地址对应的寄存器中储存的数据，将其加载到RD1和RD2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A3地址对应的寄存器</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="NPC（下一指令计算单元）">NPC（下一指令计算单元）</h4>
+<p> 该模块根据当前指令地址和其他控制信号（“JR”，“JUMP”等），计算出下一指令所在的地址。<br>
+<img src="NPC.png" alt=""></p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>Offset</td>
+<td>I</td>
+<td>32</td>
+<td>地址偏移量，用于计算B类指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>Ins_26</td>
+<td>I</td>
+<td>26</td>
+<td>当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>Ra</td>
+<td>I</td>
+<td>32</td>
+<td>储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令</td>
+</tr>
+<tr>
+<td>If_Branch</td>
+<td>I</td>
+<td>1</td>
+<td>B类指令选择信号<br>1：说明当前指令为B类指令<br>0：说明当前指令不是B类信号</td>
+</tr>
+<tr>
+<td>JR</td>
+<td>I</td>
+<td>1</td>
+<td>输入“JR”控制信号<br>1：说明当前指令为jr或jal<br>0：说明当前指令不是jr和jalr</td>
+</tr>
+<tr>
+<td>JUMP</td>
+<td>I</td>
+<td>1</td>
+<td>输入“JUMP”控制信号<br>1：说明当前指令为j或jal<br>0：说明当前指令不是为j和jump</td>
+</tr>
+<tr>
+<td>Next_PC</td>
+<td>O</td>
+<td>32</td>
+<td>输出下一指令地址</td>
+</tr>
+<tr>
+<td>PC+4</td>
+<td>O</td>
+<td>32</td>
+<td>输出PC+4的值，用于实现jal和jalr指令中的地址存储</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>注：关于“If_branch”，“JR”，“JUMP”端口信号的选择作用将在“”部分进一步说明</p>
+<h4 id="ALU（逻辑运算单元）">ALU（逻辑运算单元）</h4>
+<p>  该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。<br>
+<img src="ALU.png" alt=""></p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALU_Op</td>
+<td>I</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+</tr>
+<tr>
+<td>Src_A</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第一个值</td>
+</tr>
+<tr>
+<td>Src_B</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第二个值</td>
+</tr>
+<tr>
+<td>Shift</td>
+<td>I</td>
+<td>5</td>
+<td>移位数输入</td>
+</tr>
+<tr>
+<td>FlowJudge</td>
+<td>I</td>
+<td>1</td>
+<td>溢出判断信号<br>1：进行溢出判断<br>0：不进行溢出判断</td>
+</tr>
+<tr>
+<td>Equal</td>
+<td>O</td>
+<td>1</td>
+<td>相等判断信号<br>1：Src_A和Src_B相等<br>0：Src_A和Src_B不相等</td>
+</tr>
+<tr>
+<td>ALU_Result</td>
+<td>O</td>
+<td>32</td>
+<td>输出ALU计算结果</td>
+</tr>
+<tr>
+<td>Overflow</td>
+<td>O</td>
+<td>1</td>
+<td>输出ALU计算结果的溢出情况（add，sub，addi等指令有效）<br>1：ALU计算结果溢出<br>0：ALU计算结果</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>功能定义</strong>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>ALU_Op</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>加</td>
+<td>0b0000</td>
+<td>ALU_Result = Src_A + Src_B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>减</td>
+<td>0b0001</td>
+<td>ALU_Result = Src_A - Src_B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>按位与</td>
+<td>0b0010</td>
+<td>ALU_Result = Src_A &amp; Src_B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>按位或</td>
+<td>0b0011</td>
+<td>ALU_Result = Src_A | Src_B</td>
+</tr>
+<tr>
+<td>5</td>
+<td>按位异或</td>
+<td>0b0100</td>
+<td>ALU_Result = Src_A ⊕ Src_B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>按位或非</td>
+<td>0b0101</td>
+<td>ALU_Result = ~(Src_A | Src_B)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>逻辑左移</td>
+<td>0b0110</td>
+<td>ALU_Result = Src_B &lt;&lt; Shift</td>
+</tr>
+<tr>
+<td>8</td>
+<td>逻辑右移</td>
+<td>0b0111</td>
+<td>ALU_Result = Src_B &gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>9</td>
+<td>算术右移</td>
+<td>0b1000</td>
+<td>ALU_Result = Src_B &gt;&gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>10</td>
+<td>带符号比较</td>
+<td>0b1001</td>
+<td>ALU_Result = (Src_A &gt; Src_B) ? 1 : 0（带符号比较）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>无符号比较</td>
+<td>0b1010</td>
+<td>ALU_Result = (Src_A &gt; Src_B) ? 1 : 0（无符号比较）</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="DM-（数据存储器）">DM （数据存储器）</h4>
+<p>  该模块使用了Logism自带的RAM，不仅可以实现对数据的存储与访问，还通过“LS”，“LSExt”，“LSop”等控制信号对字节/半字进行操作，并具有异步复位功能。<br>
+<img src="DM.png" alt=""></p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>A</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指向数据储存器中某个存储单元</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入失效</td>
+</tr>
+<tr>
+<td>LS</td>
+<td>I</td>
+<td>1</td>
+<td>输入“LS”控制信号<br>1:说明当前指令是对字节/半字的操作<br>0:执行其他指令（包括lw和sw）</td>
+</tr>
+<tr>
+<td>LSExt</td>
+<td>I</td>
+<td>1</td>
+<td>输入“LSExt”控制信号<br>1：对DM中读出的字节/半字进行符号扩展（lb,lh指令）<br>0：对DM中读出的字节/半字进行符号扩展（lbu，lhu指令）</td>
+</tr>
+<tr>
+<td>LSOp</td>
+<td>I</td>
+<td>1</td>
+<td>输入“LSOp”控制信号<br>1：执行半字操作指令（lh，lhu，sh）<br>0：执行字节操作指令（lb，lbu，sb）</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>O</td>
+<td>32</td>
+<td>输出A指定的存储单元中的32位数据</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>功能定义</strong>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>Reset信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出A地址对应的存储单元中的数据，将其加载到RD</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A地址对应的存储单元</td>
+</tr>
+<tr>
+<td>注：关于“LS”，“LSExt”，“LSop”端口信号的选择作用将在“”部分进一步说明</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="Branch-Control（B类指令控制模块）">Branch Control（B类指令控制模块）</h4>
+<p>  该模块通过接收“Branch”，“Branch_Op”等控制信号，将对转移条件进行判断，并输出判断结果。<br>
+<img src="Branch%20Control.png" alt=""></p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D</td>
+<td>I</td>
+<td>32</td>
+<td>输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz）</td>
+</tr>
+<tr>
+<td>Equal</td>
+<td>I</td>
+<td>1</td>
+<td>相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne）</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>I</td>
+<td>1</td>
+<td>B类指令判断信号<br>1：当前执行的指令B类指令<br>0：其他指令</td>
+</tr>
+<tr>
+<td>BranchOp</td>
+<td>I</td>
+<td>3</td>
+<td>B类指令选择指令<br>0b000：beq指令<br>0b001：bgez，bltz<br>0b010：bgtz<br>0b011：blez<br>0b100：bne</td>
+</tr>
+<tr>
+<td>Judge</td>
+<td>I</td>
+<td>1</td>
+<td>区别bgez，bltz两个指令</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>O</td>
+<td>1</td>
+<td>输出判断结果<br>1：B类指令转移条件成立<br>0：B类指令转移条件不成立</td>
+</tr>
+<tr>
+<td>注：关于“Branch”，“BranchOp”端口信号的选择作用将在“”部分进一步说明</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="控制模块定义">控制模块定义</h3>
+<p> 在控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等19条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND Logic）和或逻辑（OR Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。<br>
+<img src="Control%20Unit.png" alt=""></p>
+<ul>
+<li><strong>控制信号定义</strong>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>信号名</th>
+<th>位宽</th>
+<th>描述</th>
+<th>触发指令（信号为1）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>MemToReg</td>
+<td>1</td>
+<td>GRF中WD接口输入数据选择</td>
+<td>lw, lb, lbu, lh, lhu</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MemWrite</td>
+<td>1</td>
+<td>DM写入使能信号</td>
+<td>sw, sb, sh</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ALUSrc</td>
+<td>1</td>
+<td>ALU中Src_B接口输入数据选择</td>
+<td>addi, andi, addiu, slti, ori, lw, sw, sltiu, xori, lb, lbu, lh, lhu, sb, sh, lui</td>
+</tr>
+<tr>
+<td>4</td>
+<td>RegWrite</td>
+<td>1</td>
+<td>GRF写入使能信号</td>
+<td>sll, sra, srl, add, addu, sub, and, or, nor, slt, sltu, jalr, xor, sllv, srav, srlv, subu, jal, addi, andi, addiu, slti, ori, lw, sltiu, xori, lb, lbu, lh, lhu, lui</td>
+</tr>
+<tr>
+<td>5</td>
+<td>SYSCALL</td>
+<td>1</td>
+<td>syscall指令译码信号，GRF中A1接口输入数据选择</td>
+<td>syscall</td>
+</tr>
+<tr>
+<td>6</td>
+<td>SignedExt</td>
+<td>1</td>
+<td>立即数符号扩展选择</td>
+<td>addi, addiu, slti, sltiu, lw, sw, lb, lbu, lh, lhu, sb, sh</td>
+</tr>
+<tr>
+<td>7</td>
+<td>RegDst</td>
+<td>1</td>
+<td>GRF中A3接口输入数据选择</td>
+<td>sll, sra, srl, add, addu, sub, and, or, nor, slt, sltu, jalr, xor, sllv, srav, srlv, subu</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Branch</td>
+<td>1</td>
+<td>B类指令判断信号</td>
+<td>beq, bne, bgez, bgtz, blez, bltz</td>
+</tr>
+<tr>
+<td>9</td>
+<td>BranchOp</td>
+<td>3</td>
+<td>B类指令选择信号</td>
+<td>见Branch模块</td>
+</tr>
+<tr>
+<td>10</td>
+<td>JR</td>
+<td>1</td>
+<td>J类指令选择信号</td>
+<td>jalr, jr</td>
+</tr>
+<tr>
+<td>11</td>
+<td>JUMP</td>
+<td>1</td>
+<td>J类指令判断信号</td>
+<td>jalr, jr, j, jal</td>
+</tr>
+<tr>
+<td>12</td>
+<td>AddrTrans</td>
+<td>1</td>
+<td>指令地址传递信号，选择是否将PC+4输入到GRF的WD端口</td>
+<td>jal, jalr</td>
+</tr>
+<tr>
+<td>13</td>
+<td>RaLink</td>
+<td>1</td>
+<td>$ra寄存器写入选择信号，选择是否将$ra作为GRF的写入对象</td>
+<td>jal</td>
+</tr>
+<tr>
+<td>14</td>
+<td>VarShift</td>
+<td>1</td>
+<td>可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口</td>
+<td>srav, srlv, sllv</td>
+</tr>
+<tr>
+<td>15</td>
+<td>FlowJudge</td>
+<td>1</td>
+<td>溢出判断选择信号</td>
+<td>add, sub, addi</td>
+</tr>
+<tr>
+<td>16</td>
+<td>LS</td>
+<td>1</td>
+<td>字节/半字操作选择信号</td>
+<td>lb, lbu, lh, lhu, sb, sh</td>
+</tr>
+<tr>
+<td>17</td>
+<td>LSExt</td>
+<td>1</td>
+<td>字节/半字符号扩展选择信号</td>
+<td>lb, lh</td>
+</tr>
+<tr>
+<td>18</td>
+<td>LSOp</td>
+<td>1</td>
+<td>字节/半字类访存指令选择信号</td>
+<td>lh, lhu, sh</td>
+</tr>
+<tr>
+<td>19</td>
+<td>LUI</td>
+<td>1</td>
+<td>lui指令译码信号，选择是否将16写入ALU的Shift接口</td>
+<td>lui</td>
+</tr>
+<tr>
+<td>20</td>
+<td>ALUOp</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+<td>见ALU模块</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="重要机制实现方法">重要机制实现方法</h3>
+<h4 id="转移指令（B类和J类）实现方法">转移指令（B类和J类）实现方法</h4>
+<p>  转移指令包括两种——B类和J类，这两类指令的地址转移功能均需要通过NPC的选择与计算将对应的PC地址传入PC寄存器（IFU模块中）。B类指令数量更多，转移条件的判断也更为复杂，因此我们将其封装成一个模块——Branch Control。该模块的接口定义已经给出，现在分析其内部实现逻辑。<br>
+<img src="Branch%20Control%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0.png" alt=""></p>
+<ul>
+<li>根据判断逻辑不同，B类指令又可以分为两类——bne，beq和bltz，blez，bgtz，bgez。bne和beq指令需要将两个操作数进行比较，根据两者的值是否相等进一步判断是否执行跳转。“Equal”接口的信号正是两个操作数的比较结果。而bltz，blez，bgtz，bgez四个指令只需要将一个操作数和0进行比较。我们将这个操作数的值直接传入该模块，然后用四个比较器分别计算这四个指令的判断结果。</li>
+<li>6个B类指令的判断结果已经得到，下面我们要做的是根据当前指令选择出其中一个判断结果进行输出，这就需要通过“BranchOp”（B类指令选择信号）进行选择——</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>BranchOp</th>
+<th>对应指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0b000</td>
+<td>beq</td>
+</tr>
+<tr>
+<td>0b001</td>
+<td>bgez，bltz</td>
+</tr>
+<tr>
+<td>0b010</td>
+<td>bgtz</td>
+</tr>
+<tr>
+<td>0b011</td>
+<td>blez</td>
+</tr>
+<tr>
+<td>0b100</td>
+<td>bne</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>由上表可以发现，当“BranchOp”的值为0b001时，对应的指令有两个——bgez和bltz。原因是根据MIPS指令集，bgez和bgtz的Opcode完全一致（000001），无法仅通过Control Unit将这两个指令进行区分。因此，我们需要将指令的16~20位数据输入该模块（在该数据段中bgez指令的值为0b00001，bltz的值为0b00000），即“Judge”信号，将这两个指令的判断结果区分。</li>
+<li>虽然得到了初步判断结果，但是仍然无法确定是否进行地址转移。因为即使当前指令是非B类指令，ALU和该模块中的判断操作仍会进行，但这不是我们想要的结果。 因此我们将得到的初步判断结果和Branch（B类指令判断信号）进行与运算，就得到最终的判断结果并传入NPC中（若为1，则说明应该执行跳转）。</li>
+</ul>
+<p>下面我们介绍NPC中B类和J类指令的执行逻辑。<br>
+<img src="NPC%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0.png" alt=""></p>
+<ul>
+<li>我们需要先将输入的数据进行处理，转换为PC地址，包括对“Offset”（B类指令码中的地址偏移量）和“Instruction[25:0]”（j和jal指令码中储存地址的数据段）进行处理。然后通过“If_branch”信号（Branch Control模块输出的结果），“JR”信号，“JUMP”信号对之前得到的计算结果进行选择，最终将选择后的结果通过“Next_PC”端口输出。</li>
+<li>此外，由于jal和jalr指令中需要将PC+4的值写入到某个寄存器中，因此需要将PC+4的值计算出来通过“PC+4”接口输出。<br>
+在写入过程中，控制信号“RaLink”和“AddrTrans”起到了调节数据通路的作用。</li>
+</ul>
+<h4 id="访存指令实现方法">访存指令实现方法</h4>
+<p>访存指令包含8个——lw，sw，lb，lbu，lh，lhu，sb，sh，均在DM模块中实现。由于Logisim自带的RAM功能上的限制，我们无法直接对字节和半字进行操作。为实现对字节和半字的访存，笔者在DM中单独设计了一个模块——“LS Control”。该模块可以接收RAM中的数据，并对其进行处理，以便实现对字节和半字的操作。</p>
+<p><img src="DM%E5%86%85%E9%83%A8.png" alt=""><br>
+LS Control内部实现逻辑如下</p>
+<p><img src="LS%20Control%E5%86%85%E9%83%A8.png" alt=""></p>
+<ul>
+<li>当前指令为lw或sw时，“LS”信号值为1，直接进行写入和访问即可。</li>
+<li>当前指令为lb，lbu，lh，lhu时，我们首先将需要访问的字节/半字所在的整个字从RAM取出（RAM地址为“A”信号的2~6位），传入LS Control中，根据“A”中的地址数据取出字节/半字。然后跟据“LSEXT”的值对取出的字节/半字进行符号扩展或者零扩展（lb和lh需要进行符号扩展，lbu和lhu需要进行0扩展）。而”LSOp“的作用是用来判断当前处理的对象是字节还是半字，最终将选择出的值加载到LD端口，返回到DM模块中。</li>
+<li>当前指令为sb或sh时，我们还需要将写入的数据传入LS Control中，将其中的字节/半字取出，加载进从RAM中读出的字中。该操作仍然需要通过”LSOp“判断当前处理的对象是字节还是半字，最终将选择出的值加载到SD端口，返回到DM模块中。</li>
+</ul>
+<h2 id="测试方案">测试方案</h2>
+<h3 id="典型测试样例">典型测试样例</h3>
+<h4 id="运算指令测试">运算指令测试</h4>
+<p>该部分测试通过随机数随机生成，以保证测试数据的任意性，然后与同学代码进行对拍，以确定正确性。（随机生成程序与对拍程序均由同学设计）<br>
+其中一组测试数据如下所示</p>
+  <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">  <span class="token punctuation">.</span>data
+a0<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1312790913</span>
+a1<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">735115427</span>
+a2<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">879199915</span>
+a3<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1512039151</span>
+a4<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">2013377222</span>
+a5<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1905462880</span>
+a6<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1727785544</span>
+a7<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">495505030</span>
+a8<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">908018362</span>
+a9<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">872011691</span>
+a10<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">688762757</span>
+a11<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">584970043</span>
+a12<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">771638002</span>
+a13<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1758026820</span>
+a14<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1511157661</span>
+a15<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1960163833</span>
+a16<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">544909545</span>
+a17<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">927301894</span>
+a18<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1007746847</span>
+a19<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1635999615</span>
+a20<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">873288396</span>
+a21<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">185826422</span>
+a22<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">804499640</span>
+a23<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1264829813</span>
+a24<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1861578073</span>
+a25<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1064488967</span>
+a26<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">1910898200</span>
+a27<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">2116088717</span>
+a28<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">300923572</span>
+a29<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">2026048648</span>
+a30<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token number">130284251</span>
+a31<span class="token punctuation">:</span>   <span class="token punctuation">.</span>word  <span class="token operator">-</span><span class="token number">1794474076</span>
+<span class="token punctuation">.</span>text
+li <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> a0
+li <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> a1
+li <span class="token kernel-function property">$2</span><span class="token punctuation">,</span> a2
+li <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> a3
+li <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> a4
+lw <span class="token kernel-function property">$5</span><span class="token punctuation">,</span> a5
+lw <span class="token kernel-function property">$6</span><span class="token punctuation">,</span> a6
+lw <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> a7
+lw <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> a8
+lw <span class="token kernel-function property">$9</span><span class="token punctuation">,</span> a9
+lw <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> a10
+lw <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> a11
+lw <span class="token kernel-function property">$12</span><span class="token punctuation">,</span> a12
+lw <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> a13
+lw <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> a14
+lw <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> a15
+lw <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> a16
+lw <span class="token kernel-function property">$17</span><span class="token punctuation">,</span> a17
+lw <span class="token kernel-function property">$18</span><span class="token punctuation">,</span> a18
+lw <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> a19
+lw <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> a20
+lw <span class="token kernel-function property">$21</span><span class="token punctuation">,</span> a21
+lw <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> a22
+lw <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> a23
+lw <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> a24
+lw <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> a25
+lw <span class="token kernel-function property">$26</span><span class="token punctuation">,</span> a26
+lw <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> a27
+lw <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> a28
+lw <span class="token kernel-function property">$29</span><span class="token punctuation">,</span> a29
+lw <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> a30
+lw <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> a31
+<span class="token keyword">xor</span> <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$1</span>
+addu <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+addu <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+srlv <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span>
+sub <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span>
+add <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$18</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$18</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$5</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$22</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$21</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+sllv <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$19</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$7</span>
+srlv <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$1</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+sltu <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span>
+addu <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$30</span>
+sllv <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+srav <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$9</span>
+sltu <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$17</span><span class="token punctuation">,</span> <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+slt <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+srav <span class="token kernel-function property">$12</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span>
+addu <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span>
+sltu <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+subu <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+srav <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+add <span class="token kernel-function property">$18</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span>
+sltu <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span>
+srlv <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span>
+sllv <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$26</span>
+add <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$18</span>
+srlv <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span>
+add <span class="token kernel-function property">$2</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$26</span>
+addu <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$20</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$26</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+add <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+srlv <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+add <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span>
+sltu <span class="token kernel-function property">$6</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span>
+………………<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="转移指令（B类和J类）测试">转移指令（B类和J类）测试</h4>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">main<span class="token punctuation">:</span>	
+li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>
+li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1000</span>
+li	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token number">1000</span>
+lui	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token number">0</span>x8000	#s3 is  <span class="token operator">-</span><span class="token number">2147483648</span>
+lui	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token number">0</span>x8000
+ori	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token number">0</span>x0001	#s4 is  <span class="token operator">-</span><span class="token number">2147483647</span>
+lui	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff
+ori	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token number">0</span>xffff	#s5 is  <span class="token number">2147483647</span>
+lui	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff
+ori	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> <span class="token number">0</span>xfffe	#s6 is <span class="token number">2147483646</span>
+
+
+beq_1<span class="token punctuation">:</span>	beq	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> beq_1_test
+beq_2<span class="token punctuation">:</span>	beq	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> beq_2_test
+……
+beq_10<span class="token punctuation">:</span>  beq	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> beq_10_test
+beq_end<span class="token punctuation">:</span>
+
+bne_1<span class="token punctuation">:</span>	bne	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> bne_1_test
+……
+bne_10<span class="token punctuation">:</span>	bne	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> bne_10_test
+bne_end<span class="token punctuation">:</span>
+
+blez_1<span class="token punctuation">:</span> blez	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> blez_1_test
+……
+blez_10<span class="token punctuation">:</span> blez	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> blez_10_test
+blez_end<span class="token punctuation">:</span>
+
+bgtz_1<span class="token punctuation">:</span>	 bgtz	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span>bgtz_1_test
+……
+bgtz_10<span class="token punctuation">:</span> bgtz	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span>bgtz_10_test
+bgtz_end<span class="token punctuation">:</span>
+
+jal_1<span class="token punctuation">:</span>	jal	jal_1_test
+……
+jal_5<span class="token punctuation">:</span>	jal	jal_5_test
+jal_end<span class="token punctuation">:</span>
+
+jalr_1<span class="token punctuation">:</span>	<span class="token keyword">or</span>	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">12916</span>
+	jalr	<span class="token kernel-function property">$v1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$v0</span>
+……
+jalr_5<span class="token punctuation">:</span>	<span class="token keyword">or</span>	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">12948</span>
+	jalr	<span class="token kernel-function property">$v1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$v0</span>
+
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+li	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token number">10</span>
+syscall
+	
+beq_1_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span><span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	beq_2
+……
+beq_10_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span><span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	beq_end
+
+bne_1_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span><span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	bne_2
+……
+bne_10_test<span class="token punctuation">:</span>addi	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span><span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	bne_end  	      	      	   
+
+blez_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span><span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		j	blez_2
+……
+blez_10_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span><span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		j	blez_end
+
+bgtz_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span><span class="token kernel-function property">$t3</span> <span class="token number">1</span>
+		j	bgtz_2
+……
+bgtz_10_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span><span class="token kernel-function property">$t3</span> <span class="token number">1</span>
+		j	bgtz_end
+		
+jal_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$ra</span>
+……
+jal_5_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$ra</span>
+
+jalr_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$v1</span>
+……
+jalr_5_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$v1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="访存指令测试">访存指令测试</h4>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token punctuation">.</span>text
+
+li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>xABCF1234
+li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token number">0</span>x1234ABCD
+li	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token number">0</span>xa1b2c3d4
+li	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff0000
+
+sb	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">100</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">103</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">105</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token function">107</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token function">108</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">110</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">112</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">114</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">16</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">20</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">24</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">28</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">3</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">7</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">11</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">13</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">32</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">36</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">40</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">44</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">3</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">7</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">11</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">13</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">48</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">52</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">56</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">60</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">2</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">64</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">68</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">72</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">76</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">2</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">6</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">80</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">84</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">88</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">92</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+li	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token number">10</span>
+syscall<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="自动测试工具">自动测试工具</h3>
+<p> 我们通过python程序将MIPS汇编程序（test.asm）转化为16进制指令码（rom.txt），并自动加载进存有单周期cpu电路文件（cpu.cric）中的ROM元件中，并形成新的电路文件（cpu_remake.cric）。</p>
+  <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">import</span> re
+<span class="token comment">#generate ROM-File</span>
+command<span class="token operator">=</span><span class="token string">"java -jar Mars4_5.jar test.asm nc mc CompactTextAtZero a dump .text HexText rom.txt"</span> 
+os<span class="token punctuation">.</span>system<span class="token punctuation">(</span>command<span class="token punctuation">)</span>
+content <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"rom.txt"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">#write ROM-File to Circle—File</span>
+cur <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"cpu.circ"</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cur <span class="token operator">=</span> re<span class="token punctuation">.</span>sub<span class="token punctuation">(</span><span class="token string">r'addr/data: 5 32([\s\S]*)&lt;/a&gt;'</span><span class="token punctuation">,</span><span class="token string">"addr/data: 5 32\n"</span> <span class="token operator">+</span> content <span class="token operator">+</span> <span class="token string">"&lt;/a&gt;"</span><span class="token punctuation">,</span> cur<span class="token punctuation">)</span>
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"cpu_remake.circ"</span><span class="token punctuation">,</span><span class="token string">"w"</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token builtin">file</span><span class="token punctuation">:</span>
+<span class="token builtin">file</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>cur<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="思考题">思考题</h2>
+<ol>
+<li>Q：现在我们的模块中 IM 使用 ROM， DM 使用 RAM， GRF 使用 Register，这种做法合理吗？ 请给出分析，若有改进意见也请一并给出。<br>
+A：合理。ROM是只读存储器，是非易失的，因此可以用来储存指令；RAM既可以读也可以写，因此满足DM对读写的要求；GRF是寄存器堆，需要较高的读写速度，因此适合用寄存器实现。</li>
+<li>Q：事实上，实现 nop 空指令，我们并不需要将它加入控制信号真值表，为什么？请给出你的理由。<br>
+A：nop指令码为0x00000000，相当于<code>sll $0, $0, 0</code>, 相当于把$0寄存器中的值左移0位并写入$0寄存器，因为$0的值始终为0，不会被修改，因此该指令执行后没有任何影响。即使cpu没有设置sll指令，nop指令也不会对电路中任何元件进行操作，对电路没有任何影响。</li>
+<li>Q：上文提到，MARS 不能导出 PC 与 DM 起始地址均为 0 的机器码。实际上，可以通过为 DM 增添片选信号，来避免手工修改的麻烦，请查阅相关资料进行了解，并阐释为了解决这个问题，你最终采用的方法。<br>
+A：我们在导入时将MARS导出模式设置TestAtZero，此时text的首地址为0，data在0x3000。我们可以设置一个片选信号，检测输入的地址的高4位，如果是0b0011，则说明是data中的数据，然后再导入到DM中。</li>
+<li>Q：除了编写程序进行测试外，还有一种验证 CPU 设计正确性的办法——形式验证。 形式验证的含义是根据某个或某些形式规范或属性，使用数学的方法证明其正确性或非正确性。请搜索“形式验证（Formal Verification)”了解相关内容后，简要阐述相比于测试，形式验证的优劣之处。<br>
+A：相比于传统测试，形式验证是采用数学方法将待验证电路和功能描述或参考实际直接进行比较，可以实现对所有情况进行验证，而且验证时间短，不仅能够缩短设计周期，而且能够达到完全的功能覆盖率。不像传统测试那样费时费力，而且正确率无法保证。然而，形式验证目前不能有效的验证电路的性能，如电路的时间延迟和功耗。</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2021/11/01/co/co-p3-dan-zhou-qi-cpu-logisim-shi-xian/">http://hyggge.github.io/2021/11/01/co/co-p3-dan-zhou-qi-cpu-logisim-shi-xian/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/BUAA/">
+                                    <span class="chip bg-color">BUAA</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                    <span class="chip bg-color">计算机组成</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/11/09/co/co-p4-dan-zhou-qi-cpu-verilog-shi-xian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="「BUAA-CO」P4_单周期cpu（Verilog实现）">
+                        
+                        <span class="card-title">「BUAA-CO」P4_单周期cpu（Verilog实现）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-09
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="「BUAA-CO」P2_MIPS汇编程序设计">
+                        
+                        <span class="card-title">「BUAA-CO」P2_MIPS汇编程序设计</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

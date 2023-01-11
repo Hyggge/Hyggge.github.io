@@ -1,0 +1,1412 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「BUAA-CO」P2_MIPS汇编程序设计, Hyggge&#39;s Blog">
+    <meta name="description" content="MIPS架构（RISC）
+CPU执行程序的过程
+
+读取指令
+分析指令
+执行指令
+
+RISC的设计思想：
+CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
+
+加速大概率事件
+简单意味着更容易设计、电路频率更高
+简单功能由硬件实现；">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「BUAA-CO」P2_MIPS汇编程序设计 | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「BUAA-CO」P2_MIPS汇编程序设计</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/BUAA/">
+                                <span class="chip bg-color">BUAA</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                <span class="chip bg-color">计算机组成</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                计算机组成
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-10-30
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    8 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="MIPS架构（RISC）">MIPS架构（RISC）</h2>
+<h3 id="CPU执行程序的过程">CPU执行程序的过程</h3>
+<ul>
+<li>读取指令</li>
+<li>分析指令</li>
+<li>执行指令</li>
+</ul>
+<h3 id="RISC的设计思想：">RISC的设计思想：</h3>
+<p>CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令</p>
+<ul>
+<li>加速大概率事件</li>
+<li>简单意味着更容易设计、电路频率更高</li>
+<li>简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）</li>
+</ul>
+<h3 id="RISC的设计策略">RISC的设计策略</h3>
+<ul>
+<li>指令定长：所有指令都占用32位（1个字）<br>
+降低了从存储器中读取指令的复杂度</li>
+<li>简化指令寻址模式：以基地址+偏移为主<br>
+降低了从主存中读取操作数的复杂度</li>
+<li>ISA的指令不仅数量少，而且简单<br>
+降低了指令执行的复杂度</li>
+<li>只有load与store两类指令能够访存<br>
+例如，不允许寄存器+存储器或存储器+存储器</li>
+<li>把复杂留给编译<br>
+编译器将高层语言复杂语句转换为若干简单的汇编指令</li>
+</ul>
+<h2 id="MIPS的寄存器">MIPS的寄存器</h2>
+<p>MIPS共有32个一般寄存器（标号为$0 ~ $31),不区别正负。还有pc、hi、lo等特殊寄存器</p>
+<table>
+<thead>
+<tr>
+<th>寄存器名</th>
+<th>序号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$zero</td>
+<td>0</td>
+<td>储存常量0，不支持修改</td>
+</tr>
+<tr>
+<td>$v0 ~ $v1</td>
+<td>2~3</td>
+<td>函数返回值</td>
+</tr>
+<tr>
+<td>$a0 ~ $a3</td>
+<td>4~7</td>
+<td>函数参数</td>
+</tr>
+<tr>
+<td>$t0 ~ $t9</td>
+<td>8~15, 24~25</td>
+<td>临时变量</td>
+</tr>
+<tr>
+<td>$s0 ~ $s7</td>
+<td>16~23</td>
+<td>程序员变量（全局变量）</td>
+</tr>
+<tr>
+<td>$k0 ~ $k1</td>
+<td>26~27</td>
+<td>操作系统使用</td>
+</tr>
+<tr>
+<td>$gp</td>
+<td>28</td>
+<td>在生成复杂的存储布局时使用（属于编译范畴）</td>
+</tr>
+<tr>
+<td>$sp</td>
+<td>29</td>
+<td>栈顶指针</td>
+</tr>
+<tr>
+<td>$fp</td>
+<td>30</td>
+<td>在生成复杂的存储布局时使用（属于编译范畴）</td>
+</tr>
+<tr>
+<td>$ra</td>
+<td>31</td>
+<td>函数返回值</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>无</td>
+<td>程序计数器（冯诺依曼计算机）</td>
+</tr>
+<tr>
+<td>hi</td>
+<td>无</td>
+<td>储存乘法运算结果的高32位和除法运算的余数</td>
+</tr>
+<tr>
+<td>lo</td>
+<td>无</td>
+<td>储存乘法运算结果的低32位和除法运算的商</td>
+</tr>
+</tbody>
+</table>
+<h2 id="MIPS中主存地址的表示和主存数据的存储">MIPS中主存地址的表示和主存数据的存储</h2>
+<h3 id="地址表示方式：">地址表示方式：</h3>
+<ul>
+<li>绝对地址<br>
+主存单元的地址直接用具体的数值来表示</li>
+<li>相对地址<br>
+采用“基地址+偏移”的方式，优点如下
+<ul>
+<li>一致性：与数据结构的访问方式高度一致</li>
+<li>统一性：可以用某个固定base与不同的offset计算得到任意地址</li>
+<li>灵活性： 不同的{base,offset}组合可以对应同一个地址，为软件编程带来很大的灵活性</li>
+</ul>
+</li>
+</ul>
+<h3 id="指令存储方式：">指令存储方式：</h3>
+<ul>
+<li>大端存储：最高有效字节在字内的最低地址</li>
+<li>小端存储：最高有效字节在字内的最高地址</li>
+</ul>
+<h2 id="MIPS的指令集（按功能分类）">MIPS的指令集（按功能分类）</h2>
+<h3 id="加载指令">加载指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">lb<span class="token punctuation">,</span> lbu<span class="token punctuation">,</span> lh<span class="token punctuation">,</span> lhu<span class="token punctuation">,</span> lw<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="保存指令">保存指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">sb<span class="token punctuation">,</span> sh<span class="token punctuation">,</span> sw<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="R-R运算指令">R-R运算指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">add<span class="token punctuation">,</span> addu<span class="token punctuation">,</span> sub<span class="token punctuation">,</span> subu<span class="token punctuation">,</span> mult<span class="token punctuation">,</span> multu<span class="token punctuation">,</span> div<span class="token punctuation">,</span> divu
+slt<span class="token punctuation">,</span> sltu
+sll<span class="token punctuation">,</span> srl<span class="token punctuation">,</span> sra<span class="token punctuation">,</span> sllv<span class="token punctuation">,</span> srlv<span class="token punctuation">,</span> srav 
+and<span class="token punctuation">,</span> or<span class="token punctuation">,</span> xor<span class="token punctuation">,</span> nor<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="R-I运算指令">R-I运算指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">addi<span class="token punctuation">,</span> addiu<span class="token punctuation">,</span> andi<span class="token punctuation">,</span> ori<span class="token punctuation">,</span> xori<span class="token punctuation">,</span> lui
+slti<span class="token punctuation">,</span> sltiu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="分支指令">分支指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">beq<span class="token punctuation">,</span> bne<span class="token punctuation">,</span> blez<span class="token punctuation">,</span> bltz<span class="token punctuation">,</span> bgez<span class="token punctuation">,</span> bgtz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="跳转指令">跳转指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">j<span class="token punctuation">,</span> jal<span class="token punctuation">,</span> jr<span class="token punctuation">,</span> jalr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="传输指令">传输指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">mfhi<span class="token punctuation">,</span> mflo<span class="token punctuation">,</span> mthi<span class="token punctuation">,</span> mflo<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="特权指令">特权指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">eret</span><span class="token punctuation">(</span>异常返回<span class="token punctuation">)</span>， <span class="token function">mfc0</span><span class="token punctuation">(</span>读CP0寄存器<span class="token punctuation">)</span>， <span class="token function">mtc0</span><span class="token punctuation">(</span>写CP0寄存器<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="陷阱指令">陷阱指令</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">break</span><span class="token punctuation">(</span>断点异常<span class="token punctuation">)</span>， <span class="token function">syscall</span><span class="token punctuation">(</span>系统调用异常<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="tips1-MIPS指令判断溢出的方法">tips1: MIPS指令判断溢出的方法</h3>
+<ul>
+<li>以add指令为例：<br>
+<img src="add%E5%88%A4%E6%96%AD%E6%BA%A2%E5%87%BA.png" alt=""></li>
+</ul>
+<h3 id="tips2-LO和HI寄存器中保存的值">tips2: LO和HI寄存器中保存的值</h3>
+<ul>
+<li>在乘法指令中， LO保存运算结果的低32位，HI保存运算结果的高32位；</li>
+<li>在除法指令中， LO保存商，HI保存余数；</li>
+</ul>
+<h3 id="tips3-MIPS指令中“u”的含义">tips3: MIPS指令中“u”的含义</h3>
+<p>signed 和 unsigned 有三种不同的含义</p>
+<ul>
+<li>符号位扩展
+<ul>
+<li>lb, lh  符号扩展</li>
+<li>lbu, lhu 零扩展</li>
+</ul>
+</li>
+<li>溢出检测
+<ul>
+<li>add, addi, sub, mult, div 检测溢出</li>
+<li>addu, addiu, subu, multu, divu 不检测溢出</li>
+</ul>
+</li>
+<li>比较对象的符号性
+<ul>
+<li>slt, slti     和符号数比较</li>
+<li>sltu, sltiu  和无符号数比较</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪指令">伪指令</h3>
+<ul>
+<li>为了使程序更可读更易编写，MIPS定义了一组伪指令，例如常用的<code>move</code>,<code>la</code>,<code>li</code>等等。</li>
+<li>伪指令并不是真正的指令， 在汇编时汇编器会将其转化为实际指令<br>
+例如<code>move dst, src</code>会被转化为<code>addi dst, src, 0</code></li>
+<li>伪指令通常会转化为多条真实指令，因此这组真实指令之间必须通过某个寄存器（<code>$at</code>）来传递信息。因此<code>$at</code>为汇编器专属寄存器，不能被程序员修改（约定）。</li>
+</ul>
+<h2 id="MIPS中函数的实现">MIPS中函数的实现</h2>
+<h3 id="函数实现的步骤">函数实现的步骤</h3>
+<ul>
+<li>调用者把参数放置在某个地方以便函数能访问（<code>$a0</code>, <code>$a1</code>, <code>$a2</code>, <code>$a3</code>）</li>
+<li>调用者转移控制给被调用的函数(<code>jal</code>指令)</li>
+<li>函数获取局部变量对应的空间(通过桟操作)</li>
+<li>函数执行具体功能</li>
+<li>函数把返回值放置在某个地方，然后恢复使用的资源(<code>v0</code>, <code>v1</code>)</li>
+<li>返回控制给调用者(<code>jr</code>指令)</li>
+</ul>
+<h3 id="函数相关的寄存器">函数相关的寄存器</h3>
+<ul>
+<li>$a0 ~ $a3：4个传递参数的寄存器</li>
+<li>$v0 ~ $v1：2个传递返回值的寄存器</li>
+<li>$ra：返回地址寄存器，保存着调用者的地址用到的寄存器</li>
+</ul>
+<h3 id="保存和恢复寄存器">保存和恢复寄存器</h3>
+<ul>
+<li>因为寄存器数量较少，因此需要桟将寄存器中的数据保存在内存中，防止调用函数的过程中某些需要保存的值被覆盖。此时我们需要对保存栈顶地址的寄存器<code>$sp</code>进行操作：<strong>申请桟帧-&gt;储存寄存器的值-&gt;调用函数-&gt;将桟中的值返回寄存器-&gt;释放桟帧</strong><br>
+<img src="%E6%A1%9F%E6%93%8D%E4%BD%9C%E7%A4%BA%E4%BE%8B.png" alt=""></li>
+<li>根据寄存器受保护的程度,可以将寄存器分为<strong>强保护</strong>和<strong>弱保护</strong><br>
+<img src="%E5%AF%84%E5%AD%98%E5%99%A8%E4%BF%9D%E6%8A%A4%E5%88%86%E6%9E%90.png" alt=""><br>
+注意，强保护寄存器为<strong>被调用者</strong>保存（进入函数时保存，退出函数前恢复）；弱保护寄存器由<strong>调用者</strong>保存（调用子函数前保存，子函数返回后恢复）。</li>
+</ul>
+<h2 id="MIPS指令格式">MIPS指令格式</h2>
+<p>MIPS指令的32位被划分为若干个域，代表特定含义，每一个域在不同指令的含义大体是相同的。</p>
+<h3 id="R型指令">R型指令</h3>
+<p><strong>域的分块</strong><br>
+<img src="R%E5%9E%8B%E5%88%86%E5%9D%97.png" alt=""><br>
+<strong>域的命名</strong><br>
+<img src="R%E5%9E%8B.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>域名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>opcode</td>
+<td>代表指令的操作，R型指令的opcode固定为0b000000</td>
+</tr>
+<tr>
+<td>funct</td>
+<td>与opcode指令配合，精确定义指令的具体操作，主要用于服务R型指令</td>
+</tr>
+<tr>
+<td>rs</td>
+<td>指定第一个操作数（source寄存器）</td>
+</tr>
+<tr>
+<td>rt</td>
+<td>指定第二个操作数（target寄存器）</td>
+</tr>
+<tr>
+<td>rd</td>
+<td>指定结果回写的寄存器（destination寄存器）</td>
+</tr>
+<tr>
+<td>shamt</td>
+<td>移位指令（sll， sra， srl）中的移位位数，其他指令中该域固定为0</td>
+</tr>
+<tr>
+<td><strong>注意</strong>：</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>nop</code>是一条特殊指令（0x00000000）， 对应的指令为<code>sll $0, $0, 0</code>,主要用于解决流水线冲突。</li>
+</ul>
+<h3 id="I型指令">I型指令</h3>
+<p><strong>域的分块</strong><br>
+<img src="I%E5%9E%8B%E5%88%86%E5%9D%97.png" alt=""><br>
+<strong>域的命名</strong><br>
+<img src="I%E5%9E%8B%E5%91%BD%E5%90%8D.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>域名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>opcode</td>
+<td>代表指令的操作， I型中opcode为非零编码，一共可以编码64条指令</td>
+</tr>
+<tr>
+<td>rs</td>
+<td>指定第一个操作数（source操作数）</td>
+</tr>
+<tr>
+<td>rt</td>
+<td>指定第二个操作数（target操作数）</td>
+</tr>
+<tr>
+<td>immediate</td>
+<td>表示16位立即数</td>
+</tr>
+<tr>
+<td><strong>注意</strong>：</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>立即数（immediate）分为<strong>有符号立即数</strong>和<strong>无符号立即数</strong>
+<ul>
+<li>无符号立即数的指令包括：<strong>位运算</strong>指令(and, or, nor等)和<strong>小于置位</strong>指令（slti等）<br>
+<strong>zero_ext()</strong>：运算前需要进行无符号扩展</li>
+<li>有符号立即数的指令包括：<strong>分支</strong>指令（如beq， bne等），<strong>访存</strong>指令（lw， sw等）<br>
+<strong>sign_ext()</strong>：运算前需要进行符号扩展</li>
+</ul>
+</li>
+<li>如何计算32位立即数？
+<ul>
+<li>解决方案：<strong>结合使用lui和ori两个指令</strong></li>
+<li>例如伪指令<code>addi $t0, $t0, 0xABABCDCD</code> 可以转化为以下三条指令<pre class="line-numbers language-c" data-language="c"><code class="language-c">lui $at<span class="token punctuation">,</span><span class="token number">0xABAB</span> # 高<span class="token number">16</span>位
+ori $at<span class="token punctuation">,</span>$at<span class="token punctuation">,</span><span class="token number">0xCDCD</span> # 低<span class="token number">16</span>位
+add $t0<span class="token punctuation">,</span>$t0<span class="token punctuation">,</span>$at # 赋值<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+<li>关于跳转指令（B类指令）的跳转范围
+<ul>
+<li>指令都是32位长，且指令是字对齐，这意味着最低2位恒为0。因此immediate没有必要记录最低2位，乘以4后就得到了对应字节地址！immediate为16位符号数，其表示范围是正负±$2^15$</li>
+<li>如果跳转的目的地址超过了$2^15$条指令可以将<code>beq $s0, $0, far</code>改写为<pre class="line-numbers language-c" data-language="c"><code class="language-c">bne $s0<span class="token punctuation">,</span> $<span class="token number">0</span><span class="token punctuation">,</span> next
+j far
+next<span class="token operator">:</span> #next instruction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="J型指令">J型指令</h3>
+<p><strong>域的分块和命名</strong><br>
+<img src="J%E5%9E%8B.png" alt=""><br>
+<strong>PC地址的计算方法</strong><br>
+<img src="PC%E7%9A%84%E8%AE%A1%E7%AE%97.png" alt=""><br>
+由于PC的值始终是4的倍数，因此最后两位都是零，没有必要存储；PC的高四位来自当前指令的高四位，意味着目的地址与当前指令必在同一区段 <strong>{X000_0000，XFFF_FFFF}</strong>,因此<code>j</code>指令的跳转范围是<strong>256MB</strong>，只有jr指令（R型）才可以跳转到<strong>4GB</strong>内的任意地址。</p>
+<h3 id="指令格式总结">指令格式总结</h3>
+<ul>
+<li>三类指令格式对比<br>
+<img src="%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F%E6%80%BB%E7%BB%93.png" alt=""></li>
+<li>B类指令(<strong>I型</strong>)使用<strong>PC相对寻址</strong>，J指令(<strong>J型</strong>)使用<strong>绝对地址寻址</strong></li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/">http://hyggge.github.io/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/BUAA/">
+                                    <span class="chip bg-color">BUAA</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                    <span class="chip bg-color">计算机组成</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/11/01/co/co-p3-dan-zhou-qi-cpu-logisim-shi-xian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="「BUAA-CO」P3_单周期cpu（Logisim实现）">
+                        
+                        <span class="card-title">「BUAA-CO」P3_单周期cpu（Logisim实现）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-01
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/10/26/co/co-p1-verilog-zhong-fu-hao-shu-de-shi-yong/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="「BUAA-CO」P1_Verilog中符号数的使用">
+                        
+                        <span class="card-title">「BUAA-CO」P1_Verilog中符号数的使用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

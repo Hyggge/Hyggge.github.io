@@ -1,0 +1,101 @@
+Complexity metrics,ÖÜÈý, 27 4ÔÂ 2022 17:33:54 CST,,
+Method,CogC,ev(G),iv(G),v(G)
+MainClass.main(String[]),3,1,4,4
+"elevator.Elevator.Elevator(int, int, double)",0,1,1,1
+elevator.Elevator.getCapacity(),0,1,1,1
+elevator.Elevator.getId(),0,1,1,1
+elevator.Elevator.getSpeed(),0,1,1,1
+elevator.ElevatorFactory.create(ElevatorRequest),2,2,2,2
+"elevator.ElevatorFactory.init(HashMap<Integer, RequestTable>, HashMap<Integer, RequestTable>)",0,1,1,1
+"elevator.LateralElevator.LateralElevator(int, int, double, int, int, RequestTable, Strategy)",1,1,2,2
+elevator.LateralElevator.in(HashSet<Person>),1,1,2,2
+elevator.LateralElevator.move(),2,1,3,3
+elevator.LateralElevator.openAndClose(HashSet<Person>),1,1,2,2
+elevator.LateralElevator.out(),1,1,2,2
+elevator.LateralElevator.pickPeople(),0,1,1,1
+elevator.LateralElevator.run(),10,8,7,8
+elevator.LateralElevator.toString(),0,1,1,1
+"elevator.VerticalElevator.VerticalElevator(int, int, double, int, RequestTable, Strategy)",1,1,2,2
+elevator.VerticalElevator.in(HashSet<Person>),1,1,2,2
+elevator.VerticalElevator.move(),2,1,2,3
+elevator.VerticalElevator.openAndClose(HashSet<Person>),1,1,2,2
+elevator.VerticalElevator.out(),1,1,2,2
+elevator.VerticalElevator.pickPeople(),0,1,1,1
+elevator.VerticalElevator.run(),10,8,7,8
+elevator.VerticalElevator.toString(),0,1,1,1
+"strategy.LateralStrategy.getAdvice(int, int, int, int, boolean, HashMap<Integer, HashSet<Person>>, RequestTable, ...)",13,6,5,9
+"strategy.LateralStrategy.needReverse(int, boolean, RequestTable, HashMap<Integer, HashSet<Person>>, int)",4,2,8,8
+"strategy.VerticalStrategy.getAdvice(int, int, int, int, boolean, HashMap<Integer, HashSet<Person>>, RequestTable, ...)",12,6,4,8
+"strategy.VerticalStrategy.hasReqInNowDirection(int, boolean, RequestTable)",12,6,4,6
+system.Controller.Controller(),0,1,1,1
+system.Controller.addNewRequest(PersonRequest),0,1,1,1
+"system.Controller.addSwitchInfo(int, int)",0,1,1,1
+system.Controller.dispatch(Person),3,2,3,3
+system.Controller.getInstance(),0,1,1,1
+"system.Controller.getSwitchFloor(int, int, int, int)",11,5,4,6
+"system.Controller.init(HashMap<Integer, RequestTable>, HashMap<Integer, RequestTable>)",1,1,2,2
+system.Controller.setOver(),2,1,3,3
+system.InputHandler.run(),7,3,7,7
+system.OutputHandler.println(String),0,1,1,1
+"utils.Person.Person(int, ArrayList<Route>)",0,1,1,1
+utils.Person.finishNowRoute(),0,1,1,1
+utils.Person.getId(),0,1,1,1
+utils.Person.getLateralNeed(),0,1,1,1
+utils.Person.getNowRoute(),1,2,1,2
+utils.Person.isOver(),0,1,1,1
+utils.Person.skipInvalidStage(),3,3,2,3
+utils.RequestCounter.RequestCounter(),0,1,1,1
+utils.RequestCounter.acquire(),7,3,4,4
+utils.RequestCounter.getInstance(),0,1,1,1
+utils.RequestCounter.release(),0,1,1,1
+utils.RequestTable.RequestTable(String),1,1,2,2
+utils.RequestTable.addRequest(Person),2,1,2,2
+"utils.RequestTable.check(int, boolean)",7,4,5,7
+"utils.RequestTable.check(int, int)",4,4,2,4
+"utils.RequestTable.delRequest(int, boolean, int)",4,1,4,4
+"utils.RequestTable.delRequest(int, int, int)",4,1,4,4
+utils.RequestTable.isEmpty(),0,1,1,1
+utils.RequestTable.isOver(),0,1,1,1
+utils.RequestTable.needGetIn(int),0,1,1,1
+utils.RequestTable.setOver(),0,1,1,1
+utils.RequestTable.waitRequest(),1,1,2,2
+"utils.Route.Route(int, int, int, int)",0,1,1,1
+utils.Route.getFromBuilding(),0,1,1,1
+utils.Route.getFromFloor(),0,1,1,1
+utils.Route.getToBuilding(),0,1,1,1
+utils.Route.getToFloor(),0,1,1,1
+utils.Route.isValid(),1,1,1,2
+utils.Tool.adjustId(int),2,1,1,3
+utils.Tool.charToId(char),0,1,1,1
+utils.Tool.idToChar(int),0,1,1,1
+,,,,
+Class,OCavg,OCmax,WMC,
+MainClass,4,4,4,
+elevator.Elevator,1,1,4,
+elevator.ElevatorFactory,1.5,2,3,
+elevator.LateralElevator,2.38,8,19,
+elevator.VerticalElevator,2.38,8,19,
+strategy.LateralStrategy,4,6,8,
+strategy.VerticalStrategy,6,6,12,
+system.Controller,2.25,6,18,
+system.InputHandler,6,6,6,
+system.OutputHandler,1,1,1,
+utils.Advice,n/a,n/a,0,
+utils.Person,1.43,3,10,
+utils.RequestCounter,1.5,3,6,
+utils.RequestTable,2.09,4,23,
+utils.Route,1,1,6,
+utils.Tool,1.67,3,5,
+,,,,
+Package,v(G)avg,v(G)tot,,
+,4,4,,
+elevator,2.23,49,,
+strategy,7.75,31,,
+system,2.6,26,,
+utils,1.87,58,,
+,,,,
+Module,v(G)avg,v(G)tot,,
+U2_H7_Project,2.47,168,,
+,,,,
+Project,v(G)avg,v(G)tot,,
+project,2.47,168,,

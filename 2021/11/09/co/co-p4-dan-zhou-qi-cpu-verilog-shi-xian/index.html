@@ -1,0 +1,2228 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「BUAA-CO」P4_单周期cpu（Verilog实现）, Hyggge&#39;s Blog">
+    <meta name="description" content="单周期CPU设计方案
+设计概述
+本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Cont">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「BUAA-CO」P4_单周期cpu（Verilog实现） | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「BUAA-CO」P4_单周期cpu（Verilog实现）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/BUAA/">
+                                <span class="chip bg-color">BUAA</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                <span class="chip bg-color">计算机组成</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                计算机组成
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-11-09
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    25 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="单周期CPU设计方案">单周期CPU设计方案</h2>
+<h3 id="设计概述">设计概述</h3>
+<p>本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
+<p><img src="CPU.png" alt=""></p>
+<h3 id="实现指令说明">实现指令说明</h3>
+<p> 本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。</p>
+<h4 id="R型指令">R型指令</h4>
+<ul>
+<li>算数/位运算指令：add, addu, sub, subu, and, or, nor, xor</li>
+<li>移位指令：sll, srl, sra, sllv, srlv, srav</li>
+<li>置位指令：slt, sltu</li>
+<li>跳转指令：jr, jalr</li>
+</ul>
+<h4 id="J型指令">J型指令</h4>
+<ul>
+<li>跳转指令：j, jal</li>
+</ul>
+<h4 id="I型指令">I型指令</h4>
+<ul>
+<li>算数/位运算指令： addi, andi, addiu, ori, xori, lui</li>
+<li>B类指令：beq, bne, bgtz, bgez, blez, bltz</li>
+<li>置位指令：slti, sltiu</li>
+<li>访存指令：lw, sw, lh, lhu, lb, lbu, sh, sb</li>
+<li></li>
+</ul>
+<h3 id="数据通路模块定义">数据通路模块定义</h3>
+<h4 id="IFU（取指令单元）">IFU（取指令单元）</h4>
+<p>  该模块内部包含PC（程序计数器）和IM（指令存储器容量为32*1024 bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号</td>
+</tr>
+<tr>
+<td>stop</td>
+<td>I</td>
+<td>1</td>
+<td>停止信号</td>
+</tr>
+<tr>
+<td>next_pc</td>
+<td>I</td>
+<td>32</td>
+<td>下一条要被执行的指令的地址</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令的地址</td>
+</tr>
+<tr>
+<td>instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>功能定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>当reset信号有效时，将PC寄存器中的值置为0x00000000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>停止</td>
+<td>当stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写PC寄存器</td>
+<td>当stop信号失效且时钟上升沿来临时，将下一条指令的地址（next_pc）写入PC寄存器</td>
+</tr>
+<tr>
+<td>4</td>
+<td>取指令</td>
+<td>根据当前PC的值从IM（指令存储器）中读出对应的指令到instr端口</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="GRF（通用寄存器组）">GRF（通用寄存器组）</h4>
+<p>该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能）。GRF可以实现异步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>1</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号  1：复位信号有效  0：复位信号无效</td>
+</tr>
+<tr>
+<td>read_addr_1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
+</tr>
+<tr>
+<td>read_addr_2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
+</tr>
+<tr>
+<td>write_addr</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>write_data</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>RegWrite</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号  1：写入有效  0：写入失效</td>
+</tr>
+<tr>
+<td>read_data_1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的32位数据</td>
+</tr>
+<tr>
+<td>read_data_2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的32位数据</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>功能定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>reset信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出read_addr_1，read_addr_2地址对应的寄存器中储存的数据，将其加载到read_data_1和read_data_2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当RegWrite信号有效且时钟上升沿来临时，将write_data中的数据写入到write_addr地址对应的寄存器</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="NPC（下一指令计算单元）">NPC（下一指令计算单元）</h4>
+<p>该模块根据当前指令地址和控制信号，计算出下一指令所在的地址。</p>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>I</td>
+<td>32</td>
+<td>地址偏移量，用于计算B类指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>instr_26</td>
+<td>I</td>
+<td>26</td>
+<td>当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>ra_data</td>
+<td>I</td>
+<td>32</td>
+<td>储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令</td>
+</tr>
+<tr>
+<td>branch_judge</td>
+<td>I</td>
+<td>1</td>
+<td>B类指令分支条件判断结果  1：B类指令分支条件成立  0：B类指令分支条件不成立</td>
+</tr>
+<tr>
+<td>NPCOp</td>
+<td>I</td>
+<td>3</td>
+<td>对输出next_pc的值进行选择  0b000:next_pc为pc+4  0b001:next_pc为分支的地址  0b010:next_pc为j型指令的跳转地址  0b011:next_pc为寄存器中保存的地址</td>
+</tr>
+<tr>
+<td>next_pc</td>
+<td>O</td>
+<td>32</td>
+<td>输出下一指令地址</td>
+</tr>
+<tr>
+<td>pc+4</td>
+<td>O</td>
+<td>32</td>
+<td>输出pc+4的值，用于实现jal和jalr指令中的地址存储</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="ALU（逻辑运算单元）">ALU（逻辑运算单元）</h4>
+<p>  该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th><strong>信号名</strong></th>
+<th><strong>方向</strong></th>
+<th><strong>位宽</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALUOp</td>
+<td>I</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+</tr>
+<tr>
+<td>src_A</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第一个值</td>
+</tr>
+<tr>
+<td>src_B</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第二个值</td>
+</tr>
+<tr>
+<td>shamt</td>
+<td>I</td>
+<td>5</td>
+<td>移位数输入</td>
+</tr>
+<tr>
+<td>FlowJudge</td>
+<td>I</td>
+<td>1</td>
+<td>溢出判断信号  1：进行溢出判断  0：不进行溢出判断</td>
+</tr>
+<tr>
+<td>equal</td>
+<td>O</td>
+<td>1</td>
+<td>相等判断信号  1：src_A和src_B相等  0：src_A和src_B不相等</td>
+</tr>
+<tr>
+<td>ALU_result</td>
+<td>O</td>
+<td>32</td>
+<td>输出ALU计算结果</td>
+</tr>
+<tr>
+<td>flow_result</td>
+<td>O</td>
+<td>1</td>
+<td>输出ALU计算结果的溢出情况（add，sub，addi等指令有效）</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>功能定义</strong>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>ALU_Op</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>加</td>
+<td>0b0000</td>
+<td>ALU_result = src_A + src_B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>减</td>
+<td>0b0001</td>
+<td>ALU_result = src_A - src_B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>按位与</td>
+<td>0b0010</td>
+<td>ALU_result = src_A &amp; src_B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>按位或</td>
+<td>0b0011</td>
+<td>ALU_result = src_A | src_B</td>
+</tr>
+<tr>
+<td>5</td>
+<td>按位异或</td>
+<td>0b0100</td>
+<td>ALU_result = src_A ⊕ src_B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>按位或非</td>
+<td>0b0101</td>
+<td>ALU_result = ~(src_A | src_B)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>逻辑左移</td>
+<td>0b0110</td>
+<td>ALU_result = src_B &lt;&lt; shamt</td>
+</tr>
+<tr>
+<td>8</td>
+<td>逻辑右移</td>
+<td>0b0111</td>
+<td>ALU_result = src_B &gt;&gt; shamt</td>
+</tr>
+<tr>
+<td>9</td>
+<td>算术右移</td>
+<td>0b1000</td>
+<td>ALU_result = src_B &gt;&gt;&gt; shamt</td>
+</tr>
+<tr>
+<td>10</td>
+<td>带符号比较</td>
+<td>0b1001</td>
+<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（带符号比较）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>无符号比较</td>
+<td>0b1010</td>
+<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（无符号比较）</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="DM-（数据存储器）">DM （数据存储器）</h4>
+<p>该模块可以实现对数据的存储与访问（包括对字、半字、字节的各种访存操作），还可以实现同步复位。</p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令的地址</td>
+</tr>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号</td>
+</tr>
+<tr>
+<td>MemWrite</td>
+<td>I</td>
+<td>1</td>
+<td>储存器写入使能信号  1：写入有效  0：写入失效</td>
+</tr>
+<tr>
+<td>addr</td>
+<td>I</td>
+<td>32</td>
+<td>储存器写入地址</td>
+</tr>
+<tr>
+<td>write_data</td>
+<td>I</td>
+<td>32</td>
+<td>储存器写入数据</td>
+</tr>
+<tr>
+<td>LSOp</td>
+<td>I</td>
+<td>3</td>
+<td>访存功能选择  <br>0b000:lw  <br>0b001:sw  <br>0b010:lh  <br>0b011:lhu  <br>0b100:sh  <br>0b101:lb  <br>0b110:lbu  <br>0b111:sb</td>
+</tr>
+<tr>
+<td>read_data</td>
+<td>O</td>
+<td>32</td>
+<td>储存器读出数据</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h4 id="Branch-Control（B类指令控制模块）">Branch Control（B类指令控制模块）</h4>
+<p>该模块跟据当前所执行的分支指令类型进行相应判断，并将判断结果输出。</p>
+<ul>
+<li><strong>端口定义</strong>
+<table>
+<thead>
+<tr>
+<th>cmp_data</th>
+<th>I</th>
+<th>32</th>
+<th>输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>equal</td>
+<td>I</td>
+<td>1</td>
+<td>相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne）</td>
+</tr>
+<tr>
+<td>BranchOp</td>
+<td>I</td>
+<td>3</td>
+<td>B类指令选择指令  0b000：beq指令  0b001：bgez，bltz  0b010：bgtz  0b011：blez  0b100：bne</td>
+</tr>
+<tr>
+<td>judge</td>
+<td>I</td>
+<td>1</td>
+<td>区别bgez，bltz两个指令</td>
+</tr>
+<tr>
+<td>result</td>
+<td>O</td>
+<td>1</td>
+<td>输出判断结果  1：B类指令转移条件成立  0：B类指令转移条件不成立</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="控制模块定义">控制模块定义</h3>
+<p>在控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等15条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND Logic）和或逻辑（OR Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
+<ul>
+<li>
+<p><strong>控制信号定义</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>信号名</th>
+<th>位宽</th>
+<th>描述</th>
+<th>触发指令（信号为1）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>MemToReg</td>
+<td>1</td>
+<td>GRF中WD接口输入数据选择</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>MemWrite</td>
+<td>1</td>
+<td>DM写入使能信号</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>ALUSrc</td>
+<td>1</td>
+<td>ALU中Src_B接口输入数据选择</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>RegWrite</td>
+<td>1</td>
+<td>GRF写入使能信号</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>SYSCALL</td>
+<td>1</td>
+<td>syscall指令译码信号，GRF中A1接口输入数据选择</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>SignedExt</td>
+<td>1</td>
+<td>立即数符号扩展选择</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>RegDst</td>
+<td>1</td>
+<td>GRF中A3接口输入数据选择</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>AddrToReg</td>
+<td>1</td>
+<td>指令地址传递信号，选择是否将PC+4输入到GRF的WD端口</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>RaLink</td>
+<td>1</td>
+<td>$ra寄存器写入选择信号，选择是否将$ra作为GRF的写入对象</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>VarShift</td>
+<td>1</td>
+<td>可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>FlowJudge</td>
+<td>1</td>
+<td>溢出判断选择信号</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>BranchOp</td>
+<td>3</td>
+<td>B类指令选择信号</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>LSOp</td>
+<td>3</td>
+<td>访存操作选择信号</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>NPCOp</td>
+<td>3</td>
+<td>next_pc输出选择信号</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>ALUOp</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>生成代码</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">   <span class="token keyword">assign</span> MemToReg       <span class="token operator">=</span> _lw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> MemWrite       <span class="token operator">=</span> _sw <span class="token operator">|</span> _sh <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> ALUSrc         <span class="token operator">=</span> _addi <span class="token operator">|</span> _addiu <span class="token operator">|</span> _andi <span class="token operator">|</span> _ori <span class="token operator">|</span> _xori <span class="token operator">|</span> _slti <span class="token operator">|</span> _sltiu <span class="token operator">|</span> _lw <span class="token operator">|</span> _sw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _sh <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu <span class="token operator">|</span> _sb <span class="token operator">|</span> _lui<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> RegWrite       <span class="token operator">=</span> _sll <span class="token operator">|</span> _sra <span class="token operator">|</span> _srl <span class="token operator">|</span> _add <span class="token operator">|</span> _addu <span class="token operator">|</span> _sub <span class="token operator">|</span> _and <span class="token operator">|</span> _or <span class="token operator">|</span> _nor <span class="token operator">|</span> _slt <span class="token operator">|</span> _sltu <span class="token operator">|</span> _jalr <span class="token operator">|</span> _xor <span class="token operator">|</span> _sllv <span class="token operator">|</span> _srav <span class="token operator">|</span> _srlv <span class="token operator">|</span> _subu <span class="token operator">|</span> _jal <span class="token operator">|</span> _addi <span class="token operator">|</span> _addiu <span class="token operator">|</span> _andi <span class="token operator">|</span> _ori <span class="token operator">|</span> _xori <span class="token operator">|</span> _slti <span class="token operator">|</span> _sltiu <span class="token operator">|</span> _lw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu <span class="token operator">|</span> _lui<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> SYSCALL        <span class="token operator">=</span> _syscall<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> SignedExt      <span class="token operator">=</span> _addi <span class="token operator">|</span> _addiu <span class="token operator">|</span> _slti <span class="token operator">|</span> _sltiu <span class="token operator">|</span> _lw <span class="token operator">|</span> _sw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _sh <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> RegDst         <span class="token operator">=</span> _sll <span class="token operator">|</span> _sra <span class="token operator">|</span> _srl <span class="token operator">|</span> _add <span class="token operator">|</span> _addu <span class="token operator">|</span> _sub <span class="token operator">|</span> _and <span class="token operator">|</span> _or <span class="token operator">|</span> _nor <span class="token operator">|</span> _slt <span class="token operator">|</span> _sltu <span class="token operator">|</span> _jalr <span class="token operator">|</span> _xor <span class="token operator">|</span> _sllv <span class="token operator">|</span> _srav <span class="token operator">|</span> _srlv <span class="token operator">|</span> _subu<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> AddrToReg      <span class="token operator">=</span> _jalr <span class="token operator">|</span> _jal<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> RaLink         <span class="token operator">=</span> _jal<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> VarShift       <span class="token operator">=</span> _sllv <span class="token operator">|</span> _srav <span class="token operator">|</span> _srlv<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> FlowJudge      <span class="token operator">=</span> _add <span class="token operator">|</span> _sub <span class="token operator">|</span> _addi<span class="token punctuation">;</span>
+    
+    <span class="token keyword">assign</span> NPCOp<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>       <span class="token operator">=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> NPCOp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _jalr <span class="token operator">|</span> _jr <span class="token operator">|</span> _j <span class="token operator">|</span> _jal<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> NPCOp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _jalr <span class="token operator">|</span> _jr <span class="token operator">|</span> _beq <span class="token operator">|</span> _bne <span class="token operator">|</span> _bgez <span class="token operator">|</span> _bgtz <span class="token operator">|</span> _blez <span class="token operator">|</span> _bltz<span class="token punctuation">;</span>
+    
+    <span class="token keyword">assign</span> BranchOp<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>    <span class="token operator">=</span> _bne<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> BranchOp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>    <span class="token operator">=</span> _bgtz <span class="token operator">|</span> _blez<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> BranchOp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>    <span class="token operator">=</span> _bgez <span class="token operator">|</span> _blez <span class="token operator">|</span> _bltz<span class="token punctuation">;</span>
+
+    <span class="token keyword">assign</span> LSOp<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>        <span class="token operator">=</span> _sh <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> LSOp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>        <span class="token operator">=</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lbu <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> LSOp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>        <span class="token operator">=</span> _sw <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lb <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+
+    <span class="token keyword">assign</span> ALUOp<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _sra <span class="token operator">|</span> _slt <span class="token operator">|</span> _sltu <span class="token operator">|</span> _srav <span class="token operator">|</span> _slti <span class="token operator">|</span> _sltiu <span class="token operator">|</span> _lui<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> ALUOp<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _sll <span class="token operator">|</span> _srl <span class="token operator">|</span> _nor <span class="token operator">|</span> _xor <span class="token operator">|</span> _sllv <span class="token operator">|</span> _srlv <span class="token operator">|</span> _xori<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> ALUOp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _sll <span class="token operator">|</span> _srl <span class="token operator">|</span> _and <span class="token operator">|</span> _or <span class="token operator">|</span> _sltu <span class="token operator">|</span> _sllv <span class="token operator">|</span> _srlv <span class="token operator">|</span> _andi <span class="token operator">|</span> _ori <span class="token operator">|</span> _sltiu <span class="token operator">|</span> _lui<span class="token punctuation">;</span>
+<span class="token keyword">assign</span> ALUOp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>       <span class="token operator">=</span> _srl <span class="token operator">|</span> _sub <span class="token operator">|</span> _or <span class="token operator">|</span> _nor <span class="token operator">|</span> _slt <span class="token operator">|</span> _srlv <span class="token operator">|</span> _subu <span class="token operator">|</span> _ori <span class="token operator">|</span> _slti <span class="token operator">|</span> _lui<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h3 id="重要机制实现方法">重要机制实现方法</h3>
+<h4 id="转移指令（B类和J类）实现方法">转移指令（B类和J类）实现方法</h4>
+<p>转移指令包括两种——B类和J类，这两类指令的地址转移功能均需要通过NPC的选择与计算将对应的PC地址传入PC寄存器（IFU模块中）。B类指令数量更多，转移条件的判断也更为复杂，因此我们将其封装成一个模块——BranchControl。该模块的接口定义已经给出，现在分析其内部实现逻辑。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token important">always @</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token keyword">case</span> <span class="token punctuation">(</span>BranchOp<span class="token punctuation">)</span>
+            <span class="token constant">`BRANCH_BEQ</span><span class="token punctuation">:</span>            result <span class="token operator">=</span> equal<span class="token punctuation">;</span>
+            <span class="token constant">`BRANCH_BNE</span><span class="token punctuation">:</span>            result <span class="token operator">=</span> <span class="token operator">~</span>equal<span class="token punctuation">;</span>
+            <span class="token constant">`BRANCH_BGEZ_OR_BLEZ</span><span class="token punctuation">:</span>   result <span class="token operator">=</span> <span class="token punctuation">(</span>judge <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>cmp_data<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>cmp_data<span class="token punctuation">)</span> <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token constant">`BRANCH_BGTZ</span><span class="token punctuation">:</span>           result <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>cmp_data<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token constant">`BRANCH_BLEZ</span><span class="token punctuation">:</span>           result <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>cmp_data<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>                result <span class="token operator">=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+    <span class="token keyword">end</span> 
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>
+<p>据判断逻辑不同，B类指令又可以分为两类——bne，beq和bltz，blez，bgtz，bgez。bne和beq指令需要将两个操作数进行比较，根据两者的值是否相等进一步判断是否执行跳转。“Equal”接口的信号正是两个操作数的比较结果。而bltz，blez，bgtz，bgez四个指令只需要将一个操作数和0进行比较。我们将这个操作数的值直接传入该模块，然后用四个比较器分别计算这四个指令的判断结果。</p>
+</li>
+<li>
+<p>6个B类指令的判断结果已经得到，下面我们要做的是根据当前指令选择出其中一个判断结果进行输出，这就需要通过“BranchOp”（B类指令选择信号）进行选择</p>
+<table>
+<thead>
+<tr>
+<th>BranchOp</th>
+<th>对应指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0b000</td>
+<td>beq</td>
+</tr>
+<tr>
+<td>0b001</td>
+<td>bgez，bltz</td>
+</tr>
+<tr>
+<td>0b010</td>
+<td>bgtz</td>
+</tr>
+<tr>
+<td>0b011</td>
+<td>blez</td>
+</tr>
+<tr>
+<td>0b100</td>
+<td>bne</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>由上表可以发现，当“BranchOp”的值为0b001时，对应的指令有两个——bgez和bltz。原因是根据MIPS指令集，bgez和bgtz的Opcode完全一致（000001），无法仅通过Control Unit将这两个指令进行区分。因此，我们需要将指令的16~20位数据输入该模块（在该数据段中bgez指令的值为0b00001，bltz的值为0b00000），即“Judge”信号，将这两个指令的判断结果区分。这样分支指令的判断结果就可以得出，并传入NPC中。</p>
+</li>
+</ul>
+<p>下面我们介绍NPC中B类和J类指令的执行逻辑。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span>       <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>       npc_1 <span class="token operator">=</span> pc <span class="token operator">+</span> <span class="token number">32'd4</span><span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>       <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>       npc_2 <span class="token operator">=</span> pc <span class="token operator">+</span> <span class="token number">32'd4</span> <span class="token operator">+</span> <span class="token punctuation">(</span>offset <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>       <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>       npc_3 <span class="token operator">=</span> <span class="token operator">{</span>pc<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">28</span><span class="token punctuation">]</span><span class="token punctuation">,</span> instr_26<span class="token punctuation">,</span> <span class="token number">2'b00</span><span class="token operator">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>       <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>       npc_4 <span class="token operator">=</span> ra_data<span class="token punctuation">;</span>、、
+<span class="token keyword">assign</span> pc_plus_4 <span class="token operator">=</span> npc_1<span class="token punctuation">;</span>
+
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token keyword">case</span> <span class="token punctuation">(</span>NPCOp<span class="token punctuation">)</span>
+            <span class="token constant">`NPC_PC_PLUS_FOUR</span><span class="token punctuation">:</span>       next_pc <span class="token operator">=</span> npc_1<span class="token punctuation">;</span>
+            <span class="token constant">`NPC_BRANCH</span><span class="token punctuation">:</span>             next_pc <span class="token operator">=</span> <span class="token punctuation">(</span>branch_judge<span class="token punctuation">)</span> <span class="token operator">?</span> npc_2 <span class="token punctuation">:</span> npc_1<span class="token punctuation">;</span>
+            <span class="token constant">`NPC_INSTR_26</span><span class="token punctuation">:</span>           next_pc <span class="token operator">=</span> npc_3<span class="token punctuation">;</span>
+            <span class="token constant">`NPC_RA_DATA</span><span class="token punctuation">:</span>            next_pc <span class="token operator">=</span> npc_4<span class="token punctuation">;</span>
+             <span class="token keyword">default</span><span class="token punctuation">:</span>                next_pc <span class="token operator">=</span> next_pc<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+    <span class="token keyword">end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>我们需要先将输入的数据进行处理，转换为PC地址，包括对“Offset”（B类指令码中的地址偏移量）和“Instruction[25:0]”（j和jal指令码中储存地址的数据段）进行处理。然后通过“branch_jdudge”信号（Branch Control模块输出的结果）和“NPCOp”信号对之前得到的计算结果进行选择，最终将选择后的结果通过“next_pc”端口输出。</li>
+<li>此外，由于jal和jalr指令中需要将PC+4的值写入到某个寄存器中，因此需要将PC+4的值计算出来通过“PC+4”接口输出。在写入过程中，控制信号“RaLink”和“AddrTrans”起到了调节数据通路的作用。</li>
+</ul>
+<h4 id="访存指令实现方法">访存指令实现方法</h4>
+<p>访存指令包含8个——lw，sw，lb，lbu，lh，lhu，sb，sh，均在DM模块中实现。由于我们的程序中DM为按字地址存储，所以我们无法直接对字节和半字进行操作，需要进行位的拼接。读储存器代码如下：</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    temp         <span class="token operator">=</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">//get the whole word</span>
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">case</span><span class="token punctuation">(</span>LSOp<span class="token punctuation">)</span>
+            <span class="token constant">`LS_LW</span><span class="token punctuation">:</span> read_data   <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+            <span class="token constant">`LS_LH</span><span class="token punctuation">:</span> read_data   <span class="token operator">=</span> <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">16</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> 
+                                                        <span class="token punctuation">:</span> <span class="token operator">{{</span><span class="token number">16</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+            <span class="token constant">`LS_LHU</span><span class="token punctuation">:</span> read_data  <span class="token operator">=</span> <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">16</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> 
+                                                        <span class="token punctuation">:</span> <span class="token operator">{{</span><span class="token number">16</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+            <span class="token constant">`LS_LB</span><span class="token punctuation">:</span> read_data   <span class="token operator">=</span> <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b00</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span>
+                                    <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b01</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span> 
+                                    <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b10</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">:</span> 
+                                                             <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+            <span class="token constant">`LS_LBU</span><span class="token punctuation">:</span> read_data  <span class="token operator">=</span> <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b00</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span>
+                                    <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b01</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span> 
+                                    <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b10</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">:</span> 
+                                                             <span class="token operator">{{</span><span class="token number">24</span><span class="token operator">{</span><span class="token number">1'b0</span><span class="token operator">}}</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>  
+            <span class="token keyword">default</span><span class="token punctuation">:</span> read_data <span class="token operator">=</span> temp<span class="token punctuation">;</span>                 
+        <span class="token keyword">endcase</span>
+<span class="token keyword">end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>写储存器代码如下：</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+            <span class="token function">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">1024</span><span class="token punctuation">;</span> i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+                data_memory<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;=</span> <span class="token number">32'h0</span><span class="token punctuation">;</span>
+            <span class="token keyword">end</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>MemWrite <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>LSOp<span class="token punctuation">)</span> 
+                <span class="token constant">`LS_SW</span><span class="token punctuation">:</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> write_data<span class="token punctuation">;</span>
+                <span class="token constant">`LS_SH</span><span class="token punctuation">:</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> 
+		<span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span> <span class="token operator">?</span>  <span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">,</span> write_data<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span> 
+				<span class="token operator">{</span>write_data<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+                <span class="token constant">`LS_SB</span><span class="token punctuation">:</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> 
+		<span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b00</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">,</span> write_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span>
+		<span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b01</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">,</span> write_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span> <span class="token punctuation">:</span> 
+                       <span class="token punctuation">(</span>addr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">2'b10</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span>temp<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">,</span> write_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">:</span> 
+                                                 <span class="token operator">{</span>write_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> temp<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+                <span class="token keyword">default</span><span class="token punctuation">:</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">endcase</span>
+        <span class="token keyword">else</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> data_memory<span class="token punctuation">[</span>addr<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h2 id="测试方案">测试方案</h2>
+<h3 id="典型测试样例">典型测试样例</h3>
+<h4 id="运算指令测试">运算指令测试</h4>
+<p>该部分测试通过随机数随机生成，以保证测试数据的任意性，然后与同学代码进行对拍，以确定正确性。（随机生成程序与对拍程序均由同学设计）<br>
+其中一组测试数据如下所示</p>
+  <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">li  <span class="token kernel-function property">$0</span> <span class="token operator">-</span><span class="token number">5646112</span>
+li  <span class="token kernel-function property">$1</span>  <span class="token number">123555</span>
+……………………
+<span class="token keyword">xor</span> <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$1</span>
+addu <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+addu <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+srlv <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span>
+sub <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span>
+add <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$18</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$18</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$5</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$22</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$21</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+sllv <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$19</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$7</span>
+srlv <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$1</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+sltu <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$14</span>
+addu <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$30</span>
+sllv <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+srav <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$9</span>
+sltu <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$8</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$17</span><span class="token punctuation">,</span> <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+slt <span class="token kernel-function property">$20</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$17</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$7</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+srav <span class="token kernel-function property">$12</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span>
+addu <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span>
+sltu <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+subu <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$21</span>
+srav <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+add <span class="token kernel-function property">$18</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span>
+sltu <span class="token kernel-function property">$22</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span>
+srlv <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$6</span>
+sllv <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$26</span>
+add <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$18</span>
+srlv <span class="token kernel-function property">$15</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span>
+<span class="token keyword">or</span> <span class="token kernel-function property">$25</span><span class="token punctuation">,</span> <span class="token kernel-function property">$10</span><span class="token punctuation">,</span> <span class="token kernel-function property">$31</span>
+add <span class="token kernel-function property">$2</span><span class="token punctuation">,</span> <span class="token kernel-function property">$13</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$24</span><span class="token punctuation">,</span> <span class="token kernel-function property">$26</span>
+addu <span class="token kernel-function property">$19</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$20</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">xor</span> <span class="token kernel-function property">$14</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span>
+<span class="token keyword">and</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$16</span><span class="token punctuation">,</span> <span class="token kernel-function property">$25</span>
+<span class="token keyword">nor</span> <span class="token kernel-function property">$26</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span>
+add <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$29</span>
+srlv <span class="token kernel-function property">$30</span><span class="token punctuation">,</span> <span class="token kernel-function property">$3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$2</span>
+add <span class="token kernel-function property">$11</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$27</span>
+sltu <span class="token kernel-function property">$6</span><span class="token punctuation">,</span> <span class="token kernel-function property">$28</span><span class="token punctuation">,</span> <span class="token kernel-function property">$23</span>
+……………………<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="转移指令（B类和J类）测试">转移指令（B类和J类）测试</h4>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">main<span class="token punctuation">:</span>	
+li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>
+li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1000</span>
+li	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token number">1000</span>
+lui	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token number">0</span>x8000	#s3 is  <span class="token operator">-</span><span class="token number">2147483648</span>
+lui	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token number">0</span>x8000
+ori	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token number">0</span>x0001	#s4 is  <span class="token operator">-</span><span class="token number">2147483647</span>
+lui	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff
+ori	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token number">0</span>xffff	#s5 is  <span class="token number">2147483647</span>
+lui	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff
+ori	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> <span class="token number">0</span>xfffe	#s6 is <span class="token number">2147483646</span>
+
+
+beq_1<span class="token punctuation">:</span>	beq	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> beq_1_test
+beq_2<span class="token punctuation">:</span>	beq	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> beq_2_test
+……
+beq_10<span class="token punctuation">:</span>  beq	<span class="token kernel-function property">$s5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> beq_10_test
+beq_end<span class="token punctuation">:</span>
+
+bne_1<span class="token punctuation">:</span>	bne	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> bne_1_test
+……
+bne_10<span class="token punctuation">:</span>	bne	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> bne_10_test
+bne_end<span class="token punctuation">:</span>
+
+blez_1<span class="token punctuation">:</span> blez	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> blez_1_test
+……
+blez_10<span class="token punctuation">:</span> blez	<span class="token kernel-function property">$s6</span><span class="token punctuation">,</span> blez_10_test
+blez_end<span class="token punctuation">:</span>
+
+bgtz_1<span class="token punctuation">:</span>	 bgtz	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span>bgtz_1_test
+……
+bgtz_10<span class="token punctuation">:</span> bgtz	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span>bgtz_10_test
+bgtz_end<span class="token punctuation">:</span>
+
+jal_1<span class="token punctuation">:</span>	jal	jal_1_test
+……
+jal_5<span class="token punctuation">:</span>	jal	jal_5_test
+jal_end<span class="token punctuation">:</span>
+
+jalr_1<span class="token punctuation">:</span>	<span class="token keyword">or</span>	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">12916</span>
+	jalr	<span class="token kernel-function property">$v1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$v0</span>
+……
+jalr_5<span class="token punctuation">:</span>	<span class="token keyword">or</span>	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">12948</span>
+	jalr	<span class="token kernel-function property">$v1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$v0</span>
+
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+li	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token number">10</span>
+syscall
+	
+beq_1_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span><span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	beq_2
+……
+beq_10_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span><span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	beq_end
+
+bne_1_test<span class="token punctuation">:</span> addi	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span><span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	bne_2
+……
+bne_10_test<span class="token punctuation">:</span>addi	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span><span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+	   j	bne_end  	      	      	   
+
+blez_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span><span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		j	blez_2
+……
+blez_10_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span><span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		j	blez_end
+
+bgtz_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span><span class="token kernel-function property">$t3</span> <span class="token number">1</span>
+		j	bgtz_2
+……
+bgtz_10_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span><span class="token kernel-function property">$t3</span> <span class="token number">1</span>
+		j	bgtz_end
+		
+jal_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$ra</span>
+……
+jal_5_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t4</span><span class="token punctuation">,</span> <span class="token kernel-function property">$4</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$ra</span>
+
+jalr_1_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$v1</span>
+……
+jalr_5_test<span class="token punctuation">:</span>	addi	<span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$t5</span><span class="token punctuation">,</span> <span class="token number">1</span>
+		jr	<span class="token kernel-function property">$v1</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="访存指令测试">访存指令测试</h4>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token punctuation">.</span>text
+
+li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>xABCF1234
+li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token number">0</span>x1234ABCD
+li	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token number">0</span>xa1b2c3d4
+li	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token number">0</span>x7fff0000
+
+sb	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">100</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">103</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">105</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sb	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token function">107</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s4</span><span class="token punctuation">,</span> <span class="token function">108</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">110</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">112</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sh	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">114</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">16</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">20</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">24</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">28</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">3</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">7</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">11</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lb	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">13</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">32</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">36</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">40</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">44</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">3</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">7</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">11</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lbu	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">13</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">48</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">52</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">56</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">60</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">2</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">4</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lh	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">64</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">68</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">72</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">76</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">2</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">6</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">8</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+lhu	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">12</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token function">80</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token function">84</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t2</span><span class="token punctuation">,</span> <span class="token function">88</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$t3</span><span class="token punctuation">,</span> <span class="token function">92</span><span class="token punctuation">(</span><span class="token kernel-function property">$0</span><span class="token punctuation">)</span>
+li	<span class="token kernel-function property">$v0</span><span class="token punctuation">,</span> <span class="token number">10</span>
+syscall<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="自动测试工具">自动测试工具</h3>
+<p>我们通过python程序将MIPS汇编程序（test.asm）编译并运行，形成16进制机器码（code.txt）和标准输出（mips_out.txt）。然后命令行运行ise，得到工程文件的输出（verilog_out.txt）.然后我们对两个输出文件进行比较，得出比较结果。若出现不同，还会输出错误日志文件（log_i.txt）。</p>
+  <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+p_road <span class="token operator">=</span> <span class="token string">"D:\\Code\\Verilog\\homework_code\\P4_cpu_test"</span>
+run_time <span class="token operator">=</span> <span class="token string">"200us"</span>
+xilinx_path <span class="token operator">=</span> <span class="token string">"E:\\Xilinx\\14.7\\ISE_DS\\ISE"</span>
+error <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">run_mars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"java -jar mars.jar mc CompactDataAtZero a dump .text HexText code.txt nc mips_code.asm"</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"java -jar mars.jar mc CompactDataAtZero nc mips_code.asm &gt; mips_out.txt"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">load_hex_code</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    list_temp <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"code.txt"</span><span class="token punctuation">,</span> <span class="token string">"r+"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> hex_code<span class="token punctuation">:</span>
+        list_temp <span class="token operator">=</span> hex_code<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>p_road <span class="token operator">+</span> <span class="token string">"\\code.txt"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> file_to_IM<span class="token punctuation">:</span>
+        file_to_IM<span class="token punctuation">.</span>writelines<span class="token punctuation">(</span>list_temp<span class="token punctuation">)</span>
+    hex_code<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    file_to_IM<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">run_ise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    file_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> j <span class="token punctuation">,</span>k <span class="token keyword">in</span> os<span class="token punctuation">.</span>walk<span class="token punctuation">(</span>p_road<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> <span class="token builtin">file</span> <span class="token keyword">in</span> k<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token builtin">file</span><span class="token punctuation">.</span>endswith<span class="token punctuation">(</span><span class="token string">".v"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                file_list<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>p_road <span class="token operator">+</span> <span class="token string">"\\mips.prj"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> prj<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>file_list<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            prj<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"Verilog work \""</span> <span class="token operator">+</span> p_road <span class="token operator">+</span> <span class="token string">"\\"</span> <span class="token operator">+</span> file_list<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">"\"\n"</span><span class="token punctuation">)</span>           
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>p_road <span class="token operator">+</span> <span class="token string">"\mips.tcl"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> tcl<span class="token punctuation">:</span>
+        tcl<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"run "</span> <span class="token operator">+</span> run_time <span class="token operator">+</span><span class="token string">";\nexit"</span><span class="token punctuation">)</span>
+    prj<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    tcl<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">"XILINX"</span><span class="token punctuation">]</span> <span class="token operator">=</span> xilinx_path
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span>xilinx_path <span class="token operator">+</span> <span class="token string">"\\bin\\nt64\\fuse -nodebug -prj "</span> <span class="token operator">+</span> p_road <span class="token operator">+</span> <span class="token string">"\\mips.prj -o mips.exe mips_tb &gt; compile_log.txt"</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"mips.exe -nolog -tclbatch "</span> <span class="token operator">+</span> p_road <span class="token operator">+</span> <span class="token string">"\\mips.tcl&gt; verilog_out.txt"</span><span class="token punctuation">)</span>
+    <span class="token comment"># print("mips.exe -nolog -tclbatch " + p_road + "\\mips.tcl &gt; verilog_out.txt")</span>
+
+<span class="token keyword">def</span> <span class="token function">copy_file</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> target_road<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    f_1 <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span>
+    list_temp <span class="token operator">=</span> f_1<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    f_2 <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>target_road <span class="token operator">+</span> <span class="token string">"\\"</span> <span class="token operator">+</span> name<span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>
+    f_2<span class="token punctuation">.</span>writelines<span class="token punctuation">(</span>list_temp<span class="token punctuation">)</span>
+    f_1<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    f_2<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">file_cmp</span><span class="token punctuation">(</span>test_order<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"mips_out.txt"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> out_1<span class="token punctuation">:</span>
+        out_std <span class="token operator">=</span> out_1<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        out_std<span class="token punctuation">.</span>remove<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"verilog_out.txt"</span><span class="token punctuation">,</span> <span class="token string">"r+"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> out_2<span class="token punctuation">:</span>
+        out_test <span class="token operator">=</span> out_2<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+        out_2 <span class="token operator">=</span> out_2<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">".\\log.txt"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>test_order<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> log<span class="token punctuation">:</span>
+        flag <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>out_std<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>out_test<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>out_std<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">if</span><span class="token punctuation">(</span>out_std<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> out_test<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    flag <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                    log<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"error in line {}\n expected output is {}\nyour outout is {}\n\n"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> out_std<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> out_test<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Wrong Answer!"</span><span class="token punctuation">)</span>
+            os<span class="token punctuation">.</span>makedirs<span class="token punctuation">(</span><span class="token string">".\\test_log_file\\log_{}\\"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            copy_file<span class="token punctuation">(</span><span class="token string">"log.txt"</span><span class="token punctuation">,</span> <span class="token string">".\\test_log_file\\log_{}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            copy_file<span class="token punctuation">(</span><span class="token string">"mips_code.asm"</span><span class="token punctuation">,</span> <span class="token string">".\\test_log_file\\log_{}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            copy_file<span class="token punctuation">(</span><span class="token string">"mips_out.txt"</span><span class="token punctuation">,</span> <span class="token string">".\\test_log_file\\log_{}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            copy_file<span class="token punctuation">(</span><span class="token string">"verilog_out.txt"</span><span class="token punctuation">,</span> <span class="token string">".\\test_log_file\\log_{}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Accepted!"</span><span class="token punctuation">)</span>
+<span class="token comment">#### main</span>
+test_times <span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>test_times<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"python D:\大学资料\大二上\计算机组成\实验上机\P4\自动化测试\code_generate.py"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n{}/{}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> test_times<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    run_mars<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    load_hex_code<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    run_ise<span class="token punctuation">(</span><span class="token punctuation">)</span>
+file_cmp<span class="token punctuation">(</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="思考题">思考题</h2>
+<ol>
+<li>
+<p>Q：根据你的理解，在下面给出的DM的输入示例中，地址信号addr位数为什么是[11:2]而不是[9:0]？这个addr信号又是从哪里来的？<br>
+<img src="p4Q1.png" alt=""><br>
+A：因为MIPS架构cpu的指令存储器是按字节寻址，而我们在Verilog中构建的IM是按字寻址的，而且地址尾款为10位（[0:1024]）。因此应该对pc[9:0]进行左移2位的操作，相当于取pc[11:2].addr信号是来源于pc</p>
+</li>
+<li>
+<p>Q：思考Verilog语言设计控制器的译码方式，给出代码示例，并尝试对比各方式的优劣。<br>
+A：可以记录下 指令对应的控制信号如何取值，也可以记录下控制信号每种取值所对应的指令。如以下代码——</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//第一种方式</span>
+<span class="token important">always @</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token keyword">begin</span>
+	     <span class="token function">if</span><span class="token punctuation">(</span>_add <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token keyword">begin</span>
+			 Regwrite <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+			 RegDst <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+		 <span class="token keyword">end</span>
+		 <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>sub <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+			 Regwrite <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+			 RegDst <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+			………………
+		 <span class="token keyword">end</span>
+<span class="token comment">//第二种方式</span>
+ <span class="token keyword">assign</span> MemToReg       <span class="token operator">=</span> _lw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu<span class="token punctuation">;</span>
+ <span class="token keyword">assign</span> MemWrite       <span class="token operator">=</span> _sw <span class="token operator">|</span> _sh <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>Q：在相应的部件中，reset的优先级比其他控制信号（不包括clk信号）都要高，且相应的设计都是同步复位。清零信号reset所驱动的部件具有什么共同特点<br>
+A：都具有寄存器类型，可以对数据进行存储，在运行中可读可写，如pc，DM，GRF。</p>
+</li>
+<li>
+<p>Q：C语言是一种弱类型程序设计语言。C语言中不对计算结果溢出进行处理，这意味着C语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持C语言，MIPS指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi与addiu是等价的，add与addu是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的Operation部分 。<br>
+A：英文指令集中，对于ADD的解释是: ADDU performs the same arithmetic operation but does not trap on overflow,也就是说，add和addu仅有溢出检测的区别。在忽略溢出的条件下，无论是否溢出，二者都将计算结果存入rd中，因此二者是等价的。Addi和addiu同理。</p>
+</li>
+<li>
+<p>Q：根据自己的设计说明单周期处理器的优缺点。</p>
+<p>A：单周期的CPU会在一个时钟周期内完成所有的工作，既从指令取出，到得到结果，全部在一个时钟之内完成。优点是设计较为简单，指令与指令之间独立，缺点是cpu的时钟周期受关键路径限制，时钟周期较长，效率比较低。</p>
+</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2021/11/09/co/co-p4-dan-zhou-qi-cpu-verilog-shi-xian/">http://hyggge.github.io/2021/11/09/co/co-p4-dan-zhou-qi-cpu-verilog-shi-xian/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/BUAA/">
+                                    <span class="chip bg-color">BUAA</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                    <span class="chip bg-color">计算机组成</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/11/15/co/co-p5-liu-shui-xian-cpu-basic/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="「BUAA-CO」P5_流水线cpu（Basic）">
+                        
+                        <span class="card-title">「BUAA-CO」P5_流水线cpu（Basic）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-15
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/11/01/co/co-p3-dan-zhou-qi-cpu-logisim-shi-xian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="「BUAA-CO」P3_单周期cpu（Logisim实现）">
+                        
+                        <span class="card-title">「BUAA-CO」P3_单周期cpu（Logisim实现）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

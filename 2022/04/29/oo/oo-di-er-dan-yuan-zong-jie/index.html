@@ -1,0 +1,1549 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「BUAA-OO」第二单元:电梯调度, Hyggge&#39;s Blog">
+    <meta name="description" content="前言
+OO第二单元的主题是 “多线程”，主要是让我们初步学习多线程的编程思想，理解和解决线程交互和线程安全问题，进一步深化对 “面向对象” 的理解。
+本单元的三次作业都是和 “电梯调度问题” 有关，需要我们根据不同要求对电梯调度系统进行模拟">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「BUAA-OO」第二单元:电梯调度 | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「BUAA-OO」第二单元:电梯调度</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/BUAA/">
+                                <span class="chip bg-color">BUAA</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+                                <span class="chip bg-color">面向对象</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                面向对象
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-04-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    6.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    24 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言">前言</h2>
+<p>OO第二单元的主题是 <strong>“多线程”</strong>，主要是让我们初步学习多线程的编程思想，理解和解决线程交互和线程安全问题，进一步深化对 <strong>“面向对象”</strong> 的理解。</p>
+<p>本单元的三次作业都是和 <strong>“电梯调度问题”</strong> 有关，需要我们根据不同要求对电梯调度系统进行模拟。这三次作业不仅要求我们关注 <strong>“如何正确的加锁来解决线程安全问题”</strong>，还要求我们考虑到<strong>调度策略的整体性能</strong>。</p>
+<p>由于以前没有接触过多线程编程，因此刚开始做作业时稍微有些吃力。但是我随着对 <strong>“多线程”</strong> 和 <strong>“线程同步”</strong> 理解的加深，在做后面的作业时越来越得心应手。同时，我也学会在代码中使用一些常用的设计模式，例如 <strong>“单例模式”、“工厂模式”、“流水线模式”</strong> 等等，进一步降低代码的耦合度，让代码层次更加清晰。</p>
+<hr>
+<h2 id="第一次作业分析">第一次作业分析</h2>
+<p><a href="%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BD%9C%E4%B8%9A%E6%8C%87%E5%AF%BC%E4%B9%A6.pdf">题目链接</a></p>
+<p>第一次作业比较简单，每个楼座只对一部电梯进行调度。这次作业主要是让我们熟悉线程创建、运行等基本操作，熟悉多线程的设计方法。</p>
+<h3 id="代码架构分析">代码架构分析</h3>
+<p>本次作业中我们需要关注以下三个问题</p>
+<ul>
+<li><strong>如何将"生产者-消费者"模型运用在本次作业中？</strong></li>
+<li><strong>如何通过加锁来解决线程安全问题？</strong></li>
+<li><strong>电梯调度采用什么样的策略？</strong></li>
+</ul>
+<p>下面我针对这三个问题进行分析——</p>
+<h4 id="Producer-Consumer模型">Producer-Consumer模型</h4>
+<p>在使用"生产者-消费者"模型之前我们需要明确——谁是消费者？谁是生产者？经过简单的分析我们不难发现——</p>
+<ul>
+<li><strong>输入线程</strong>（<code>InputHandler</code>）从终端中获取用户的请求，所以输入线程是生产者</li>
+<li><strong>电梯线程</strong>（<code>Elevator</code>）对用户请求进行处理，并将用户运送指定位置，因此电梯线程应该作为消费者。</li>
+<li>生产者和消费者中间的托盘是什么呢？很显然，托盘应该是一个用来盛放用户请求的"容器"，于是我设置了<strong>请求队列类</strong>（<code>RequestTable</code>）用来存放请求。</li>
+</ul>
+<p>在我的设计中，<code>RequestTable</code>类一共实例化了<strong>5个对象</strong>，分别用来储存A、B、C、D、E座发出的请求。<code>InputHandler</code>类同时"拥有"这5个请求队列，在请求输入的时候直接根据<strong>请求发出地</strong>将请求放进对应的请求队列中。每个楼座的<code>Elevator</code>只有拥有本楼座的请求队列，只对该请求队列中的请求进行处理。所以最后的结构就是下面这个样子——<br>
+<img src="HW1%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p>另外，基于封装的思想，我还对用户请求单独建一个类（<code>Person</code>）,在这个类中封装了单个请求的所有信息，包括<strong>请求人id</strong>、<strong>出发地</strong>、<strong>目的地</strong>。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span><span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> fromBuilding<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> toBuilding<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> fromFloor<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> toFloor<span class="token punctuation">;</span>
+    <span class="token comment">//...</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以，请求（<code>Person</code>）是以什么形式存放在请求队列<code>RequestTable</code>呢？原来，在<code>RequestTable</code>类中我们有一个<code>requestMap</code>成员变量</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ResquestTable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> endTag<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">HashSet</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> requestMap<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>很明显，<code>requestMap</code>的类型是<code>HashMap</code>，其中<code>key</code>代表<strong>楼层序号</strong>（$key\in[1,10]$），<code>value</code>表示的是<strong>在每个楼层发出的请求的集合</strong>。例如<code>requestMap.get(5)</code>就代表 <strong>“出发地在5楼的所有请求的集合”</strong>。</p>
+<h4 id="锁的设置">锁的设置</h4>
+<p>请求队列<code>RequestTable</code>可以<strong>同时被输入线程和电梯线程访问</strong>，因此存在线程安全问题。在本次作业中，我主要是采用了”对方法加锁“的方式，将<code>RequestTable</code>涉及到成员变量读写的方法全部加了锁，这样就可以保证每次只有一个线程来访问请求队列。</p>
+<h4 id="调度策略">调度策略</h4>
+<p>众所周知，电梯调度问题本身是没有一个最优解的——一个算法在某种情况下可能效率比较高，但是总会出现一种特殊情况，使得该算法的性能远远落后于其他算法。目前已经有许多和电梯调度相关的算法，例如<code>ALS</code>,<code>LOOK</code>,<code>SCAN</code>等等，我们需要从中挑选一个<strong>平均性能占优并且比较稳定</strong>的算法。</p>
+<p>往届学长大多选择的是 <strong>LOOK算法</strong>，而且我们日常乘坐的电梯大多数也是采用的这种算法。既然它能被大多数电梯使用，那这种算法一定有它的"过人之处"。因此，最终我选择<strong>LOOK</strong>作为电梯调度的策略。</p>
+<h5 id="LOOK">LOOK</h5>
+<p>下面来简单介绍我在本次作业中使用的调度算法（LOOK）——</p>
+<ul>
+<li>
+<p>首先为电梯规定一个初始方向，然后电梯开始沿着该方向运动。</p>
+</li>
+<li>
+<p>到达某楼层时，<strong>首先判断是否需要开门</strong></p>
+<ul>
+<li>如果发现电梯里有人可以出电梯（到达目的地），则开门让乘客出去；</li>
+<li>如果发现该楼层中有人想上电梯，并且目的地方向和电梯方向相同，则开门让这个乘客进入。</li>
+</ul>
+</li>
+<li>
+<p><strong>接下来，进一步判断电梯里是否有人</strong>。如果电梯里还有人，则沿着当前方向移动到下一层。否则，检查请求队列中是否还有请求（目前其他楼层是否有乘客想要进电梯）——</p>
+<ul>
+<li>
+<p>如果请求队列不为空，且某请求的发出地是电梯"前方"的某楼层，则电梯继续沿着原来的方向运动。</p>
+</li>
+<li>
+<p>如果请求队列不为空，且所有请求的发出地都在电梯"后方"的楼层上，或者是在该楼层有请求但是这个请求的目的地在电梯后方（因为电梯不会开门接反方向的请求），则电梯掉头并进入"判断是否需要开门"的步骤（循环实现）。</p>
+</li>
+<li>
+<p>如果请求队列为空，且输入线程没有结束（即没有输入文件结束符），则电梯停在该楼层等待请求输入（wait）。</p>
+<blockquote>
+<p>注意：电梯等待时运行方向不变。在我的设计中，运行方向是电梯的一个状态量而不是过程量，用来表示<strong>下一次move时的方向</strong>。当有新请求进入请求队列时，电梯被唤醒，此时电梯的运行方向仍然是电梯wait前的方向。</p>
+</blockquote>
+</li>
+<li>
+<p>如果请求队列为空，且输入线程已经结束，则电梯线程结束。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="策略类的设置">策略类的设置</h5>
+<p>在本次作业中我采用了 <strong>“电梯类和策略类分离”</strong> 的设计。策略类（<code>Strategy</code>）可以获得<strong>当前电梯和请求队列的当前状态</strong>，并基于LOOK策略向电梯提供建议，建议包括<code>OVER</code>, <code>MOVE</code>, <code>REVERSE</code>, <code>OPEN</code>, <code>WAIT</code>五种。我们把这些建议封装到枚举类<code>Advice</code>中，以提高代码的可读性。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*Strategy.java*/</span>
+
+<span class="token keyword">public</span> <span class="token class-name">Advice</span> <span class="token function">getAdvice</span><span class="token punctuation">(</span><span class="token keyword">int</span> curFloor<span class="token punctuation">,</span> <span class="token keyword">int</span> curNum<span class="token punctuation">,</span> <span class="token keyword">boolean</span> direction<span class="token punctuation">,</span>
+                        <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">HashSet</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> destMap<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//判断现在是否可以上下电梯</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">canOpenForOut</span><span class="token punctuation">(</span>curFloor<span class="token punctuation">,</span> destMap<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">canOpenForIn</span><span class="token punctuation">(</span>curFloor<span class="token punctuation">,</span> curNum<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OPEN</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">//如果电梯里有人</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>curNum <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">MOVE</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">//如果电梯里没有人</span>
+    <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token comment">//如果请求队列中没有人</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>requestTable<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>requestTable<span class="token punctuation">.</span><span class="token function">isOver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OVER</span><span class="token punctuation">;</span> <span class="token comment">//如果输入结束，电梯线程结束</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">WAIT</span><span class="token punctuation">;</span> <span class="token comment">//如果输入未结束，电梯线程等待</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">//如果请求队列中有人</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">hasReqInOriginDirection</span><span class="token punctuation">(</span>curFloor<span class="token punctuation">,</span> direction<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">MOVE</span><span class="token punctuation">;</span> <span class="token comment">//如果有请求发出地在电梯“前方”，则前当前方向移动一层</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">REVERSE</span><span class="token punctuation">;</span> <span class="token comment">//否则，电梯转向（仅状态改变，电梯不移动）</span>
+        <span class="token punctuation">}</span>
+        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>Strategy</code>类<strong>聚合</strong>在<code>Elevator</code>类中，电梯每到达一个楼层，就会调用策略类的<code>getAdvice()</code>方法来询问建议，并根据建议做出反应。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*Elevator.java*/</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Advice</span> advice <span class="token operator">=</span> strategy<span class="token punctuation">.</span><span class="token function">getAdvice</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> building<span class="token punctuation">,</span> floor<span class="token punctuation">,</span>
+                                        direction<span class="token punctuation">,</span>passenger<span class="token punctuation">,</span> requestTable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OVER</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>                              <span class="token comment">//电梯线程结束</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">MOVE</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">move</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                             <span class="token comment">//电梯沿着原方向移动一层</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">REVERSE</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            direction <span class="token operator">=</span> <span class="token operator">!</span>direction<span class="token punctuation">;</span>             <span class="token comment">//电梯转向</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">WAIT</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            requestTable<span class="token punctuation">.</span><span class="token function">waitRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment">//电梯等待</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OPEN</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>       
+            <span class="token function">openAndClose</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                     <span class="token comment">//电梯开门</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="代码复杂度分析">代码复杂度分析</h3>
+<p><strong>Method Metrics</strong></p>
+<p><img src="1_metrics.png" alt=""></p>
+<p>由上面的分析可知，<code>Strategy</code>类中<code>gerAdvice()</code>、<code>hasReqInOrigin()</code>、<code>needAdjustDirection()</code>三个方法的复杂度较高。主要原因是<code>Strategy</code>类需要对电梯和请求队列的状态进行分析，从而为电梯提供建议，而整个判断过程需要较为复杂的逻辑（循环、大量if-else），因此复杂度显著高于其他方法。</p>
+<p>但总体来说，本次作业代码的整体复杂度较为理想。主要是因为有了第一单元的经验，在设计时注意遵循了<strong>单一职责原则</strong>，避免出现较长的方法和类。</p>
+<h3 id="代码UML图">代码UML图</h3>
+<h4 id="类图">类图</h4>
+<p><img src="1.jpg" alt=""></p>
+<h4 id="时序图">时序图</h4>
+<p><img src="1_seq.png" alt=""></p>
+<hr>
+<h2 id="第二次作业分析">第二次作业分析</h2>
+<p><a href="%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A%E6%8C%87%E5%AF%BC%E4%B9%A6.pdf">题目链接</a></p>
+<p>第二次作业在第一次的基础上增加了横向电梯，这种电梯只能在某一楼层的不同楼座（A-E座）之间运动。此外，每一楼座、每一楼层的电梯也不止一部，可以动态增长。</p>
+<h3 id="代码架构分析-2">代码架构分析</h3>
+<h4 id="工厂模式">工厂模式</h4>
+<p>本次作业电梯种类有所增加，为了提高代码可扩展性，我采用了工厂模式进行设计。首先我定义了一个抽象电梯类<code>Elevator</code>，该类实现<code>Runable</code>接口，并重写了<code>run()</code>方法（<code>run()</code>在<code>Elevator</code>类中是<strong>抽象方法</strong>）。然后我又定义了<code>VerticalElevator</code>类和<code>LateralElevator</code>类来继承<code>Elevator</code>，这两个类分别表示纵向电梯和横向电梯，并都对父类的<code>run()</code>方法进行重写。</p>
+<p>当输入线程接收到“增加电梯”的指令时，就会把该请求传到工厂类对象中，然后工厂类根据<strong>新增电梯的类型</strong>生产出对应类型的电梯，向上转型为<code>Elevator</code>然后返回。</p>
+<p><img src="HW2%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>此外，不管是横向电梯还是纵向电梯，都需要策略类来为电梯提供建议。但是，横向电梯和纵向电梯的调度策略又不完全相同，因此我们不能用一个策略类来组装两种电梯，而是<strong>需要为每一种电梯分别建立一个策略类</strong>。</p>
+<p>不同的策略类都需要<code>getAdvice()</code>方法为不同电梯提供建议，<strong>在行为上有相似之处</strong>。基于抽象原则，我们定义了一个策略类接口<code>Strategy</code>，并在该接口中定义<code>getAdvice()</code>方法，然后定义<code>VerticalStrategy</code>类和<code>LateralStrategy</code>类分别实现该接口。电梯工厂在生产电梯时，会根据电梯种类来选择对应的策略类进行组装。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*ElevatorFactory.java*/</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ElevatorFactory</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">Elevator</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>type<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"building"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">Strategy</span> strategy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VerticalStrategy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">VerticalElevator</span><span class="token punctuation">(</span>strategy<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token class-name">Strategy</span> strategy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LateralStrategy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">LateralElevator</span><span class="token punctuation">(</span>strategy<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="调度策略-2">调度策略</h4>
+<h5 id="单电梯调度">单电梯调度</h5>
+<p><code>VerticalStrategy</code>类为纵向电梯提供建议，因此可以直接使用第一次作业的设计。而在<code>LateralStrategy</code>类中，我采用的是一种 <strong>"类似LOOK"的策略</strong>——</p>
+<p>我们知道，横向电梯是可以在五个楼座之间<strong>循环移动</strong>的，因此无论你在哪一座，都可以按任意方向运动至目标楼座。但是，如果电梯自始至终都按一个方向运动，在某些情况下效率会比较低下。例如，有乘客想要从<strong>A座</strong>乘电梯到达<strong>E座</strong>，如果事先规定的方向是<strong>顺时针</strong>，那么电梯运动的路线就是<code>A-&gt;B-&gt;C-&gt;D-&gt;E</code>。但是，显然<code>A-&gt;E</code>路线会更快。<br>
+<img src="HW2%E6%A8%AA%E5%90%91%E7%94%B5%E6%A2%AF.png" alt=""><br>
+为解决上述问题，我借鉴了LOOK算法中 <strong>“及时掉头”</strong> 的思想，让策略类根据电梯和请求队列的当前状态来判断当前是否需要掉头。"掉头"需要同时满足以下两个条件——</p>
+<ul>
+<li>电梯"前方"的<strong>两个座</strong>都没有请求发出，只有"后方"两个座发出来请求（无需关注请求的方向，因为横向电梯<strong>不采用同向捎带</strong>的策略，而是能接则接）。通过上图来解释就是，目前电梯在A座，而B座和C座没有请求发出，而D座和E座中至少有一个发出了请求。</li>
+<li>电梯里没有人，或者电梯里乘客的目的地都是电梯"后面"的两个座。</li>
+</ul>
+<h5 id="多电梯协同">多电梯协同</h5>
+<p>策略类只是为一个电梯的运行提供建议，但是每一个楼层（座）可能配置有多个电梯，那么这些电梯之间是如何协同的呢？或者说，如何把该楼层（座）的请求分配给这些电梯呢?</p>
+<p>最终，我采用”自由竞争“的策略来解决电梯间协同的问题。</p>
+<p>首先，每个楼层、每个楼座都有一个请求队列（一共有是15个），而每一个请求队列都被某楼层（座）的所有电梯拥有。整个结构如下图所示——<br>
+<img src="HW2%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p>每个电梯的策略类在决策的时候，都是根据该电梯当前状态和整个请求队列的状态进行判断，并提出建议。此时，同一楼层（座）的两部电梯可能会按照策略类的建议开门接同一个请求，即<strong>两者竞争资源</strong>，但最终只有一个电梯能真正接到。</p>
+<p>此时，我们会遇到一个<strong>线程同步问题</strong>——两个电梯同时在某一层竞争一个请求，一个电梯开门并接到了，但是此时另一个电梯只是开了门，但并没有接上人，白白浪费了一次开关门时间，导致在性能上大打折扣。</p>
+<p>本人采用 <strong>“二次咨询+缓冲队列”</strong> 的方式解决这个了问题——当电梯运行到某层时会向策略类咨询建议，如果发现当前建议是<code>OPEN</code>，电梯会<strong>重新咨询一次策略类</strong>，如果此时的策略仍然是<code>OPEN</code>，那么我们就先把该楼层（座）可以上电梯的乘客放在一个<strong>缓冲队列</strong>中，电梯开门后再将缓冲队列中的乘客加入电梯。需要注意的是，<strong>"二次咨询"和"加入缓冲队列"两个操作应该加锁，使其变成一个原子操作</strong>，这样就可以保证另一个电梯在二次咨询时不会得到<code>OPEN</code>的建议（因为此时能接的乘客已经从请求队列中移出，进入另一个电梯的缓冲队列中了）。具体实现如下——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*VerticalElevator.java*/</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Advice</span> advice <span class="token operator">=</span> strategy<span class="token punctuation">.</span><span class="token function">getAdvice</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> building<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OVER</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">MOVE</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">REVERSE</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">WAIT</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>advice <span class="token operator">==</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OPEN</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> peopleServed <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token comment">//缓冲队列</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>requestTable<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">//二次咨询</span>
+                <span class="token class-name">Advice</span> checkOpen <span class="token operator">=</span> strategy<span class="token punctuation">.</span><span class="token function">getAdvice</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> building<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>checkOpen <span class="token operator">!=</span> <span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token constant">OPEN</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token comment">//将能接的人从请求队列中移出，加入到缓冲队列中</span>
+                peopleServed <span class="token operator">=</span> <span class="token function">pickPeople</span><span class="token punctuation">(</span>num<span class="token punctuation">,</span> floor<span class="token punctuation">,</span> direction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token function">openAndClose</span><span class="token punctuation">(</span>peopleServed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="代码复杂度分析-2">代码复杂度分析</h3>
+<p><strong>Method Metrics</strong></p>
+<p><img src="2_metrics.png" alt=""></p>
+<p>和上一次作业相比，这次<code>VerticalElecator</code>和<code>VerticalElevator</code>中<code>run()</code>方法的基本复杂度也显著上升，主要是因为，我们为解决空开门的问题使用了 <strong>“二次咨询+缓冲队列”</strong> 的机制，这种机制的引入使判断逻辑变得更加复杂。</p>
+<h3 id="代码UML图-2">代码UML图</h3>
+<h4 id="类图-2">类图</h4>
+<p><img src="2.jpg" alt=""></p>
+<h4 id="时序图-2">时序图</h4>
+<p><img src="2_seq.png" alt=""></p>
+<hr>
+<h2 id="第三次作业分析">第三次作业分析</h2>
+<p><a href="%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83%E7%AC%AC%E4%B8%89%E6%AC%A1%E4%BD%9C%E4%B8%9A%E6%8C%87%E5%AF%BC%E4%B9%A6.pdf">题目链接</a></p>
+<p>第三次作业增加了3个新要求——</p>
+<ul>
+<li>电梯容量和运行速度可自定义</li>
+<li>横向电梯的停靠楼座可自定义</li>
+<li>可能会出现乘客换乘问题</li>
+</ul>
+<h3 id="代码架构分析-3">代码架构分析</h3>
+<h4 id="电梯类的迭代">电梯类的迭代</h4>
+<p>在本次作业中我们仍然沿用工厂模式。但是，本次电梯的 <strong>运行速度（<code>speed</code>）和容量（<code>capacity</code>）</strong> 是可以自定义的，所以我们需要在<strong>抽象电梯类<code>Elevator</code></strong> 中增加这两个成员变量。此时，子类<code>VeritcalElevator</code>和<code>LateralElevator</code>也会拥有这两个属性。</p>
+<p>另外，横向电梯并不是在所有楼座都可以停靠，因此我们还需要在<code>LateralElevator</code>类中单独设置一个<code>SwitchInfo</code>变量来记录可停靠信息。当横向电梯策略类在判断是否可以开门接人时，必须考虑 <strong>“电梯是否能够在该楼座开门”</strong> 以及 <strong>“电梯能否在乘客的目的楼座上开门”</strong>。</p>
+<h4 id="流水线模式的使用">流水线模式的使用</h4>
+<p>本次作业中乘客可能需要几次换乘才能到达目的地，为了解决这个问题，我采用了课上实验课学到的<strong>流水线模式</strong>。</p>
+<p>首先，经过简单分析可知，每一个乘客的请求都可以<strong>分成三段</strong>——<strong>先纵向、再横向、再纵向</strong>。对于一些同楼层（座）的请求也可以分成三段，只不过在其中某段可能会出现 <strong>“目的地和出发地相同”</strong> 的情况，例如"A3-&gt;A6"可以拆分为"A3-&gt;A3, A3-&gt;A3, A3-&gt;A6"。此时，我们需要对请求类<code>Person</code>进行一定修改，以满足分段需求——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*Person.java*/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> nowStage<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Route</span><span class="token punctuation">&gt;</span></span> routeList<span class="token punctuation">;</span>
+    <span class="token comment">//...</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/*Route.java*/</span>
+<span class="token comment">/*用该类来封装每一阶段的请求*/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Route</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> fromBuilding<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> toBuilding<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> fromFloor<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> toFloor<span class="token punctuation">;</span>
+    <span class="token comment">//...</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而<strong>请求的分段操作</strong>是在<code>Controller</code>类中完成的。<code>Controller</code>类是一个全局控制器，采用单例模式，它有两个作用——</p>
+<ul>
+<li>将<code>InputHandler</code>类输入的乘客请求分成三个流水段，并封装到一个<code>Person</code>类中。</li>
+<li>根据<strong>请求当前的执行阶段</strong>将其分配给相应的请求队列，最后由拥有该请求队列的电梯处理。每当电梯完成一个阶段，电梯就会把该请求"扔回到"<code>Controller</code>，并由<code>Controller</code>将请求<strong>再分配</strong>，让其他电梯执行下一阶段的任务。如果控制器发现某请求的所有阶段都已经执行完，则不再将其分配。</li>
+</ul>
+<p>最后整个流水线模式的架构如下图所示。<br>
+<img src="HW3%E7%BB%93%E6%9E%84.png" alt=""></p>
+<blockquote>
+<p>关于中转楼层的选择，我采用的是指导书上的基准策略——假设乘客的起始楼座为P，目的楼座为Q，起始楼层为X, 目的楼层为Y，则中转楼层m满足如下公式：<br>
+存在 “(M &gt;&gt; (P -‘A’)) &amp; 1) + ((M &gt;&gt; (Q -‘A’)) &amp; 1) == 2”，且使"|X-m| + |Y-m|"最小的m</p>
+</blockquote>
+<h4 id="电梯结束问题">电梯结束问题</h4>
+<p>设想这样一种情况——</p>
+<ul>
+<li>输入线程发现了文件结束符，于是通过<code>Controller</code>给<strong>每个请求队列的<code>EndTag</code>都置为<code>True</code></strong>。</li>
+<li>此时电梯A中所有请求都已完成，而且它的策略类发现电梯所在楼层（座）的请求队列的<code>EndTag</code>是真，于是向电梯发出了<code>OVER</code>建议，该电梯线程结束。</li>
+<li>此时，另一个楼层（座）中的电梯B正在处理某请求R的第2阶段。不幸的是，R的第3阶段需要A来执行，所以，R请求会永远无法被满足。</li>
+</ul>
+<p>因此，在本次作业中，我们不能直接根据文件结束符来判断是否应该将请求队列的<code>EndTag</code>置为真，而是<strong>应该等待所有请求都执行完</strong>。这个问题我们可以通过设计<code>RequestCounter</code>类来解决。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*RequestCounter.java*/</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RequestCounter</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> cnt<span class="token punctuation">;</span>
+    
+    <span class="token comment">//...</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">release</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        cnt<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>cnt <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                cnt <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                    <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>RequestCounter</code>和我们在OS课上学到的信号量（<code>Samaphore</code>）极为相似，而<code>release()</code>和<code>acquire()</code>两个方法分别对应信号量的 <strong><code>P</code>操作和<code>V</code>操作</strong>。这两个方法分别在<code>Controller</code>类和<code>InputHandler</code>类中使用——</p>
+<ul>
+<li>当一个请求的所有阶段都完成，<code>Controller</code>会调用<code>release()</code>方法，使计数器的值加1。</li>
+<li>当输入线程<code>InputHandler</code>获取文件结束符后，会连续调用n次<code>acquire()</code>方法（n表示乘客请求的总个数），每次调用都会使计数器的值减1（如果在减操作之前发现计数器值为0时，则会等待计数器大于0之后再减1）。当n次<code>acquire()</code>都成功执行，则说明所有的乘客请求都已经处理完毕了，然后就可以将所有请求队列的<code>EndTag</code>置为真。<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*InputHandler.java*/</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> personNum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//...</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">//输入结束之后执行personNum次acquire()方法</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> personNum<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">RequestCounter</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">acquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">//所有的请求都已经执行完毕，通过Controller将所有请求队列的`EndTag`置为真</span>
+    <span class="token class-name">Controller</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setOver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p>这样一来，电梯结束的问题就成功解决了。</p>
+<h3 id="代码复杂度分析-3">代码复杂度分析</h3>
+<p><strong>Method Metrics</strong></p>
+<p><img src="3_metrics.png" alt=""></p>
+<p>第三次作业的新增方法<code>pickPeople()</code>和<code>getSwitchFloor()</code>的复杂度也比较高，主要是因为本次作业横向电梯的可停靠楼座可以自定义，导致我们在请求队列中接人时，还需要特判电梯是否可以在该楼座开门，以及电梯能否在乘客的目的楼座开门。因此，方法复杂度高也不足为奇。</p>
+<h3 id="代码UML图-3">代码UML图</h3>
+<h4 id="类图-3">类图</h4>
+<p><img src="3.jpg" alt=""></p>
+<h4 id="时序图-3">时序图</h4>
+<p><img src="3_seq.png" alt=""></p>
+<hr>
+<h2 id="个人bug分析">个人bug分析</h2>
+<p>前两次作业的强测和互测均没有发现问题，但是在第三次作业的强测中有一个测试点出现了<code>RTLE</code>（运行时间超时）。一开始百思不得其解，后来重读了一遍代码才发现原来是<code>Controller</code>类中<code>setEndTag()</code>方法中少给了一个请求队列加锁，使得程序无法正确地将请求队列中的<code>endTag</code>置为真，最终导致线程无法正常关闭。</p>
+<hr>
+<h2 id="关于测试">关于测试</h2>
+<p>在这一单元我仍然采用<strong>自动化测试</strong>来寻找代码bug，测试程序分为两部分——</p>
+<ul>
+<li><strong>数据生成器</strong></li>
+<li><strong>输出检查器</strong></li>
+</ul>
+<h3 id="数据生成器">数据生成器</h3>
+<p>数据生成是用<strong>随机数</strong>的方式来实现的。为了让数据生成器也有很好的<strong>可扩展性</strong>，我将某些功能封装成了函数，便于在做后面的作业时对数据生成器进行修改和迭代。此外，在设计数据生成器时还需要注意指导书上提到的一些“数据规范”——</p>
+<ul>
+<li>电梯系统的指令数：1~70条</li>
+<li>不能向没有电梯的楼层或者楼座发起请求</li>
+<li>第一条指令的投喂时间在 1s 或 1s 以后</li>
+<li>每个楼层（座）的电梯不能超过3个</li>
+<li>电梯总数不能超过15个</li>
+<li>电梯速度只能是{0.2, 0.4, 0.6}中的一个，电梯容量只能是{4, 6, 8}中的一个</li>
+<li>…</li>
+</ul>
+<p>整个数据生成器的架构如下所示</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">MAX_FLOOR <span class="token operator">=</span> <span class="token number">10</span> 
+MAX_TIME <span class="token operator">=</span> <span class="token number">50</span>
+MAX_REQ_NUM <span class="token operator">=</span> <span class="token number">50</span>
+MAX_E_NUM <span class="token operator">=</span> <span class="token number">15</span>
+MAX_E_NUM_PER_BUILDING <span class="token operator">=</span> <span class="token number">3</span>
+MAX_E_NUM_PER_FLOOR <span class="token operator">=</span> <span class="token number">3</span>
+
+
+SINGLE <span class="token operator">=</span> <span class="token boolean">True</span>
+MULTIPLE <span class="token operator">=</span> <span class="token boolean">False</span>
+MAX_INT <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">31</span>  <span class="token operator">-</span> <span class="token number">1</span>
+
+<span class="token comment">#sets of people and elevator  </span>
+p_id_set <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+e_id_set <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">}</span>
+
+<span class="token comment">#number of elevators per building or per floor</span>
+building_acess_map <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'A'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'B'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'C'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'D'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span>
+floor_acess_map <span class="token operator">=</span> <span class="token punctuation">{</span>i<span class="token punctuation">:</span><span class="token number">0</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> MAX_FLOOR <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+floor_acess_map<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+
+<span class="token comment"># tags of building and floor</span>
+building_tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'B'</span><span class="token punctuation">,</span> <span class="token string">'C'</span><span class="token punctuation">,</span> <span class="token string">'D'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">]</span>
+floor_tags <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> MAX_FLOOR<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+speed_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.4</span><span class="token punctuation">,</span> <span class="token number">0.6</span><span class="token punctuation">]</span>
+capacity_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span>
+
+<span class="token comment">#initial data</span>
+time <span class="token operator">=</span> <span class="token number">1.0</span>
+e_num <span class="token operator">=</span> <span class="token number">5</span>
+req_num <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token comment"># Functions for get relative information </span>
+<span class="token keyword">def</span> <span class="token function">get_p_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_e_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_time_gap</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_building</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_floor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_switch_info</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_capacity</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">get_speed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+
+<span class="token comment"># Functions for checking </span>
+<span class="token keyword">def</span> <span class="token function">check_floor_can_add</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> 
+<span class="token keyword">def</span> <span class="token function">check_building_can_add</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+    
+<span class="token comment"># Functions for generating person requests or elevator requests</span>
+<span class="token keyword">def</span> <span class="token function">gener_p</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">gener_e</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+<span class="token keyword">def</span> <span class="token function">gener_virtical_e</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> 
+<span class="token keyword">def</span> <span class="token function">gener_lateral_e</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+    
+<span class="token comment"># main</span>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    num <span class="token operator">=</span> random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span> MAX_REQ_NUM<span class="token punctuation">)</span>
+    <span class="token keyword">global</span> time<span class="token punctuation">,</span> e_num<span class="token punctuation">,</span> req_num
+    time <span class="token operator">=</span> <span class="token number">1.0</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>req_num <span class="token operator">&lt;</span> num <span class="token keyword">and</span> time <span class="token operator">&lt;</span> MAX_TIME<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        choice <span class="token operator">=</span> random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>choice <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token keyword">or</span> choice <span class="token operator">==</span> <span class="token number">0</span> <span class="token keyword">and</span> e_num <span class="token operator">&gt;=</span> MAX_E_NUM<span class="token punctuation">)</span> <span class="token punctuation">:</span>
+            gener_p<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span> <span class="token punctuation">:</span>
+            gener_e<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            e_num <span class="token operator">+=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>生成的请求不能任其随机分布，还需要对某楼层或者某楼座进行压力测试，即只针对一楼层（座）生成大量请求。另外，我们可能还需要仅对横向电梯测试或者仅对纵向电梯测试。为了满足多样性的需求，我还为数据生成器增加了许多“模式”可以选择。</p>
+<p>例如在第二次作业的数据生成器中，我专门设计了<code>dst_mode</code>和<code>run_mode</code>两个全局变量用来表示数据生成的模式，前者可取<code>LATERAL</code>、<code>VERICAL</code>、<code>CROSSING</code>三个值，后者可取<code>SINGLE</code>和<code>MULIPLE</code>两个值，两个变量进行组合就有6种不同的模式。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">'''
+Copyright (C) 2022 BUAA
+Author: Hyggge, &lt;czh20020503@buaa.edu.com&gt;
+
+You can use this program to generate test data, which can be used in Unit 6 of BUAA-OO.
+Before run it, you should choose a operatatin mode based on your need. To change the mode, 
+you need modify the values of "dst_mode" and "run_mode". The introduction is shown below.
+
+############################## Mode Introduction #################################
+____________________________________________________________________________________
+| dst_mode | run_mode |                       Introduction                         |
+| -------- | -------- | -----------------------------------------------------------|
+|  SINGLE  | VERTICAL | Only "certain-building" has vertical elevators             |
+|  SINGLE  | LATERAL  | Only "certain-floor" has lateral elevators                 |
+|  SINGLE  | CROSSING | Only "certain-building" and "certain-floor" have elevators |
+| MULTIPLE | VERTICAL | Every building can have vertical elevators                 |
+| MULTIPLE | LATERAL  | Every floor can have lateral elevators                     |
+| MULTIPLE | CROSSING | Every building and every floor can have elevators          |
+------------------------------------------------------------------------------------
+'''</span>
+
+<span class="token comment"># const defination</span>
+LATERAL <span class="token operator">=</span> <span class="token number">1</span>
+VERTICAL <span class="token operator">=</span> <span class="token number">2</span>
+CROSSING <span class="token operator">=</span> <span class="token number">3</span>
+
+SINGLE <span class="token operator">=</span> <span class="token number">1</span>
+MULTIPLE <span class="token operator">=</span> <span class="token number">2</span>
+
+<span class="token comment"># variable for mode selection</span>
+dst_mode <span class="token operator">=</span> SINGLE
+run_mode <span class="token operator">=</span> LATERAL
+certain_building <span class="token operator">=</span> random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span>building_tags<span class="token punctuation">)</span>
+certain_floor <span class="token operator">=</span> random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span>floor_tags<span class="token punctuation">)</span>
+
+<span class="token comment">#...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="输出检查器">输出检查器</h3>
+<p>在这一部分，我们需要对作业代码的运行结果进行检查。需要检查的内容包括——</p>
+<ul>
+<li><strong>输出格式是否正确</strong></li>
+<li><strong>电梯是否已经超载</strong></li>
+<li><strong>电梯运行速度和开关门速度是否满足要求</strong></li>
+<li><strong>电梯开关门是否符合常理</strong>（电梯不能先关后开，不能在电梯关门后再让乘客进出）</li>
+<li><strong>电梯到达的楼层或者楼座是否真实存在</strong>（电梯不能跑到-18楼…）</li>
+<li><strong>电梯在某楼做是否可以停靠</strong>（主要针对横向电梯，需要结合输入数据进行判断）</li>
+<li><strong>所有乘客的请求是否全部满足</strong>（检查是否出现“电梯吃人”或者“请求饿死”的现象，需要结合输入数据进行判断）</li>
+<li><strong>从电梯里出来的乘客是否真实存在</strong>（细思极恐…）</li>
+</ul>
+<hr>
+<h2 id="心得体会">心得体会</h2>
+<ul>
+<li><strong>写代码时注意遵循"SOLID"原则</strong>，这会使我们省去不少debug的麻烦。</li>
+<li><strong>多多关注讨论区</strong>。在本单元的讨论区中我学到了不少新知识，比如<strong>CPU时间查看、泛型的使用、监视器底层原理</strong>等等。</li>
+<li><strong>加锁要慎重</strong>。我们需要对共享对象做同步处理，但并不意味之要将所有的方法都加上锁，这样会极大影响并行效率。此外，要注意尽量不要在方法上加锁，而是优先使用<code>synchronize</code>同步块，减少同步区域，提高性能。</li>
+<li><strong>架构设计时应注意层次化</strong>。先根据需要实现的功能把工程划分成几个不同的功能模块，并规定好不同模块之间的接口，然后再自上而下依次实现。这样不仅有利于降低整个工程的复杂度，还有利于后期的迭代。</li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/">http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/BUAA/">
+                                    <span class="chip bg-color">BUAA</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+                                    <span class="chip bg-color">面向对象</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/05/03/os/os-lab3-shi-yan-bao-gao/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="「BUAA-OS」 Lab3：进程调度">
+                        
+                        <span class="card-title">「BUAA-OS」 Lab3：进程调度</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-03
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                        <span class="chip bg-color">操作系统</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/04/18/c/cpp-programing-lec-7/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="「BUAA-C++」Lec7:C++类模版和STL简介">
+                        
+                        <span class="card-title">「BUAA-C++」Lec7:C++类模版和STL简介</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/C/" class="post-category">
+                                    C++
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C++</span>
+                    </a>
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

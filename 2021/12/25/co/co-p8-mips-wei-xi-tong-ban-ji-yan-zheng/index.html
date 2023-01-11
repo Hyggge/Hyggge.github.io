@@ -1,0 +1,2151 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「BUAA-CO」P8_MIPS微系统（板级验证）, Hyggge&#39;s Blog">
+    <meta name="description" content="MIPS微系统设计方案
+设计概述
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。
+
+为了实现该功能，我们需要对P7工程">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「BUAA-CO」P8_MIPS微系统（板级验证） | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「BUAA-CO」P8_MIPS微系统（板级验证）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/BUAA/">
+                                <span class="chip bg-color">BUAA</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                <span class="chip bg-color">计算机组成</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                计算机组成
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-12-25
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    19 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="MIPS微系统设计方案">MIPS微系统设计方案</h2>
+<h3 id="设计概述">设计概述</h3>
+<p>本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。</p>
+<p><img src="xlinx.png" alt="xlinx"></p>
+<p>为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。</p>
+<p><img src="P8%E7%BB%93%E6%9E%84%E6%A8%A1%E5%9E%8B.png" alt="P8结构模型"></p>
+<h3 id="实现指令说明">实现指令说明</h3>
+<p>我们将本CPU实现的指令分为以下几类：</p>
+<ul>
+<li>
+<p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor, slt, sltu</p>
+</li>
+<li>
+<p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti, sltiu</p>
+</li>
+<li>
+<p><strong>shift</strong>: sll, sra, srl</p>
+</li>
+<li>
+<p><strong>shiftv</strong>: sllv, srav, srlv</p>
+</li>
+<li>
+<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
+</li>
+<li>
+<p><strong>store</strong>: sw, sh, sb</p>
+</li>
+<li>
+<p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p>
+</li>
+<li>
+<p><strong>J类</strong>：j, jal, jr, jalr</p>
+</li>
+<li>
+<p><strong>特殊</strong>：lui</p>
+</li>
+<li>
+<p><strong>CP0相关指令</strong>：mfc0，mtc0</p>
+</li>
+<li>
+<p><strong>异常中断返回：</strong> eret</p>
+</li>
+</ul>
+<hr>
+<h2 id="工程模块定义">工程模块定义</h2>
+<p>该部分我们仅介绍与P7不同的模块——Bridge，Tube，UART，GPIO</p>
+<h3 id="fpga-top（顶层模块）">fpga_top（顶层模块）</h3>
+<p>该模块替代P7中的mips模块，增加了和外设（数码管、LED等等）通信的IO接口。</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk_in</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>sys_rstn</td>
+<td>I</td>
+<td>1</td>
+<td>低电平同步复位信号</td>
+</tr>
+<tr>
+<td>dip_swithc0</td>
+<td>I</td>
+<td>8</td>
+<td>第0组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc1</td>
+<td>I</td>
+<td>8</td>
+<td>第1组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc2</td>
+<td>I</td>
+<td>8</td>
+<td>第2组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc3</td>
+<td>I</td>
+<td>8</td>
+<td>第3组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc4</td>
+<td>I</td>
+<td>8</td>
+<td>第4组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc5</td>
+<td>I</td>
+<td>8</td>
+<td>第5组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc6</td>
+<td>I</td>
+<td>8</td>
+<td>第6组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_switch7</td>
+<td>I</td>
+<td>8</td>
+<td>第7组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>user_key</td>
+<td>I</td>
+<td>8</td>
+<td>用户按键开关控制信号</td>
+</tr>
+<tr>
+<td>led_light</td>
+<td>O</td>
+<td>31</td>
+<td>LED灯控制信号</td>
+</tr>
+<tr>
+<td>digital_tube2</td>
+<td>O</td>
+<td>8</td>
+<td>第2组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel2</td>
+<td>O</td>
+<td>1</td>
+<td>第2组四段数码管片选信号</td>
+</tr>
+<tr>
+<td>digital_tube1</td>
+<td>O</td>
+<td>8</td>
+<td>第1组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel1</td>
+<td>O</td>
+<td>3</td>
+<td>第1组四段数码管片选信号</td>
+</tr>
+<tr>
+<td>digital_tube0</td>
+<td>O</td>
+<td>8</td>
+<td>第0组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel0</td>
+<td>O</td>
+<td>3</td>
+<td>第0组四段数码管片选信号</td>
+</tr>
+<tr>
+<td>uart_rxd</td>
+<td>I</td>
+<td>1</td>
+<td>UART接收信号</td>
+</tr>
+<tr>
+<td>uart_txd</td>
+<td>O</td>
+<td>1</td>
+<td>UART发送信号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Bridge（系统桥）">Bridge（系统桥）</h3>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>高电平同步复位信号</td>
+</tr>
+<tr>
+<td>A_in</td>
+<td>I</td>
+<td>32</td>
+<td>写入/读取的外设单元的地址</td>
+</tr>
+<tr>
+<td>WD_in</td>
+<td>I</td>
+<td>32</td>
+<td>写入外设单元的数据</td>
+</tr>
+<tr>
+<td>byteen</td>
+<td>I</td>
+<td>4</td>
+<td>写入外设单元的使能</td>
+</tr>
+<tr>
+<td>DM_RD</td>
+<td>I</td>
+<td>32</td>
+<td>DM读取值的输入</td>
+</tr>
+<tr>
+<td>Timer_RD</td>
+<td>I</td>
+<td>32</td>
+<td>Timer读取值的输入</td>
+</tr>
+<tr>
+<td>UART_RD</td>
+<td>I</td>
+<td>32</td>
+<td>UART读取值的输入</td>
+</tr>
+<tr>
+<td>Tube_RD</td>
+<td>I</td>
+<td>32</td>
+<td>Tube读取值的输入</td>
+</tr>
+<tr>
+<td>GPIO_RD</td>
+<td>I</td>
+<td>32</td>
+<td>GPIO读取值的输入</td>
+</tr>
+<tr>
+<td>A_out</td>
+<td>O</td>
+<td>32</td>
+<td>写入/读取的外设单元的地址</td>
+</tr>
+<tr>
+<td>WD_out</td>
+<td>O</td>
+<td>32</td>
+<td>写入外设单元的数据</td>
+</tr>
+<tr>
+<td>RD_out</td>
+<td>O</td>
+<td>32</td>
+<td>外设单元的读取值输出</td>
+</tr>
+<tr>
+<td>DM_WE</td>
+<td>O</td>
+<td>4</td>
+<td>DM写入使能</td>
+</tr>
+<tr>
+<td>Timer_WE</td>
+<td>O</td>
+<td>1</td>
+<td>Timer写入使能</td>
+</tr>
+<tr>
+<td>UART_WE</td>
+<td>O</td>
+<td>1</td>
+<td>UART写入使能</td>
+</tr>
+<tr>
+<td>Tube_WE</td>
+<td>O</td>
+<td>4</td>
+<td>Tube写入使能</td>
+</tr>
+<tr>
+<td>GPIO_WE</td>
+<td>O</td>
+<td>4</td>
+<td>GPIO写入使能</td>
+</tr>
+<tr>
+<td>UART_STB</td>
+<td>O</td>
+<td>1</td>
+<td>UART片选信号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Tube（数码管驱动模块）">Tube（数码管驱动模块）</h3>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>高电平同步复位信号</td>
+</tr>
+<tr>
+<td>A</td>
+<td>I</td>
+<td>32</td>
+<td>读/写数码管的地址</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>写入数码管的数据</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>数码管写入使能</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>I</td>
+<td>32</td>
+<td>数码管读取数据</td>
+</tr>
+<tr>
+<td>digital_tube2</td>
+<td>O</td>
+<td>8</td>
+<td>第2组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel2</td>
+<td>O</td>
+<td>1</td>
+<td>第2组四段数码管片选信号</td>
+</tr>
+<tr>
+<td>digital_tube1</td>
+<td>O</td>
+<td>8</td>
+<td>第1组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel1</td>
+<td>O</td>
+<td>3</td>
+<td>第1组四段数码管片选信号</td>
+</tr>
+<tr>
+<td>digital_tube0</td>
+<td>O</td>
+<td>8</td>
+<td>第0组四段数码管驱动信号</td>
+</tr>
+<tr>
+<td>digital_tube_sel0</td>
+<td>O</td>
+<td>3</td>
+<td>第0组四段数码管片选信号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="GPIO（通用IO驱动模块）">GPIO（通用IO驱动模块）</h3>
+<p>该模块位于CPU模块中，主要用于获取外部中断信息和内部异常信息，进行判断后输出异常/中断请求。同时该模块中设有四个寄存器——SR，Cause，EPC和PRIP。</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+</tr>
+<tr>
+<td>A</td>
+<td>I</td>
+<td>32</td>
+<td>读GPIO的地址</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>写入GPIO的数据</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>GPIO写入使能</td>
+</tr>
+<tr>
+<td>dip_swithc0</td>
+<td>I</td>
+<td>8</td>
+<td>第0组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc1</td>
+<td>I</td>
+<td>8</td>
+<td>第1组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc2</td>
+<td>I</td>
+<td>8</td>
+<td>第2组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc3</td>
+<td>I</td>
+<td>8</td>
+<td>第3组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc4</td>
+<td>I</td>
+<td>8</td>
+<td>第4组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc5</td>
+<td>I</td>
+<td>8</td>
+<td>第5组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_swithc6</td>
+<td>I</td>
+<td>8</td>
+<td>第6组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>dip_switch7</td>
+<td>I</td>
+<td>8</td>
+<td>第7组拨码开关控制信号</td>
+</tr>
+<tr>
+<td>user_key</td>
+<td>I</td>
+<td>8</td>
+<td>用户按键开关控制信号</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>O</td>
+<td>8</td>
+<td>GPIO的读取数据</td>
+</tr>
+<tr>
+<td>led_light</td>
+<td>O</td>
+<td>32</td>
+<td>LED灯控制信号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="UART模块">UART模块</h3>
+<p>该模块为系统桥，实际上是区分地址的组合逻辑模块，用于CPU和DM、Timer1、Timer0之间的的数据交换。</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLK_I</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>RST_I</td>
+<td>I</td>
+<td>1</td>
+<td>高电平同步复位信号</td>
+</tr>
+<tr>
+<td>ADD_I</td>
+<td>I</td>
+<td>3（[4:2]）</td>
+<td>读/写UART的地址</td>
+</tr>
+<tr>
+<td>WE_I</td>
+<td>I</td>
+<td>1</td>
+<td>UART写使能信号（和CPU交互）</td>
+</tr>
+<tr>
+<td>DAT_I</td>
+<td>I</td>
+<td>32</td>
+<td>UART写入数据（和CPU交互）</td>
+</tr>
+<tr>
+<td>STB_I</td>
+<td>I</td>
+<td>1</td>
+<td>UART片选信号输入</td>
+</tr>
+<tr>
+<td>RxD</td>
+<td>I</td>
+<td>1</td>
+<td>UART接收数据（和外设交互）</td>
+</tr>
+<tr>
+<td>DAT_O</td>
+<td>O</td>
+<td>32</td>
+<td>UART读取数据（和CPU交互）</td>
+</tr>
+<tr>
+<td>ACK_O</td>
+<td>O</td>
+<td>1</td>
+<td>UART片选信号输出</td>
+</tr>
+<tr>
+<td>TxD</td>
+<td>O</td>
+<td>1</td>
+<td>UART发送数据（和外设交互）</td>
+</tr>
+<tr>
+<td>inter</td>
+<td>O</td>
+<td>1</td>
+<td>中断请求信号</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="重要机制实现方法">重要机制实现方法</h2>
+<h3 id="IP-Core-的使用和相关调整">IP Core 的使用和相关调整</h3>
+<p>因为在P8实验中，为了使得我们的微系统是“可综合的”，我们需要将<strong>用常规方法描述的DM和IM</strong>删去，同时用FPGA内封装好的特殊功能部件——“<strong>块储存器</strong>”（<strong>“IP核”的一种</strong>）来替换。我们在ISE中生成后，直接在我们的微系统中调用即可。调用模板如</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">IM <span class="token function">u_IM</span><span class="token punctuation">(</span><span class="token comment">//input</span>
+        <span class="token punctuation">.</span>clka           <span class="token punctuation">(</span> clk_in                    <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input clka</span>
+        <span class="token punctuation">.</span>addra          <span class="token punctuation">(</span> IM_A               <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input [11 : 0] addra</span>
+        <span class="token comment">//output</span>
+        <span class="token punctuation">.</span>douta          <span class="token punctuation">(</span> IM_RD              <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span>  <span class="token comment">// output [31 : 0] douta</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+DM u_DM <span class="token punctuation">(</span><span class="token comment">//input</span>
+        <span class="token punctuation">.</span>clka           <span class="token punctuation">(</span> clk_in                    <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input clka</span>
+        <span class="token punctuation">.</span>wea            <span class="token punctuation">(</span> Bridge_DM_WE       <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input [3 : 0] wea</span>
+        <span class="token punctuation">.</span>addra          <span class="token punctuation">(</span> DM_A               <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input [11 : 0] addra</span>
+        <span class="token punctuation">.</span>dina           <span class="token punctuation">(</span> Bridge_RD_out      <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input [31 : 0] dina</span>
+        <span class="token comment">//output</span>
+        <span class="token punctuation">.</span>douta          <span class="token punctuation">(</span> DM_RD              <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span>  <span class="token comment">// output [31 : 0] douta</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>与我们之前使用的IM和DM不同，P8中使用的块储存器是 <strong>“同步读出”</strong>，这种行为差异造成了数据读出的时机不同，为了适应这一变化，需要对流水线的结构作出一定的修改。笔者采用的是<strong>修改流水寄存器</strong>的方法，即<strong>短接法</strong>。教程中的描述为——</p>
+<blockquote>
+<p><strong>修改流水级寄存器</strong>。由于 Block RAM/ROM 的读端口可以抽象成组合逻辑与寄存器的连接，而 P6/P7 的流水线则是将组合逻辑读出的值输入 M/W 级流水寄存器；因此若将 M/W 级流水寄存器中的流水m_data_rdata的寄存器短接，就等价于将 Block RAM 读出端的"寄存器"移到了 M/W 流水寄存器上。这样修改后，流水线的结构与修改前几乎是相同的。</p>
+</blockquote>
+<p>此外，我们该需要对D级流水寄存器和Bridge进行相应调整</p>
+<ul>
+<li>
+<p><strong>D级寄存器</strong>的调整：为保证D 级发生阻塞时，指令被正确地 stall 在 D 级，我们需要D级流水寄存器中增加一个l临时寄存器来存储<strong>上一次在D级的instruction</strong>。然后再通过一个选择信号来选择当前进入D级的instruction是<strong>IM同步读出的instrcution</strong>还是<strong>临时寄存器中的instruction</strong>。清空延迟槽时<strong>将D级instruction置0</strong>的操作也类似。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//D级流水寄存器</span>
+	<span class="token keyword">reg</span>        stall_tag<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>        clr_tag<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> last_instr_reg<span class="token punctuation">;</span>
+
+    <span class="token keyword">assign</span> D_instr <span class="token operator">=</span> clr_tag   <span class="token operator">?</span> <span class="token number">32'd0</span> <span class="token punctuation">:</span>
+                     stall_tag <span class="token operator">?</span> last_instr_reg <span class="token punctuation">:</span> 
+                                 F_instr<span class="token punctuation">;</span>
+                                
+    
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            last_instr_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+            stall_tag      <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+            clr_tag        <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span> 
+        <span class="token keyword">else</span> <span class="token keyword">begin</span>
+            last_instr_reg <span class="token operator">&lt;=</span> D_instr<span class="token punctuation">;</span>
+            stall_tag      <span class="token operator">&lt;=</span> <span class="token punctuation">(</span><span class="token operator">~</span>en<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+            clr_tag        <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>reset <span class="token operator">|</span> req <span class="token operator">|</span> BD_clr<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>Bridge</strong>的调整：由于Bridge沟通的外设既有同步读的DM，也有异步读的Timer，Tube，UART，GPIO等设备，这样在Bridge向CPU传数据的时候会产生冲突。因此笔者将他们的读方式统一成“同步读”，方法是——在Bridge为每一个外设设置一个数据寄存器（DM除外），每个时钟上升沿更新<strong>从这些外设中异步读出的值</strong>。此外，我们还需要将<strong>被访问的外设的地址</strong>存进一个临时寄存器，每次根据这个<strong>临时寄存器</strong>的地址从若干<strong>数据寄存器</strong>中选择相应的值，返回到CPU中。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//read</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> Timer_RD_reg<span class="token punctuation">;</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> UART_RD_reg<span class="token punctuation">;</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> Tube_RD_reg<span class="token punctuation">;</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> GPIO_RD_reg<span class="token punctuation">;</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> A_reg<span class="token punctuation">;</span>
+                
+<span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+    <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        Timer_RD_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>  
+        UART_RD_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+        Tube_RD_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        GPIO_RD_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        A_reg <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+    <span class="token keyword">end</span>
+    <span class="token keyword">else</span> <span class="token keyword">begin</span>
+        Timer_RD_reg <span class="token operator">&lt;=</span> Timer_RD<span class="token punctuation">;</span>  
+        UART_RD_reg <span class="token operator">&lt;=</span> UART_RD<span class="token punctuation">;</span> 
+        Tube_RD_reg <span class="token operator">&lt;=</span> Tube_RD<span class="token punctuation">;</span>
+        GPIO_RD_reg <span class="token operator">&lt;=</span> GPIO_RD<span class="token punctuation">;</span>
+        A_reg <span class="token operator">&lt;=</span> A_in<span class="token punctuation">;</span> 
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span> 
+
+<span class="token keyword">assign</span> RD_out <span class="token operator">=</span> <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h0</span>    <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h2fff</span><span class="token punctuation">)</span> <span class="token operator">?</span> DM_RD <span class="token punctuation">:</span>
+                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f00</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f0b</span><span class="token punctuation">)</span> <span class="token operator">?</span> Timer_RD_reg <span class="token punctuation">:</span>
+                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f20</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f3b</span><span class="token punctuation">)</span> <span class="token operator">?</span> UART_RD_reg <span class="token punctuation">:</span>
+                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f40</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f47</span><span class="token punctuation">)</span> <span class="token operator">?</span> Tube_RD_reg <span class="token punctuation">:</span>
+                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f50</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f5b</span> <span class="token operator">||</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f60</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f63</span><span class="token punctuation">)</span> <span class="token operator">?</span> GPIO_RD_reg <span class="token punctuation">:</span> <span class="token number">32'd0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h3 id="数码管驱动设计">数码管驱动设计</h3>
+<p>数码管驱动中有两个寄存器，和对其他外设的操作一样，我们需要实现CPU对寄存器的读写。代码比较简单，如下所示</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> tube_0_data<span class="token punctuation">;</span>
+   <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> tube_1_data<span class="token punctuation">;</span>
+   <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  tube_2_data<span class="token punctuation">;</span>
+
+   <span class="token comment">//read</span>
+   <span class="token keyword">assign</span> RD <span class="token operator">=</span> <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f40</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f43</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span>tube_1_data<span class="token punctuation">,</span> tube_0_data<span class="token operator">}</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f44</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f47</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span><span class="token number">28'd0</span><span class="token punctuation">,</span>  tube_2_data<span class="token operator">}</span> <span class="token punctuation">:</span>
+                                                   <span class="token number">32'd0</span><span class="token punctuation">;</span>
+   
+   <span class="token comment">//write</span>
+
+   <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+       <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span><span class="token keyword">begin</span>
+           tube_0_data <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+           tube_1_data <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+           tube_2_data <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+       <span class="token keyword">end</span>
+       <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">|</span> WE<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+           <span class="token function">if</span><span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f40</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f43</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> tube_0_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> tube_0_data<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> tube_1_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> tube_1_data<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">;</span> 
+           <span class="token keyword">end</span>      
+           <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f44</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f47</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> tube_2_data <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+           <span class="token keyword">end</span>
+       <span class="token keyword">end</span>
+   <span class="token keyword">end</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在数码管驱动设计中，我们不仅要能够向驱动中的寄存器读写数据，还要根据驱动内部寄存器的值向真正的数码管传递对应的电平信号，来控制数码管的亮灭。四段数码管为一组，每组数码管由一个驱动信号、一个片选信号控制。原理如下</p>
+<p><img src="%E5%85%AB%E6%AE%B5%E6%95%B0%E7%A0%81%E7%AE%A1png.png" alt=""></p>
+<p>一段数码管显示的16进制数与控制信号的关系如下表所示(注意：实验中采用的是共阳极数码管，低电平时亮，高电平时灭)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">数码管显示的16进制数</th>
+<th style="text-align:center">数码管控制信号{DP,G,F,E,D,C,B,A}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0xC0</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0xF9</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0xA4</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0xB0</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">0x99</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">0x92</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">0x82</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">0xF8</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">0x80</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">0x90</td>
+</tr>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">0x88</td>
+</tr>
+<tr>
+<td style="text-align:center">B</td>
+<td style="text-align:center">0x83</td>
+</tr>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">0xC6</td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:center">0xA1</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:center">0x86</td>
+</tr>
+<tr>
+<td style="text-align:center">F</td>
+<td style="text-align:center">0x8E</td>
+</tr>
+</tbody>
+</table>
+<p>为实现该功能，笔者设计了单独的模块<code>Monitor</code>来对一组数码管的亮灭进行控制，直接在<code>Tube</code>模块中调用即可。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> <span class="token function">Moniter</span><span class="token punctuation">(</span>
+    <span class="token keyword">input</span>             clk<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>             reset<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>      <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> tube_data<span class="token punctuation">,</span>
+
+    <span class="token keyword">output</span>     <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  tube_disp<span class="token punctuation">,</span>
+    <span class="token keyword">output</span>     <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  sel
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">reg</span>        <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> cnt<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>        <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  sel_reg<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>               reset_tag<span class="token punctuation">;</span>
+
+    <span class="token keyword">wire</span> A<span class="token punctuation">,</span> B<span class="token punctuation">,</span> C<span class="token punctuation">,</span> D<span class="token punctuation">,</span> E<span class="token punctuation">,</span> F<span class="token punctuation">,</span> G<span class="token punctuation">,</span> DP<span class="token punctuation">;</span>
+
+    <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> sel_data <span class="token operator">=</span> <span class="token punctuation">(</span>sel <span class="token operator">==</span> <span class="token number">4'b0001</span><span class="token punctuation">)</span> <span class="token operator">?</span> tube_data<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token punctuation">:</span>
+                          <span class="token punctuation">(</span>sel <span class="token operator">==</span> <span class="token number">4'b0010</span><span class="token punctuation">)</span> <span class="token operator">?</span> tube_data<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">]</span>  <span class="token punctuation">:</span>
+                          <span class="token punctuation">(</span>sel <span class="token operator">==</span> <span class="token number">4'b0100</span><span class="token punctuation">)</span> <span class="token operator">?</span> tube_data<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token punctuation">:</span>
+                                             tube_data<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">12</span><span class="token punctuation">]</span><span class="token punctuation">;</span> 
+
+    <span class="token keyword">assign</span> sel <span class="token operator">=</span> reset_tag <span class="token operator">?</span> <span class="token number">4'b1111</span> <span class="token punctuation">:</span> sel_reg<span class="token punctuation">;</span> 
+
+    <span class="token keyword">assign</span> tube_disp <span class="token operator">=</span> reset_tag <span class="token operator">?</span> <span class="token number">8'b1111_1110</span> <span class="token punctuation">:</span> <span class="token operator">{</span>DP<span class="token punctuation">,</span> A<span class="token punctuation">,</span> B<span class="token punctuation">,</span> C<span class="token punctuation">,</span> D<span class="token punctuation">,</span> E<span class="token punctuation">,</span> F<span class="token punctuation">,</span> G<span class="token operator">}</span><span class="token punctuation">;</span> 
+	
+    <span class="token keyword">assign</span> <span class="token operator">{</span>DP<span class="token punctuation">,</span> G<span class="token punctuation">,</span> F<span class="token punctuation">,</span> E<span class="token punctuation">,</span> D<span class="token punctuation">,</span> C<span class="token punctuation">,</span> B<span class="token punctuation">,</span> A<span class="token operator">}</span> <span class="token operator">=</span>  <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'hc0</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h1</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'hf9</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h2</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'ha4</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h3</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'hb0</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h4</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h99</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h5</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h92</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h6</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h82</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h7</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'hf8</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h8</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h80</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'h9</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h90</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'ha</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h88</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'hb</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h83</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'hc</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'hc6</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'hd</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'ha1</span> <span class="token punctuation">:</span>
+                                        <span class="token punctuation">(</span>sel_data <span class="token operator">==</span> <span class="token number">4'he</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">8'h86</span> <span class="token punctuation">:</span>
+                                                             <span class="token number">8'h8e</span> <span class="token punctuation">;</span>
+    
+    <span class="token comment">//reset_reg fsm</span>
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> reset_tag <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>      reset_tag <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+
+
+    <span class="token comment">//sel_reg fsm</span>
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> sel_reg <span class="token operator">&lt;=</span> <span class="token number">4'b0001</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt <span class="token operator">==</span> <span class="token constant">`MAX</span> <span class="token operator">-</span> <span class="token number">32'd1</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+            sel_reg <span class="token operator">&lt;=</span> <span class="token operator">{</span>sel_reg<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> sel_reg<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+
+    <span class="token comment">//cnt fsm</span>
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> cnt <span class="token operator">&lt;=</span> <span class="token number">32'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">begin</span>
+            <span class="token function">if</span><span class="token punctuation">(</span>cnt <span class="token operator">==</span> <span class="token constant">`MAX</span> <span class="token operator">-</span> <span class="token number">32'd1</span><span class="token punctuation">)</span> cnt <span class="token operator">&lt;=</span> <span class="token number">32'd0</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> cnt <span class="token operator">&lt;=</span> cnt <span class="token operator">+</span> <span class="token number">32'd1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+
+    
+
+<span class="token keyword">endmodule</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="通用IO驱动设计">通用IO驱动设计</h3>
+<p>通用IO包括三部分——<strong>64 位用户输入微动开关</strong>、 <strong>8 个通用按键开关和LED</strong>、<strong>LED</strong>。前两个是输入设备，只有LED是输出设备。</p>
+<ul>
+<li>
+<p>对于输入设备（<strong>64 位用户输入微动开关</strong>、 <strong>8 个通用按键开关</strong>）而言，外部传来的数据只有在<strong>CPU读取该设备数据的时候</strong>才是有效的，也就是说，在CPU读其他外设时，无论该输入设备输进什么值，都是无效值，也就没有必要用寄存器将外界读取的值存储下来，只需要将输入设备的引脚直接连接到控制模块的读数据端口，使 CPU 将它们当作一个只读的寄存器。</p>
+</li>
+<li>
+<p>对于输出设备（<strong>LED</strong>）而言，每次CPU写进设备驱动的数据都应该保存下来，这样才能保证CPU读写其他外设时，该驱动仍然向<strong>真正的输出外设</strong>稳定地输出数据。</p>
+</li>
+</ul>
+<p>整体写法也比较简单，如下所示——</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> led_reg<span class="token punctuation">;</span>
+   
+   <span class="token comment">//led display</span>
+   <span class="token keyword">assign</span> led_light <span class="token operator">=</span> <span class="token operator">~</span>led_reg<span class="token punctuation">;</span> 
+   
+
+   <span class="token comment">//read</span>
+   <span class="token keyword">assign</span> RD <span class="token operator">=</span> <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f50</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f53</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">~{</span>dip_switch3<span class="token punctuation">,</span> dip_switch2<span class="token punctuation">,</span> dip_switch1<span class="token punctuation">,</span> dip_switch0<span class="token operator">}</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f54</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f57</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">~{</span>dip_switch7<span class="token punctuation">,</span> dip_switch6<span class="token punctuation">,</span> dip_switch5<span class="token punctuation">,</span> dip_switch4<span class="token operator">}</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f58</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f5b</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span><span class="token number">24'd0</span><span class="token punctuation">,</span> <span class="token operator">~</span>user_key<span class="token operator">}</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>A <span class="token operator">&gt;=</span> <span class="token number">32'h7f60</span> <span class="token operator">&amp;&amp;</span> A <span class="token operator">&lt;=</span> <span class="token number">32'h7f63</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">{</span>led_reg<span class="token operator">}</span> <span class="token punctuation">:</span> <span class="token number">32'd0</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//write</span>
+   <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+       <span class="token function">if</span><span class="token punctuation">(</span>reset<span class="token punctuation">)</span> led_reg <span class="token operator">&lt;=</span> <span class="token number">32'hffff_ffff</span><span class="token punctuation">;</span>
+       <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">|</span> WE<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> led_reg<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> led_reg<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span>  <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> led_reg<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+               <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> led_reg<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">;</span> 
+       <span class="token keyword">end</span>
+   <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="UART的修改">UART的修改</h3>
+<p>为了实现UART中断功能，即<strong>接收到一次完整的数据后向CPU产生中断信号，CPU对其进行响应</strong>，我们需要对UART进行一定的修改。其实也比较简单，仔细阅读高老板的代码后就知道，只需要两行代码即可实现。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> inter<span class="token punctuation">;</span>
+<span class="token keyword">assign</span> inter <span class="token operator">=</span> rs<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>实现串口通信的mips代码也比较简单</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token punctuation">.</span>text
+li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f20
+li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token number">0</span>xfff1
+mtc0	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+
+loop<span class="token punctuation">:</span>	
+beq	<span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> loop
+nop
+
+<span class="token punctuation">.</span>ktext <span class="token number">0</span>x4180
+lw	<span class="token kernel-function property">$k0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
+sw	<span class="token kernel-function property">$k0</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span> 
+eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>Warning:一定要修改UART的头文件中有关时钟频率的宏定义（根据教程来，一般是将时钟频率改为50MHz）！否则会导致波特率不匹配！</li>
+</ul>
+<h3 id="软件代码编写——计算器和计数器">软件代码编写——计算器和计数器</h3>
+<p>硬件搭好后，我们可以编写mips程序（即软件），将机器码加载进IM中，这样就可以通过软硬件的交互实现一定的功能。下面说明<strong>计算器</strong>和<strong>计数器</strong>两个题目的软件代码的编写</p>
+<p><strong>1.计算器</strong></p>
+<ul>
+<li>
+<p>题目描述</p>
+<blockquote>
+<p>用 64 个拨码开关输入 2 个操作数，其中第 7~4 组代表第一个操作数，第 3~0 组代表第二个操作数。用 8 个用户按键代表 8 种二元运算（可自行定义）。每次按下一个用户按键后（假设同一时刻至多有 1 个用户按键会被按下），将对应的运算结果输出至数码管。当没有用户按键按下时，保持之前的结果。</p>
+</blockquote>
+</li>
+<li>
+<p>mips代码</p>
+  <pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">li	$s0, 0x7f58
+li	$s1, 0x7f54
+li	$s2, 0x7f50
+li	$s3, 0x7f40
+loop:
+    lw	$t1, 0($s1)
+    lw	$t2, 0($s2)
+    lbu	$t0, 0($s0)
+    #li	$v0, 5
+    #syscall
+    #move  	$t1, $v0
+    #li	$v0, 5
+    #syscall
+    #move  	$t2, $v0
+    #li	$v0, 5
+    #syscall
+    #move  	$t0, $v0
+    
+    switch:
+        op_1:
+        li	$t3, 1
+        bne	$t0, $t3, op_2
+        nop
+        add	$t4, $t1, $t2
+        j	switch_end
+        
+        op_2:
+        li	$t3, 2
+        bne	$t0, $t3, op_3
+        nop
+        sub	$t4, $t1, $t2
+        j	switch_end
+        
+        op_3:
+        li	$t3, 4
+        bne	$t0, $t3, op_4
+        nop
+        and	$t4, $t1, $t2
+        j	switch_end
+        
+        op_4:
+        li	$t3, 8
+        bne	$t0, $t3, op_5
+        nop
+        or	$t4, $t1, $t2
+        j	switch_end
+        
+        op_5:
+        li	$t3, 16
+        bne	$t0, $t3, op_6
+        nop
+        xor	$t4, $t1, $t2
+        j	switch_end
+        
+        op_6:
+        li	$t3, 32
+        bne	$t0, $t3, op_7
+        nop
+        sllv	$t4, $t1, $t2
+        j	switch_end
+        
+        op_7:
+        li	$t3, 64
+        bne	$t0, $t3, op_8
+        nop
+        srlv	$t4, $t1, $t2
+        j	switch_end
+        
+        op_8:
+        li	$t3, 128
+        bne	$t0, $t3, switch_end
+        nop
+        srav	$t4, $t1, $t2
+        
+
+    switch_end:
+        
+        sw	$t4, 0($s3)
+        #move	$a0, $t4
+        #li	$v0, 1
+        #syscall
+
+    j	loop
+    nop
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p><strong>2.计数器的实现</strong></p>
+<ul>
+<li>题目描述
+<blockquote>
+<p>用第 3~0 组拨码开关输入一个初始值。当系统复位后，程序读取拨码开关的值并从这个值开始向下计数（每秒减1）至 0，你需要使用 timer 来实现此功能。当程序运行时，若拨码开关的值发生变化，则重新从拨码开关读取初值，并重新计数。</p>
+</blockquote>
+</li>
+<li>mips代码<pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">.ktext 0x4180
+handler:
+	beq	$t2, $0, end
+	nop
+	addi	$t2, $t2, -1
+	end: eret
+	
+	
+.text
+#interrupt  enable
+ori	$s0, 0xfff1
+mtc0	$s0, $12
+
+li	$s0, 0x7f50    #input
+li	$s1, 0x7f40    #display
+li	$s2, 0x7f00
+li	$s3, 0x7f04
+li	$s4, 0xb
+li	$s5, 25000000
+li	$s5, 25
+
+# t0 is input-value
+# t1 is max-value
+# t2 is value counter
+
+loop: 
+	lw	$t0, 0($s0)
+	sw	$t2, 0($s1)
+	beq	$t0, $t1, loop
+	nop
+
+
+begin:
+	sw	$0, 0($s2)
+	move	$t1, $t0
+	move	$t2, $t0
+	sw	$s5, 0($s3)
+	sw	$s4, 0($s2)
+	j	loop
+	nop
+	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="自动化生成coe文件">自动化生成coe文件</h2>
+<p>当我们写完软件部分的代码时，需要将其转换成机器码，同时还需要根据coe文件格式进行一定处理——文件开头加相应前缀，每行机器码后面需要加逗号。如果手动进行修改的话费时费力，可以通过下面的python脚本自动生成coe文件。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+mips_code_path <span class="token operator">=</span> <span class="token string">"uart.asm"</span>
+mips_handler_path <span class="token operator">=</span> <span class="token string">"mips_handler.asm"</span>
+
+<span class="token keyword">def</span> <span class="token function">run_mars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"java -jar Mars_perfect.jar nc a db mc CompactDataAtZero dump 0x00003000-0x0000417c HexText text.txt "</span> <span class="token operator">+</span> mips_code_path<span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"java -jar Mars_perfect.jar nc a db mc CompactDataAtZero dump 0x00004180-0x00004f00 HexText ktext.txt "</span> <span class="token operator">+</span> mips_handler_path<span class="token punctuation">)</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">r"text.txt"</span><span class="token punctuation">,</span><span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> textfile<span class="token punctuation">:</span>
+        <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">r"ktext.txt"</span><span class="token punctuation">,</span><span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> ktextfile<span class="token punctuation">:</span>
+            <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">r"code.txt"</span><span class="token punctuation">,</span><span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> codefile<span class="token punctuation">:</span>
+                <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0x3000</span><span class="token punctuation">,</span><span class="token number">0x4180</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+                    ret1 <span class="token operator">=</span>textfile<span class="token punctuation">.</span>readline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token keyword">if</span><span class="token punctuation">(</span>ret1<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        codefile<span class="token punctuation">.</span>write<span class="token punctuation">(</span>ret1<span class="token punctuation">)</span>
+                    <span class="token keyword">else</span><span class="token punctuation">:</span>
+                        codefile<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"00000000\n"</span><span class="token punctuation">)</span>
+                codefile<span class="token punctuation">.</span>write<span class="token punctuation">(</span>ktextfile<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>remove<span class="token punctuation">(</span><span class="token string">"text.txt"</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>remove<span class="token punctuation">(</span><span class="token string">"ktext.txt"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    run_mars<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"code.txt"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        data <span class="token operator">=</span> f<span class="token punctuation">.</span>readlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> i <span class="token operator">!=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">:</span>
+            data<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">",\n"</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            data<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">";\n"</span>
+
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>mips_code_path<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">"coe"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"memory_initialization_radix=16;\nmemory_initialization_vector=\n"</span><span class="token punctuation">)</span>
+        f<span class="token punctuation">.</span>writelines<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2021/12/25/co/co-p8-mips-wei-xi-tong-ban-ji-yan-zheng/">http://hyggge.github.io/2021/12/25/co/co-p8-mips-wei-xi-tong-ban-ji-yan-zheng/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/BUAA/">
+                                    <span class="chip bg-color">BUAA</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                                    <span class="chip bg-color">计算机组成</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/01/19/c/cpp-yin-yong-he-zhi-zhen/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="「Cpp」引用和指针">
+                        
+                        <span class="card-title">「Cpp」引用和指针</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-19
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/C/" class="post-category">
+                                    C++
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C++</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/12/15/co/co-p7-mips-wei-xi-tong-yi-chang-zhong-duan/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="「BUAA-CO」P7_MIPS微系统（异常中断）">
+                        
+                        <span class="card-title">「BUAA-CO」P7_MIPS微系统（异常中断）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/BUAA/">
+                        <span class="chip bg-color">BUAA</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                        <span class="chip bg-color">计算机组成</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

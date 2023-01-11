@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Hyggge&#39;s Blog</title>
+  
+  <subtitle>Hyggge&#39;s Blog</subtitle>
+  <link href="http://hyggge.github.io/atom.xml" rel="self"/>
+  
+  <link href="http://hyggge.github.io/"/>
+  <updated>2023-01-11T06:19:43.273Z</updated>
+  <id>http://hyggge.github.io/</id>
+  
+  <author>
+    <name>Hyggge</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>「Compile」SysY编译器设计</title>
+    <link href="http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/"/>
+    <id>http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/</id>
+    <published>2023-01-11T01:20:41.000Z</published>
+    <updated>2023-01-11T06:19:43.273Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="编译" scheme="http://hyggge.github.io/categories/%E7%BC%96%E8%AF%91/"/>
+    
+    
+    <category term="编译" scheme="http://hyggge.github.io/tags/%E7%BC%96%E8%AF%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Ruby」 Block的理解和使用</title>
+    <link href="http://hyggge.github.io/2022/10/08/ruby/ruby-block-de-li-jie-he-shi-yong/"/>
+    <id>http://hyggge.github.io/2022/10/08/ruby/ruby-block-de-li-jie-he-shi-yong/</id>
+    <published>2022-10-08T08:32:11.000Z</published>
+    <updated>2023-01-11T06:06:22.326Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Ruby" scheme="http://hyggge.github.io/categories/Ruby/"/>
+    
+    
+    <category term="Ruby" scheme="http://hyggge.github.io/tags/Ruby/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Ruby」Case Equality</title>
+    <link href="http://hyggge.github.io/2022/09/06/ruby/ruby-case-equality/"/>
+    <id>http://hyggge.github.io/2022/09/06/ruby/ruby-case-equality/</id>
+    <published>2022-09-06T07:12:30.000Z</published>
+    <updated>2023-01-11T06:06:22.324Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Ruby" scheme="http://hyggge.github.io/categories/Ruby/"/>
+    
+    
+    <category term="Ruby" scheme="http://hyggge.github.io/tags/Ruby/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Shell」 Shell中的特殊符号</title>
+    <link href="http://hyggge.github.io/2022/07/25/linux/shell-bash-zhong-de-te-shu-fu-hao/"/>
+    <id>http://hyggge.github.io/2022/07/25/linux/shell-bash-zhong-de-te-shu-fu-hao/</id>
+    <published>2022-07-25T14:24:49.000Z</published>
+    <updated>2023-01-11T06:06:22.351Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="http://hyggge.github.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="http://hyggge.github.io/tags/Linux/"/>
+    
+    <category term="Shell编程" scheme="http://hyggge.github.io/tags/Shell%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Git」Little Tips</title>
+    <link href="http://hyggge.github.io/2022/07/06/git/git-little-tips/"/>
+    <id>http://hyggge.github.io/2022/07/06/git/git-little-tips/</id>
+    <published>2022-07-06T09:02:38.000Z</published>
+    <updated>2023-01-11T06:06:22.371Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/categories/Git/"/>
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Git」stash命令</title>
+    <link href="http://hyggge.github.io/2022/07/06/git/git-stash-ming-ling/"/>
+    <id>http://hyggge.github.io/2022/07/06/git/git-stash-ming-ling/</id>
+    <published>2022-07-06T07:36:26.000Z</published>
+    <updated>2023-01-11T06:06:22.368Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/categories/Git/"/>
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab4 Challenge：线程和信号量</title>
+    <link href="http://hyggge.github.io/2022/07/04/os/os-lab4-tiao-zhan-xing-ren-wu-she-ji/"/>
+    <id>http://hyggge.github.io/2022/07/04/os/os-lab4-tiao-zhan-xing-ren-wu-she-ji/</id>
+    <published>2022-07-04T03:40:46.000Z</published>
+    <updated>2023-01-11T07:36:43.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab6：管道和shell</title>
+    <link href="http://hyggge.github.io/2022/06/26/os/os-lab6-shi-yan-bao-gao/"/>
+    <id>http://hyggge.github.io/2022/06/26/os/os-lab6-shi-yan-bao-gao/</id>
+    <published>2022-06-26T13:59:08.000Z</published>
+    <updated>2023-01-11T07:36:43.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OO」第四单元：UML建模语言</title>
+    <link href="http://hyggge.github.io/2022/06/26/oo/oo-di-si-dan-yuan-zong-jie/"/>
+    <id>http://hyggge.github.io/2022/06/26/oo/oo-di-si-dan-yuan-zong-jie/</id>
+    <published>2022-06-26T04:21:05.000Z</published>
+    <updated>2023-01-11T06:06:22.352Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab5：文件系统</title>
+    <link href="http://hyggge.github.io/2022/06/04/os/os-lab5-shi-yan-bao-gao/"/>
+    <id>http://hyggge.github.io/2022/06/04/os/os-lab5-shi-yan-bao-gao/</id>
+    <published>2022-06-04T05:21:26.000Z</published>
+    <updated>2023-01-11T07:36:43.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OO」第三单元:规格化设计</title>
+    <link href="http://hyggge.github.io/2022/06/04/oo/oo-di-san-dan-yuan-zong-jie/"/>
+    <id>http://hyggge.github.io/2022/06/04/oo/oo-di-san-dan-yuan-zong-jie/</id>
+    <published>2022-06-04T04:34:10.000Z</published>
+    <updated>2023-01-11T06:06:22.357Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab5函数解读</title>
+    <link href="http://hyggge.github.io/2022/05/30/os/os-lab5-han-shu-jie-du/"/>
+    <id>http://hyggge.github.io/2022/05/30/os/os-lab5-han-shu-jie-du/</id>
+    <published>2022-05-30T07:40:22.000Z</published>
+    <updated>2023-01-11T07:36:43.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab4：系统调用和fork</title>
+    <link href="http://hyggge.github.io/2022/05/09/os/os-lab4-shi-yan-bao-gao/"/>
+    <id>http://hyggge.github.io/2022/05/09/os/os-lab4-shi-yan-bao-gao/</id>
+    <published>2022-05-09T03:34:24.000Z</published>
+    <updated>2023-01-11T07:36:43.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab3：进程调度</title>
+    <link href="http://hyggge.github.io/2022/05/03/os/os-lab3-shi-yan-bao-gao/"/>
+    <id>http://hyggge.github.io/2022/05/03/os/os-lab3-shi-yan-bao-gao/</id>
+    <published>2022-05-03T03:13:40.000Z</published>
+    <updated>2023-01-11T07:36:43.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OO」第二单元:电梯调度</title>
+    <link href="http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/"/>
+    <id>http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/</id>
+    <published>2022-04-29T14:31:57.000Z</published>
+    <updated>2023-01-11T06:06:22.352Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="面向对象" scheme="http://hyggge.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-C++」Lec7:C++类模版和STL简介</title>
+    <link href="http://hyggge.github.io/2022/04/18/c/cpp-programing-lec-7/"/>
+    <id>http://hyggge.github.io/2022/04/18/c/cpp-programing-lec-7/</id>
+    <published>2022-04-18T10:57:58.000Z</published>
+    <updated>2023-01-11T07:36:43.441Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="C++" scheme="http://hyggge.github.io/categories/C/"/>
+    
+    
+    <category term="C++" scheme="http://hyggge.github.io/tags/C/"/>
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-OS」 Lab2：内存管理</title>
+    <link href="http://hyggge.github.io/2022/04/18/os/os-lab2-shi-yan-bao-gao/"/>
+    <id>http://hyggge.github.io/2022/04/18/os/os-lab2-shi-yan-bao-gao/</id>
+    <published>2022-04-18T01:44:03.000Z</published>
+    <updated>2023-01-11T07:36:43.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「操作系统」进程调度</title>
+    <link href="http://hyggge.github.io/2022/04/16/os/os-jin-cheng-diao-du/"/>
+    <id>http://hyggge.github.io/2022/04/16/os/os-jin-cheng-diao-du/</id>
+    <published>2022-04-16T12:36:45.000Z</published>
+    <updated>2023-01-11T06:06:22.327Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「BUAA-C++」Lec6:多态</title>
+    <link href="http://hyggge.github.io/2022/04/12/c/cpp-progranming-lec-6/"/>
+    <id>http://hyggge.github.io/2022/04/12/c/cpp-progranming-lec-6/</id>
+    <published>2022-04-12T07:10:57.000Z</published>
+    <updated>2023-01-11T07:36:43.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="C++" scheme="http://hyggge.github.io/categories/C/"/>
+    
+    
+    <category term="C++" scheme="http://hyggge.github.io/tags/C/"/>
+    
+    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Git」分支管理</title>
+    <link href="http://hyggge.github.io/2022/04/11/git/git-fen-zhi-guan-li/"/>
+    <id>http://hyggge.github.io/2022/04/11/git/git-fen-zhi-guan-li/</id>
+    <published>2022-04-11T08:24:41.000Z</published>
+    <updated>2023-01-11T06:06:22.367Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/categories/Git/"/>
+    
+    
+    <category term="Git" scheme="http://hyggge.github.io/tags/Git/"/>
+    
+  </entry>
+  
+</feed>

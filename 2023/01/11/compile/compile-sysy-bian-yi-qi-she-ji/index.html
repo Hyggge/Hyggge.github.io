@@ -1,0 +1,1601 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「Compile」SysY编译器设计, Hyggge&#39;s Blog">
+    <meta name="description" content="编译器总体设计
+总体结构
+本文描述的编译器是采用Java语言编写的MIPS编译器。该编译器分为前端，中端，后端三部分——
+
+前端：词法分析、语法分析、语义分析，最终将源程序生成为LLVM IR
+中端：中间代码优化，包括mem2reg，GVN">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>「Compile」SysY编译器设计 | Hyggge&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.svg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hyggge&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.svg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hyggge&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hyggge" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Come On
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hyggge" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Come On" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">「Compile」SysY编译器设计</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BC%96%E8%AF%91/">
+                                <span class="chip bg-color">编译</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%BC%96%E8%AF%91/" class="post-category">
+                                编译
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-01-11
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    30 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="编译器总体设计">编译器总体设计</h2>
+<h3 id="总体结构">总体结构</h3>
+<p>本文描述的编译器是采用Java语言编写的MIPS编译器。该编译器分为前端，中端，后端三部分——</p>
+<ul>
+<li>前端：词法分析、语法分析、语义分析，最终将源程序生成为LLVM IR</li>
+<li>中端：中间代码优化，包括mem2reg，GVN，图着色寄存器分配，死代码删除，常量计算</li>
+<li>后端：目标代码生成，即将LLVM IR进一步翻译成MIPS代码</li>
+</ul>
+<h3 id="文件组织与接口">文件组织与接口</h3>
+<p>编译器项目结构如下所示</p>
+<pre class="line-numbers language-none"><code class="language-none">├─src
+│  ├─back_end       	# 后端    
+│  │  └─mips  
+│  │      └─assembly
+│  ├─exception
+│  ├─front_end          # 前端
+│  │  ├─AST
+│  │  │  ├─Exp   
+│  │  │  ├─Func
+│  │  │  ├─Stmt
+│  │  │  └─Var
+│  │  ├─lexer
+│  │  ├─parser
+│  │  └─symbol			
+│  ├─llvm_ir			# LLVM IR定义
+│  │  ├─initial
+│  │  ├─instr
+│  │  └─type
+│  ├─mid_end            # 中端
+│  ├─utils              # 工具类
+│  └─Compliler.java     # 入口程序
+└─test                  # 测试文件夹
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从入口程序Complier.java中，我们可以看出不同部分之间的接口——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// token analyse</span>
+<span class="token class-name">Lexer</span> lexer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Lexer</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">TokenStream</span> tokenStream <span class="token operator">=</span> lexer<span class="token punctuation">.</span><span class="token function">getTokenStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// syntax analyse</span>
+<span class="token class-name">Parser</span> parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Parser</span><span class="token punctuation">(</span>tokenStream<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Node</span> compUnit <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parseCompUnit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// check error</span>
+compUnit<span class="token punctuation">.</span><span class="token function">checkError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Printer</span><span class="token punctuation">.</span><span class="token function">printAllErrorMsg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// generate IR</span>
+<span class="token class-name">IRBuilder</span><span class="token punctuation">.</span>mode <span class="token operator">=</span> <span class="token class-name">IRBuilder</span><span class="token punctuation">.</span><span class="token constant">AUTO_INSERT_MODE</span><span class="token punctuation">;</span>
+compUnit<span class="token punctuation">.</span><span class="token function">genIR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Module</span> <span class="token keyword">module</span> <span class="token operator">=</span> <span class="token class-name">IRBuilder</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getModule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Printer</span><span class="token punctuation">.</span><span class="token function">printOriLLVM</span><span class="token punctuation">(</span><span class="token keyword">module</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// optimize</span>
+<span class="token class-name">IRBuilder</span><span class="token punctuation">.</span>mode <span class="token operator">=</span> <span class="token class-name">IRBuilder</span><span class="token punctuation">.</span><span class="token constant">DEFAULT_MODE</span><span class="token punctuation">;</span>
+<span class="token class-name">Optimizer</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token keyword">module</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// generate MIPS</span>
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token function">toAssembly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">AssemblyTable</span> assemblyTable <span class="token operator">=</span> <span class="token class-name">MipsBuilder</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getAssemblyTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Printer</span><span class="token punctuation">.</span><span class="token function">printMIPS</span><span class="token punctuation">(</span>assemblyTable<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>大体流程是——</p>
+<ul>
+<li>Lexer类解析源程序，将源程序按照词法解析成一个个token，并封装成token流（TokenStream类）。</li>
+<li>Parae类获取Lexer类解析出来的token流，按照文法规则构建抽象语法树（AST），构建完成后返回AST的根节点（compUnit）。</li>
+<li>从AST根节点开始，自顶向下递归调用每个节点的checkError方法，进行错误检查。</li>
+<li>从AST根节点开始，自顶向下递归调用每个节点的genIR方法，生成中间代码，并由IRBuilder返回封装好的LLVM IR顶层模块——module。（IRBuilder是一个单例模式类，统一管理中间代码的生成过程）。</li>
+<li>将module传入Optimizer类, 启动run方法，对module进行优化——mem2reg，GVN，图着色寄存器分配，死代码删除，常量计算，简单乘除优化 (Optimizer是一个单例模式类，统一管理中间代码的优化过程)。</li>
+<li>调用module类的toAssembly方法，自顶向下递归调用每个LLVM相关类的toAssemply的方法，进行中间代码生成，并由MipsBuilder返回封装好的mips指令列表assemblyTable。（MipsBuilder是一个单例模式类，统一管理中间代码的翻译过程）。</li>
+</ul>
+<h2 id="前端">前端</h2>
+<h3 id="词法分析">词法分析</h3>
+<p>词法分析主要由Lexer类实现。首先，我们将源文件转化为输入流（笔者采用的是可回退的输入流——PushbackInputStream），然后依次读取每个字符，按照下面的词法规则进行解析——</p>
+<p><img src="./lexer.png" alt=""></p>
+<p>每识别出一个token，我们就将其封装到下面的Token类中。其中TokenType为表示token类型的枚举类，value为token本身的名称，lineNumber是Token所在的行号（便于在错误处理时输出出错行号）。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">TokenType</span> type<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> value<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> lineNumber<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当识别完所有的token后，我们将其封装成TokenStream类，便于后续语法分析的使用。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TokenStream</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Token</span><span class="token punctuation">&gt;</span></span> tokenList<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> pos<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> watchPoint<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">TokenStream</span><span class="token punctuation">(</span><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Token</span><span class="token punctuation">&gt;</span></span> tokenList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>tokenList <span class="token operator">=</span> tokenList<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>watchPoint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在识别的过程中，有下面几个细节需要注意——</p>
+<ul>
+<li>换行符在不同平台上的表示是不同的，Windows下为<code>\r + \n</code>，linux下为<code>\n</code>。为了保证编译器在不同平台上的可迁移性，我们需要对其进行特殊处理——无论是哪种表示，换行符中必定有<code>\n</code>，因此我们遇到<code>\r</code>时直接忽略即可，只以<code>\n</code>作为换行标志。</li>
+<li>对于<code>!=, ==, &gt;, &gt;=, &lt;, &lt;=, =, ==, //, /, /* </code>，只读一个字符是无法进行判断的，需要向前多读一个字符。</li>
+<li>标识符和关键字是无法通过预读进行区分的。我们可以先按照标识符的词法规则进行识别，然后再判断它是否和某个关键字相同。</li>
+<li>Java采用Unicode编码，每个字符（char）是用两个字节表示的。由此，文件结束符应该表示为<code>\uFFFF</code>，这一点需要注意。</li>
+</ul>
+<h3 id="语法分析">语法分析</h3>
+<p>语法分析主要由Parser类实现——Parser将词法分析阶段解析出来的token流作为自己的成员变量，然后按照文法规则对token流进行递归下降分析，同时构建出语法树。</p>
+<h4 id="文法规则重构">文法规则重构</h4>
+<p>为了便于语法分析以及后续阶段的处理，我们在这里对文法规则进行了一定的调整，和原文法相比有以下几点不同——</p>
+<ul>
+<li>删除Decl，BType，BlockItem这三个语法变量，精简文法。</li>
+<li>将Stmt产生式改写为——<code>Stmt ==&gt; AssignStmt | ExpStmt | BlockStmt | IfStmt | WhileStmt | BreakStmt | CReturnStmt | GetIntStmt | PrintfStmt</code>，即为每一种Stmt创建一个语法变量，并添加新的产生式。在后面递归下降分析时，我们可以为每一种Stmt单独设置一个函数进行解析，这样可以防止出现超大型函数，便于后期调试。</li>
+<li>将AddExp，MulExp，RelExp，EqExp， LAndExp，LOrExp改写为巴克斯范式，消除左递归，便于递归下降分析。</li>
+</ul>
+<h4 id="语法树相关类">语法树相关类</h4>
+<p>我们为每一个语法变量都创建一个对应的语法树节点，并且都继承自基类Node。Node类的定义如下所示——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">int</span> startLine<span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">int</span> endLine<span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name">SyntaxVarType</span> type<span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Node</span><span class="token punctuation">&gt;</span></span> children<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>startLine和endLIne分别表示该“语法变量对应的字符串的开始行号和结束行号”，实际上就是对应token串中第一个token的lineNumber和最后一个token的lineNumber。</li>
+<li>SyntaxVarType是表示语法变量类型的枚举类。</li>
+<li>children表示该节点的子节点，用于形成树型结构。</li>
+</ul>
+<blockquote>
+<p>文法规则中还有一些独立的token，他们直接出现在产生式的右侧。这些token同样是“所在产生式的语法变量”的children。因此，我们除了为每一个语法变量建立节点类，还要单独建立一个TokenNode类，表示由token构成的树节点。很显然，语法树的所有叶子节点都是TokenNode。</p>
+</blockquote>
+<p>因为我为每一个语法变量（包括Token）都单独建立了节点类，这样直接导致了类的数量爆炸。为了更好的管理（debug），我把建好的节点类按相关性大致分为4类，分别放在不同的文件夹内——</p>
+<ul>
+<li><strong>表达式相关</strong>：AddExp，CondExp，ConstExp，EqExp，Exp，LAndExp，LOrExp，LValExp，MulExp，Number，PrimaryExp，RelExp，UnaryExp，UnaryOp</li>
+<li><strong>函数相关</strong>：FuncDef，FuncFormalParam，FuncFormalParams，FuncRealParams，FuncType，MainFuncDef</li>
+<li><strong>语句相关</strong>：AssignStmt，BlockStmt，BreakStmt，ContinueStmt，ExpStmt，GetIntStmt，IfStmt，PrintfStmt，ReturnStmt，Stmt，WhileStmt</li>
+<li><strong>变(常)量定义相关</strong>：Const</li>
+<li>Decl，ConstDef，ConstInitVal，InitVal，VarDecl，VarDef</li>
+<li><strong>其他</strong>：Block，CompUnit，TokenNode</li>
+</ul>
+<h4 id="递归下降分析">递归下降分析</h4>
+<p>这一部分比较简单，直接为每一个语法变量编写一个parse函数即可。在编写程序时我做了统一约定——要求进入某个语法变量的分析子程序前，必须从token流中读取所要分析的语法成分的第一个token；而在分析子程序的出口前，读取下一个token，以便为进入下一个分析子程序做好准备。递归向下分析的整体结构如下所示——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">parseCompUnit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// if (...)</span>
+    <span class="token function">parseVarDecl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// if (...)</span>
+    <span class="token function">parseConstDecl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// if (...)</span>
+    <span class="token function">parseFuncDef</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// if (...)</span>
+    <span class="token function">parseMainFuncDef</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">parseVarDecl</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">parseConstDecl</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">parseFuncDef</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">parseMainFuncDef</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在解析Stmt的时候会出现一个问题——AssignStmt的产生式为<code>AssignStmt ==&gt; LVal '=' Exp ';'</code>， GetIntStmt的产生式为<code>GetIntStmt ==&gt; LVal '=' 'getint''('')'';'</code> ，ExpStmt的产生式为<code>ExpStmt ==&gt; [Exp] ';' </code>。其中LVal和Exp是无法进行区分的，因此我们不能直接判断应该进入AssignStmt的分析子程序，还是进入GetIntStmt，还是进入ExpStmt的分析子程序。我采用的做法是——</p>
+<ul>
+<li>先设置一个“监视点”，即记录下当前token流的指针位置，然后用Exp的分析子程序进行解析；</li>
+<li>解析完之后，如果发现后面的token为<code>=</code>，说明此时应该解析的语法成分为AssignStmt或者GetIntStmt。然后进一步看看后面的token是否是<code>getint</code>，进一步判断是AssignStmt还是GetIntStmt。最后，将token流的指针恢复到“监视点”的位置，并使用AssignStmt或GetIntStmt的分析子程序重新进行解析；</li>
+<li>如果后面没有<code>=</code>，则说明应该解析的语法成分正好为ExpStmt，不需要回溯，继续往后解析即可。</li>
+</ul>
+<h3 id="错误处理">错误处理</h3>
+<h4 id="总体架构">总体架构</h4>
+<p>在这一阶段，我们需要处理两类错误——语法错误和语义错误</p>
+<ul>
+<li>
+<p>对于和语法相关的错误，例如缺少分号，缺少小括号等等，我们可以直接在语法分析中顺带处理。注意，这里可能对原来递归下降的流程产生影响。因为可能会缺少一些必要的token， 所以“判断是否进入某个递归子程序” 的逻辑需要进行调整。</p>
+</li>
+<li>
+<p>对于其他和语义相关的错误，我们直接在Node类增加checkError这一方法，然后让继承它的各个节点类重写这一方法，处理各自可能出现的语义错误。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">checkError</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// for token nodes</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>children <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token comment">// for other nodes</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Node</span> child <span class="token operator">:</span> children<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        child<span class="token punctuation">.</span><span class="token function">checkError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在入口程序中，可以直接调用语法树根节点的checkError方法，然后自顶向下调用各个children的checkError方法。</p>
+</li>
+</ul>
+<h4 id="符号表">符号表</h4>
+<p>处理语义错误，符号表是关键。笔者所使用的是“一次性”的栈式符号表。</p>
+<h5 id="Symbol">Symbol</h5>
+<p>笔者创建了一个Symbol这一符号类，用于存储符号的基本信息。然后由该类派生出VarSymbol、ConstSymbol、FuncSymbol这些子类，用来存储不同类型符号的信息——</p>
+<ul>
+<li><strong>VarSymbol</strong>：变量名，变量值类型（int），变量维度，变量各维度的长度，变量初始值，是否为全局变量。</li>
+<li><strong>ConstSymbol</strong>：常量名，常量值类型（int），常量维度，常量各维度的长度，常量初始值，是否为全局常量。</li>
+<li><strong>FuncSymbol</strong>：函数名，函数返回值类型（int/void），函数各形参类型，函数各形参维度。</li>
+</ul>
+<blockquote>
+<p>只有全局常量和全局变量的初始值才能够在编译阶段计算出，因此对于非全局的常量和变量，其“变量初始值”一项为null</p>
+</blockquote>
+<h5 id="SymbolTable">SymbolTable</h5>
+<p>此外，笔者又创建了符号表类SymbolTable，每个SymbolTable实例用来存储“某个作用域产生的所有符号“。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SymbolTable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Symbol</span><span class="token punctuation">&gt;</span></span> symbols<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h5 id="SymbolManager">SymbolManager</h5>
+<p>最后，为了方便管理符号的创建、插入、查找和删除，笔者创建了SymbolManager单例模式类——</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SymbolManager</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">SymbolManager</span> <span class="token constant">MANAGER</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SymbolManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SymbolTable</span><span class="token punctuation">&gt;</span></span> symbolTables<span class="token punctuation">;</span>   
+    <span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Stack</span><span class="token punctuation">&lt;</span><span class="token class-name">SymbolTable</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> symbolNameMap<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">FuncSymbol</span> latestFunc<span class="token punctuation">;</span> <span class="token comment">// for check return sentence</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> loopDepth<span class="token punctuation">;</span> <span class="token comment">// for check continue and break</span>
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> isGlobal<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>symbolTable是由“各个作用域的符号表”组成的堆栈。在定义变量时，我们把变量对应的符号加入到栈顶符号表中；如果栈顶符号表中已有同名符号，则说明重复定义。</li>
+<li>symbolNameMap是一个HashMap，key是符号名，value是所有“定义过该符号的符号表”组成的堆栈。在引用变量时，栈顶符号表中的同名符号就是该变量最新的定义，直接返回即可；如果栈为空，则说明该变量没有被定义。</li>
+<li>lastestFunc是当前正在解析的函数所对应的符号，用与检查函数中是否出现不匹配的return语句。</li>
+<li>loopDepth记录当前循环的嵌套层数，用于检查continue和break是否出现在非循环语句中。</li>
+<li>isGlobal表示记录当前是否处于全局变量/常量定义阶段，用于判断生成的变量和常量是否具有编译期间就可以计算出的常量（主要在代码生成阶段使用）。</li>
+</ul>
+<p>SymbolManager是一个单例，因此每个节点在调用checkError方法时都能够很方便的访问它，为符号的增删查操作提供了极大便利。</p>
+<h4 id="函数参数匹配问题">函数参数匹配问题</h4>
+<p>在这次作业中，我们需要处理函数参数个数和维度匹配的问题。函数参数个数匹配比较简单，难的是函数维度的匹配（维度匹配包括维度个数的匹配、各维度长度的比较）。有些变量在定义时，纬度的长度不是简单的常数，而是用常量表达式（即ConstInitVal）来表示长度。因此，为了能够进行匹配，我们需要进行在编译时将该长度计算出来。笔者采用的方法是，给Exp、MulExp、AddExp等类都编写一个evaluate方法。在需要计算Exp的值时，即调用Exp的evaluate方法，在这个方法中又调用AddExp的evaluate……以此类推，最终Exp的evaluate返回的就是整个表达式的值。</p>
+<h3 id="中间代码生成">中间代码生成</h3>
+<h4 id="总体架构-2">总体架构</h4>
+<p>笔者在Node类增加genIR这一方法，然后让继承它的各个节点类重写这一方法，生成各自对应的中间代码。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Value</span> <span class="token function">genIR</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// for token nodes</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>children <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Node</span> child <span class="token operator">:</span> children<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        child<span class="token punctuation">.</span><span class="token function">genIR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在入口程序中，我们直接调用语法树根节点的genIR方法，然后就会自顶向下依次调用各个children的genIR方法，最终生成整个程序的中间代码。</p>
+<h4 id="LLVM-IR的内存形式">LLVM IR的内存形式</h4>
+<p>LLVM中的核心观点就是“一切皆Value”——也就是说和LLVM相关的所有类继承了Value这一基类。</p>
+<blockquote>
+<p><code>Value</code> 是一个非常基础的基类，一个继承于 <code>Value</code> 的子类表示它的结果可以被其他地方使用。 一个继承于 <code>User</code> 的类表示它会使用一个或多个 <code>Value</code> 对象 根据 <code>Value</code> 与 <code>User</code> 之间的关系，还可以引申出 use-def 链和 def-use 链这两个概念。use-def 链是指被某个 <code>User</code> 使用的 <code>Value</code> 列表，def-use 链是使用某个 <code>Value</code> 的 <code>User</code> 列表。实际上，LLVM 中还定义了一个 <code>Use</code> 类，<code>Use</code> 就是上述的使用关系中的一个边。</p>
+<p>​                                                                                                                                      ——来自软院编译实验指导书</p>
+</blockquote>
+<p>笔者在编程时也参考了这一观点，并参考LLVM原本的继承关系编写了User、Module、Function、Instr、Constant、Param、StringLiteral、UndefinedValue等类。</p>
+<p><img src="./llvm_ir.png" alt=""></p>
+<p>关键类的定义如下所示——</p>
+<ul>
+<li>
+<p><strong>Module</strong>：整个顶层编译单元，由外部函数声明列表、字符串字面值列表、全局变量列表、函数列表组成。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Module</span> <span class="token keyword">extends</span> <span class="token class-name">Value</span><span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> declareList<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">StringLiteral</span><span class="token punctuation">&gt;</span></span> stringLiterals<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GlobalVar</span><span class="token punctuation">&gt;</span></span> globalVarList<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Function</span><span class="token punctuation">&gt;</span></span> functionList<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>Function</strong>: 全局函数定义，由参数列表、基本块列表、返回值类型组成。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Function</span> <span class="token keyword">extends</span> <span class="token class-name">User</span><span class="token punctuation">{</span>
+    <span class="token comment">// 基本信息</span>
+    <span class="token keyword">private</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Param</span><span class="token punctuation">&gt;</span></span> paramList<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BasicBlock</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">BBList</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">LLVMType</span> retType<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>BasicBlock</strong>: 基本块，由指令列表，所属函数的指针组成。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BasicBlock</span> <span class="token keyword">extends</span> <span class="token class-name">Value</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Instr</span><span class="token punctuation">&gt;</span></span> instrList<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Function</span> parentFunction<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>User</strong>：可以使用其他Value的类，由操作数列表组成。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token keyword">extends</span> <span class="token class-name">Value</span><span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Value</span><span class="token punctuation">&gt;</span></span> operands<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>Instr</strong>: LLVM指令，由指令类型，所属基本块指针组成。此外，我们还为每一种指令单独建立了类，都继承自Instr。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Instr</span> <span class="token keyword">extends</span> <span class="token class-name">User</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">enum</span> <span class="token class-name">InstrType</span> <span class="token punctuation">{</span>
+        <span class="token constant">ALU</span><span class="token punctuation">,</span>
+        <span class="token constant">ALLOCA</span><span class="token punctuation">,</span>
+        <span class="token constant">BRANCH</span><span class="token punctuation">,</span>
+        <span class="token constant">CALL</span><span class="token punctuation">,</span>
+        <span class="token constant">GEP</span><span class="token punctuation">,</span>
+        <span class="token constant">ICMP</span><span class="token punctuation">,</span>
+        <span class="token constant">JUMP</span><span class="token punctuation">,</span>
+        <span class="token constant">LOAD</span><span class="token punctuation">,</span>
+        <span class="token constant">RETURN</span><span class="token punctuation">,</span>
+        <span class="token constant">STORE</span><span class="token punctuation">,</span>
+        <span class="token constant">ZEXT</span><span class="token punctuation">,</span>
+        <span class="token constant">IO</span><span class="token punctuation">,</span>
+        <span class="token constant">PHI</span><span class="token punctuation">,</span>
+        <span class="token constant">PCOPY</span><span class="token punctuation">,</span>
+        <span class="token constant">MOVE</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token class-name">InstrType</span> instrType<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">BasicBlock</span> parentBB<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h3 id="Value的命名">Value的命名</h3>
+<p>在LLVM IR中，每个Value都应该有名字，并且必须保证函数名不重复、同一函数中的基本块名不重复、统一基本块中的指令名不重复。IRBuilder是一个管理中间代码生成过程的单例模式类，我们可以用它来控制不同Value的命名。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">IRBuilder</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">GLOBAL_VAR_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"@g"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">STRING_LITERAL_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"@s"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">LOCAL_VAR_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"%v"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">PARAM_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"%a"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">BB_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"b"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">FUNC_NAME_PREFIX</span> <span class="token operator">=</span> <span class="token string">"@f_"</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// class attributes</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> bbCnt<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> paramCnt<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Function</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> localVarCntMap<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> globalVarCnt<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> stringLiteralCnt<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">Module</span> curModule<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Function</span> curFunction<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">BasicBlock</span> curBB<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们在IRBuilder类中定义了每种Value的前缀，然后用每种Value（除Function）用一个计数器记录已经命名的该类型Value的个数。当创建新的Value时，我们直接用“前缀+计数器值”为其命名。对于Function，我们用“前缀+原函数名进行命名”。</p>
+<h3 id="类型系统">类型系统</h3>
+<p>在LLVM IR中，每个Value都有特定的类型。笔者首先定义了LLVMType作为类型基类，然后定了ArrayType，PointerType，BaseType，OtherType继承它。</p>
+<p><img src="./llvm_type.png" alt=""></p>
+<ul>
+<li><strong>BaseType</strong>：基础类型，包括INT1（i1），INT8（i8），INT32(i32)，VOID（void） 。该类构造方法私有，上述类型都是已经建好的实例（相当于枚举）。</li>
+<li><strong>ArrayType</strong>：数组类型，由元素类型和元素数量组成。</li>
+<li><strong>PointerType</strong>：指针类型，由其指向的类型组成。</li>
+<li><strong>OtherType</strong>：其他类型，包括函数类型，基本块类型，模块类型。该型构造方法私有，上述类型都是已经建好的实例（相当于枚举）。</li>
+</ul>
+<p>为了便于快速判断类型，防止大量出现<code>instance of</code>，我在基类LLVMType中提前设置好了若干判断方法，如isInt1、isArray，isPointer等等。</p>
+<h2 id="中端">中端</h2>
+<h3 id="mem2reg">mem2reg</h3>
+<p>前端生成的LLVM IR并不是真正的SSA形式，而是把所有局部变量都变成了<code>alloca/load/store</code> 形式。即用借用内存操作来满足LLVM本身SSA的限制，实际上是借助memory开了个后门。采用内存操作的特点是实现简单，便于调试，但是效率极低。因此，在保证前端生成的LLVM代码都是正确的前提下，mem2reg就成我们的不二之选。</p>
+<blockquote>
+<p>注意：我们只将非数组变量的操作变成SSA形式，数组变量仍然使用内存存取方式。</p>
+</blockquote>
+<p>mem2reg本质上就是在正确的位置上加入$\phi$函数，也即是LLVM中的phi指令。实现mem2reg有两个步骤——</p>
+<ul>
+<li>
+<p>插入phi</p>
+</li>
+<li>
+<p>变量重命名</p>
+</li>
+</ul>
+<h4 id="准备工作">准备工作</h4>
+<p>在执行这两个步骤之前，我们需要根据基本块之间的跳转关系构建出控制流图、支配树，并计算出每个节点的支配边界。具体概念和算法可以参考<a target="_blank" rel="noopener" href="https://buaa-se-compiling.github.io/miniSysY-tutorial/challenge/mem2reg/help.html">软院编译实验指导书</a>。</p>
+<h4 id="插入phi">插入phi</h4>
+<p>只有在来自多个基本块的控制流汇合到一个基本块中时，才会出现同一个变量的多个不同定义。我们可以将该基本块称为汇合点。</p>
+<p>如果某个变量在多个基本块中都有定义（在内存形式的LLVM IR中表现为——一个alloca出来的指针在多个基本块中有store操作），那么我们需要在这些基本块的汇合点添加和该变量相关的phi。实际上，汇合点可以用“定义该变量的所有基本块”的<a target="_blank" rel="noopener" href="https://buaa-se-compiling.github.io/miniSysY-tutorial/challenge/mem2reg/help.html">迭代支配边界</a>替代（前提是所有的变量都在入口基本块中被定义一次）。我们在准备工作阶段已经计算出来了每个基本块的支配边界，基本块的迭代支配边界可以在插入phi的过程中迭代地计算出来。</p>
+<p>具体算法如下所示——</p>
+<p><img src="./DF.png" alt=""></p>
+<h4 id="变量重命名">变量重命名</h4>
+<p>在上一阶段，我们已经在必要的基本块中插入了phi指令，但是该phi指令是空的，没有加入来自不同基本块的数据流信息（表现为<code>%4 = phi i32 [ ?, ? ], [ ?, ? ]</code>），并且相关<code>alloca</code>、<code>load</code>、<code>store</code>也没有被删除。在这一阶段，我们需要根据数据流补全phi指令，调整use-def关系，最后删除相关的访存指令。</p>
+<p>具体思路是：前序遍历支配树，对于每个基本块，顺序遍历所有的指令——</p>
+<ul>
+<li>如果遇到了alloca指令，记录下alloca的指针名，为该指针建立一个空堆栈，并将该指令删除；</li>
+<li>如果遇到了store指令，将需要写入内存的Value压入指针对应的堆栈，并将该指令删除；</li>
+<li>如果遇到了load指令，那么将所有使用该load指令对应Value的指令，改为使用指针对应堆栈的栈顶Value，并将该指令删除；</li>
+<li>如果遇到了phi指令，则将该指令对应的Value压入指针对应的堆栈。</li>
+</ul>
+<p>当我们扫描完某基本块所有指令后，需要再扫描一遍其在支配树中的子节点，将最新的数据流（也就是每个指针对应的栈顶Value）信息，写入子节点中的phi指令。最后为所有子节点调用该重命名函数，进行后续的遍历过程。</p>
+<h3 id="GVN">GVN</h3>
+<p>GVN又称为全局值标号，效果等同于常量传播、复写传播、消除全局和局部的公共子表达式。我们已经通过mem2reg将中间代码转化成了SSA形式，即所有的变量都只定义了一次，这为GVN的实现奠定了良好的基础。</p>
+<p>GVN的基本思路是：为每一个运算相关的表达式指定一个hashcode，并将两者的映射关系存入到一个哈希表中。在进行某一次运算时，如果发现表达式对应的hashcode已经存在，说明该表达式以前被运算过。那么我们直接从哈希表中找到对应的已经计算好的Value即可，不需要进行重复计算。</p>
+<p>GVN优化是以函数作为基本单位的（不同函数不存在公共表达式）。在对某一个函数执行GVN时，我们需要前序遍历其支配树，这样才能保证遍历到某一条指令时，其使用的各个变量都被前面的便利过程中被定义过。</p>
+<p>此外，函数调用也是可以进行GVN优化的。但是，并不是所有的函数调用都可以进行优化——只有不操作全局变量、不调用其他函数、不进行IO的函数才能被优化掉。</p>
+<h3 id="寄存器分配">寄存器分配</h3>
+<p>我的编译器是以LLVM IR作为中间代码，对于每一条中间代码，都仅需两个临时寄存器即可翻译成对应的MIPS代码。在一般约定中，临时寄存器需要使用t0-t9 如果把这些寄存器全部作为临时变量，只有其中两个可以真正被使用，显然是浪费的。又考虑到我们的编译器并没有真正的与操作系统交互，k0和k1寄存器实际上是没有被使用的，恰好可以满足笔者编译器临时变量的需要。因此，笔者使用k0-k1作为临时寄存器，而t0-t9,s0-s7都作为全局寄存器。此外，对于函数前四个参数，笔者为其分配了a0-a3寄存器，同时在栈中为其预留空间，满足MIPS约定。</p>
+<p>对于临时寄存器，我们可以根据MIPS指令规则直接进行转化 。例如中间代码<code>%v2 = add i32 1, 2</code>，我们可以将其翻译成下面的目标代码（优化前）——</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">li $k0, 1
+li $k1, 2
+addu $t0, $k0, $k1 # $t0表示分配给%v2的寄存器<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>对于全局寄存器，笔者采用图着色的策略进行分配。但是实际上，笔者并没有真正的建立冲突图，根据活跃变量分析的结果判断某个变量所在的寄存器是否可以释放。具体思路是，活跃变量分析，计算基本块的in和out，然后前序遍历dom树——</p>
+<ul>
+<li>当遇到需要定义的变量时（也就是LLVM IR中%v*），我们为这个定义的变量分配寄存器。如果当前寄存器有剩余，那么我们可以在全局寄存器池中为其分配一个寄存器；否则随机释放一个寄存器。</li>
+<li>在分配完当前基本块后，如果下一个基本块的 in 没有这个变量，当前寄存器就可以先释放，在处理完下一个基本块后再恢复即可。处理完全部dom子节点后，再释放当前基本块“定义”的变量所占用的寄存器。</li>
+</ul>
+<p>上面的过程实际上是在中端优化中作为独立的一个pass完成的，其结果是得到“变量到全局寄存器的映射”（由HashMap存储，并保存到每一个Function中）。在后端翻译的时候，我们可以直接按照这个映射关系为全局变量分配寄存器。我们为func3执行分配全局寄存器的步骤后得到的映射关系如下所示——</p>
+<h3 id="死代码删除">死代码删除</h3>
+<p>死代码删除是指“通过活跃变量分析，找出所有只定义不使用的变量，将其定义点删除”。因为在寄存器分配阶段，我们已经获得了所有变量的def、use信息，在这一阶段我们只需要遍历一遍指令，将没有被使用的变量的定义点删除即可。</p>
+<p>需要注意的是，并不是所有的“定义但不使用”变量都可以删除，有以下两种特殊情况——</p>
+<ul>
+<li>对于<code>%v1 = call i32 @f_fibo(i32 5) </code>等函数调用指令，即使%v1在后面都没有使用也不能贸然删除。因为被调用的函数可能将指针作为形参，或者修改了全局变量，或者调用了其他函数，如果删除可对其他部分的执行产生影响</li>
+<li>对于<code>%v2 = call i32 (...) @getint()</code>等输入指令（在笔者设计中，IO和call不是一类指令），即使%2在后面没有被使用，我们也需要完成IO操作，因此也不能删除。</li>
+</ul>
+<h3 id="常量计算">常量计算</h3>
+<p>对于两个常数的运算和比较，我们直接可以在编译阶段算出结果。此外，对于变量和常量之间的运算，我们也有如下优化策略——</p>
+<ul>
+<li>
+<p>$a * 0 = 0$</p>
+</li>
+<li>
+<p>$a + 0 = a$</p>
+</li>
+<li>
+<p>$a - 0 = a$</p>
+</li>
+<li>
+<p>$0 \ / \ a = 0$</p>
+</li>
+<li>
+<p>$a\ /\ 1 = a$</p>
+</li>
+<li>
+<p>$a\ %\ 1 = a$</p>
+</li>
+</ul>
+<h2 id="后端">后端</h2>
+<h3 id="消除Phi">消除Phi</h3>
+<p>mem2reg后生成的phi指令是无法直接翻译的，我们需要将其变为一系列move指令，便于翻译。例如在b1基本块中有这样一条指令——<code>%v1 = phi i32 [ %v2, %b2 ], [ %v3, %b3 ]</code>，我们需要将其进一步变为<code>move $V1, $V2</code>和<code>move $v1, $v3</code>。</p>
+<p>转化逻辑很简单，难的是生成的move指令应该如何放置。对于<code>move %v1, %v2</code>，我们需要考察%v2所在的基本块——b2的后继数量，进一步确定move的位置。</p>
+<ul>
+<li>如果b2只有b1一个后继，那么我们直接将该move指令放到b2结尾处即可</li>
+<li>如果b2还有其他后继基本块，那么我们需要在b1-b2中新建一个基本块，然后将move指令放到新基本块中</li>
+</ul>
+<p>此外还需要注意，同一基本块中所有的phi指令都是并行赋值的，那么生成的若干move也应该满足并行赋值的特点。但是很不幸，直接生成move指令序列可能出现下面这种情况——</p>
+<pre class="line-numbers language-none"><code class="language-none">move $v4, $v5
+move $v6, $v4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>很显然，第二个move指令用到的是$v4的原始值，而不是通过第一条move指令赋值后的值。我们可以通过增加临时变量来解决这个问题——</p>
+<pre class="line-numbers language-none"><code class="language-none">move $v4_temp, $v4
+move $v4, $v5
+move $v6, $v4_temp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="内存管理">内存管理</h3>
+<p>LLVM IR中的指令最多有两个操作数，这和mips是很相近的，因此每条LLVM IR指令都可以很方便的直接转化为MIPS形式。对于已经分配好寄存器的变量，我们可以直接将其翻译成对应的寄存器，而对于其他变量，我们只能将其放到内存中，使用的时候从内存中取。这就要涉及到内存管理了——</p>
+<p>我采用的内存管理策略是：</p>
+<ul>
+<li>
+<p>每个函数以<code>$sp</code>为栈底指针。在当前函数的作用域中， <code>$sp</code>的值不会随内存分配而变化。只有调用新函数前，才会将<code>$sp</code>的值变为新函数的栈底</p>
+</li>
+<li>
+<p>首先在栈底为形参预留空间。在笔者的设计中，函数前3个形参保存在<code>$a1, $a2, $a3</code>中（<code>$a0</code>只用于IO），但是仍然在栈中为其预留空间。</p>
+</li>
+<li>
+<p>局部变量依次放到上面的空间中。我们在MIPSBuilder这一单例模式类中记录每个局部变量的存放位置相对于栈底的偏移（因为栈从高地址向低地址增长的，所以偏移为负数），以及当前栈顶到栈底的总偏移量。</p>
+<ul>
+<li>每定义一个需要分配空间的变量时，总偏移量自减4，然后在MIPSBuilder中记录好该变量到该偏移量的映射关系。</li>
+<li>当使用到某变量时，从MIPSBuilder中获取其偏移量，偏移量和$sp的值相加就是该变量在栈上的位置。</li>
+</ul>
+</li>
+<li>
+<p>在调用某个函数时，我们需要先保存当前已经分配的寄存器，然后将函数参数、$sp和$ra寄存器依次保存栈顶。最后，将$sp的值加上目前的总偏移量，作为被调用函数的栈底。接下来，直接jump到目标函数对应的lable即可。当函数返回时，我们还需要将上面保存的变量按照保存的顺序逆序进行恢复。</p>
+</li>
+</ul>
+<h2 id="附录">附录</h2>
+<h3 id="文法重构">文法重构</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">CompUnit  <span class="token operator">==</span><span class="token operator">&gt;</span>  <span class="token punctuation">{</span>VarDecl <span class="token operator">|</span> ConstDecl<span class="token punctuation">}</span> <span class="token punctuation">{</span>FUncDef<span class="token punctuation">}</span> MainFunDef
+
+
+ConstDecl <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'const'</span> <span class="token char">'int'</span> ConstDef <span class="token punctuation">{</span> <span class="token char">','</span> ConstDef <span class="token punctuation">}</span> <span class="token char">';'</span>  
+    <span class="token comment">//error i: 可能缺少分号</span>
+ConstDef <span class="token operator">==</span><span class="token operator">&gt;</span> Indent <span class="token punctuation">{</span><span class="token char">'['</span> ConstExp <span class="token char">']'</span><span class="token punctuation">}</span> <span class="token char">'='</span> ConstInitVal
+    <span class="token comment">//error b: 重复定义const变量； </span>
+    <span class="token comment">//error k: cosnt数组定义中缺少右中括号</span>
+ConstInitVal <span class="token operator">==</span><span class="token operator">&gt;</span> ConstExp <span class="token operator">|</span> <span class="token char">'{'</span> <span class="token punctuation">[</span>ConstInitVal <span class="token punctuation">{</span><span class="token char">','</span> ConstInitVal<span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token char">'}'</span>
+
+
+VarDecl   <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'int'</span> VarDef <span class="token punctuation">{</span><span class="token char">','</span> VarDef<span class="token punctuation">}</span> <span class="token char">';'</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+VarDef  <span class="token operator">==</span><span class="token operator">&gt;</span>  Ident <span class="token punctuation">{</span><span class="token char">'['</span>  ConstExp  <span class="token char">']'</span><span class="token punctuation">}</span> <span class="token punctuation">[</span><span class="token char">'='</span>  InitVal<span class="token punctuation">]</span>
+	<span class="token comment">//error b: 重复定义变量； </span>
+    <span class="token comment">//error k: 数组定义中缺少右中括号</span>
+InitVal <span class="token operator">==</span><span class="token operator">&gt;</span>  Exp <span class="token operator">|</span> <span class="token char">'{'</span> <span class="token punctuation">[</span>InitVal <span class="token punctuation">{</span><span class="token char">','</span> InitVal<span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token char">'}'</span>
+ 
+    
+    
+FuncDef  <span class="token operator">==</span><span class="token operator">&gt;</span>  FuncType Ident <span class="token char">'('</span> <span class="token punctuation">[</span>FuncFormalParams<span class="token punctuation">]</span> <span class="token char">')'</span> Block
+    <span class="token comment">//error b: 重复定义函数</span>
+    <span class="token comment">//error g: 有返回值的函数最后一句缺少return</span>
+    <span class="token comment">//error j: 缺少右小括号</span>
+FuncType <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'void'</span> <span class="token operator">|</span> <span class="token char">'int'</span>
+MainFuncDef  <span class="token operator">==</span><span class="token operator">&gt;</span>  <span class="token char">'int'</span> <span class="token char">'main'</span> <span class="token char">'('</span>  <span class="token char">')'</span> Block
+    <span class="token comment">//error b: 重复定义函数</span>
+    <span class="token comment">//error g: 有返回值的函数最后一句缺少return</span>
+    <span class="token comment">//error j: 缺少右小括号</span>
+FuncFormalParams  <span class="token operator">==</span><span class="token operator">&gt;</span>  FuncFormalParam <span class="token punctuation">{</span><span class="token char">','</span> FuncFormalParam<span class="token punctuation">}</span>
+FuncFormalParam  <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'int'</span> Indent <span class="token punctuation">[</span><span class="token char">'['</span> <span class="token char">']'</span>  <span class="token punctuation">{</span><span class="token char">'['</span> ConstExp <span class="token char">']'</span><span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token comment">//gerror b: 形参名重复定义</span>
+    <span class="token comment">//error k: 对于数组形参缺少右中括号</span>
+FuncRealParams → Exp <span class="token punctuation">{</span> <span class="token char">','</span> Exp <span class="token punctuation">}</span> 
+Block <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'{'</span> <span class="token punctuation">{</span>VarDecl <span class="token operator">|</span> ConstDecl <span class="token operator">|</span> Stmt<span class="token punctuation">}</span> <span class="token char">'}'</span>   
+    
+
+    
+Stmt <span class="token operator">==</span><span class="token operator">&gt;</span> AssignStmt <span class="token operator">|</span> ExpStmt <span class="token operator">|</span> BlockStmt <span class="token operator">|</span> IfStmt <span class="token operator">|</span> WhileStmt <span class="token operator">|</span> BreakStmt <span class="token operator">|</span> CReturnStmt <span class="token operator">|</span> GetIntStmt <span class="token operator">|</span> PrintfStmt
+AssignStmt <span class="token operator">==</span><span class="token operator">&gt;</span> LVal <span class="token char">'='</span> Exp <span class="token char">';'</span>
+    <span class="token comment">//error h: LVal不可以是常量</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+ExpStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token punctuation">[</span>Exp<span class="token punctuation">]</span> <span class="token char">';'</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+BlockStmt <span class="token operator">==</span><span class="token operator">&gt;</span> block
+IfStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'if'</span> <span class="token char">'('</span> Cond <span class="token char">')'</span> Stmt <span class="token punctuation">[</span> <span class="token char">'else'</span> Stmt <span class="token punctuation">]</span>
+    <span class="token comment">//error j: 缺少右小括号</span>
+WhileStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'while'</span> <span class="token char">'('</span> Cond <span class="token char">')'</span> Stmt
+    <span class="token comment">//error j: 缺少右小括号</span>
+BreakStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'break'</span> <span class="token char">';'</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+    <span class="token comment">//error m: 循环中可能缺少break语句</span>
+ContinueStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'continue'</span> <span class="token char">';'</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+    <span class="token comment">//error m: 循环中可能缺少continue语句</span>
+ReturnStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'return'</span> <span class="token punctuation">[</span>Exp<span class="token punctuation">]</span> <span class="token char">';'</span>
+    <span class="token comment">//error f: 无返回值的函数有return exp</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+GetIntStmt <span class="token operator">==</span><span class="token operator">&gt;</span> LVal <span class="token char">'='</span> <span class="token char">'getint'</span><span class="token char">'('</span><span class="token char">')'</span><span class="token char">';'</span>
+    <span class="token comment">//error h: LVal不可以是常量</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+    <span class="token comment">//error j: 可能缺少右小括号</span>
+PrintfStmt <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'printf'</span><span class="token char">'('</span>FormatString<span class="token punctuation">{</span><span class="token char">','</span>Exp<span class="token punctuation">}</span><span class="token char">')'</span><span class="token char">';'</span>
+    <span class="token comment">//error i: 可能缺少分号</span>
+    <span class="token comment">//error j: 可能缺少右小括号</span>
+    <span class="token comment">//error l: 格式字符与表达式个数不匹配</span>
+
+    
+    
+    
+LValExp <span class="token operator">==</span><span class="token operator">&gt;</span> Ident <span class="token punctuation">{</span><span class="token char">'['</span> Exp <span class="token char">']'</span><span class="token punctuation">}</span>
+	<span class="token comment">//error c: 使用未定义的名字</span>
+	<span class="token comment">//error k: 缺少右中括号</span>
+PrimaryExp <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'('</span> Exp <span class="token char">')'</span> <span class="token operator">|</span> LValExp <span class="token operator">|</span> Number
+UnaryExp <span class="token operator">==</span><span class="token operator">&gt;</span> PrimaryExp <span class="token operator">|</span> Ident <span class="token char">'('</span> <span class="token punctuation">[</span>FuncRealParams<span class="token punctuation">]</span> <span class="token char">')'</span> <span class="token operator">|</span> UnaryOp UnaryExp
+    <span class="token comment">//error c: 可能使用未定义的名字（函数调用中） </span>
+    <span class="token comment">//error d: 函数调用时形参和实参的个数不匹配</span>
+    <span class="token comment">//error e: 函数调用时参数类型不匹配</span>
+    <span class="token comment">//error j: 可能缺少右小括号</span>
+MulExp <span class="token operator">==</span><span class="token operator">&gt;</span> UnaryExp <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token char">'*'</span> <span class="token operator">|</span> <span class="token char">'/'</span> <span class="token operator">|</span> <span class="token char">'%'</span><span class="token punctuation">)</span> UnaryExp<span class="token punctuation">}</span>  <span class="token comment">//注意归约</span>
+AddExp <span class="token operator">==</span><span class="token operator">&gt;</span> MulExp <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token char">'+'</span> <span class="token operator">|</span> <span class="token char">'-'</span><span class="token punctuation">)</span> MulExp<span class="token punctuation">}</span> <span class="token comment">//注意归约</span>
+RelExp <span class="token operator">==</span><span class="token operator">&gt;</span> AddExp <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token char">'&lt;'</span> <span class="token operator">|</span> <span class="token char">'&gt;'</span> <span class="token operator">|</span> <span class="token char">'&lt;='</span> <span class="token operator">|</span> <span class="token char">'&gt;='</span><span class="token punctuation">)</span> AddExp<span class="token punctuation">}</span> <span class="token comment">//注意归约</span>
+EqExp <span class="token operator">==</span><span class="token operator">&gt;</span> RelExp <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token char">'=='</span> <span class="token operator">|</span> <span class="token char">'!='</span><span class="token punctuation">)</span> RelExp<span class="token punctuation">}</span> <span class="token comment">//注意归约</span>
+LAndExp <span class="token operator">==</span><span class="token operator">&gt;</span> EqExp <span class="token punctuation">{</span><span class="token char">'&amp;&amp;'</span> EqExp<span class="token punctuation">}</span> <span class="token comment">//注意归约</span>
+LOrExp <span class="token operator">==</span><span class="token operator">&gt;</span>  LAndExp <span class="token punctuation">{</span><span class="token char">'||'</span> LAndExp<span class="token punctuation">}</span> <span class="token comment">//注意归约</span>
+CondExp <span class="token operator">==</span><span class="token operator">&gt;</span> LorExp
+ConstExp <span class="token operator">==</span><span class="token operator">&gt;</span> AddExp
+Exp <span class="token operator">==</span><span class="token operator">&gt;</span> AddExp
+    
+UnaryOp <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'+'</span> <span class="token operator">|</span> <span class="token char">'-'</span> <span class="token operator">|</span> <span class="token char">'!'</span>
+Number <span class="token operator">==</span><span class="token operator">&gt;</span> IntConst
+
+<span class="token comment">//下面的语法单元不单独建类</span>
+FormatString <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token char">'"'</span><span class="token punctuation">{</span>Char<span class="token punctuation">}</span><span class="token char">'"'</span> 
+	<span class="token comment">//error a: 格式字符串中有非法字符</span>
+Char <span class="token operator">==</span><span class="token operator">&gt;</span> FormatChar <span class="token operator">|</span> NormalChar
+FormatChar <span class="token operator">==</span><span class="token operator">&gt;</span> <span class="token operator">%</span>d
+NormalChar <span class="token operator">==</span><span class="token operator">&gt;</span> 十进制编码为<span class="token number">32</span><span class="token punctuation">,</span><span class="token number">33</span><span class="token punctuation">,</span><span class="token number">40</span><span class="token operator">-</span><span class="token number">126</span>的ASCII字符，<span class="token char">'\'（编码92）出现当且仅当为'</span>\n'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="参考编译器">参考编译器</h3>
+<ul>
+<li>
+<p>郭衍培学长的课设编译器： <a target="_blank" rel="noopener" href="https://github.com/gyp2847399255/SysY-compiler">https://github.com/gyp2847399255/SysY-compiler</a></p>
+</li>
+<li>
+<p>陈昊学长的课设编译器：<a target="_blank" rel="noopener" href="https://github.com/Chenrt-ggx/MipsCompiler">https://github.com/Chenrt-ggx/MipsCompiler</a></p>
+</li>
+<li>
+<p>毕昇杯“喵喵队仰卧起坐”队编译器：<a target="_blank" rel="noopener" href="https://gitlab.eduxiji.net/educg-group-12619-928705/compiler2022-meowcompiler">https://gitlab.eduxiji.net/educg-group-12619-928705/compiler2022-meowcompiler</a></p>
+</li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Hyggge</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/">http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Hyggge</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%BC%96%E8%AF%91/">
+                                    <span class="chip bg-color">编译</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="「Compile」SysY编译器设计">
+                        
+                        <span class="card-title">「Compile」SysY编译器设计</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%96%E8%AF%91/" class="post-category">
+                                    编译
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%96%E8%AF%91/">
+                        <span class="chip bg-color">编译</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/10/08/ruby/ruby-block-de-li-jie-he-shi-yong/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="「Ruby」 Block的理解和使用">
+                        
+                        <span class="card-title">「Ruby」 Block的理解和使用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-08
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Ruby/" class="post-category">
+                                    Ruby
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Ruby/">
+                        <span class="chip bg-color">Ruby</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">Hyggge</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+                <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">161.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/hyggge" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:hyggge6@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1695386157" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1695386157" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+        <script type="text/javascript" src="/js/tw_cn.js"></script>
+        <script type="text/javascript">
+          var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+          var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+          var cookieDomain = "http://hyggge.github.io"; //Cookie地址, 一定要设定, 通常为你的网址
+          var msgToTraditionalChinese = "繁"; //此处可以更改为你想要显示的文字
+          var msgToSimplifiedChinese = "简"; //同上，但两处均不建议更改
+          var translateButtonId = "translateLink"; //默认互换id
+          translateInitilization();
+        </script>
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

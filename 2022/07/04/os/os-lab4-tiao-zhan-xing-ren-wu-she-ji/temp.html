@@ -1,0 +1,42 @@
+<pre><code class="language-cpp">extern int get_retval();
+
+void exit(void)
+{
+    void *retval = get_retval();
+    int thread_id = syscall_get_thread_id();
+    struct Thread *cur_thread = &amp;env-&gt;env_threads[THREAD2INDEX(thread_id)];
+
+    if (THREAD2INDEX(thread_id) == 0) {
+        cur_thread-&gt;thread_retval = 0;
+        syscall_thread_destroy(0);
+    }
+    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != 0) {
+        syscall_thread_destroy(0);
+    }
+    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_EXITED) != 0) {
+        syscall_thread_destroy(0);
+    }
+    else {
+        cur_thread-&gt;thread_retval = retval;
+        syscall_thread_destroy(0);
+    }
+}
+
+
+struct Env *env;
+
+void
+libmain(int argc, char **argv)
+{
+    env = 0;	// Your code here.
+    int envid;
+    envid = syscall_getenvid();
+    envid = ENVX(envid);
+    env = &amp;envs[envid];
+    // call user main routine
+    umain(argc, argv);
+    // exit gracefully
+    exit();
+}
+
+</code></pre>
