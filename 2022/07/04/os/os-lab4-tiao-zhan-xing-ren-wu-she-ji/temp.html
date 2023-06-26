@@ -1,42 +1,41 @@
-<pre><code class="language-cpp">extern int get_retval();
-
-void exit(void)
-{
-    void *retval = get_retval();
-    int thread_id = syscall_get_thread_id();
-    struct Thread *cur_thread = &amp;env-&gt;env_threads[THREAD2INDEX(thread_id)];
-
-    if (THREAD2INDEX(thread_id) == 0) {
-        cur_thread-&gt;thread_retval = 0;
-        syscall_thread_destroy(0);
-    }
-    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_CANCELED) != 0) {
-        syscall_thread_destroy(0);
-    }
-    else if ((cur_thread-&gt;thread_tag &amp; THREAD_TAG_EXITED) != 0) {
-        syscall_thread_destroy(0);
-    }
-    else {
-        cur_thread-&gt;thread_retval = retval;
-        syscall_thread_destroy(0);
-    }
-}
-
-
-struct Env *env;
-
-void
-libmain(int argc, char **argv)
-{
-    env = 0;	// Your code here.
-    int envid;
-    envid = syscall_getenvid();
-    envid = ENVX(envid);
-    env = &amp;envs[envid];
-    // call user main routine
-    umain(argc, argv);
-    // exit gracefully
-    exit();
-}
-
-</code></pre>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">extern</span> <span class="dt">int</span> get_retval<span class="op">();</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> exit<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">*</span>retval <span class="op">=</span> get_retval<span class="op">();</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> thread_id <span class="op">=</span> syscall_get_thread_id<span class="op">();</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> Thread <span class="op">*</span>cur_thread <span class="op">=</span> <span class="op">&amp;</span>env<span class="op">-&gt;</span>env_threads<span class="op">[</span>THREAD2INDEX<span class="op">(</span>thread_id<span class="op">)];</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>THREAD2INDEX<span class="op">(</span>thread_id<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        cur_thread<span class="op">-&gt;</span>thread_retval <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        syscall_thread_destroy<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">((</span>cur_thread<span class="op">-&gt;</span>thread_tag <span class="op">&amp;</span> THREAD_TAG_CANCELED<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        syscall_thread_destroy<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> <span class="op">((</span>cur_thread<span class="op">-&gt;</span>thread_tag <span class="op">&amp;</span> THREAD_TAG_EXITED<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        syscall_thread_destroy<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        cur_thread<span class="op">-&gt;</span>thread_retval <span class="op">=</span> retval<span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        syscall_thread_destroy<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Env <span class="op">*</span>env<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>libmain<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    env <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>    <span class="co">// Your code here.</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> envid<span class="op">;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    envid <span class="op">=</span> syscall_getenvid<span class="op">();</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    envid <span class="op">=</span> ENVX<span class="op">(</span>envid<span class="op">);</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    env <span class="op">=</span> <span class="op">&amp;</span>envs<span class="op">[</span>envid<span class="op">];</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">// call user main routine</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    umain<span class="op">(</span>argc<span class="op">,</span> argv<span class="op">);</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">// exit gracefully</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    exit<span class="op">();</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>

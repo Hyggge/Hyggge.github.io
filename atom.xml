@@ -6,7 +6,7 @@
   <link href="http://hyggge.github.io/atom.xml" rel="self"/>
   
   <link href="http://hyggge.github.io/"/>
-  <updated>2023-01-11T06:19:43.273Z</updated>
+  <updated>2023-06-26T14:50:13.903Z</updated>
   <id>http://hyggge.github.io/</id>
   
   <author>
@@ -17,11 +17,146 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>「CS229」Lecture5：生成学习算法、GDA和朴素贝叶斯</title>
+    <link href="http://hyggge.github.io/2023/06/26/ml/cs229-lecture5/"/>
+    <id>http://hyggge.github.io/2023/06/26/ml/cs229-lecture5/</id>
+    <published>2023-06-26T11:57:33.000Z</published>
+    <updated>2023-06-26T14:50:13.903Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「CS229」Lecture4：Perception、GLM和Softmax</title>
+    <link href="http://hyggge.github.io/2023/06/25/ml/cs229-lecture4/"/>
+    <id>http://hyggge.github.io/2023/06/25/ml/cs229-lecture4/</id>
+    <published>2023-06-25T11:57:26.000Z</published>
+    <updated>2023-06-26T14:21:32.069Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「CS229」Lecture3： 局部加权回归、Logistic回归和牛顿方法</title>
+    <link href="http://hyggge.github.io/2023/06/24/ml/cs229-lecture3/"/>
+    <id>http://hyggge.github.io/2023/06/24/ml/cs229-lecture3/</id>
+    <published>2023-06-24T11:54:18.000Z</published>
+    <updated>2023-06-26T14:23:08.899Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「CS229」Lecture2： 线性回归和梯度下降</title>
+    <link href="http://hyggge.github.io/2023/06/23/ml/cs229-lecture2/"/>
+    <id>http://hyggge.github.io/2023/06/23/ml/cs229-lecture2/</id>
+    <published>2023-06-23T11:55:14.000Z</published>
+    <updated>2023-06-26T14:14:38.037Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「CS229」 Lecture 1： 机器学习导引</title>
+    <link href="http://hyggge.github.io/2023/06/21/ml/cs229-lecture1/"/>
+    <id>http://hyggge.github.io/2023/06/21/ml/cs229-lecture1/</id>
+    <published>2023-06-21T11:51:25.000Z</published>
+    <updated>2023-06-26T12:17:29.782Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
     <title>「Compile」SysY编译器设计</title>
     <link href="http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/"/>
     <id>http://hyggge.github.io/2023/01/11/compile/compile-sysy-bian-yi-qi-she-ji/</id>
     <published>2023-01-11T01:20:41.000Z</published>
-    <updated>2023-01-11T06:19:43.273Z</updated>
+    <updated>2023-04-23T17:29:52.334Z</updated>
     
     
       
@@ -408,137 +543,6 @@
     <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
     
     <category term="面向对象" scheme="http://hyggge.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「BUAA-C++」Lec7:C++类模版和STL简介</title>
-    <link href="http://hyggge.github.io/2022/04/18/c/cpp-programing-lec-7/"/>
-    <id>http://hyggge.github.io/2022/04/18/c/cpp-programing-lec-7/</id>
-    <published>2022-04-18T10:57:58.000Z</published>
-    <updated>2023-01-11T07:36:43.441Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="C++" scheme="http://hyggge.github.io/categories/C/"/>
-    
-    
-    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
-    
-    <category term="C++" scheme="http://hyggge.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「BUAA-OS」 Lab2：内存管理</title>
-    <link href="http://hyggge.github.io/2022/04/18/os/os-lab2-shi-yan-bao-gao/"/>
-    <id>http://hyggge.github.io/2022/04/18/os/os-lab2-shi-yan-bao-gao/</id>
-    <published>2022-04-18T01:44:03.000Z</published>
-    <updated>2023-01-11T07:36:43.451Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
-    
-    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「操作系统」进程调度</title>
-    <link href="http://hyggge.github.io/2022/04/16/os/os-jin-cheng-diao-du/"/>
-    <id>http://hyggge.github.io/2022/04/16/os/os-jin-cheng-diao-du/</id>
-    <published>2022-04-16T12:36:45.000Z</published>
-    <updated>2023-01-11T06:06:22.327Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="操作系统" scheme="http://hyggge.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「BUAA-C++」Lec6:多态</title>
-    <link href="http://hyggge.github.io/2022/04/12/c/cpp-progranming-lec-6/"/>
-    <id>http://hyggge.github.io/2022/04/12/c/cpp-progranming-lec-6/</id>
-    <published>2022-04-12T07:10:57.000Z</published>
-    <updated>2023-01-11T07:36:43.453Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="C++" scheme="http://hyggge.github.io/categories/C/"/>
-    
-    
-    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
-    
-    <category term="C++" scheme="http://hyggge.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「Git」分支管理</title>
-    <link href="http://hyggge.github.io/2022/04/11/git/git-fen-zhi-guan-li/"/>
-    <id>http://hyggge.github.io/2022/04/11/git/git-fen-zhi-guan-li/</id>
-    <published>2022-04-11T08:24:41.000Z</published>
-    <updated>2023-01-11T06:06:22.367Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="Git" scheme="http://hyggge.github.io/categories/Git/"/>
-    
-    
-    <category term="Git" scheme="http://hyggge.github.io/tags/Git/"/>
     
   </entry>
   
