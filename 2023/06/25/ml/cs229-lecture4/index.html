@@ -7,10 +7,10 @@
     <meta name="keywords" content="「CS229」Lecture4：Perception、GLM和Softmax, Hyggge&#39;s Blog">
     <meta name="description" content="Perception算法
 Perception 也是一种用来解决二分类问题的算法。它的具体形式也很直观——
-\[
-h_\theta(x) = g(\theta^Tx) \\ \\
+$$
+h_\theta(x) = g(\theta^Tx) \ \
 g(z) = \begin{cases}
-    1, &amp;a">
+1, &amp;amp;  z">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -57,9 +57,9 @@ g(z) = \begin{cases}
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="Hyggge's Blog" type="application/atom+xml">
 </head>
 
 
@@ -390,248 +390,254 @@ g(z) = \begin{cases}
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="perception算法">Perception算法</h2>
-<p>Perception 也是一种用来解决二分类问题的算法。它的具体形式也很直观——
-<span class="math display">\[
-h_\theta(x) = g(\theta^Tx) \\ \\
-g(z) = \begin{cases}
-    1, &amp;  z \ge 0 \\
-    0, &amp;  z &lt; 0
-\end{cases}
-\]</span> <span class="math inline">\(g(z)\)</span>
-函数的表示形式比较符合我们的直觉：当 <span class="math inline">\(z \ge
-0\)</span> ，即 <span class="math inline">\(\theta^Tx \ge 0\)</span>
-的时候，直接将 x 分到某一类（用 1 表示），直接令 <span class="math inline">\(y = g(z) = 1\)</span> ；反之将 x 分到另外一类
-，直接令 <span class="math inline">\(y = g(z) = 0\)</span>。</p>
-<p>类似于求解Logistic回归的损失函数的过程，我们可以通过极大似然估计得到
-Perception 算法的损失函数（过程和结果和Logistic是一样的） <span class="math display">\[
-J(\theta) = \sum_{i=1}^m  - \ y^{(i)} \cdot \log(h_\theta(x^{(i)}))  -
-(1 - y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))
-\]</span> 定义好损失函数，我们就可以采用梯度下降求解参数。 <span class="math display">\[
-\begin{aligned}
-\theta_j := \theta_j - \alpha \frac{\partial \
-J(\theta)}{\partial\  \theta_j} =  \theta_j - \alpha \sum_{i=1}^m
-(h_\theta(x ^{(i)})  -  y^{(i)}) \cdot x_j^{(i)}
-\end{aligned}
-\]</span> 因为 <span class="math inline">\(g(z)\)</span>
-的表示十分简洁并且符合直觉，所以
-Perception算法求解有很好的的几何解释，具体可以看课程视频对应部分。但是，
-Perception 缺乏概率解释，这是它没有得到广泛应用的原因之一。</p>
-<p>此外，Perception
-还有一个明显缺点——它只能处理线性可分的数据集。对于线性不可分的数据集，Perception算法将无法收敛。比如下面这个图就不是线性可分的。</p>
-<p><img src="./线性不可分.png" style="zoom:75%;"></p>
-<h2 id="指数族the-exponential-family">指数族（The exponential
-family）</h2>
+                <h2 id="Perception算法">Perception算法</h2>
+<p>Perception 也是一种用来解决二分类问题的算法。它的具体形式也很直观——<br>
+$$<br>
+h_\theta(x) = g(\theta^Tx) \ \<br>
+g(z) = \begin{cases}<br>
+1, &amp;  z \ge 0 \<br>
+0, &amp;  z &lt; 0<br>
+\end{cases}<br>
+$$<br>
+$g(z)$ 函数的表示形式比较符合我们的直觉：当 $z \ge 0$ ，即 $\theta^Tx \ge 0$ 的时候，直接将 x 分到某一类（用 1 表示），直接令 $y = g(z) = 1$ ；反之将 x 分到另外一类 ，直接令 $y = g(z) = 0$。</p>
+<p>类似于求解Logistic回归的损失函数的过程，我们可以通过极大似然估计得到 Perception 算法的损失函数（过程和结果和Logistic是一样的）<br>
+$$<br>
+J(\theta) = \sum_{i=1}^m  - \ y^{(i)} \cdot \log(h_\theta(x^{(i)}))  - (1 - y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))<br>
+$$<br>
+定义好损失函数，我们就可以采用梯度下降求解参数。<br>
+$$<br>
+\begin{aligned}<br>
+\theta_j := \theta_j - \alpha \frac{\partial \ J(\theta)}{\partial\  \theta_j} =  \theta_j - \alpha \sum_{i=1}^m (h_\theta(x ^{(i)})  -  y^{(i)}) \cdot x_j^{(i)}<br>
+\end{aligned}<br>
+$$<br>
+因为 $g(z)$ 的表示十分简洁并且符合直觉，所以 Perception算法求解有很好的的几何解释，具体可以看课程视频对应部分。但是， Perception 缺乏概率解释，这是它没有得到广泛应用的原因之一。</p>
+<p>此外，Perception 还有一个明显缺点——它只能处理线性可分的数据集。对于线性不可分的数据集，Perception算法将无法收敛。比如下面这个图就不是线性可分的。</p>
+<img src="./线性不可分.png" style="zoom:75%;">
+<h2 id="指数族（The-exponential-family）">指数族（The exponential family）</h2>
 <h3 id="指数族的定义">指数族的定义</h3>
-<p>如果一个分布能用下面的方式写出来，我们就说这个分布属于指数族 <span class="math display">\[
-P(y;\eta) = b(y) \cdot \exp(\eta^TT(y) - a(\eta))
-\]</span> 现在简要介绍以下公式中的参数：</p>
+<p>如果一个分布能用下面的方式写出来，我们就说这个分布属于指数族<br>
+$$<br>
+P(y;\eta) = b(y) \cdot \exp(\eta^TT(y) - a(\eta))<br>
+$$<br>
+现在简要介绍以下公式中的参数：</p>
 <ul>
-<li><p><span class="math inline">\(y\)</span> 是研究的数据</p></li>
-<li><p><span class="math inline">\(\eta\)</span> 是自然参数（natural
-parameter），也叫典范参数（canonical parameter）。</p></li>
-<li><p><span class="math inline">\(T(y)\)</span>
-叫做充分统计量（sufficient statistic），在这里我们可以认为<span class="math inline">\(T(y) = y\)</span>。</p></li>
-<li><p><span class="math inline">\(a(\eta)\)</span>
-叫做对数分割函数（log partition function），它与数据 <span class="math inline">\(y\)</span> 无关。<span class="math inline">\(\exp(-a(\eta))\)</span>主要起“归一化”的作用。</p></li>
-<li><p><span class="math inline">\(b(y)\)</span> 叫做基础度量（base
-measure），只与数据 <span class="math inline">\(y\)</span>
-有关，与自然参数 <span class="math inline">\(\eta\)</span>
-无关。</p></li>
+<li>
+<p>$y$ 是研究的数据</p>
+</li>
+<li>
+<p>$\eta$ 是自然参数（natural parameter），也叫典范参数（canonical parameter）。</p>
+</li>
+<li>
+<p>$T(y)$ 叫做充分统计量（sufficient statistic），在这里我们可以认为$T(y) = y$。</p>
+</li>
+<li>
+<p>$a(\eta)$ 叫做对数分割函数（log partition function），它与数据 $y$ 无关。$\exp(-a(\eta))$主要起“归一化”的作用。</p>
+</li>
+<li>
+<p>$b(y)$ 叫做基础度量（base measure），只与数据 $y$ 有关，与自然参数 $\eta$ 无关。</p>
+</li>
 </ul>
-<p>其中，<span class="math inline">\(T(y), a(\eta), b(y)\)</span>
-是可以根据我们的需求任意选择的。对于一组固定的<span class="math inline">\(T(y), a(\eta), b(y)\)</span> ，就得到了一个由
-<span class="math inline">\(\eta\)</span>
-参数化的一组分布。通过改变<span class="math inline">\(\eta\)</span>
-，我们就可以得到该组分布中的不同特定分布了。</p>
+<p>其中，$T(y), a(\eta), b(y)$ 是可以根据我们的需求任意选择的。对于一组固定的$T(y), a(\eta), b(y)$ ，就得到了一个由 $\eta$ 参数化的一组分布。通过改变$\eta$ ，我们就可以得到该组分布中的不同特定分布了。</p>
 <h3 id="举例说明">举例说明</h3>
 <p>我们学过的伯努利分布、高斯分布、泊松分布等都属于指数族。</p>
-<h4 id="伯努利分布bernoulli">伯努利分布（Bernoulli）</h4>
-<p>对于伯努利分布，我们熟知的表示形式为 <span class="math display">\[
-P(y; \phi) = \phi^y(1-\phi)^{1-y}
-\]</span> 我们可以对其进行变换 <span class="math display">\[
-\begin{aligned}
-P(y; \phi) &amp;= \phi^y(1-\phi)^{1-y} \\
-&amp;= \exp(\log(\phi^y(1-\phi)^{1-y})) \\
-&amp;= \exp(y\cdot \log(\phi) + (1-y) \cdot(1-\log(\phi))) \\
-&amp;= \exp(y \cdot \log(\frac{\phi}{1 - \phi}) + \log(1 - \phi))
-\end{aligned}
-\]</span> 很显然，这符合指数族的定义。其中：</p>
+<h4 id="伯努利分布（Bernoulli）">伯努利分布（Bernoulli）</h4>
+<p>对于伯努利分布，我们熟知的表示形式为<br>
+$$<br>
+P(y; \phi) = \phi^y(1-\phi)^{1-y}<br>
+$$<br>
+我们可以对其进行变换<br>
+$$<br>
+\begin{aligned}<br>
+P(y; \phi) &amp;= \phi^y(1-\phi)^{1-y} \<br>
+&amp;= \exp(\log(\phi^y(1-\phi)^{1-y})) \<br>
+&amp;= \exp(y\cdot \log(\phi) + (1-y) \cdot(1-\log(\phi))) \<br>
+&amp;= \exp(y \cdot \log(\frac{\phi}{1 - \phi}) + \log(1 - \phi))<br>
+\end{aligned}<br>
+$$<br>
+很显然，这符合指数族的定义。其中：</p>
 <ul>
-<li><p><span class="math inline">\(\eta =
-\log(\frac{\phi}{1-\phi})\)</span>，即 <span class="math inline">\(\phi
-= \frac{1}{1 + e^{-\eta}}\)</span></p></li>
-<li><p><span class="math inline">\(T(y) = y\)</span></p></li>
-<li><p><span class="math inline">\(a(\eta) = -\log(1 - \phi) = \log(1 +
-e^\eta)\)</span></p></li>
-<li><p><span class="math inline">\(b(y) = 1\)</span></p></li>
+<li>
+<p>$\eta = \log(\frac{\phi}{1-\phi})$，即 $\phi = \frac{1}{1 + e^{-\eta}}$</p>
+</li>
+<li>
+<p>$T(y) = y$</p>
+</li>
+<li>
+<p>$a(\eta) = -\log(1 - \phi) = \log(1 + e^\eta)$</p>
+</li>
+<li>
+<p>$b(y) = 1$</p>
+</li>
 </ul>
-<h4 id="高斯分布gaussian">高斯分布（Gaussian）</h4>
-<p>对于高斯分布，我们熟知的表示形式为 <span class="math display">\[
-P(y; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi} \sigma} \exp
-(-\frac{(y-\mu)^2}{2 \sigma^2})
-\]</span> 当<span class="math inline">\(\sigma\)</span> 固定，比如<span class="math inline">\(\sigma = 1\)</span>
-时，高斯分布也是属于指数族的。我们通过下面的推导证明： <span class="math display">\[
-\begin{aligned}
-P(y; \mu, 1) &amp;= \frac{1}{\sqrt{2\pi}} \exp (-\frac{(y-\mu)^2}{2}) \\
-&amp;= \frac{1}{\sqrt{2\pi}} e^{-\frac{y^2}{2}}\exp(\mu y - \frac{1}{2}
-\mu^2) \\
-\end{aligned}
-\]</span> 很显然，这符合指数族的定义。其中：</p>
+<h4 id="高斯分布（Gaussian）">高斯分布（Gaussian）</h4>
+<p>对于高斯分布，我们熟知的表示形式为<br>
+$$<br>
+P(y; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi} \sigma} \exp (-\frac{(y-\mu)^2}{2 \sigma^2})<br>
+$$<br>
+当$\sigma$ 固定，比如$\sigma = 1$ 时，高斯分布也是属于指数族的。我们通过下面的推导证明：<br>
+$$<br>
+\begin{aligned}<br>
+P(y; \mu, 1) &amp;= \frac{1}{\sqrt{2\pi}} \exp (-\frac{(y-\mu)^2}{2}) \<br>
+&amp;= \frac{1}{\sqrt{2\pi}} e^{-\frac{y^2}{2}}\exp(\mu y - \frac{1}{2} \mu^2) \<br>
+\end{aligned}<br>
+$$<br>
+很显然，这符合指数族的定义。其中：</p>
 <ul>
-<li><p><span class="math inline">\(\eta = \mu\)</span></p></li>
-<li><p><span class="math inline">\(T(y) = y\)</span></p></li>
-<li><p><span class="math inline">\(a(\eta) = \frac{1}{2}
-\mu^2\)</span></p></li>
-<li><p><span class="math inline">\(b(y) = \frac{1}{\sqrt{2\pi}}
-e^{-\frac{y^2}{2}}\)</span></p></li>
+<li>
+<p>$\eta = \mu$</p>
+</li>
+<li>
+<p>$T(y) = y$</p>
+</li>
+<li>
+<p>$a(\eta) = \frac{1}{2} \mu^2$</p>
+</li>
+<li>
+<p>$b(y) =  \frac{1}{\sqrt{2\pi}} e^{-\frac{y^2}{2}}$</p>
+</li>
 </ul>
 <h3 id="指数族的性质">指数族的性质</h3>
-<ol type="1">
-<li><p>对于指数族中的某一组分布<span class="math inline">\(p(y;\eta)\)</span>，关于<span class="math inline">\(\eta\)</span>
-的极大似然估计（MLE）是凹优化的，即<span class="math inline">\(\eta\)</span>
-的负对数似然（NLL）是凸优化的。</p></li>
-<li><p>概率分布 <span class="math inline">\(p(y;\eta)\)</span>
-的期望<span class="math inline">\(E(y;h)\)</span>满足: <span class="math display">\[
-E(y;h) = \frac{\partial \ a(\eta)}{\partial\ \eta}
-\]</span> 方差<span class="math inline">\(Var(y;\eta)\)</span> 满足:
-<span class="math display">\[
-Var(y;\eta) = \frac{\partial^2 \ a(\eta)}{\partial\ \eta^2}
-\]</span></p></li>
+<ol>
+<li>
+<p>对于指数族中的某一组分布$p(y;\eta)$，关于$\eta$ 的极大似然估计（MLE）是凹优化的，即$\eta$ 的负对数似然（NLL）是凸优化的。</p>
+</li>
+<li>
+<p>概率分布 $p(y;\eta)$ 的期望$E(y;h)$满足:<br>
+$$<br>
+E(y;h) = \frac{\partial \ a(\eta)}{\partial\ \eta}<br>
+$$<br>
+方差$Var(y;\eta)$ 满足:<br>
+$$<br>
+Var(y;\eta) = \frac{\partial^2 \ a(\eta)}{\partial\ \eta^2}<br>
+$$</p>
+</li>
 </ol>
-<h2 id="广义线性模型glm">广义线性模型（GLM）</h2>
-<p>广义线性模型（GLM）是上面提到的指数族的自然延伸。我们前面学到的线性回归和
-Logistic 回归都可以通过广义线性模型导出。</p>
-<h3 id="glm的三个假设">GLM的三个假设</h3>
+<h2 id="广义线性模型（GLM）">广义线性模型（GLM）</h2>
+<p>广义线性模型（GLM）是上面提到的指数族的自然延伸。我们前面学到的线性回归和 Logistic 回归都可以通过广义线性模型导出。</p>
+<h3 id="GLM的三个假设">GLM的三个假设</h3>
 <ul>
-<li><p><span class="math inline">\(y \mid x;\theta \sim \tt{Exponential
-\ Family}\)</span></p></li>
-<li><p><span class="math inline">\(\eta = \theta^Tx;\ (\theta \in
-\mathbb{R}^n, \ x \in \mathbb{R}^n)\)</span>
-这条假设被称为设计选择（design choice）</p></li>
-<li><p>给定一个<span class="math inline">\(x\)</span>，如果想要对 <span class="math inline">\(y\)</span> 的值进行预测，则 <span class="math inline">\(y\)</span> 的预测值为" $ y x ; $ " 的期望，即<span class="math inline">\(E(y\mid x; \theta)\)</span>。因此，当我们使用 GLM
-进行预测时，<span class="math inline">\(h_\theta(x)\)</span>可以写作：
-<span class="math display">\[
-h_\theta(x) = E(y \mid x ;\theta)
-\]</span></p></li>
+<li>
+<p>$y \mid x;\theta \sim \tt{Exponential \ Family}$</p>
+</li>
+<li>
+<p>$\eta = \theta^Tx;\ (\theta \in \mathbb{R}^n, \ x \in \mathbb{R}^n)$  这条假设被称为设计选择（design choice）</p>
+</li>
+<li>
+<p>给定一个$x$，如果想要对 $y$ 的值进行预测，则 $y$ 的预测值为" $ y \mid x ; \theta$ " 的期望，即$E(y\mid x; \theta)$。因此，当我们使用 GLM 进行预测时，$h_\theta(x)$可以写作：<br>
+$$<br>
+h_\theta(x) = E(y \mid x ;\theta)<br>
+$$</p>
+</li>
 </ul>
-<h3 id="glm的训练和预测">GLM的训练和预测</h3>
-<p>通过上述假设可以看出，GLM 的参数是<span class="math inline">\(\theta\)</span>
-。因此训练目标就是“根据训练数据找到最合适的<span class="math inline">\(\theta\)</span>”
-，而预测目标就是“根据训练好的<span class="math inline">\(\theta\)</span>
-针对指定的<span class="math inline">\(x\)</span> 进行预测”。</p>
+<h3 id="GLM的训练和预测">GLM的训练和预测</h3>
+<p>通过上述假设可以看出，GLM 的参数是$\theta$ 。因此训练目标就是“根据训练数据找到最合适的$\theta$” ，而预测目标就是“根据训练好的$\theta$ 针对指定的$x$ 进行预测”。</p>
 <p>GML的训练和预测过程如下图所示：</p>
-<p><img src="./GLM训练与预测.svg"></p>
+<p><img src="./GLM%E8%AE%AD%E7%BB%83%E4%B8%8E%E9%A2%84%E6%B5%8B.svg" alt=""></p>
 <ul>
-<li><p>预测时，直接让<span class="math inline">\(x\)</span>与训练好的<span class="math inline">\(\theta\)</span> 进行点积运算，得到<span class="math inline">\(\eta\)</span>，输入到指数族中，对应的期望即为
-<span class="math inline">\(y\)</span> 的预测值。</p></li>
-<li><p>训练时，可以直接根据最大似然估计找到损失函数，并利用梯度下降算法对<span class="math inline">\(\theta\)</span>
-进行求解。（这里我们采用的是随机梯度下降） <span class="math display">\[
-\begin{aligned}
-\theta_j := \theta_j - \alpha \cdot(h_\theta(x ^{(i)})  -  y^{(i)})
-\cdot x_j^{(i)}
-\end{aligned}
-\]</span></p>
+<li>
+<p>预测时，直接让$x$与训练好的$\theta$ 进行点积运算，得到$\eta$，输入到指数族中，对应的期望即为 $y$ 的预测值。</p>
+</li>
+<li>
+<p>训练时，可以直接根据最大似然估计找到损失函数，并利用梯度下降算法对$\theta$ 进行求解。（这里我们采用的是随机梯度下降）<br>
+$$<br>
+\begin{aligned}<br>
+\theta_j := \theta_j - \alpha \cdot(h_\theta(x ^{(i)})  -  y^{(i)}) \cdot x_j^{(i)}<br>
+\end{aligned}<br>
+$$</p>
 <blockquote>
-<p>当然，我们也可以进行梯度上升 <span class="math display">\[
-\begin{aligned}
-\theta_j := \theta_j + \alpha \cdot(y^{(i)} - h_\theta(x ^{(i)})) \cdot
-x_j^{(i)}
-\end{aligned}
-\]</span>
+<p>当然，我们也可以进行梯度上升<br>
+$$<br>
+\begin{aligned}<br>
+\theta_j := \theta_j + \alpha \cdot(y^{(i)} - h_\theta(x ^{(i)})) \cdot x_j^{(i)}<br>
+\end{aligned}<br>
+$$<br>
 看上去仅仅是做了一个简单的数学变换，但是实际上我们这里的目标是“极大化似然函数”，而上面的梯度下降是“极小化损失函数”。</p>
-</blockquote></li>
+</blockquote>
+</li>
 </ul>
-<h3 id="glm-中的几个重要术语">GLM 中的几个重要术语</h3>
+<h3 id="GLM-中的几个重要术语">GLM 中的几个重要术语</h3>
 <ul>
-<li><p><span class="math inline">\(\eta\)</span> 被称为自然参数（natural
-parameter）</p></li>
-<li><p><span class="math inline">\(\mu =E(y;\eta) = g(\eta)\)</span>
-被称为规范响应函数（cannonical response
-function）。主要用于根据自然参数<span class="math inline">\(\eta\)</span> 得到均值 <span class="math inline">\(\mu\)</span> ，也就是 <span class="math inline">\(y\)</span> 的预测值。</p></li>
-<li><p><span class="math inline">\(\eta = g^{-1}(\mu)\)</span>
-被称为规范连接函数（canonical link function）。主要用于根据均值 <span class="math inline">\(\mu\)</span> 得到自然参数 <span class="math inline">\(\eta\)</span> 。</p></li>
+<li>
+<p>$\eta$ 被称为自然参数（natural parameter）</p>
+</li>
+<li>
+<p>$\mu =E(y;\eta) = g(\eta)$ 被称为规范响应函数（cannonical response function）。主要用于根据自然参数$\eta$ 得到均值 $\mu$ ，也就是 $y$ 的预测值。</p>
+</li>
+<li>
+<p>$\eta = g^{-1}(\mu)$ 被称为规范连接函数（canonical link function）。主要用于根据均值 $\mu$ 得到自然参数 $\eta$ 。</p>
+</li>
 </ul>
-<h3 id="glm-的三类参数">GLM 的三类参数</h3>
+<h3 id="GLM-的三类参数">GLM 的三类参数</h3>
 <p>GLM中涉及三类参数：</p>
 <ul>
-<li><p>首先最直接的是模型参数 <span class="math inline">\(\theta\)</span>，也就是我们通过训练求解的参数。（Model
-Parameter）</p></li>
-<li><p>其次是指数族中的自然参数<span class="math inline">\(\eta\)</span>， 它等于<span class="math inline">\(\theta^T x\)</span>。（Natural
-Parameter）</p></li>
-<li><p>最后是某个具体分布的参数（Cannonical Parameter）</p>
+<li>
+<p>首先最直接的是模型参数 $\theta$，也就是我们通过训练求解的参数。（Model Parameter）</p>
+</li>
+<li>
+<p>其次是指数族中的自然参数$\eta$， 它等于$\theta^T x$。（Natural Parameter）</p>
+</li>
+<li>
+<p>最后是某个具体分布的参数（Cannonical Parameter）</p>
 <ul>
-<li><p>如果我们从指数族中选择伯努利分布<span class="math inline">\(P(y;
-\phi)\)</span>，则参数就是 <span class="math inline">\(\phi\)</span>。</p></li>
-<li><p>如果我们选择高斯分布<span class="math inline">\(P(y;
-\mu)\)</span> （方差<span class="math inline">\(\sigma^2\)</span>固定），则参数就是 <span class="math inline">\(\mu\)</span>。</p></li>
-<li><p>如果我们选择...</p></li>
-</ul></li>
+<li>
+<p>如果我们从指数族中选择伯努利分布$P(y; \phi)$，则参数就是 $\phi$。</p>
+</li>
+<li>
+<p>如果我们选择高斯分布$P(y; \mu)$ （方差$\sigma^2$固定），则参数就是 $\mu$。</p>
+</li>
+<li>
+<p>如果我们选择…</p>
+</li>
+</ul>
+</li>
 </ul>
 <p>这三类参数之间的关系如下图所示：</p>
-<p><img src="./GLM三个参数.svg"></p>
-<p>需要注意，上图中<span class="math inline">\(g^{-1}(\mu)\)</span> 中的
-<span class="math inline">\(\mu\)</span>
-代表具体某个分布的期望（均值），并不单指高斯分布中的 <span class="math inline">\(\mu\)</span> 。</p>
+<p><img src="./GLM%E4%B8%89%E4%B8%AA%E5%8F%82%E6%95%B0.svg" alt=""></p>
+<p>需要注意，上图中$g^{-1}(\mu)$ 中的 $\mu$ 代表具体某个分布的期望（均值），并不单指高斯分布中的 $\mu$ 。</p>
 <h3 id="具体分布的选择">具体分布的选择</h3>
-<p>在上文我们提到，当我们使用 GLM
-进行预测时，需要针对任务类型（即需要预测的 y 的类型
-）选择合适的指数族分布。那么如何选择合适的分布呢？根据经验，我们有：</p>
+<p>在上文我们提到，当我们使用 GLM 进行预测时，需要针对任务类型（即需要预测的 y 的类型 ）选择合适的指数族分布。那么如何选择合适的分布呢？根据经验，我们有：</p>
 <ul>
-<li>对于回归问题，即<span class="math inline">\(y \in
-\mathbb{R}\)</span>时，我们选择高斯分布。</li>
+<li>对于回归问题，即$y \in \mathbb{R}$时，我们选择高斯分布。</li>
 <li>对于二分类问题，即 y 只取两个离散值时，我们选择伯努利分布。</li>
-<li>对于计数类问题，即 <span class="math inline">\(y \in
-\mathbb{N}\)</span> 时，我们选择泊松分布。</li>
-<li>对连续的、非负的随机变量进行建模，即 <span class="math inline">\(y
-\in \mathbb{R}^+\)</span> 时，例如时间间隔，我们选择<span class="math inline">\(\gamma\)</span>和指数分布。</li>
-<li>对概率进行建模，即 <span class="math inline">\(y \in [0,
-1]\)</span>时，我们选择<span class="math inline">\(\beta\)</span>
-和狄利克雷分布。</li>
+<li>对于计数类问题，即 $y \in \mathbb{N}$ 时，我们选择泊松分布。</li>
+<li>对连续的、非负的随机变量进行建模，即 $y \in \mathbb{R}^+$ 时，例如时间间隔，我们选择$\gamma$和指数分布。</li>
+<li>对概率进行建模，即 $y \in [0, 1]$时，我们选择$\beta$ 和狄利克雷分布。</li>
 </ul>
-<h2 id="softmax回归">Softmax回归</h2>
-<p>对于单标签多分类问题，我们一般采用Softmax回归。例如给定一张图片，推测图上是什么动物——狗、喵还是小兔子。在该问题中，<span class="math inline">\(x^{(i)}\)</span> 仍然是输入的特征；但是标签<span class="math inline">\(y^{(i)}\)</span> 不再是一个值，而是
-一个“独热向量”，只有预测类别的对应位置为1，其余位置都为0。假设图中的动物是猫，此时对应的标签<span class="math inline">\(y^{(i)}\)</span> 就是</p>
-<p><span class="math display">\[
-y^{(i)} = [0, 1, 0]^T
-\]</span></p>
-<p>在Softmax回归中，我们需要为每一个类别训练出一个参数<span class="math inline">\(\theta_{class_i}\)</span>（维度和输入<span class="math inline">\(x\)</span> 相同）。因此最终的参数<span class="math inline">\(\theta\)</span> 就会形成一个矩阵：</p>
-<p><span class="math display">\[
-\theta = \begin{bmatrix}
-|  &amp; | &amp; &amp;| \\   
-\theta_1 &amp; \theta_2 &amp; \dots &amp; \theta_n \\
-|  &amp; | &amp;  &amp;| \end{bmatrix}
-\]</span></p>
-<p>预测函数<span class="math inline">\(h_\theta(x)\)</span>的定义如下所示：</p>
-<p><span class="math display">\[
-h_\theta(x) = \begin{bmatrix}
-\frac{e^{\theta_1^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})} &amp;
-\frac{e^{\theta_2^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})} &amp;
-\dots &amp;
-\frac{e^{\theta_k^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})}
-\end{bmatrix}^T
-\]</span></p>
-<p>根据定义不难看出 <span class="math inline">\(h_\theta(x)\)</span>
-是一个 <span class="math inline">\(k\)</span> 维列向量，和标签 <span class="math inline">\(y\)</span> 的维度相同，其中<span class="math inline">\(k\)</span> 是分类数量。只不过 <span class="math inline">\(h_\theta(x)\)</span> 每一个分量都是一个<span class="math inline">\([0, 1]\)</span> 之间的实数值，并且分量和为1；而
-<span class="math inline">\(y\)</span> 是一个独热向量。</p>
-<p>根据预测值<span class="math inline">\(h_\theta(x^{(i)})\)</span>
-和对应标签<span class="math inline">\(y^{(i)}\)</span>，我们可以定义
-Softmax 回归的损失函数<span class="math inline">\(J(\theta)\)</span>：</p>
-<p><span class="math display">\[
-\begin{aligned}
-J(\theta) &amp;= - \sum_{i = 1}^m \tt{Cross \ Emtropy}
-(h_{\theta}(x^{(i)}),y^{(i)}) \\
-&amp;= -\sum_{i = 1}^m \sum_{l=1}^k y_l^{(i)} \cdot
-\log(h_\theta^{(i)}(x)_l) \\
-&amp;= -\sum_{i = 1}^m  y_j^{(i)} \cdot \log(h_\theta^{(i)}(x)_j)
-\tt{(其中y_j^{(i)}=1)}
-\end{aligned}
-\]</span></p>
-<p>接下来我们可以继续通过梯度下降求解<span class="math inline">\(\theta\)</span> 的最优值：</p>
-<p><span class="math display">\[
-\theta_j := \theta_j - \alpha \frac{\partial \
-J(\theta)}{\partial\  \theta_j}
-\]</span> 当然也可以通过随机梯度下降求解。</p>
+<h2 id="Softmax回归">Softmax回归</h2>
+<p>对于单标签多分类问题，我们一般采用Softmax回归。例如给定一张图片，推测图上是什么动物——狗、喵还是小兔子。在该问题中，$x^{(i)}$ 仍然是输入的特征；但是标签$y^{(i)}$ 不再是一个值，而是 一个“独热向量”，只有预测类别的对应位置为1，其余位置都为0。假设图中的动物是猫，此时对应的标签$y^{(i)}$ 就是</p>
+<p>$$<br>
+y^{(i)} = [0, 1, 0]^T<br>
+$$</p>
+<p>在Softmax回归中，我们需要为每一个类别训练出一个参数$\theta_{class_i}$（维度和输入$x$ 相同）。因此最终的参数$\theta$ 就会形成一个矩阵：</p>
+<p>$$<br>
+\theta = \begin{bmatrix}<br>
+|  &amp; | &amp; &amp;| \<br>
+\theta_1 &amp; \theta_2 &amp; \dots &amp; \theta_n \<br>
+|  &amp; | &amp;  &amp;| \end{bmatrix}<br>
+$$</p>
+<p>预测函数$h_\theta(x)$的定义如下所示：</p>
+<p>$$<br>
+h_\theta(x) = \begin{bmatrix}<br>
+\frac{e^{\theta_1^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})} &amp;<br>
+\frac{e^{\theta_2^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})} &amp;<br>
+\dots &amp;<br>
+\frac{e^{\theta_k^Tx}}{\sum_{l=1}^m(e^{\theta_l^Tx})}<br>
+\end{bmatrix}^T<br>
+$$</p>
+<p>根据定义不难看出 $h_\theta(x)$ 是一个 $k$ 维列向量，和标签 $y$ 的维度相同，其中$k$ 是分类数量。只不过 $h_\theta(x)$ 每一个分量都是一个$[0, 1]$ 之间的实数值，并且分量和为1；而 $y$ 是一个独热向量。</p>
+<p>根据预测值$h_\theta(x^{(i)})$ 和对应标签$y^{(i)}$，我们可以定义 Softmax 回归的损失函数$J(\theta)$：</p>
+<p>$$<br>
+\begin{aligned}<br>
+J(\theta) &amp;= - \sum_{i = 1}^m \tt{Cross \ Emtropy} (h_{\theta}(x^{(i)}),y^{(i)}) \<br>
+&amp;= -\sum_{i = 1}^m \sum_{l=1}^k y_l^{(i)} \cdot \log(h_\theta^{(i)}(x)<em>l) \<br>
+&amp;= -\sum</em>{i = 1}^m  y_j^{(i)} \cdot \log(h_\theta^{(i)}(x)_j) \tt{(其中y_j^{(i)}=1)}<br>
+\end{aligned}<br>
+$$</p>
+<p>接下来我们可以继续通过梯度下降求解$\theta$ 的最优值：</p>
+<p>$$<br>
+\theta_j := \theta_j - \alpha \frac{\partial \ J(\theta)}{\partial\  \theta_j}<br>
+$$<br>
+当然也可以通过随机梯度下降求解。</p>
 
                 
             </div>
