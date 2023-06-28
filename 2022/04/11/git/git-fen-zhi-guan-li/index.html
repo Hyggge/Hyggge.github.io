@@ -10,6 +10,10 @@
 
 
 
+
+
+
+
 指令
 解释
 
@@ -25,7 +29,7 @@ git branch -a
 
 
 git branch -vv
-将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个">
+将所有的本地分支列出来并且包含更多的信息，如每一个分支正在">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -404,121 +408,139 @@ git branch -vv
                 <hr>
 <h2 id="分支基本操作">分支基本操作</h2>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">解释</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">解释</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git branch</strong></td>
-<td style="text-align:center">查看本地分支</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git branch</strong></td>
+<td style="text-align: center;">查看本地分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch -a</strong></td>
-<td style="text-align:center">可以查看本地和远程仓库的分支</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git branch -a</strong></td>
+<td style="text-align: center;">可以查看本地和远程仓库的分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch -vv</strong></td>
-<td style="text-align:center">将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。一般需要先<code>git fetch --all</code>更新远程数据</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git branch -vv</strong></td>
+<td style="text-align: center;">将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。一般需要先<code>git fetch --all</code>更新远程数据</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch &lt;name&gt;</strong></td>
-<td style="text-align:center">创建分支</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git branch
+&lt;name&gt;</strong></td>
+<td style="text-align: center;">创建分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git checkout &lt;name&gt;</strong><br><strong>git switch&lt;name&gt;</strong></td>
-<td style="text-align:center">切换到已有的分支</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git checkout
+&lt;name&gt;</strong><br><strong>git switch&lt;name&gt;</strong></td>
+<td style="text-align: center;">切换到已有的分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git checkout -b &lt;name&gt;</strong><br><strong>git switch -c &lt;name&gt;</strong></td>
-<td style="text-align:center">创建并切换分支</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git checkout -b
+&lt;name&gt;</strong><br><strong>git switch -c
+&lt;name&gt;</strong></td>
+<td style="text-align: center;">创建并切换分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git merge &lt;name&gt;</strong></td>
-<td style="text-align:center">将某个分支合并到当前的分支</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git merge
+&lt;name&gt;</strong></td>
+<td style="text-align: center;">将某个分支合并到当前的分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch -d &lt;name&gt;</strong></td>
-<td style="text-align:center">删除分支</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git branch -d
+&lt;name&gt;</strong></td>
+<td style="text-align: center;">删除分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch -D &lt;name&gt;</strong></td>
-<td style="text-align:center">强制删除分支（如果删除一个没有被合并的分支，只能用该指令而不能用-d）</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git branch -D
+&lt;name&gt;</strong></td>
+<td style="text-align: center;">强制删除分支（如果删除一个没有被合并的分支，只能用该指令而不能用-d）</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git checkout -b &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
-<td style="text-align:center">在本地创建一个和远程仓库origin中某分支相关联的分支（名字最好是一样的）</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git checkout -b &lt;本地分支名&gt;
+origin/&lt;远程分支名&gt;</strong></td>
+<td style="text-align: center;">在本地创建一个和远程仓库origin中某分支相关联的分支（名字最好是一样的）</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git branch --set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
-<td style="text-align:center">将本地已经存在的某分支和远程库的某分支建立关联</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git branch --set-upstream
+&lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td>
+<td style="text-align: center;">将本地已经存在的某分支和远程库的某分支建立关联</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2 id="分支合并——merge">分支合并——merge</h2>
-<p>我们可以通过<code>git merge &lt;name&gt;</code>进行两个分支的合并，其效果是将名为<code>&lt;name&gt;</code>的分支里的内容合并到当前所在的分支上。当我们进行分支合并时，有的时候需要解决冲突，举下面三个例子——</p>
-<ul>
-<li>
-<p><strong>Position 1</strong><br>
+<h2 id="分支合并merge">分支合并——merge</h2>
+<p>我们可以通过<code>git merge &lt;name&gt;</code>进行两个分支的合并，其效果是将名为<code>&lt;name&gt;</code>的分支里的内容合并到当前所在的分支上。当我们进行分支合并时，有的时候需要解决冲突，举下面三个例子——<br>
+- <strong>Position 1</strong><br>
 如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br>
-<img src="2.png" alt=""><br>
+<img src="2.png"><br>
 此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br>
-<img src="1.png" alt=""><br>
-这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
-</li>
-<li>
-<p><strong>Position 2</strong><br>
-接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br>
-<img src="3.png" alt=""><br>
-如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
-</li>
-<li>
-<p><strong>Position 3</strong><br>
-我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
+<img src="1.png"><br>
+这种模式被称作
+<strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
 <ul>
-<li>之后我们切换到在<code>dev</code>分支上，在<code>readme.txt</code>的第一行添加了一句 <strong>“dev modify it!”</strong>, 保存之后commit到本地仓库。</li>
-<li>然后我们在切换到<code>master</code>分支上，此时<code>readme.txt</code>还是一个空文件。我们在<code>readme.txt</code>的第一行添加了一句 <strong>“master modify it!”</strong>, 保存之后也commit到本地仓库</li>
+<li><p><strong>Position 2</strong><br>
+接上例，如果禁用<code>Faster-forward</code>模式会怎样?
+答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br>
+<img src="3.png"><br>
+如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p></li>
+<li><p><strong>Position 3</strong><br>
+我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）,
+然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
+<ul>
+<li>之后我们切换到在<code>dev</code>分支上，在<code>readme.txt</code>的第一行添加了一句
+<strong>“dev modify it!”</strong>, 保存之后commit到本地仓库。</li>
+<li>然后我们在切换到<code>master</code>分支上，此时<code>readme.txt</code>还是一个空文件。我们在<code>readme.txt</code>的第一行添加了一句
+<strong>“master modify it!”</strong>, 保存之后也commit到本地仓库</li>
 </ul>
 <p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——<br>
-<img src="4.png" alt=""></p>
-<p>这种情况下，如果在<code>master</code>分支中使用指令<code>git merge dev</code>，则可能产生冲突。因为我们在两个分支上同时对<code>readme.txt</code>加了一行，但是内容不同，Git并不知道该保存哪个。此时使用<code>merge</code>命令后，Git会提示我们 <strong>“Automatic merge failed; fix conflicts and then commit the result.”</strong> 也就是说自动给合并失败了，需要我们手动结局冲突后再次提交。</p>
-<p>我们打开<code>readme.txt</code>,会发现内容变成了</p>
-  <pre class="line-numbers language-none"><code class="language-none">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<img src="4.png"></p>
+<p>这种情况下，如果在<code>master</code>分支中使用指令<code>git merge dev</code>，则可能产生冲突。因为我们在两个分支上同时对<code>readme.txt</code>加了一行，但是内容不同，Git并不知道该保存哪个。此时使用<code>merge</code>命令后，Git会提示我们
+<strong>“Automatic merge failed; fix conflicts and then commit the
+result.”</strong>
+也就是说自动给合并失败了，需要我们手动结局冲突后再次提交。</p>
+<p>我们打开<code>readme.txt</code>,会发现内容变成了<br>
+</p><pre class="line-numbers language-none"><code class="language-none">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 master modify it！
 =======
 dev modify it！
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>此时我们手动修改之后再<code>commit</code>即可。</p>
-</li>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+此时我们手动修改之后再<code>commit</code>即可。<p></p></li>
 </ul>
 <p>此外，如果在手动合并时出现了失误，我们可以通过<code>git merge --abort</code>回到合并前的状态。</p>
 <hr>
-<h2 id="分支变基——rebase">分支变基——rebase</h2>
+<h2 id="分支变基rebase">分支变基——rebase</h2>
 <h3 id="命令格式">命令格式</h3>
-<p>变基命令的一般格式为——</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> rebase <span class="token operator">&lt;</span>basebranch<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>topicbranch<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>其中<code>basebranch</code>是作为新基底的分支，<code>topicbranch</code>是待变基的分支。当然，如果你想让当前所在的分支作为<code>topicbranch</code>，可以直接使用<code>git rebase &lt;basebranch&gt;</code>。</p>
+<p>变基命令的一般格式为——<br>
+</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> rebase <span class="token operator">&lt;</span>basebranch<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>topicbranch<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+其中<code>basebranch</code>是作为新基底的分支，<code>topicbranch</code>是待变基的分支。当然，如果你想让当前所在的分支作为<code>topicbranch</code>，可以直接使用<code>git rebase &lt;basebranch&gt;</code>。<p></p>
 <h3 id="用法解释">用法解释</h3>
 <p><code>git rebase</code>的官方解释是——"<strong>当执行rebase操作时，git会从两个分支的共同祖先开始提取待变基分支上的修改，然后将待变基分支指向基分支的最新提交，最后将刚才提取的修改应用到基分支的最新提交的后面。</strong>"我们用下面的例子来分析</p>
-<p><img src="%E5%90%88%E5%B9%B6%E5%89%8D.jpg" alt=""></p>
+<p><img src="合并前.jpg"></p>
 <p>此时<code>master</code>指向的是<code>C4</code>，<code>dev</code>指向的是<code>C6</code>，它们的公共祖先是<code>C2</code>。此时我们在<code>dev</code>分支上调用命令<code>git rebase master</code>，Git就会比较<code>C5</code>、<code>C6</code>和<code>C2</code>之间的区别，然后将<code>C5</code>、<code>C6</code>较<code>C2</code>的修改应用在<code>C4</code>上（即<code>C4</code>作为新的基底），形成新的提交<code>C5'</code>和<code>C6'</code>，最后再将原先的<code>C5</code>和<code>C6</code>删掉。其效果相当于将<code>dev</code>上的两个提交记录（<code>C5</code>和<code>C6</code>）拿下来，安到master的最新提交（<code>C4</code>）上。</p>
 <p>操作结果如下图所示——</p>
-<p><img src="%E5%8F%98%E5%9F%BA%E5%90%8E.jpg" alt=""></p>
+<p><img src="变基后.jpg"></p>
 <p>可以发现，变基实际上就是更改历史，使得提交历史成为一条直线而没有分叉。这样做的好处是能够保持提交历史的整洁性，但是缺点也很明显——丢弃了一些提交记录，如果你的同伴是基于这些记录进行开发，那就会使事情变得很麻烦。</p>
-<p>因此，如果正在和同伴协作开发，应该尽量避免使用<code>rebase</code>。如果真出现了"<strong>有人推送了经过变基的提交，并丢弃了你的本地开发所基于的一些提交</strong>",我们可以通过两种方法解决（具体可参见《<em>Pro Git</em>》的相关章节）</p>
-<ul>
-<li><strong>第一种</strong>：先使用<code>get fetch --all</code>获取同伴使用变基后的提交记录，然后使用<code>get rebase origin/master</code>（也就是用变基解决变基）。</li>
-<li><strong>第二种</strong>：在下拉时使用<code>git pull --rebase</code>，而不是使用<code>git pull</code>。</li>
-</ul>
+<p>因此，如果正在和同伴协作开发，应该尽量避免使用<code>rebase</code>。如果真出现了"<strong>有人推送了经过变基的提交，并丢弃了你的本地开发所基于的一些提交</strong>",我们可以通过两种方法解决（具体可参见《<em>Pro
+Git</em>》的相关章节）<br>
+-
+<strong>第一种</strong>：先使用<code>get fetch --all</code>获取同伴使用变基后的提交记录，然后使用<code>get rebase origin/master</code>（也就是用变基解决变基）。<br>
+-
+<strong>第二种</strong>：在下拉时使用<code>git pull --rebase</code>，而不是使用<code>git pull</code>。</p>
 <hr>
-<h2 id="分支拣选——cherry-pick">分支拣选——cherry-pick</h2>
-<p>Git 中的拣选类似于对特定的某次提交的变基。 它会提取该提交的补丁，之后尝试将其重新应用到当前分支上。 这种方式在你只想引入<strong>某个分支中的某个提交</strong>，或者<strong>某个分支中只有一个提交，而你不想运行变基</strong>时很有用。假设你的项目提交历史如下图所示——</p>
-<p><img src="%E6%8B%A3%E9%80%89%E5%89%8D.jpg" alt=""></p>
+<h2 id="分支拣选cherry-pick">分支拣选——cherry-pick</h2>
+<p>Git 中的拣选类似于对特定的某次提交的变基。
+它会提取该提交的补丁，之后尝试将其重新应用到当前分支上。
+这种方式在你只想引入<strong>某个分支中的某个提交</strong>，或者<strong>某个分支中只有一个提交，而你不想运行变基</strong>时很有用。假设你的项目提交历史如下图所示——</p>
+<p><img src="拣选前.jpg"></p>
 <p>此时如果想要将提交<code>e43a6</code>拉去到<code>master</code>分支，我们可以先切换到<code>master</code>分支，然后使用命令<code>git cherry-pick e43a6</code>。这样一来，<code>master</code>分支会新增一个提交，结果如下——</p>
-<p><img src="%E6%8B%A3%E9%80%89%E5%90%8E.jpg" alt=""></p>
+<p><img src="拣选后.jpg"></p>
 
                 
             </div>
@@ -908,7 +930,7 @@ dev modify it！
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

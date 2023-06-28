@@ -392,9 +392,9 @@ public:
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Class-Template">Class Template</h2>
-<p>首先我们可以用类来实现一个<code>int</code>型数据的栈，代码如下</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Stack</span> <span class="token punctuation">{</span>
+                <h2 id="class-template">Class Template</h2>
+<p>首先我们可以用类来实现一个<code>int</code>型数据的栈，代码如下<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Stack</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> pool<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     <span class="token keyword">int</span> top<span class="token punctuation">;</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -405,17 +405,19 @@ public:
     <span class="token keyword">int</span> <span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token operator">-&gt;</span>pool<span class="token punctuation">[</span>top<span class="token operator">--</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>此时，如果我们想要实现一个储存<code>double</code>类型的栈怎么办呢？</p>
-<p>当然，我们可以使用程序员传统艺能——“ctrl C + ctrl V”，这在栈的类型较少时是比较适用的，顶多就是代码多了一些；但是如果需要的栈的类型比较多（比如我们需要一个存储“苹果”类对象的栈），这种方法显然是不行的。</p>
-<p>类模板可以帮助我们解决这个问题。<strong>所谓类模板，实际上是建立一个通用类，其数据成员、成员函数的返回值类型和形参类型不具体指定，用一个虚拟的类型来代表。</strong> 在该类创建对象的时候，我们需要指定一个确定的类型，然后编译器就会用<strong>我们指定的类型</strong>来代替前面<strong>定义类模板时适用的虚拟类型</strong>。模板类的定义方法为——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">&gt;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+此时，如果我们想要实现一个储存<code>double</code>类型的栈怎么办呢？<p></p>
+<p>当然，我们可以使用程序员传统艺能——“ctrl C + ctrl
+V”，这在栈的类型较少时是比较适用的，顶多就是代码多了一些；但是如果需要的栈的类型比较多（比如我们需要一个存储“苹果”类对象的栈），这种方法显然是不行的。</p>
+<p>类模板可以帮助我们解决这个问题。<strong>所谓类模板，实际上是建立一个通用类，其数据成员、成员函数的返回值类型和形参类型不具体指定，用一个虚拟的类型来代表。</strong>
+在该类创建对象的时候，我们需要指定一个确定的类型，然后编译器就会用<strong>我们指定的类型</strong>来代替前面<strong>定义类模板时适用的虚拟类型</strong>。模板类的定义方法为——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">&gt;</span>
 <span class="token keyword">class</span> <span class="token class-name">ClassName</span> <span class="token punctuation">{</span>
     <span class="token comment">//...</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在用类模板来创建对象时，需要用<code>&lt;&gt;</code>指定一下具体类型</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">ClassName<span class="token operator">&lt;</span>type_name<span class="token operator">&gt;</span> obj_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>下面我们使用类模板来重新定义一下<code>Stack</code>类，并使用这个类模板分别创建<code>int</code>类型和<code>double</code>类型的<code>Stack</code></p>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><br>
+在用类模板来创建对象时，需要用<code>&lt;&gt;</code>指定一下具体类型<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">ClassName<span class="token operator">&lt;</span>type_name<span class="token operator">&gt;</span> obj_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+下面我们使用类模板来重新定义一下<code>Stack</code>类，并使用这个类模板分别创建<code>int</code>类型和<code>double</code>类型的<code>Stack</code><br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">&gt;</span>
 <span class="token keyword">class</span> <span class="token class-name">Stack</span> <span class="token punctuation">{</span>
     T pool<span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -433,34 +435,29 @@ public:
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Stack<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> intStack<span class="token punctuation">;</span>
     Stack<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">&gt;</span> intStack<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="STL">STL</h2>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h2 id="stl">STL</h2>
 <p>像上面<code>Stack</code>这种数据结构（或者称为容器），我们在编程时会大量使用。但是，如果每次使用都定义一次<code>Stack</code>，显然是非常费力的，而且这种重复造轮子的工作也没有什么意义。</p>
 <p>这让我们不禁会想——如果C++能够为我们提供一个写好<code>Stack</code>模板就好了</p>
-<p>幸运的是，C++摸透了我们的小心思，提供了STL（标准模板库）供我们使用。STL中有大量的动态增长的万能容器，像<code>list</code>、<code>vector</code>、<code>queue</code>、<code>stack</code>等等，同时还为我们提供了容器操作（增删改查）的相关操作。</p>
-<h3 id="list-vector">list&amp;vector</h3>
-<p>我们先简单介绍一下两个常用的容器——<code>list</code>和<code>vector</code>，这两种容器都是线性存储容器，其定义和操作也很相似</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> a<span class="token punctuation">;</span>
+<p>幸运的是，C++摸透了我们的小心思，提供了STL（标准模板库）供我们使用。STL中有大量的动态增长的万能容器，像<code>list</code>、<code>vector</code>、<code>queue</code>、<code>stack</code>等等，同时还为我们提供了容器操作（增删改查）的相关操作。<br>
+### list&amp;vector<br>
+我们先简单介绍一下两个常用的容器——<code>list</code>和<code>vector</code>，这两种容器都是线性存储容器，其定义和操作也很相似<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> a<span class="token punctuation">;</span>
 a<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//insert element</span>
 
 vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> b<span class="token punctuation">;</span>
-b<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//insert element</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>我们需要关注的是这两者的底层实现原理——</p>
-<ul>
-<li><code>vector</code>类似于我们在c语言中使用的数组，强于随机访问，弱于增删改</li>
-<li><code>list</code>类似于我们学过的链表，强于增删改，弱于随机访问</li>
-</ul>
+b<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//insert element</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+我们需要关注的是这两者的底层实现原理——<br>
+-
+<code>vector</code>类似于我们在c语言中使用的数组，强于随机访问，弱于增删改<br>
+- <code>list</code>类似于我们学过的链表，强于增删改，弱于随机访问<p></p>
 <p>问题来了，前面提到STL中的容器大多都是可以动态增长的，那么<code>vector</code>和<code>list</code>是如何实现动态增长的呢？</p>
 <ul>
-<li>
-<p><code>list</code>比较好理解，毕竟是链表嘛，当需要插入一个新的数据时，直接申请一个新的空间来容纳新的链表项就行。</p>
-</li>
-<li>
-<p>而<code>vector</code>实现方式是，在<code>vector</code>创建时先在内存空间中开辟了一大块连续的空间用来存储，当发现这一块连续的空间不够用了，他会在内存中找到一个更大的连续的空间，然后将之前的数据全部都复制到新的内存空间，从而实现动态增长。</p>
-</li>
+<li><p><code>list</code>比较好理解，毕竟是链表嘛，当需要插入一个新的数据时，直接申请一个新的空间来容纳新的链表项就行。</p></li>
+<li><p>而<code>vector</code>实现方式是，在<code>vector</code>创建时先在内存空间中开辟了一大块连续的空间用来存储，当发现这一块连续的空间不够用了，他会在内存中找到一个更大的连续的空间，然后将之前的数据全部都复制到新的内存空间，从而实现动态增长。</p></li>
 </ul>
-<p>为了证明这一点，我们可以做一个小的实验，我们先定义一个<code>vector&lt;int&gt;</code>类型的对象<code>a</code>，然后<code>a</code>中插入10000个数字，每次插入后看一下<code>a[0]</code>的地址又没有改变，如果改变了则证明我刚才的解释是正确的。实验代码如下</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>为了证明这一点，我们可以做一个小的实验，我们先定义一个<code>vector&lt;int&gt;</code>类型的对象<code>a</code>，然后<code>a</code>中插入10000个数字，每次插入后看一下<code>a[0]</code>的地址又没有改变，如果改变了则证明我刚才的解释是正确的。实验代码如下<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> a<span class="token punctuation">;</span>
     <span class="token keyword">int</span><span class="token operator">*</span> last_addr <span class="token operator">=</span> <span class="token number">0x0</span><span class="token punctuation">;</span>
     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -470,8 +467,8 @@ b<span class="token punctuation">.</span><span class="token function">push_back<
             last_addr <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>a<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>实验结果为——</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+实验结果为——<br>
 <pre class="line-numbers language-none"><code class="language-none">0x6c2520
 0x6c2540
 0x6c2520
@@ -486,18 +483,18 @@ b<span class="token punctuation">.</span><span class="token function">push_back<
 0x6a7f30
 0x6a9f40
 0x6c38a0
-0x6cb8b0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Iterator">Iterator</h3>
+0x6cb8b0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="iterator">Iterator</h3>
 <p>如果想要访问<code>vector</code>中的某一个数据，直接可以使用下标<code>a[i]</code>访问；但是，如果想要访问<code>list</code>中的一个元素呢？我们需要先翻一下STL手册，查一下有没有和访问相关的函数。同样，对于不同的容器，同一访问操作（增、删、改、查）可能会有不同的函数定义。如果要把所有容器的相关函数都记住，显然是不可能的，查STL手册同样也费事费力。</p>
 <p><strong>所以，那么多STL容器就没有一个统一的访问方法么???</strong></p>
-<p>答案当然是<strong>有的</strong>，那就是使用<strong>迭代器</strong>。迭代器实际上是每个STL容器中都定义的一个数据类型，通过这个数据类型我们可以访问容器中所有的元素。此外，基本每个STL容器中也都提供了<code>begin()</code>和<code>end()</code>函数，这两个函数分别返回容器开头和末尾的迭代器，这样我们就可以很容易的遍历容器中的元素了——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>答案当然是<strong>有的</strong>，那就是使用<strong>迭代器</strong>。迭代器实际上是每个STL容器中都定义的一个数据类型，通过这个数据类型我们可以访问容器中所有的元素。此外，基本每个STL容器中也都提供了<code>begin()</code>和<code>end()</code>函数，这两个函数分别返回容器开头和末尾的迭代器，这样我们就可以很容易的遍历容器中的元素了——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> a<span class="token punctuation">;</span>
     <span class="token keyword">for</span> <span class="token punctuation">(</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span><span class="token double-colon punctuation">::</span>iterator it <span class="token operator">=</span> a<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> a<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*</span>it <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以发现迭代器的操作和指针是非常像的，这是因为，STL的开发者对迭代器进行了<strong>运算符重载</strong>，从而方便用户使用迭代器。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+可以发现迭代器的操作和指针是非常像的，这是因为，STL的开发者对迭代器进行了<strong>运算符重载</strong>，从而方便用户使用迭代器。<p></p>
 <p>实际上，迭代器有不同的类型，包括<strong>输入迭代器</strong>、<strong>输出迭代器</strong>、<strong>正向迭代器</strong>、<strong>双向迭代器</strong>和<strong>随机访问迭代器</strong>，而且不同类型的迭代器操作方法也不完全相同。关于迭代器的类型和相关操作，可以参考这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_23100787/article/details/51388163">博客</a>。</p>
 
                 
@@ -896,7 +893,7 @@ b<span class="token punctuation">.</span><span class="token function">push_back<
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

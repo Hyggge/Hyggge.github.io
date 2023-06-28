@@ -6,8 +6,14 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「Maven」依赖与依赖管理, Hyggge&#39;s Blog">
     <meta name="description" content="
-pom.xml文件中的依赖声明
-所有的依赖写在&amp;lt;dependnecies&amp;gt;框架中，每当声名一个新的依赖时，需要新建一个&amp;lt;dependnecy&amp;gt;，中间至少包含三个内容——groupId artifactId vers">
+
+
+
+
+
+## pom.xml文件中的依赖声明
+所有的依赖写在&amp;lt;dependnecies&amp;gt;框架中，每当声名一个新的依赖时，需要新建一个&amp;lt;dependnecy&amp;gt;，中间至少包含三个内容——groupId
+artifac">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -383,9 +389,15 @@ pom.xml文件中的依赖声明
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="pom-xml文件中的依赖声明">pom.xml文件中的依赖声明</h2>
-<p>所有的依赖写在<code>&lt;dependnecies&gt;</code>框架中，每当声名一个新的依赖时，需要新建一个<code>&lt;dependnecy&gt;</code>，中间至少包含三个内容——<code>groupId</code> <code>artifactId</code> <code>version</code>,可以直接在<a target="_blank" rel="noopener" href="https://mvnrepository.com/">官网</a>中查找。</p>
+                <table style="width:6%;">
+<colgroup>
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>## pom.xml文件中的依赖声明<br>
+所有的依赖写在<code>&lt;dependnecies&gt;</code>框架中，每当声名一个新的依赖时，需要新建一个<code>&lt;dependnecy&gt;</code>，中间至少包含三个内容——<code>groupId</code>
+<code>artifactId</code> <code>version</code>,可以直接在<a target="_blank" rel="noopener" href="https://mvnrepository.com/">官网</a>中查找。<br>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
     <span class="token comment">&lt;!--具体的依赖--&gt;</span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
@@ -396,24 +408,36 @@ pom.xml文件中的依赖声明
       <span class="token comment">&lt;!--依赖版本号--&gt;</span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>4.12<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
-<h2 id="依赖管理">依赖管理</h2>
-<h3 id="依赖传递">依赖传递</h3>
-<ul>
-<li><strong>直接依赖：</strong> 在当前项目中通过<strong>依赖配置</strong>建立的依赖关系（直接在<code>pom.xml</code>中配置的依赖）</li>
-<li><strong>间接依赖：</strong> 当被依赖的资源如果依赖其他资源，则当前项目<strong>间接依赖</strong>其他的资源。例如项目A依赖资源B，资源B又依赖资源C，则A间接依赖C……以此类推，类似于继承。</li>
-</ul>
-<h3 id="冲突问题的解决">冲突问题的解决</h3>
-<p>如果一个项目<strong>直接和间接依赖的资源中</strong>有相同的（版本号不要求相同），则会产生冲突。冲突的解决依赖于以下三个原则——</p>
-<ul>
-<li><strong>路径优先</strong>：当依赖中出现相同的资源时，层级越深则优先级越低，层级越浅则优先级越高——即<strong>遵循就近原则</strong>。</li>
-<li><strong>声明优先</strong>：当资源在相同层级被依赖时，<strong>配置顺序靠前</strong>的覆盖<strong>配置顺序靠后</strong>的。</li>
-<li><strong>特殊优先</strong>：当同级配置了相同资源的不同版本，<strong>后配置的覆盖先配置的</strong></li>
-</ul>
-<h3 id="可选依赖">可选依赖</h3>
-<p>可选依赖是指<strong>对外隐藏当前所依赖的资源</strong>。例如，项目A依赖了资源B，资源B依赖了资源C，但是B对C的依赖时被隐藏的，那么项目A不会间接依赖资源C。</p>
-<p>可选依赖的设置方法如下——</p>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>## 依赖管理</td>
+</tr>
+<tr class="even">
+<td>### 依赖传递<br>
+- <strong>直接依赖：</strong>
+在当前项目中通过<strong>依赖配置</strong>建立的依赖关系（直接在<code>pom.xml</code>中配置的依赖）<br>
+- <strong>间接依赖：</strong>
+当被依赖的资源如果依赖其他资源，则当前项目<strong>间接依赖</strong>其他的资源。例如项目A依赖资源B，资源B又依赖资源C，则A间接依赖C……以此类推，类似于继承。</td>
+</tr>
+<tr class="odd">
+<td>### 冲突问题的解决<br>
+如果一个项目<strong>直接和间接依赖的资源中</strong>有相同的（版本号不要求相同），则会产生冲突。冲突的解决依赖于以下三个原则——<br>
+-
+<strong>路径优先</strong>：当依赖中出现相同的资源时，层级越深则优先级越低，层级越浅则优先级越高——即<strong>遵循就近原则</strong>。<br>
+-
+<strong>声明优先</strong>：当资源在相同层级被依赖时，<strong>配置顺序靠前</strong>的覆盖<strong>配置顺序靠后</strong>的。<br>
+-
+<strong>特殊优先</strong>：当同级配置了相同资源的不同版本，<strong>后配置的覆盖先配置的</strong></td>
+</tr>
+<tr class="even">
+<td>### 可选依赖<br>
+可选依赖是指<strong>对外隐藏当前所依赖的资源</strong>。例如，项目A依赖了资源B，资源B依赖了资源C，但是B对C的依赖时被隐藏的，那么项目A不会间接依赖资源C。</td>
+</tr>
+<tr class="odd">
+<td>可选依赖的设置方法如下——<br>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
     <span class="token comment">&lt;!--具体的依赖--&gt;</span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
@@ -423,10 +447,15 @@ pom.xml文件中的依赖声明
       <span class="token comment">&lt;!--可选依赖选项 --&gt;</span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>optional</span><span class="token punctuation">&gt;</span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>optional</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="排除依赖">排除依赖</h3>
-<p>排除依赖是指 <strong>主动断开依赖的资源</strong>，被排除的资源无需指定版本。例如，项目A依赖了资源B，资源B依赖了资源C，但是我们又不想让项目A间接依赖资源C，那么这时候就需要在项目A中将对资源C的依赖排除。</p>
-<p>排除依赖的设置方法如下——</p>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></td>
+</tr>
+<tr class="even">
+<td>### 排除依赖<br>
+排除依赖是指
+<strong>主动断开依赖的资源</strong>，被排除的资源无需指定版本。例如，项目A依赖了资源B，资源B依赖了资源C，但是我们又不想让项目A间接依赖资源C，那么这时候就需要在项目A中将对资源C的依赖排除。</td>
+</tr>
+<tr class="odd">
+<td>排除依赖的设置方法如下——<br>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
     <span class="token comment">&lt;!--具体的依赖--&gt;</span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
@@ -443,60 +472,60 @@ pom.xml文件中的依赖声明
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exclusions</span><span class="token punctuation">&gt;</span></span>
 
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></td>
+</tr>
+</tbody>
+</table>
 <h2 id="依赖范围">依赖范围</h2>
-<p>依赖的<code>jar</code>在默认情况下可以在任何地方使用，也可以通过scope标签设定其作用范围。</p>
-<h3 id="依赖范围分类">依赖范围分类</h3>
-<ul>
-<li>主程序范围有效（main文件夹）</li>
-<li>测试程序范围有效（test文件夹）</li>
-<li>是否参与打包（package指令范围）</li>
-</ul>
+<p>依赖的<code>jar</code>在默认情况下可以在任何地方使用，也可以通过scope标签设定其作用范围。<br>
+### 依赖范围分类<br>
+- 主程序范围有效（main文件夹）<br>
+- 测试程序范围有效（test文件夹）<br>
+- 是否参与打包（package指令范围）</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">scope</th>
-<th style="text-align:center">主代码</th>
-<th style="text-align:center">测试代码</th>
-<th style="text-align:center">打包</th>
-<th style="text-align:center">资源范例</th>
+<tr class="header">
+<th style="text-align: center;">scope</th>
+<th style="text-align: center;">主代码</th>
+<th style="text-align: center;">测试代码</th>
+<th style="text-align: center;">打包</th>
+<th style="text-align: center;">资源范例</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">compile</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">log4j</td>
+<tr class="odd">
+<td style="text-align: center;">compile</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">log4j</td>
 </tr>
-<tr>
-<td style="text-align:center">test</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center">junit</td>
+<tr class="even">
+<td style="text-align: center;">test</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">junit</td>
 </tr>
-<tr>
-<td style="text-align:center">provided</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center">servlet-api</td>
+<tr class="odd">
+<td style="text-align: center;">provided</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">servlet-api</td>
 </tr>
-<tr>
-<td style="text-align:center">runtime</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center">N</td>
-<td style="text-align:center">Y</td>
-<td style="text-align:center">jdbc</td>
+<tr class="even">
+<td style="text-align: center;">runtime</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">N</td>
+<td style="text-align: center;">Y</td>
+<td style="text-align: center;">jdbc</td>
 </tr>
 </tbody>
 </table>
 <h3 id="依赖范围设置">依赖范围设置</h3>
-<p>需要使用<code>scope</code>关键字设置依赖的范围——</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
+<p>需要使用<code>scope</code>关键字设置依赖的范围——<br>
+</p><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
     <span class="token comment">&lt;!--具体的依赖--&gt;</span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
 
@@ -507,50 +536,15 @@ pom.xml文件中的依赖声明
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">&gt;</span></span>runtime<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">&gt;</span></span>
 
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="依赖范围传递">依赖范围传递</h3>
-<p>带有依赖范围的资源进行传递时，作用范围会受到影响，并未严格传递。如下表所示（注："行"为<strong>直接依赖</strong>，"列"为<strong>间接依赖</strong>）</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">compile</th>
-<th style="text-align:center">test</th>
-<th style="text-align:center">provided</th>
-<th style="text-align:center">runtime</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>compile</strong></td>
-<td style="text-align:center">compile</td>
-<td style="text-align:center">test</td>
-<td style="text-align:center">provided</td>
-<td style="text-align:center">runtime</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>test</strong></td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>provided</strong></td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>runtime</strong></td>
-<td style="text-align:center">runtime</td>
-<td style="text-align:center">test</td>
-<td style="text-align:center">provided</td>
-<td style="text-align:center">runtime</td>
-</tr>
-</tbody>
-</table>
+<p>带有依赖范围的资源进行传递时，作用范围会受到影响，并未严格传递。如下表所示（注："行"为<strong>直接依赖</strong>，"列"为<strong>间接依赖</strong>）<br>
+||compile|test|provided|runtime|<br>
+|:--:|:--:|:--:|:--:|:--:|<br>
+|<strong>compile</strong>|compile|test|provided|runtime|<br>
+|<strong>test</strong>|-|-|-|-|<br>
+|<strong>provided</strong>|-|-|-|-|<br>
+|<strong>runtime</strong>|runtime|test|provided|runtime|</p>
 
                 
             </div>
@@ -929,7 +923,7 @@ pom.xml文件中的依赖声明
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

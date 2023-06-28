@@ -7,8 +7,12 @@
     <meta name="keywords" content="「BUAA-OS」 Lab5：文件系统, Hyggge&#39;s Blog">
     <meta name="description" content="实验思考题
 Thinking 5.1
-Q： 查阅资料，了解 Linux/Unix 的 /proc 文件系统是什么？有什么作用？ Windows 操作系统又是如何实现这些功能的？proc 文件系统这样的设计有什么好处和可以改进的地方？
-A： ">
+Q： 查阅资料，了解 Linux/Unix 的 /proc
+文件系统是什么？有什么作用？ Windows
+操作系统又是如何实现这些功能的？proc
+文件系统这样的设计有什么好处和可以改进的地方？
+A：
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,52 +393,58 @@ A： ">
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="实验思考题">实验思考题</h2>
-<h3 id="Thinking-5-1">Thinking 5.1</h3>
-<p><strong>Q：</strong> <strong>查阅资料，了解 Linux/Unix 的 /proc 文件系统是什么？有什么作用？ Windows 操作系统又是如何实现这些功能的？proc 文件系统这样的设计有什么好处和可以改进的地方？</strong></p>
-<p><strong>A：</strong> <code>/proc</code>是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，<strong>用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态</strong>。</p>
+<h3 id="thinking-5.1">Thinking 5.1</h3>
+<p><strong>Q：</strong> <strong>查阅资料，了解 Linux/Unix 的 /proc
+文件系统是什么？有什么作用？ Windows
+操作系统又是如何实现这些功能的？proc
+文件系统这样的设计有什么好处和可以改进的地方？</strong></p>
+<p><strong>A：</strong>
+<code>/proc</code>是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，<strong>用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态</strong>。</p>
 <p>这样设计可以让用户以访问文件的方式访问进程信息，方便了用户的使用。此外，它只存在内存当中，而不占用外存空间，省去了访问一般文件时将数据从外存加载入内存的时间开销，访问速度非常快。但是正因如此，它会占用很多的内存空间。</p>
 <p><strong>Windows系统是通过使用<code>WMI</code>来实现相似功能的</strong>——<code>WMI</code>是可伸缩的系统管理结构，该规范采用⼀个统一、基于标准且可扩展的面向对象接口。它提供与系统管理员信息和基础<code>WMI API</code>交互的标准方法，主要由系统管理应用程序开发⼈员和系统管理员⽤来访问和操作系统管理信息；它可用来生成组织和管理系统信息的工具，使系统管理⼈员能够更密切的监视系统活动。</p>
-<h3 id="Thinking-5-2">Thinking 5.2</h3>
-<p><strong>Q：</strong> <strong>如果我们通过 kseg0 读写设备，我们对于设备的写入会缓存到 Cache 中。通过 kseg0 访问设备是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请你思考：这么做这会引起什么问题？对于不同种类的设备（如我们提到的串口设备和 IDE 磁盘）的操作会有差异吗？可以从缓存的性质和缓存刷新的策略来考虑。</strong></p>
-<p><strong>A：</strong> 当外部设备自身更新数据时，如果此时CPU写入外设的数据还只在缓存中，<strong>则缓存的那部分数据就只能在外设自身更新后再写入外设</strong>（只有缓存块将要被新进入的数据取代时，缓存数据才会被写入内存），这样就会发生错误的行为。</p>
+<h3 id="thinking-5.2">Thinking 5.2</h3>
+<p><strong>Q：</strong> <strong>如果我们通过 kseg0
+读写设备，我们对于设备的写入会缓存到 Cache 中。通过 kseg0
+访问设备是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请你思考：这么做这会引起什么问题？对于不同种类的设备（如我们提到的串口设备和
+IDE
+磁盘）的操作会有差异吗？可以从缓存的性质和缓存刷新的策略来考虑。</strong></p>
+<p><strong>A：</strong>
+当外部设备自身更新数据时，如果此时CPU写入外设的数据还只在缓存中，<strong>则缓存的那部分数据就只能在外设自身更新后再写入外设</strong>（只有缓存块将要被新进入的数据取代时，缓存数据才会被写入内存），这样就会发生错误的行为。</p>
 <p>串口设备读写频繁，而IDE磁盘读写频率相对较小，因此串口设备发生错误的概率要远大于IDE磁盘。</p>
-<h3 id="Thinking-5-3">Thinking 5.3</h3>
-<p><strong>Q：</strong> <strong>比较 MOS 操作系统的文件控制块和 Unix/Linux 操作系统的 inode 及相关概念，试述二者的不同之处。</strong></p>
-<p><strong>A：</strong> 文件控制块和inode都是记录已打开文件的相关信息，但是两者又有很多不同。</p>
+<h3 id="thinking-5.3">Thinking 5.3</h3>
+<p><strong>Q：</strong> <strong>比较 MOS 操作系统的文件控制块和
+Unix/Linux 操作系统的 inode
+及相关概念，试述二者的不同之处。</strong></p>
+<p><strong>A：</strong>
+文件控制块和inode都是记录已打开文件的相关信息，但是两者又有很多不同。<br>
+- <strong>存储内容不同</strong>,文件控制块中的内容有——<br>
+- 文件名<br>
+- 文件大小<br>
+- 文件类型<br>
+- 文件数据块的直接指针列表<br>
+- 储存文件数据块指针的间接磁盘块指针<br>
+- 文件所在目录的指针</p>
+<pre><code>而inode中的内容包括——
+ - 文件的字节数，块数
+ - 文件拥有者的User ID
+ - 文件的Group ID
+ - 文件的读、写、执行权限
+ - 文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。
+ - 链接数，即有多少文件名指向这个inode
+ - 文件数据block的位置
+ - inode编号</code></pre>
 <ul>
-<li>
-<p><strong>存储内容不同</strong>,文件控制块中的内容有——</p>
-<ul>
-<li>文件名</li>
-<li>文件大小</li>
-<li>文件类型</li>
-<li>文件数据块的直接指针列表</li>
-<li>储存文件数据块指针的间接磁盘块指针</li>
-<li>文件所在目录的指针</li>
+<li>文件控制块顺次排列在目录文件中，而在Linux系统中，目录文件是由一系列目录项组成，每个目录项由文件名和指向inode的指针组成，占用空间远远小于文件控制块，查找操作的系统开销也大大减小。</li>
+<li>MOS中的文件控制块仅支持一级间接指针域，也只有一个；而Linux中的inode支持多级间接指针域，可以存储更大的文件。</li>
 </ul>
-<p>而inode中的内容包括——</p>
-<ul>
-<li>文件的字节数，块数</li>
-<li>文件拥有者的User ID</li>
-<li>文件的Group ID</li>
-<li>文件的读、写、执行权限</li>
-<li>文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。</li>
-<li>链接数，即有多少文件名指向这个inode</li>
-<li>文件数据block的位置</li>
-<li>inode编号</li>
-</ul>
-</li>
-<li>
-<p>文件控制块顺次排列在目录文件中，而在Linux系统中，目录文件是由一系列目录项组成，每个目录项由文件名和指向inode的指针组成，占用空间远远小于文件控制块，查找操作的系统开销也大大减小。</p>
-</li>
-<li>
-<p>MOS中的文件控制块仅支持一级间接指针域，也只有一个；而Linux中的inode支持多级间接指针域，可以存储更大的文件。</p>
-</li>
-</ul>
-<h3 id="Thinking-5-4">Thinking 5.4</h3>
-<p><strong>Q：</strong> <strong>查找代码中的相关定义，试回答一个磁盘块中最多能存储多少个文件 控制块？一个目录下最多能有多少个文件？我们的文件系统支持的单个文件最大为 多大？</strong></p>
-<p><strong>A：</strong> 通过查看文件控制块的定义，我们可以发现，每个文件控制块都被数组<code>f_pad</code>强制对齐为<strong>256B</strong>。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token punctuation">{</span>
+<h3 id="thinking-5.4">Thinking 5.4</h3>
+<p><strong>Q：</strong>
+<strong>查找代码中的相关定义，试回答一个磁盘块中最多能存储多少个文件
+控制块？一个目录下最多能有多少个文件？我们的文件系统支持的单个文件最大为
+多大？</strong></p>
+<p><strong>A：</strong>
+通过查看文件控制块的定义，我们可以发现，每个文件控制块都被数组<code>f_pad</code>强制对齐为<strong>256B</strong>。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token punctuation">{</span>
 	u_char f_name<span class="token punctuation">[</span>MAXNAMELEN<span class="token punctuation">]</span><span class="token punctuation">;</span>	
 	u_int f_size<span class="token punctuation">;</span>			
 	u_int f_type<span class="token punctuation">;</span>			
@@ -443,145 +453,161 @@ A： ">
 	<span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span>f_dir<span class="token punctuation">;</span>		
     <span class="token comment">//BY2FILE = 256</span>
 	u_char f_pad<span class="token punctuation">[</span>BY2FILE <span class="token operator">-</span> MAXNAMELEN <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> NDIRECT <span class="token operator">*</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ul>
-<li>一个磁盘块的容量为4KB，因此最多可以容纳16个文件控制块。</li>
-<li>一个目录文件最多可以使用1024个磁盘块存储数据，因此一个目录下最多1024*16 = 16384个文件。</li>
-<li>一个文件最多可以使用1024个磁盘块存储数据，因此一个文件最大容量为1024*4KB = 4MB。</li>
-</ul>
-<h3 id="Thinking-5-5">Thinking 5.5</h3>
-<p><strong>Q：</strong> <strong>请思考，在满足磁盘块缓存的设计的前提下，我们实验使用的内核支持的最大磁盘大小是多少？</strong><br>
-<strong>A：</strong> 块缓存所在的地址空间为<code>[0x10000000, 0x50000000)</code>,因此我们的内核能够支持的磁盘大小为<code>0x40000000</code>,也就是1GB。</p>
-<h3 id="Thinking-5-6">Thinking 5.6</h3>
-<p><strong>Q：</strong> <strong>如果将 DISKMAX 改成 0xC0000000, 超过用户空间，我们的文件系统还能正常工作吗？为什么？</strong><br>
-<strong>A：</strong> 不可以正常工作。如果<code>DISHMAX</code>值为<code>0xC0000000</code>，则有一部分块缓存会在内核空间中。而我们的文件系统属于文件用户态进程，无法访问内核空间的数据（访问内核空间数据时会出现<code>TOO LOW</code>报错）。</p>
-<h3 id="Thinking-5-7">Thinking 5.7</h3>
-<p><strong>Q：</strong> <strong>在 lab5 中，fs/fs.h、include/fs.h 等文件中出现了许多结构体和宏定义，写出你认为比较重要或难以理解的部分，并进行解释。</strong><br>
-<strong>A：</strong> 文件控制块（<code>File</code>）定位文件数据的方式比较重要，需要特别关注。每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块有<code>10</code>个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。示意图可见”实验难点图示“部分。</p>
-<h3 id="Thinking-5-8">Thinking 5.8</h3>
-<p><strong>Q：</strong> <strong>阅读 user/file.c，你会发现很多函数中都会将一个 struct Fd* 型的 指针转换为 struct Filefd* 型的指针，请解释为什么这样的转换可行。</strong><br>
-<strong>A：</strong> 首先，每个文件描述符fd都独占一页的，远大于struct Fd和<code>struct Filefd</code>的大小，因此将<code>struct Fd*</code>强制转换为<code>struct Filefd*</code>不会访问其他不相关的数据。<br>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+- 一个磁盘块的容量为4KB，因此最多可以容纳16个文件控制块。<br>
+-
+一个目录文件最多可以使用1024个磁盘块存储数据，因此一个目录下最多1024*16
+= 16384个文件。<br>
+-
+一个文件最多可以使用1024个磁盘块存储数据，因此一个文件最大容量为1024*4KB
+= 4MB。<p></p>
+<h3 id="thinking-5.5">Thinking 5.5</h3>
+<p><strong>Q：</strong>
+<strong>请思考，在满足磁盘块缓存的设计的前提下，我们实验使用的内核支持的最大磁盘大小是多少？</strong><br>
+<strong>A：</strong>
+块缓存所在的地址空间为<code>[0x10000000, 0x50000000)</code>,因此我们的内核能够支持的磁盘大小为<code>0x40000000</code>,也就是1GB。</p>
+<h3 id="thinking-5.6">Thinking 5.6</h3>
+<p><strong>Q：</strong> <strong>如果将 DISKMAX 改成 0xC0000000,
+超过用户空间，我们的文件系统还能正常工作吗？为什么？</strong><br>
+<strong>A：</strong>
+不可以正常工作。如果<code>DISHMAX</code>值为<code>0xC0000000</code>，则有一部分块缓存会在内核空间中。而我们的文件系统属于文件用户态进程，无法访问内核空间的数据（访问内核空间数据时会出现<code>TOO LOW</code>报错）。</p>
+<h3 id="thinking-5.7">Thinking 5.7</h3>
+<p><strong>Q：</strong> <strong>在 lab5 中，fs/fs.h、include/fs.h
+等文件中出现了许多结构体和宏定义，写出你认为比较重要或难以理解的部分，并进行解释。</strong><br>
+<strong>A：</strong>
+文件控制块（<code>File</code>）定位文件数据的方式比较重要，需要特别关注。每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块有<code>10</code>个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。示意图可见”实验难点图示“部分。</p>
+<h3 id="thinking-5.8">Thinking 5.8</h3>
+<p><strong>Q：</strong> <strong>阅读
+user/file.c，你会发现很多函数中都会将一个 struct Fd* 型的 指针转换为
+struct Filefd* 型的指针，请解释为什么这样的转换可行。</strong><br>
+<strong>A：</strong> 首先，每个文件描述符fd都独占一页的，远大于struct
+Fd和<code>struct Filefd</code>的大小，因此将<code>struct Fd*</code>强制转换为<code>struct Filefd*</code>不会访问其他不相关的数据。<br>
 其次，每个<code>strcut Filefd</code>的开头都包含一个<code>struct File</code>，将<code>struct Fd*</code>强制转换为<code>struct Filefd*</code>后，同样可以通过<code>p-&gt;f_fd</code>来访问原先<code>struct Fd</code>中数据。这和面向对象中基类和派生类的关系十分相似，如果将<code>struct Fd</code>想象成基类，<code>struct File</code>想象成派生类，将基类的指针"向下转型"到派生类的指针是没有任何问题的。</p>
-<h3 id="Thinking-5-9">Thinking 5.9</h3>
-<p><strong>Q：</strong>  <strong>在lab4 的实验中我们实现了极为重要的fork 函数。那么fork 前后的父子进程是否会共享文件描述符和定位指针呢？请在完成练习5.8和5.9的基础上编写一个程序进行验证。</strong><br>
-<strong>A：</strong> 一个进程所有的文件描述符都存储在<code>[FDTABLE, FILEBASE)</code>这一地址空间中。在<code>fork</code>函数执行时，会将这父进程页表中映射一部分地址的页表项拷贝到子进程的页表中，因此<code>fork</code>前后的父子进程会共享文件描述符和定位指针。</p>
-<h3 id="Thinking-5-10">Thinking 5.10</h3>
-<p><strong>Q：</strong>  <strong>请解释Fd, Filefd, Open 结构体及其各个域的作用。比如各个结构体会在哪些过程中被使用，是否对应磁盘上的物理实体还是单纯的内存数据等。说明形式自定，要求简洁明了，可大致勾勒出文件系统数据结构与物理实体的对应关系与设计框架。</strong><br>
-<strong>A：</strong></p>
-<ul>
-<li>
-<p><strong>Fd结构体定义及各个域的作用如下所示</strong></p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token punctuation">{</span>
+<h3 id="thinking-5.9">Thinking 5.9</h3>
+<p><strong>Q：</strong> <strong>在lab4 的实验中我们实现了极为重要的fork
+函数。那么fork
+前后的父子进程是否会共享文件描述符和定位指针呢？请在完成练习5.8和5.9的基础上编写一个程序进行验证。</strong><br>
+<strong>A：</strong>
+一个进程所有的文件描述符都存储在<code>[FDTABLE, FILEBASE)</code>这一地址空间中。在<code>fork</code>函数执行时，会将这父进程页表中映射一部分地址的页表项拷贝到子进程的页表中，因此<code>fork</code>前后的父子进程会共享文件描述符和定位指针。</p>
+<h3 id="thinking-5.10">Thinking 5.10</h3>
+<p><strong>Q：</strong> <strong>请解释Fd, Filefd, Open
+结构体及其各个域的作用。比如各个结构体会在哪些过程中被使用，是否对应磁盘上的物理实体还是单纯的内存数据等。说明形式自定，要求简洁明了，可大致勾勒出文件系统数据结构与物理实体的对应关系与设计框架。</strong><br>
+<strong>A：</strong><br>
+- <strong>Fd结构体定义及各个域的作用如下所示</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token punctuation">{</span>
 	u_int fd_dev_id<span class="token punctuation">;</span>    <span class="token comment">//文件对应的设备id</span>
 	u_int fd_offset<span class="token punctuation">;</span>    <span class="token comment">//文件指针所指向的位置</span>
 	u_int fd_omode<span class="token punctuation">;</span>     <span class="token comment">//文件打开模式</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>该结构体主要用于记录已打开文件的状态，便于用户直接使用文件描述符对文件进行操作、申请服务等等。由于文件描述符主要是为用户所使用，因此它对应的是磁盘映射到内存中的数据。</p>
-</li>
-<li>
-<p><strong>Filefd的结构体定义及各个域的作用如下所示</strong></p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Filefd</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+该结构体主要用于记录已打开文件的状态，便于用户直接使用文件描述符对文件进行操作、申请服务等等。由于文件描述符主要是为用户所使用，因此它对应的是磁盘映射到内存中的数据。<p></p>
+<ul>
+<li><p><strong>Filefd的结构体定义及各个域的作用如下所示</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Filefd</span> <span class="token punctuation">{</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Fd</span> f_fd<span class="token punctuation">;</span>     <span class="token comment">//文件描述符结构体</span>
 	u_int f_fileid<span class="token punctuation">;</span>     <span class="token comment">//文件id，表示该文件在opentab中的位置</span>
 	<span class="token keyword">struct</span> <span class="token class-name">File</span> f_file<span class="token punctuation">;</span> <span class="token comment">//文件控制块</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>文件描述符中存储的数据毕竟是有限的，有的时候我们需要将<code>Fd*</code>强制转换为<code>Filefd*</code>从而获取到文件控制块，从而获得更多文件信息，比如文件大小等等。</p>
-</li>
-<li>
-<p><strong>Open结构体定义及各个域的作用如下所示</strong></p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Open</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+文件描述符中存储的数据毕竟是有限的，有的时候我们需要将<code>Fd*</code>强制转换为<code>Filefd*</code>从而获取到文件控制块，从而获得更多文件信息，比如文件大小等等。<p></p></li>
+<li><p><strong>Open结构体定义及各个域的作用如下所示</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Open</span> <span class="token punctuation">{</span>
 	<span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span>o_file<span class="token punctuation">;</span>	<span class="token comment">// 文件控制块指针</span>
 	u_int o_fileid<span class="token punctuation">;</span>		    <span class="token comment">// 文件id</span>
 	<span class="token keyword">int</span> o_mode<span class="token punctuation">;</span>		        <span class="token comment">// 文件打开方式</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Filefd</span> <span class="token operator">*</span>o_ff<span class="token punctuation">;</span>	<span class="token comment">// Filefd结构体</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这个结构体主要被文件系统服务进程使用，用于记录所有进程中被打开的文件。每个被打开的文件都对应一个<code>Open</code>结构体，所有的结构体依次排列在数组<code>opentab[MAXOPEN]</code>，每次我们只需要通过<code>file_id</code>来查找即可。</p>
-</li>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+这个结构体主要被文件系统服务进程使用，用于记录所有进程中被打开的文件。每个被打开的文件都对应一个<code>Open</code>结构体，所有的结构体依次排列在数组<code>opentab[MAXOPEN]</code>，每次我们只需要通过<code>file_id</code>来查找即可。<p></p></li>
 </ul>
-<h3 id="Thinking-5-11">Thinking 5.11</h3>
-<p><strong>Q：</strong>  <strong>UML时序图中有多种不同形式的箭头，请结合UML 时序图的规范，解释这些不同箭头的差别，并思考我们的操作系统是如何实现对应类型的进程间通信的。</strong></p>
+<h3 id="thinking-5.11">Thinking 5.11</h3>
+<p><strong>Q：</strong>
+<strong>UML时序图中有多种不同形式的箭头，请结合UML
+时序图的规范，解释这些不同箭头的差别，并思考我们的操作系统是如何实现对应类型的进程间通信的。</strong></p>
 <p><strong>A：</strong> UML时序图中有以下几种箭头——</p>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">消息类型</th>
-<th style="text-align:center">表示</th>
+<tr class="header">
+<th style="text-align: center;">消息类型</th>
+<th style="text-align: center;">表示</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>同步消息</strong></td>
-<td style="text-align:center">用黑三角箭头搭配黑实线表示</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>同步消息</strong></td>
+<td style="text-align: center;">用黑三角箭头搭配黑实线表示</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>异步消息</strong></td>
-<td style="text-align:center">用两条小线的开箭头和黑色实线表示</td>
+<tr class="even">
+<td style="text-align: center;"><strong>异步消息</strong></td>
+<td style="text-align: center;">用两条小线的开箭头和黑色实线表示</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>返回消息</strong></td>
-<td style="text-align:center">用黑三角箭头搭配黑色虚线表示</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>返回消息</strong></td>
+<td style="text-align: center;">用黑三角箭头搭配黑色虚线表示</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>创建消息</strong></td>
-<td style="text-align:center">用开三角箭头搭配黑实线表示，其下面特别注明 <code>&lt;&lt;create&gt;&gt;</code></td>
+<tr class="even">
+<td style="text-align: center;"><strong>创建消息</strong></td>
+<td style="text-align: center;">用开三角箭头搭配黑实线表示，其下面特别注明
+<code>&lt;&lt;create&gt;&gt;</code></td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>摧毁消息</strong></td>
-<td style="text-align:center">用黑三角箭头搭配黑实线表示，其下面特别注明 <code>&lt;&lt;destroy&gt;&gt;</code></td>
+<tr class="odd">
+<td style="text-align: center;"><strong>摧毁消息</strong></td>
+<td style="text-align: center;">用黑三角箭头搭配黑实线表示，其下面特别注明
+<code>&lt;&lt;destroy&gt;&gt;</code></td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>Lost and Found Message</strong></td>
-<td style="text-align:center">用一个黑色实心的点和黑色实心三角箭头黑实线表示</td>
+<tr class="even">
+<td style="text-align: center;"><strong>Lost and Found
+Message</strong></td>
+<td style="text-align: center;">用一个黑色实心的点和黑色实心三角箭头黑实线表示</td>
 </tr>
 </tbody>
 </table>
 <p>我们的操作系统是通过IPC来实现进程间通信的，这种方式传递的信息本质上是一种同步消息。具体流程是：发送方先调用<code>ipc_send</code>函数，该函数通过一个死循环来不断向接收方信息。当接收方成功接收到消息时，<code>ipc_send</code>函数跳出循环并结束，这时发送方再调用<code>ipc_recv</code>函数主动放弃CPU，等待接收返回信息。</p>
-<p>整个流程在函数<code>fsipc</code>里得到体现</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">fsipc</span><span class="token punctuation">(</span>u_int type<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>fsreq<span class="token punctuation">,</span> u_int dstva<span class="token punctuation">,</span> u_int <span class="token operator">*</span>perm<span class="token punctuation">)</span>
+<p>整个流程在函数<code>fsipc</code>里得到体现<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">fsipc</span><span class="token punctuation">(</span>u_int type<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>fsreq<span class="token punctuation">,</span> u_int dstva<span class="token punctuation">,</span> u_int <span class="token operator">*</span>perm<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	u_int whom<span class="token punctuation">;</span>
 	<span class="token function">ipc_send</span><span class="token punctuation">(</span>envs<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>env_id<span class="token punctuation">,</span> type<span class="token punctuation">,</span> <span class="token punctuation">(</span>u_int<span class="token punctuation">)</span>fsreq<span class="token punctuation">,</span> PTE_V <span class="token operator">|</span> PTE_R<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">return</span> <span class="token function">ipc_recv</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>whom<span class="token punctuation">,</span> dstva<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Thinking-5-12">Thinking 5.12</h3>
-<p><strong>Q：</strong>  <strong>阅读serv.c/serve函数的代码，我们注意到函数中包含了一个死循环<code>for (;;) {...}</code>，为什么这段代码不会导致整个内核进入panic 状态？</strong><br>
-<strong>A：</strong> 这个死循环并不会导致CPU的轮询，原因是每次循环会调用<code>ipc_recv</code>函数。在这个函数被调用后，文件系统服务进程就会主动让出CPU（进程状态被标记为<code>NOT_RANNABLE</code>），直到用户进程向该进程申请服务（调用<code>ipc_send</code>）时才会被唤醒，进而为用户进程提供服务。因此，循环的次数始终等于文件系统服务进程提供服务的次数，并不会导致内核进入<code>panic</code>状态。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="thinking-5.12">Thinking 5.12</h3>
+<p><strong>Q：</strong>
+<strong>阅读serv.c/serve函数的代码，我们注意到函数中包含了一个死循环<code>for (;;) {...}</code>，为什么这段代码不会导致整个内核进入panic
+状态？</strong><br>
+<strong>A：</strong>
+这个死循环并不会导致CPU的轮询，原因是每次循环会调用<code>ipc_recv</code>函数。在这个函数被调用后，文件系统服务进程就会主动让出CPU（进程状态被标记为<code>NOT_RANNABLE</code>），直到用户进程向该进程申请服务（调用<code>ipc_send</code>）时才会被唤醒，进而为用户进程提供服务。因此，循环的次数始终等于文件系统服务进程提供服务的次数，并不会导致内核进入<code>panic</code>状态。</p>
 <h2 id="实验难点图示">实验难点图示</h2>
-<p>我认为本次实验主要包含以下难点——</p>
-<ul>
-<li><strong>文件数据块的定位方式</strong></li>
-<li><strong>fsformat.c中函数的调用关系</strong></li>
-<li><strong>文件系统的地址空间布局</strong></li>
-<li><strong>用户进程和文件系统服务进程的交互</strong></li>
-</ul>
+<p>我认为本次实验主要包含以下难点——<br>
+- <strong>文件数据块的定位方式</strong><br>
+- <strong>fsformat.c中函数的调用关系</strong><br>
+- <strong>文件系统的地址空间布局</strong><br>
+- <strong>用户进程和文件系统服务进程的交互</strong></p>
 <h3 id="文件数据块的定位方式">文件数据块的定位方式</h3>
 <p>每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块中有10个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。</p>
 <p>假设某文件是一个目录文件，则其定位数据块的方式如下图所示<br>
-<img src="file_data.drawio.svg" alt=""></p>
-<h3 id="fsformat-c中函数的调用关系">fsformat.c中函数的调用关系</h3>
+<img src="file_data.drawio.svg"></p>
+<h3 id="fsformat.c中函数的调用关系">fsformat.c中函数的调用关系</h3>
 <p>在本次实验中，我们需要通过<code>fsformat.c</code>文件创建磁盘镜像<code>gxemul/fs.img</code>，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。<br>
 <code>fsformat.c</code>中函数的调用关系如下所示——</p>
-<p><img src="fsformat.drawio.svg" alt=""></p>
+<p><img src="fsformat.drawio.svg"></p>
 <h3 id="文件系统的地址空间布局">文件系统的地址空间布局</h3>
-<p>文件系统的正常工作也需要占用一定的内存空间。</p>
-<ul>
-<li>文件服务进程需要占用<code>[0x10000000, 0x50000000)</code>这一1GB空间作为块缓存。</li>
-<li>用户进程还需要占用<code>[0x5fc00000, 0x600000000)</code>这一4MB空间来储存文件描述符。
-<blockquote>
-<p>因为用户进程最多只能开32个文件描述符，每个文件描述符占用一页，因此实际上这一空间是无法占满的，最多占用32*4KB=128KB。</p>
-</blockquote>
-</li>
-<li>用户进程需要占用<code>[0x60000000, 0x680000000)</code>这一128MB空间作为文件内容缓存区。缓存区的每个页面都和文件服务进程中的对应块缓存映射到同一个物理页，并标记为<code>PTE_LIBARAY</code>。
-<blockquote>
-<p>因为用户进程最多只能有32个文件描述符，因此只能同时打开32个文件，每个文件最多占用4MB空间，因此用户进程缓存区大小为32*4MB=128MB。</p>
-</blockquote>
-</li>
-</ul>
+<p>文件系统的正常工作也需要占用一定的内存空间。<br>
+-
+文件服务进程需要占用<code>[0x10000000, 0x50000000)</code>这一1GB空间作为块缓存。<br>
+-
+用户进程还需要占用<code>[0x5fc00000, 0x600000000)</code>这一4MB空间来储存文件描述符。<br>
+&gt;
+因为用户进程最多只能开32个文件描述符，每个文件描述符占用一页，因此实际上这一空间是无法占满的，最多占用32<em>4KB=128KB。<br>
+-
+用户进程需要占用<code>[0x60000000, 0x680000000)</code>这一128MB空间作为文件内容缓存区。缓存区的每个页面都和文件服务进程中的对应块缓存映射到同一个物理页，并标记为<code>PTE_LIBARAY</code>。<br>
+&gt;
+因为用户进程最多只能有32个文件描述符，因此只能同时打开32个文件，每个文件最多占用4MB空间，因此用户进程缓存区大小为32</em>4MB=128MB。</p>
 <p>地址空间布局如下所示<br>
-<img src="map.drawio.svg" alt=""></p>
+<img src="map.drawio.svg"></p>
 <h3 id="用户进程和文件系统服务进程的交互">用户进程和文件系统服务进程的交互</h3>
 <p>用户进程通过文件系统的用户接口申请服务，该请求会通过IPC机制告知文件系统服务进程（<code>fsipc.c</code>），然后由文件系统服务进程提供服务（<code>serve.c</code>）。不同用户接口及其服务的流程如下所示——<br>
-<img src="process.drawio.svg" alt=""></p>
+<img src="process.drawio.svg"></p>
 <h2 id="体会与感想">体会与感想</h2>
 <p>本次实验的代码填写比较简单，根据代码注释和指导书的提示就可以轻松完成，评测拿到满分并不困难。</p>
 <p>尽管实验任务比较简单，但是这次实验涉及的代码文件更多，新增代码多达千余行，新增结构体也有十几个，给代码的理解带来了很多困难。因此，要想真正理解每个函数的作用、函数之间的调用关系以及用户申请文件系统服务的流程，还需要下一番功夫。</p>
@@ -984,7 +1010,7 @@ A： ">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

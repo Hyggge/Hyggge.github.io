@@ -430,10 +430,19 @@
                 </a>
                 
                 
+                <a href="/categories/ML/" title="ML: 5">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #85C1E9;">ML
+                        <span class="tag-length">5</span>
+                    </span>
+                </a>
+                
+                
                 <a href="/categories/Maven/" title="Maven: 3">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #85C1E9;">Maven
+                            style="background-color: #F8C471;">Maven
                         <span class="tag-length">3</span>
                     </span>
                 </a>
@@ -442,17 +451,8 @@
                 <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="面向对象: 4">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F8C471;">面向对象
+                            style="background-color: #F9E79F;">面向对象
                         <span class="tag-length">4</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/categories/ML/" title="ML: 5">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            style="background-color: #F9E79F;">ML
-                        <span class="tag-length">5</span>
                     </span>
                 </a>
                 
@@ -556,7 +556,8 @@
                             
                                 MIPS微系统设计方案
 设计概述
-​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_
+​
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_R
                             
                         </div>
                         <div class="publish-info">
@@ -662,7 +663,8 @@
                             
                                 流水线CPU设计方案
 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M
+​
+本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_
                             
                         </div>
                         <div class="publish-info">
@@ -714,7 +716,8 @@
                             
                                 流水线CPU设计方案
 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Re
+​
+本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg
                             
                         </div>
                         <div class="publish-info">
@@ -766,7 +769,8 @@
                             
                                 单周期CPU设计方案
 设计概述
-本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch Cont
+本文所设计的CPU为Verilog实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Controler，Branch
+Cont
                             
                         </div>
                         <div class="publish-info">
@@ -818,7 +822,8 @@
                             
                                 单周期CPU设计方案
 设计概述
- 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branc
+ 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control
+Unite，Branc
                             
                         </div>
                         <div class="publish-info">
@@ -877,10 +882,10 @@ CPU执行程序的过程
 
 RISC的设计思想：
 CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
-
-加速大概率事件
-简单意味着更容易设计、电路频率更高
-简单功能由硬件实现；
+- 加速大概率事件
+- 简单意味着更容易设计、电路频率更高
+-
+简单功能由
                             
                         </div>
                         <div class="publish-info">
@@ -931,7 +936,8 @@ CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指�
                         <div class="summary block-with-text">
                             
                                 算数右移符号&gt;&gt;&gt;
-我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)，
+算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
 wire [15:0] A, B, C;
 
 assign 
@@ -986,11 +992,10 @@ assign
                             
                                 定义和实例化模块时reg的使用
 
-
-在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
-
-
-在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 
+在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg
+类型的信号只能被连接至元件的输入端口上。
+在声明元件时，我们可以将任意端口声明为 wire
+类型，但只能将输出端口声明为 reg 类型，
                             
                         </div>
                         <div class="publish-info">
@@ -1076,7 +1081,7 @@ assign
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

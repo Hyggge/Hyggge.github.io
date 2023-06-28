@@ -390,10 +390,13 @@
 <p>在学习这一单元之前，我们仅仅是将UML当作一种"画图工具"，仅仅知道它能帮助我们画出各种各样的类图、顺序图、状态图等等。但是，这样我们只是看到了UML的表象，却没有深刻理解其“统一建模语言”的本质。<strong>既然UML是一种语言，那它就应该既有"词汇"，又有"语法"</strong>。通过理论课的学习我们已经知道，UML中的"词汇"就是一个个元模型（例如UMLClass、UMLRegion等等），而“语法”就是各个UML元模型之间的层次关系和组合关系。而本单元的三次作业，就是围绕着UML的"词汇"和"语法"进行展开，要求我们准确理解类图、顺序图和状态图中各个元模型和它们之间的关系，并在此基础上进行建模，实现一个功能较为完备的UML解析器。</p>
 <hr>
 <h2 id="作业架构分析">作业架构分析</h2>
-<h3 id="自建MyElement类">自建MyElement类</h3>
+<h3 id="自建myelement类">自建MyElement类</h3>
 <p>本单元的三次作业都是要求我们实现官方包<code>UserApi</code>接口中的方法，但是这并不意味着我们只需要写一个<code>MyImplementation</code>类就可以了（毕竟课程组怎么可能会这么温柔呢bushi）。尽管官方包已经将输入的json字符串解析并封装成了<code>UMLClass</code>、<code>UMLInterface</code>等类，但是这些类中的信息仅仅是从json中迁移过来，对于完成作业来说还是远远不够的。</p>
-<p>由此，我们可以自己新建<code>MyClass</code>、<code>MyInterface</code>等类，里面不仅包含<code>UMLClass</code>、<code>UMLInterface</code>等类的内容，还可以根据需要添加新的信息。例如，<code>MyClass</code>可以添加"继承的所有类的集合"、“实现的所有接口的集合”，“所有成员变量的集合”，“所有成员方法的集合”, “继承深度"等等；<code>MyRegion</code>中可以添加"拥有的所有状态的集合”；<code>MyLifeline</code>中可以添加"所有发出的lost message的集合"，"所有收到的found message的集合"等等。为了让自建类可以包含官方包已经封装好的类中的内容，我们可以通过"组合"的方式实现——</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span>
+<p>由此，我们可以自己新建<code>MyClass</code>、<code>MyInterface</code>等类，里面不仅包含<code>UMLClass</code>、<code>UMLInterface</code>等类的内容，还可以根据需要添加新的信息。例如，<code>MyClass</code>可以添加"继承的所有类的集合"、"实现的所有接口的集合"，"所有成员变量的集合"，"所有成员方法的集合",
+"继承深度"等等；<code>MyRegion</code>中可以添加"拥有的所有状态的集合"；<code>MyLifeline</code>中可以添加"所有发出的lost
+message的集合"，"所有收到的found
+message的集合"等等。为了让自建类可以包含官方包已经封装好的类中的内容，我们可以通过"组合"的方式实现——<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> <span class="token keyword">int</span> depth<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">UmlClass</span> umlClass<span class="token punctuation">;</span>
 
@@ -407,26 +410,27 @@
     <span class="token keyword">private</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allClasses<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allInterfaces<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allAttributes<span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="层次化建模">层次化建模</h3>
-<p>因为输入的json字符串的顺序无法得到保证，所以可能出现<code>UMLGeneration</code>和<code>UMLInterfaceRealization</code>等元模型的出现时间要早于<code>UMLClass</code>和<code>UMLInterface</code>和其他类似的情况，这给我们封装自建类带来的困难。一个比较好的解决办法是多次遍历<code>elements</code>，根据不同元模型之间的依赖关系来先后解析不同的<code>UMLElement</code>、并封装成<code>MyElement</code>。</p>
-<p>经过三次作业的迭代，我们最终可以通过5次遍历来解析所有的元模型——</p>
-<ul>
-<li><strong>Loop1:  UMLClass、UMLInterface、UMLStateMachine、UMLCollaboration</strong></li>
-<li><strong>Loop2: UMLOperation、UMLAttribute、UMLGeneralization、UMLInterfaceRealization、UMLAssociation、UMLInteraction、UMLRegion</strong></li>
-<li><strong>Loop3: UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPseudostate、UMLFinalState</strong></li>
-<li><strong>Loop4: UMLMessage、UMLTransition</strong></li>
-<li><strong>Loop5: UMLEvent、UMLOpaqueBehavior</strong></li>
-</ul>
-<p>这5次遍历可以直接在<code>MyImplementation</code>里进行。而为了防止因为行数过长而被StyleChecker制裁，我单独设置了一个<code>Loop</code>类来封装所有的遍历过程。·</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MyImplementation</span><span class="token punctuation">(</span><span class="token class-name">UmlElement</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> elements<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+### 层次化建模<br>
+因为输入的json字符串的顺序无法得到保证，所以可能出现<code>UMLGeneration</code>和<code>UMLInterfaceRealization</code>等元模型的出现时间要早于<code>UMLClass</code>和<code>UMLInterface</code>和其他类似的情况，这给我们封装自建类带来的困难。一个比较好的解决办法是多次遍历<code>elements</code>，根据不同元模型之间的依赖关系来先后解析不同的<code>UMLElement</code>、并封装成<code>MyElement</code>。<p></p>
+<p>经过三次作业的迭代，我们最终可以通过5次遍历来解析所有的元模型——<br>
+- <strong>Loop1:
+UMLClass、UMLInterface、UMLStateMachine、UMLCollaboration</strong><br>
+- <strong>Loop2:
+UMLOperation、UMLAttribute、UMLGeneralization、UMLInterfaceRealization、UMLAssociation、UMLInteraction、UMLRegion</strong><br>
+- <strong>Loop3:
+UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPseudostate、UMLFinalState</strong><br>
+- <strong>Loop4: UMLMessage、UMLTransition</strong><br>
+- <strong>Loop5: UMLEvent、UMLOpaqueBehavior</strong></p>
+<p>这5次遍历可以直接在<code>MyImplementation</code>里进行。而为了防止因为行数过长而被StyleChecker制裁，我单独设置了一个<code>Loop</code>类来封装所有的遍历过程。·<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MyImplementation</span><span class="token punctuation">(</span><span class="token class-name">UmlElement</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> elements<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Dict</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Loop</span><span class="token punctuation">.</span><span class="token function">loop1</span><span class="token punctuation">(</span>elements<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Loop</span><span class="token punctuation">.</span><span class="token function">loop2</span><span class="token punctuation">(</span>elements<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Loop</span><span class="token punctuation">.</span><span class="token function">loop3</span><span class="token punctuation">(</span>elements<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Loop</span><span class="token punctuation">.</span><span class="token function">loop4</span><span class="token punctuation">(</span>elements<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Loop</span><span class="token punctuation">.</span><span class="token function">loop5</span><span class="token punctuation">(</span>elements<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="字典类">字典类</h3>
 <p>可以发现，MyClass中<code>fatherSet</code>、<code>sonSet</code>等容器类存放的都是<code>String</code>类型的对象，很显然这些字符串都是表示元模型的id。因为每个元模型的id都是不同的，所以这样做既有操作上的便利性，也有实现上的可行性和安全性。<strong>但是——我们怎么通过id来找到对应的<code>MyElement</code>或者<code>UMLElement</code>呢？</strong>（有些UMLElement实际上不需要添加心得内容，因此不需要新建对应的MyElement）</p>
 <p>为了解决这个问题，我新建了一个字典类——<code>Dict</code>，这个类中存放着所有的MyElement或者UMLElement。同时为了实现"根据id查找"和"根据name进行查找"，我使用了HashMap作为容器来存放。</p>
@@ -485,43 +489,51 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在进行<code>elements</code>的五次遍历时，我们可以将遍历到的 <code>UMLElement</code> 通过<code>Dict</code>类的add方法加入到对应的容器中。需要注意的是，对于那些需要扩展的 <code>UMLElement</code> ，<code>Dict</code>会先调用自建类的构造方法将其转化成<code>MyElement</code>，然后再加入对应的容器。</p>
-<h2 id="架构设计思维和OO方法理解的演进">架构设计思维和OO方法理解的演进</h2>
+<p>在进行<code>elements</code>的五次遍历时，我们可以将遍历到的
+<code>UMLElement</code>
+通过<code>Dict</code>类的add方法加入到对应的容器中。需要注意的是，对于那些需要扩展的
+<code>UMLElement</code>
+，<code>Dict</code>会先调用自建类的构造方法将其转化成<code>MyElement</code>，然后再加入对应的容器。</p>
+<h2 id="架构设计思维和oo方法理解的演进">架构设计思维和OO方法理解的演进</h2>
 <ul>
-<li>
-<p><strong>第一单元的主题是"表达式展开"</strong>，主要是想让我们初步接触面向对象的思想，感受OO方法的魅力。OO的世界观就是"一切皆是对象"，但是要真正理解这句话，还需要学会如何从一个具体问题中抽象出若干对象。第一个单元恰好给我们提供了一个具体情境——表达式展开问题，需要我们从中抽象出一系列对象来帮助我们解决问题。从全局来看，表达式本身可以看作对象；站在表达式的角度，表达式由一个个项通过 + 或者 - 来连接，因此项也能看作对象；站在项的角度，项是由一个个因子通过 * 来链接，因此因子也是对象。这个单元的训练让我们深刻体会到了面向对象编程的优势——通过从问题中抽象出一系列对象，我们可以建立一个层次化、模块化的结构，从而降低了问题的复杂度。</p>
-</li>
-<li>
-<p><strong>第二单元的主题是"电梯调度"</strong>，要求我们将关注点从"对象的行为"转移到"对象的交互"。所有的对象都不是孤立存在的，只有和其他的对象建立联系、进行交互，才可以实现一个更大的功能。但是在多线程的场景下，对象之间的交互时机、交互结果都具有了不确定性，带来了很大的安全隐患。因此，我们需要结合实际场景对线程安全问题进行分析和解决——哪些对象之间的交互存在着安全隐患？如何合理的加锁既能防止死锁，又能保证效率? 只有解决了线程安全问题，才能保证对象之间的交互"乱中有序"、符合预期。</p>
-</li>
-<li>
-<p><strong>第三单元的主题是"JML规格"</strong>，要求我们能够理解JML规格语言，并能基于规格进行代码实现。但是我相信课程组开设这一单元的主要目的并不是要让我们学会使用JML（毕竟JML是真的冷门），而是想让我们在"面向规格编程"的过程中感受到“契约式编程”的魅力——高可靠性、高复用性、便于测试。此外这个单元的三次作业也让我体会到——契约仅仅是对程序的功能做出了限制，在不违背契约的前提下，还需要重点关注如何高效的实现契约，这就很考验我们设计算法的能力了。</p>
-</li>
-<li>
-<p><strong>第四单元的主题是"UML建模语言"</strong>，要求我们深入理解UML语言中各个元模型和它们之间的关系，据此为每一个元模型建立对象，并使所有对象形成一个层次化结构，最终实现对UML的解析。这个单元使我们进一步感受到UML语言的"面向对象"本质，进一步加深对面向对象思想的理解。</p>
-</li>
+<li><p><strong>第一单元的主题是"表达式展开"</strong>，主要是想让我们初步接触面向对象的思想，感受OO方法的魅力。OO的世界观就是"一切皆是对象"，但是要真正理解这句话，还需要学会如何从一个具体问题中抽象出若干对象。第一个单元恰好给我们提供了一个具体情境——表达式展开问题，需要我们从中抽象出一系列对象来帮助我们解决问题。从全局来看，表达式本身可以看作对象；站在表达式的角度，表达式由一个个项通过
++ 或者 - 来连接，因此项也能看作对象；站在项的角度，项是由一个个因子通过
+*
+来链接，因此因子也是对象。这个单元的训练让我们深刻体会到了面向对象编程的优势——通过从问题中抽象出一系列对象，我们可以建立一个层次化、模块化的结构，从而降低了问题的复杂度。</p></li>
+<li><p><strong>第二单元的主题是"电梯调度"</strong>，要求我们将关注点从"对象的行为"转移到"对象的交互"。所有的对象都不是孤立存在的，只有和其他的对象建立联系、进行交互，才可以实现一个更大的功能。但是在多线程的场景下，对象之间的交互时机、交互结果都具有了不确定性，带来了很大的安全隐患。因此，我们需要结合实际场景对线程安全问题进行分析和解决——哪些对象之间的交互存在着安全隐患？如何合理的加锁既能防止死锁，又能保证效率?
+只有解决了线程安全问题，才能保证对象之间的交互"乱中有序"、符合预期。</p></li>
+<li><p><strong>第三单元的主题是"JML规格"</strong>，要求我们能够理解JML规格语言，并能基于规格进行代码实现。但是我相信课程组开设这一单元的主要目的并不是要让我们学会使用JML（毕竟JML是真的冷门），而是想让我们在"面向规格编程"的过程中感受到“契约式编程”的魅力——高可靠性、高复用性、便于测试。此外这个单元的三次作业也让我体会到——契约仅仅是对程序的功能做出了限制，在不违背契约的前提下，还需要重点关注如何高效的实现契约，这就很考验我们设计算法的能力了。</p></li>
+<li><p><strong>第四单元的主题是"UML建模语言"</strong>，要求我们深入理解UML语言中各个元模型和它们之间的关系，据此为每一个元模型建立对象，并使所有对象形成一个层次化结构，最终实现对UML的解析。这个单元使我们进一步感受到UML语言的"面向对象"本质，进一步加深对面向对象思想的理解。</p></li>
 </ul>
 <h2 id="测试的理解和实践">测试的理解和实践</h2>
-<p>在这四个单元中我都是采用了 <strong>“单元测试+随机测试+边缘数据测试”</strong> 的测试流程。</p>
-<ul>
-<li>
-<p><strong>单元测试主要是在 “coding” 阶段进行的。</strong> 每当写完一个(或几个)可以实现特定功能的类后，我会先在test文件夹下新建一个测试类，然后使用junit对这个（或这些）类的各个方法进行测试。如果测试没有问题，再去实现其他功能。这是以前用SprintBoot开发后端时养成的习惯，这样做可以尽早将一些不必要的bug定位出来，减轻后期整体测试时的工作量。</p>
-</li>
-<li>
-<p><strong>当我们将整个项目写完后，需要对其进行完整、系统的测试，以确定我们的设计是否符合要求，输出是否合法。</strong> 我主要采用了自动化随机测试的方法进行整体测试，而这就需要评测机来发挥作用了。整个评测机主要包含两个部分——数据生成器和正确性检查，这样进行分离可以使得评测机拥有很好的可扩展性，降低迭代时的复杂度。<br>
+<p>在这四个单元中我都是采用了
+<strong>"单元测试+随机测试+边缘数据测试"</strong> 的测试流程。<br>
+- <strong>单元测试主要是在 "coding" 阶段进行的。</strong>
+每当写完一个(或几个)可以实现特定功能的类后，我会先在test文件夹下新建一个测试类，然后使用junit对这个（或这些）类的各个方法进行测试。如果测试没有问题，再去实现其他功能。这是以前用SprintBoot开发后端时养成的习惯，这样做可以尽早将一些不必要的bug定位出来，减轻后期整体测试时的工作量。<br>
+-
+<strong>当我们将整个项目写完后，需要对其进行完整、系统的测试，以确定我们的设计是否符合要求，输出是否合法。</strong>
+我主要采用了自动化随机测试的方法进行整体测试，而这就需要评测机来发挥作用了。整个评测机主要包含两个部分——数据生成器和正确性检查，这样进行分离可以使得评测机拥有很好的可扩展性，降低迭代时的复杂度。<br>
  <br>
-<strong>在第一单元，我仍然是按照作业中"递归下降"的思想来生成数据，并设置变量对递归次数、系数大小进行控制，从而保证可以生成不同复杂度的数据，提高覆盖率。</strong> 因为有了Python中 sympy 库的加持，我们可以直接对代码输出进行正确性判断，提高了测试的可靠性。但是后面几个单元都没有了标准答案可供参考，因此只能通过对拍的方式进行评测。<br>
+<strong>在第一单元，我仍然是按照作业中"递归下降"的思想来生成数据，并设置变量对递归次数、系数大小进行控制，从而保证可以生成不同复杂度的数据，提高覆盖率。</strong>
+因为有了Python中 sympy
+库的加持，我们可以直接对代码输出进行正确性判断，提高了测试的可靠性。但是后面几个单元都没有了标准答案可供参考，因此只能通过对拍的方式进行评测。<br>
  <br>
-<strong>在第二单元</strong>，我也是采是用随机数的方式来生成乘客请求，但是请求不能任其随机分布，还需要对某楼层或者某楼座进行压力测试，即只针对一楼层（座）生成大量请求。另外，我们可能还需要仅对横向电梯测试或者仅对纵向电梯测试。<strong>为了满足多样性的需求，我为数据生成器增加了许多“模式”可以选择。这样可以检查在不同情境下代码的性能表现和运行结果，更好的排查死锁和电梯灵异现象。</strong> 当然在设计数据生成器时还需要注意指导书上的一些"数据规范"，我们可以通过设置常量进行限制，如果直接将数据限制在代码里写死，将不利于评测机的修改和迭代。本单元的正确性检查主要采用对拍的方式，但由于代码需要模拟电梯运行的时间延迟，每次跑一个数据可能会耗时一两分钟，如果所有对拍的代码都采用串行的方式运行，测试效率将会受到极大的限制，因此我们可以使用python的 subprocess 函数创建多个子进程，实现对不同测试者的代码"同时"进行测试，充分利用并发的优势，提高测试效率。<br>
+<strong>在第二单元</strong>，我也是采是用随机数的方式来生成乘客请求，但是请求不能任其随机分布，还需要对某楼层或者某楼座进行压力测试，即只针对一楼层（座）生成大量请求。另外，我们可能还需要仅对横向电梯测试或者仅对纵向电梯测试。<strong>为了满足多样性的需求，我为数据生成器增加了许多“模式”可以选择。这样可以检查在不同情境下代码的性能表现和运行结果，更好的排查死锁和电梯灵异现象。</strong>
+当然在设计数据生成器时还需要注意指导书上的一些"数据规范"，我们可以通过设置常量进行限制，如果直接将数据限制在代码里写死，将不利于评测机的修改和迭代。本单元的正确性检查主要采用对拍的方式，但由于代码需要模拟电梯运行的时间延迟，每次跑一个数据可能会耗时一两分钟，如果所有对拍的代码都采用串行的方式运行，测试效率将会受到极大的限制，因此我们可以使用python的
+subprocess
+函数创建多个子进程，实现对不同测试者的代码"同时"进行测试，充分利用并发的优势，提高测试效率。<br>
  <br>
-<strong>在第三单元</strong>，作业内容涉及到了图的建立，<strong>如果完全随机生成数据的话，图的复杂度可能会非常低（例如图中大多数都是孤立结点）。为了提高数据的强度，我在数据生成器里设置一些数据结构</strong>，用来存储 “所有group、person、message的id”，“group和person之间的关联关系”、“当前生成的图的状态（如连通性）” 等等。每当需要生成一个指令，我们都需要参考数据结构，根据数据状态进行生成。此外，JML规格中已经描述了每个方法可能出现的各种正常、异常情况，我们在生成每个方法对应的指令时，一定要为每种情况设置一定的出现概率，而这也需要数据结构来保证。<br>
+<strong>在第三单元</strong>，作业内容涉及到了图的建立，<strong>如果完全随机生成数据的话，图的复杂度可能会非常低（例如图中大多数都是孤立结点）。为了提高数据的强度，我在数据生成器里设置一些数据结构</strong>，用来存储
+"所有group、person、message的id"，"group和person之间的关联关系"、"当前生成的图的状态（如连通性）"
+等等。每当需要生成一个指令，我们都需要参考数据结构，根据数据状态进行生成。此外，JML规格中已经描述了每个方法可能出现的各种正常、异常情况，我们在生成每个方法对应的指令时，一定要为每种情况设置一定的出现概率，而这也需要数据结构来保证。<br>
  <br>
-<strong>在第四单元</strong>涉及到了不同元模型之间的复杂关系，我们同样可以通过设置数据结构来保证数据的强度。<strong>但是，由于和作业相关的元模型数量很多，关系也错综复杂，如何仍然采用面向过程来设计数据生成器，将会使复杂度变得不可控，同时也会影响生成数据的正确性和强度。因此，本单元我主要采用了面向对象的思维来设计数据生成器。</strong> 尽管代码行数显著增多（迭代到第三次作业时已经达到1300余行），但是设计和实现的过程并不复杂，同时还能在 coding 的过程中加深对UML元模型及其关系的理解。<br>
+<strong>在第四单元</strong>涉及到了不同元模型之间的复杂关系，我们同样可以通过设置数据结构来保证数据的强度。<strong>但是，由于和作业相关的元模型数量很多，关系也错综复杂，如何仍然采用面向过程来设计数据生成器，将会使复杂度变得不可控，同时也会影响生成数据的正确性和强度。因此，本单元我主要采用了面向对象的思维来设计数据生成器。</strong>
+尽管代码行数显著增多（迭代到第三次作业时已经达到1300余行），但是设计和实现的过程并不复杂，同时还能在
+coding 的过程中加深对UML元模型及其关系的理解。<br>
  </p>
-</li>
-<li>
-<p><strong>边缘化数据测试是整个测试过程中最关键、也是最容易发现bug的阶段。</strong> 受限于随机数的偶然性和数据生成器的生成算法，自动化随机测试不能够保证能够覆盖到所有的情况。对于一些特殊的情况，我们还是需要采取"手撸"的方式构造一些有针对性的、刁钻的数据，从而弥补随机测试的短板，提高测试的全面性。</p>
-</li>
+<ul>
+<li><strong>边缘化数据测试是整个测试过程中最关键、也是最容易发现bug的阶段。</strong>
+受限于随机数的偶然性和数据生成器的生成算法，自动化随机测试不能够保证能够覆盖到所有的情况。对于一些特殊的情况，我们还是需要采取"手撸"的方式构造一些有针对性的、刁钻的数据，从而弥补随机测试的短板，提高测试的全面性。</li>
 </ul>
 <h2 id="课程收获">课程收获</h2>
 <ul>
@@ -933,7 +945,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

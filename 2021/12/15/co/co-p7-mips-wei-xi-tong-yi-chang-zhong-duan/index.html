@@ -7,7 +7,8 @@
     <meta name="keywords" content="「BUAA-CO」P7_MIPS微系统（异常中断）, Hyggge&#39;s Blog">
     <meta name="description" content="MIPS微系统设计方案
 设计概述
-​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_">
+​
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_R">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -387,64 +388,45 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="MIPS微系统设计方案">MIPS微系统设计方案</h2>
+                <h2 id="mips微系统设计方案">MIPS微系统设计方案</h2>
 <h3 id="设计概述">设计概述</h3>
-<p>​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将P6设计的CPU单独封装成一个模块，然后再设计Bridge、Timer0、Timer1三个外设，和CPU处于同一层次上。此外我们还需要在CPU的M流水级设计一个CP0模块用于中断异常处理。结构层次如下所示——</p>
-<p><img src="%E5%BE%AE%E7%B3%BB%E7%BB%9F.png" alt=""></p>
+<p>​
+本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU，
+HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将P6设计的CPU单独封装成一个模块，然后再设计Bridge、Timer0、Timer1三个外设，和CPU处于同一层次上。此外我们还需要在CPU的M流水级设计一个CP0模块用于中断异常处理。结构层次如下所示——</p>
+<p><img src="微系统.png"></p>
 <h3 id="实现指令说明">实现指令说明</h3>
 <p>我们将本CPU实现的指令分为以下几类：</p>
 <ul>
-<li>
-<p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor, slt, sltu</p>
-</li>
-<li>
-<p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti, sltiu</p>
-</li>
-<li>
-<p><strong>shift</strong>: sll, sra, srl</p>
-</li>
-<li>
-<p><strong>shiftv</strong>: sllv, srav, srlv</p>
-</li>
-<li>
-<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
-</li>
-<li>
-<p><strong>store</strong>: sw, sh, sb</p>
-</li>
-<li>
-<p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p>
-</li>
-<li>
-<p><strong>J类</strong>：j, jal, jr, jalr</p>
-</li>
-<li>
-<p><strong>特殊</strong>：lui</p>
-</li>
-<li>
-<p><strong>md类</strong>：mult, multu, div, divu</p>
-</li>
-<li>
-<p><strong>mf类</strong>：mfhi, mflo</p>
-</li>
-<li>
-<p><strong>mt类</strong>：mthi, mtlo</p>
-</li>
-<li>
-<p><strong>CP0相关指令</strong>：mfc0，mtc0</p>
-</li>
-<li>
-<p><strong>异常中断返回：</strong> eret</p>
-</li>
+<li><p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor,
+slt, sltu</p></li>
+<li><p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti,
+sltiu</p></li>
+<li><p><strong>shift</strong>: sll, sra, srl</p></li>
+<li><p><strong>shiftv</strong>: sllv, srav, srlv</p></li>
+<li><p><strong>load</strong>: lw, lh, lhu, lb, lbu</p></li>
+<li><p><strong>store</strong>: sw, sh, sb</p></li>
+<li><p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p></li>
+<li><p><strong>J类</strong>：j, jal, jr, jalr</p></li>
+<li><p><strong>特殊</strong>：lui</p></li>
+<li><p><strong>md类</strong>：mult, multu, div, divu</p></li>
+<li><p><strong>mf类</strong>：mfhi, mflo</p></li>
+<li><p><strong>mt类</strong>：mthi, mtlo</p></li>
+<li><p><strong>CP0相关指令</strong>：mfc0，mtc0</p></li>
+<li><p><strong>异常中断返回：</strong> eret</p></li>
 </ul>
-<hr>
 <h2 id="工程模块定义">工程模块定义</h2>
 <p>该部分我们不再介绍P6中已经实现的模块，只介绍新增模块CPU（封装P6CPU），CP0，Bridge，TC（用于实例化Timer1，Timer0）。但是原有模块需要根据异常处理的实现需要进行微调。</p>
-<h3 id="CPU模块">CPU模块</h3>
+<h3 id="cpu模块">CPU模块</h3>
 <p>该模块用于封装P6中的已经设计好的CPU（包括新模块CP0）</p>
 <table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 66%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -452,103 +434,103 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>lk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>同步复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>inter_out</td>
 <td>I</td>
 <td>1</td>
 <td>外部输入的中断信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>inter_T0</td>
 <td>I</td>
 <td>1</td>
 <td>Timer0产生的中断信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>inter_T1</td>
 <td>I</td>
 <td>1</td>
 <td>Timer1产生的中断信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>i_inst_rdata</td>
 <td>I</td>
 <td>32</td>
 <td>i_inst_addr队形的32位指令</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>m_data_addr</td>
 <td>I</td>
 <td>32</td>
 <td>m_data_addr 对应的 32 位数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>i_inst_addr</td>
 <td>O</td>
 <td>32</td>
 <td>需要进行取指操作的流水级 PC（一般为 F 级）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>m_data_addr</td>
 <td>O</td>
 <td>32</td>
 <td>数据存储器待写入地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>m_data_wdata</td>
 <td>O</td>
 <td>32</td>
 <td>数据存储器待写入数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>m_data_byteen</td>
 <td>O</td>
 <td>4</td>
 <td>字节使能信号（相当于之前的MenWrite信号）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>m_inst_addr</td>
 <td>O</td>
 <td>32</td>
 <td>M级PC</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>w_grf_we</td>
 <td>O</td>
 <td>1</td>
 <td>grf 写使能信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>w_grf_addr</td>
 <td>O</td>
 <td>5</td>
 <td>grf 中待写入寄存器编号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>w_grf_wdata</td>
 <td>O</td>
 <td>32</td>
 <td>grf 中待写入数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>w_inst_addr</td>
 <td>O</td>
 <td>32</td>
 <td>W 级 PC</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>spj_7f20</td>
 <td>O</td>
 <td>32</td>
@@ -556,11 +538,18 @@
 </tr>
 </tbody>
 </table>
-<h3 id="CP0模块">CP0模块</h3>
+<h3 id="cp0模块">CP0模块</h3>
 <p>该模块位于CPU模块中，主要用于获取外部中断信息和内部异常信息，进行判断后输出异常/中断请求。同时该模块中设有四个寄存器——SR，Cause，EPC和PRIP。</p>
 <table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 5%">
+<col style="width: 10%">
+<col style="width: 31%">
+<col style="width: 38%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -569,98 +558,98 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>复位信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A1</td>
 <td>I</td>
 <td>5</td>
 <td>读 CP0 寄存器编号</td>
 <td>执行 <code>mfc0</code> 指令时产生</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A2</td>
 <td>I</td>
 <td>5</td>
 <td>写 CP0 寄存器编号</td>
 <td>执行 <code>mtc0</code> 指令时产生</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>D_in</td>
 <td>I</td>
 <td>32</td>
 <td>CP0 寄存器的写入数据</td>
 <td>执行 <code>mtc0</code> 指令时产生</td>
 </tr>
-<tr>
+<tr class="even">
 <td>pc</td>
 <td>I</td>
 <td>32</td>
 <td>中断/异常时的 PC(M级pc)</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>ExcCode_in</td>
 <td>I</td>
 <td>5</td>
 <td>中断/异常的类型</td>
 <td>异常功能部件</td>
 </tr>
-<tr>
+<tr class="even">
 <td>BD_in</td>
 <td>I</td>
 <td>1</td>
 <td>分支延迟槽指令标志</td>
 <td>M_BD输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>HWInt</td>
 <td>I</td>
 <td>6([7:2])</td>
 <td>6 个设备中断</td>
 <td>外部设备</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>CP0 寄存器写使能</td>
 <td>执行 <code>mtc0</code> 指令时产生</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>EXLClr</td>
 <td>I</td>
 <td>1</td>
 <td>置 0 SR 的EXL 位</td>
 <td>Eret_M控制信号输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>req</td>
 <td>O</td>
 <td>1</td>
 <td>异常/中断请求</td>
 <td>由 CP0 模块确认响应异常/中断</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>EPC_out</td>
 <td>O</td>
 <td>32</td>
 <td>EXC 寄存器输出</td>
 <td>CP0 模块中的EPC寄存器</td>
 </tr>
-<tr>
+<tr class="even">
 <td>D_out</td>
 <td>O</td>
 <td>32</td>
@@ -669,11 +658,11 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Bridge模块">Bridge模块</h3>
+<h3 id="bridge模块">Bridge模块</h3>
 <p>该模块为系统桥，实际上是区分地址的组合逻辑模块，用于CPU和DM、Timer1、Timer0之间的的数据交换。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -681,73 +670,73 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>A_in</td>
 <td>I</td>
 <td>32</td>
 <td>写入/读取的外设单元的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD_in</td>
 <td>I</td>
 <td>32</td>
 <td>写入外设单元的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>byteen</td>
 <td>I</td>
 <td>4</td>
 <td>写入外设单元的使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DM_RD</td>
 <td>I</td>
 <td>32</td>
 <td>DM读取值的输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>T1_RD</td>
 <td>I</td>
 <td>32</td>
 <td>Timer1读取值的输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>T0_RD</td>
 <td>I</td>
 <td>32</td>
 <td>Timer0读取值的输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A_out</td>
 <td>O</td>
 <td>32</td>
 <td>写入/读取的外设单元的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD_out</td>
 <td>O</td>
 <td>32</td>
 <td>写入外设单元的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>RD_out</td>
 <td>O</td>
 <td>32</td>
 <td>外设单元的读取值输出</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DM_WE</td>
 <td>O</td>
 <td>4</td>
 <td>DM写入使能</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>T1_WE</td>
 <td>O</td>
 <td>1</td>
 <td>Timer1写入使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>T0_WE</td>
 <td>O</td>
 <td>1</td>
@@ -755,10 +744,10 @@
 </tr>
 </tbody>
 </table>
-<h3 id="TC模块">TC模块</h3>
+<h3 id="tc模块">TC模块</h3>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -766,43 +755,43 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>addr</td>
 <td>I</td>
 <td>30（[31:2]）</td>
 <td>Timer写入地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>Timer写入使能</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Din</td>
 <td>I</td>
 <td>32</td>
 <td>Timer写入数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Dout</td>
 <td>O</td>
 <td>32</td>
 <td>Timer读取数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>IRQ</td>
 <td>O</td>
 <td>1</td>
@@ -810,17 +799,13 @@
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="重要机制实现方法">重要机制实现方法</h2>
-<h3 id="CP0响应机制">CP0响应机制</h3>
+<h3 id="cp0响应机制">CP0响应机制</h3>
 <p>CP0是检测异常和中断的重要部件，异常和中断通过以下接口传入——</p>
 <ul>
-<li>
-<p><strong>中断信息</strong>通过 <strong>HWInt[7:2]</strong> 接口进入，其中HWInt[2]连接Timer0的终端请求，HWInt[3]连接Timer1的终端请求，HWInt[4]连接外部的中断请求。</p>
-</li>
-<li>
-<p><strong>异常信息</strong>通过<strong>ExcCode_in</strong>和<strong>BD_in</strong>两个接口传入，ExcCode_in传入的是异常代码（ADEL，ADES，RI，OV），BD_in传入的是延迟槽指令标志（有效则表示当前指令为延迟槽指令）。</p>
-</li>
+<li><p><strong>中断信息</strong>通过 <strong>HWInt[7:2]</strong>
+接口进入，其中HWInt[2]连接Timer0的终端请求，HWInt[3]连接Timer1的终端请求，HWInt[4]连接外部的中断请求。</p></li>
+<li><p><strong>异常信息</strong>通过<strong>ExcCode_in</strong>和<strong>BD_in</strong>两个接口传入，ExcCode_in传入的是异常代码（ADEL，ADES，RI，OV），BD_in传入的是延迟槽指令标志（有效则表示当前指令为延迟槽指令）。</p></li>
 </ul>
 <p>检测到中断或者异常时，CP0会进行判断并响应，决定是否将req(<strong>CP0向CPU发出的中断请求</strong>)置1。判断逻辑如下——</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> inter_req  <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">|</span><span class="token punctuation">(</span>HWInt <span class="token operator">&amp;</span> IM<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> IE <span class="token operator">&amp;</span> <span class="token punctuation">(</span><span class="token operator">!</span>EXL<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//中断有效判断</span>
@@ -868,29 +853,22 @@
 <h3 id="异常识别">异常识别</h3>
 <p>P7中我们考虑的异常情况有以下几种——</p>
 <ul>
-<li>
-<p>F级异常：</p>
+<li>F级异常：
 <ul>
 <li>PC地址没有字对齐（AdEL）</li>
 <li>PC地址超过0x3000 ~ 0x6ffc（AdEL）</li>
-</ul>
-</li>
-<li>
-<p>D级异常：</p>
+</ul></li>
+<li>D级异常：
 <ul>
 <li>未知的指令码（RI）</li>
-</ul>
-</li>
-<li>
-<p>E级异常：</p>
+</ul></li>
+<li>E级异常：
 <ul>
 <li>addi、add、sub计算溢出（Ov）</li>
 <li>load类指令计算地址时加法溢出（AdEL）</li>
 <li>store类指令计算地址时加法溢出（AdES）</li>
-</ul>
-</li>
-<li>
-<p>M级异常：</p>
+</ul></li>
+<li>M级异常：
 <ul>
 <li>lw取数地址未 4 字节对齐（AdEL）</li>
 <li>lh、lhu取数地址未与 2 字节对齐（AdEL）</li>
@@ -901,23 +879,18 @@
 <li>sh、sb存 Timer 寄存器的值（AdES）</li>
 <li>sw向计时器的 Count 寄存器存值（AdES）</li>
 <li>store型指令存数地址超出 DM、Timer0、Timer1 的范围（AdES）</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <p>针对以上列出的异常情况，我们在每一个流水级对异常进行检测。由于教程提出了以下要求——</p>
 <ul>
-<li>
-<p>发生取指异常后视为 <code>nop</code> 直至提交到 CP0。</p>
-</li>
-<li>
-<p>发生 <code>RI</code> 异常后视为 <code>nop</code> 直至提交到 CP0。</p>
-</li>
-<li>
-<p><code>load</code> 与 <code>store</code> 类算址溢出按照 <code>AdEL</code> 与 <code>AdES</code> 处理。</p>
-</li>
+<li><p>发生取指异常后视为 <code>nop</code> 直至提交到 CP0。</p></li>
+<li><p>发生 <code>RI</code> 异常后视为 <code>nop</code> 直至提交到
+CP0。</p></li>
+<li><p><code>load</code> 与 <code>store</code> 类算址溢出按照
+<code>AdEL</code> 与 <code>AdES</code> 处理。</p></li>
 </ul>
-<p>因此不会出现<strong>一个指令在多级出现异常</strong>的情况。如果某个流水级出现了新的异常，我们将这个异常流水到下一级即可，而不是流水上一级传来的异常；如果这个流水级没有出现新的异常，则将上一级传来的异常继续流水给下一级即可。代码如下——</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//F级异常检测</span>
+<p>因此不会出现<strong>一个指令在多级出现异常</strong>的情况。如果某个流水级出现了新的异常，我们将这个异常流水到下一级即可，而不是流水上一级传来的异常；如果这个流水级没有出现新的异常，则将上一级传来的异常继续流水给下一级即可。代码如下——<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//F级异常检测</span>
 <span class="token keyword">assign</span> F_ExcCode <span class="token operator">=</span> <span class="token punctuation">(</span>F_pc<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">2'b00</span> <span class="token operator">||</span> F_pc <span class="token operator">&lt;</span> <span class="token number">32'h3000</span> <span class="token operator">||</span> F_pc <span class="token operator">&gt;</span> <span class="token number">32'h6ffc</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`ADEL</span> <span class="token punctuation">:</span> <span class="token number">5'd0</span><span class="token punctuation">;</span>
 <span class="token comment">//D级异常检测（Invalid_D有效表示当前指令非法）</span>
 <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_ExcCode_fixed <span class="token operator">=</span> <span class="token punctuation">(</span>Invalid_D<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`RI</span> <span class="token punctuation">:</span> D_ExcCode<span class="token punctuation">;</span>  
@@ -942,8 +915,7 @@
                                 <span class="token punctuation">(</span><span class="token punctuation">(</span>LSOp_M <span class="token operator">==</span> <span class="token constant">`LS_SW</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> timer_addr <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>M_AO<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">4'h8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>      <span class="token operator">?</span> <span class="token constant">`ADES</span> <span class="token punctuation">:</span>
                                 <span class="token punctuation">(</span>store_tag <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>timer_addr <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>DM_addr<span class="token punctuation">)</span>                         <span class="token operator">?</span> <span class="token constant">`ADES</span> <span class="token punctuation">:</span>
                                                                                                  M_ExcCode<span class="token punctuation">;</span>
-           <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
+           <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h2 id="测试方案">测试方案</h2>
 <h3 id="handler设计">handler设计</h3>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token punctuation">.</span>ktext <span class="token number">0</span>x4180
@@ -965,8 +937,7 @@ _return<span class="token punctuation">:</span>
 	eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="测试数据样例">测试数据样例</h3>
 <ul>
-<li>
-<p><strong>MIPS机器码样例</strong></p>
+<li><p><strong>MIPS机器码样例</strong></p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">text
 la	<span class="token kernel-function property">$ra</span><span class="token punctuation">,</span> pos_1
 addi	<span class="token kernel-function property">$ra</span><span class="token punctuation">,</span> <span class="token kernel-function property">$ra</span><span class="token punctuation">,</span> <span class="token number">1</span>
@@ -1068,10 +1039,8 @@ li	<span class="token kernel-function property">$s1</span><span class="token pun
 sh	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
 sh	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token function">0</span><span class="token punctuation">(</span><span class="token kernel-function property">$s0</span><span class="token punctuation">)</span>
    #D_exc_AdEL
-<span class="token keyword">and</span>	<span class="token kernel-function property">$5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>testbench样例</strong></p>
+<span class="token keyword">and</span>	<span class="token kernel-function property">$5</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$s2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p><strong>testbench样例</strong></p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token constant">`timescale</span> <span class="token number">1</span>ns<span class="token operator">/</span><span class="token number">1</span>ps
 <span class="token constant">`include</span> <span class="token string">"mips.v"</span>
 <span class="token keyword">module</span> mips_txt_int<span class="token punctuation">;</span>
@@ -1259,30 +1228,30 @@ sh	<span class="token kernel-function property">$s1</span><span class="token pun
 					interrupt <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
 					need_interrupt <span class="token operator">&lt;=</span> need_interrupt <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
 			<span class="token keyword">end</span>
-            <span class="token comment">//………………………………………………</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+            <span class="token comment">//………………………………………………</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<hr>
 <h2 id="思考题">思考题</h2>
 <ul>
-<li>
-<p><strong>Q：我们计组课程一本参考书目标题中有“硬件/软件接口”接口字样，那么到底什么是“硬件/软件接口”？(Tips：什么是接口？和我们到现在为止所学的有什么联系？)</strong></p>
-<p><strong>A：</strong> 硬件/软件接口是指软件和硬件之间数据交互的接口。在我看来，这个应该指的是操作系统，操作系统将外部软件程序的机器码传入core，由core执行；而core执行后产生的数据又通过操作系统传给软件。</p>
-</li>
-<li>
-<p><strong>Q：BE 部件对所有的外设都是必要的吗？</strong></p>
-<p><strong>A：</strong> 我认为没有必要，BE部件是为了实现DM按字节访存设置的，而其他的部件例如Timer仅仅支持按字访存，因此不需要BE部件。</p>
-</li>
-<li>
-<p><strong>Q：请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU 知晓的？</strong></p>
-<p><strong>A：</strong> 鼠标和键盘等外设并不是直接与CPU相连的，中间需要通过软件来连接，这个软件也就是我们熟知的驱动。驱动和硬件之间通过操作系统进行处理。</p>
-</li>
-<li>
-<p>**Q:**请开发一个主程序以及定时器的 exception handler。整个系统完成如下功能：</p>
+<li><p><strong>Q：我们计组课程一本参考书目标题中有“硬件/软件接口”接口字样，那么到底什么是“硬件/软件接口”？(Tips：什么是接口？和我们到现在为止所学的有什么联系？)</strong></p>
+<p><strong>A：</strong>
+硬件/软件接口是指软件和硬件之间数据交互的接口。在我看来，这个应该指的是操作系统，操作系统将外部软件程序的机器码传入core，由core执行；而core执行后产生的数据又通过操作系统传给软件。</p></li>
+<li><p><strong>Q：BE 部件对所有的外设都是必要的吗？</strong></p>
+<p><strong>A：</strong>
+我认为没有必要，BE部件是为了实现DM按字节访存设置的，而其他的部件例如Timer仅仅支持按字访存，因此不需要BE部件。</p></li>
+<li><p><strong>Q：请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU
+知晓的？</strong></p>
+<p><strong>A：</strong>
+鼠标和键盘等外设并不是直接与CPU相连的，中间需要通过软件来连接，这个软件也就是我们熟知的驱动。驱动和硬件之间通过操作系统进行处理。</p></li>
+<li><p><strong>Q:</strong>请开发一个主程序以及定时器的 exception
+handler。整个系统完成如下功能：</p>
 <p>（1）定时器在主程序中被初始化为模式 0；</p>
 <p>（2）定时器倒计数至 0 产生中断；</p>
-<p>（3）handler 设置使能 Enable 为 1 从而再次启动定时器的计数器。(2) 及 (3) 被无限重复。</p>
-<p>（4）主程序在初始化时将定时器初始化为模式 0，设定初值寄存器的初值为某个值，如 100 或 1000。（注意，主程序可能需要涉及对 <a target="_blank" rel="noopener" href="http://CP0.SR">CP0.SR</a> 的编程，推荐阅读过后文后再进行。）</p>
+<p>（3）handler 设置使能 Enable 为 1 从而再次启动定时器的计数器。(2) 及
+(3) 被无限重复。</p>
+<p>（4）主程序在初始化时将定时器初始化为模式
+0，设定初值寄存器的初值为某个值，如 100 或
+1000。（注意，主程序可能需要涉及对 CP0.SR
+的编程，推荐阅读过后文后再进行。）</p>
 <p><strong>A:</strong></p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">主程序<span class="token punctuation">:</span>
 <span class="token punctuation">.</span>text
@@ -1307,8 +1276,7 @@ ori <span class="token kernel-function property">$k0</span><span class="token pu
 ori <span class="token kernel-function property">$k1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>x9
 sw <span class="token kernel-function property">$k0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
 sw <span class="token kernel-function property">$k1</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
-eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 
                 
@@ -1707,7 +1675,7 @@ eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

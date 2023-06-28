@@ -7,11 +7,10 @@
     <meta name="keywords" content="「BUAA-CO」P1_Verilog中reg的使用, Hyggge&#39;s Blog">
     <meta name="description" content="定义和实例化模块时reg的使用
 
-
-在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
-
-
-在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg ">
+在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg
+类型的信号只能被连接至元件的输入端口上。
+在声明元件时，我们可以将任意端口声明为 wire
+类型，但只能将输出端口声明为 reg 类型，">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -393,30 +392,25 @@
             <div id="articleContent">
                 <h2 id="定义和实例化模块时reg的使用">定义和实例化模块时reg的使用</h2>
 <ul>
-<li>
-<p>在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。</p>
-</li>
-<li>
-<p>在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 类型，否则会出现问题。</p>
-<p>定义输出端口时，我们可以直接定义成reg类型</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> <span class="token keyword">reg</span> a<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li>
-<p>或者在模块内部声明<code>reg</code>寄存器，然后通过<code>assign</code>语句将寄存器中的值赋给<code>wire</code>型输出端口</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> b<span class="token punctuation">;</span> <span class="token comment">//b是wire型(net)端口</span>
+<li><p>在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg
+类型的信号只能被连接至元件的输入端口上。</p></li>
+<li><p>在声明元件时，我们可以将任意端口声明为 wire
+类型，但只能将输出端口声明为 reg 类型，否则会出现问题。</p>
+<p>定义输出端口时，我们可以直接定义成reg类型<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> <span class="token keyword">reg</span> a<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p></p></li>
+<li><p>或者在模块内部声明<code>reg</code>寄存器，然后通过<code>assign</code>语句将寄存器中的值赋给<code>wire</code>型输出端口<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> b<span class="token punctuation">;</span> <span class="token comment">//b是wire型(net)端口</span>
 <span class="token keyword">reg</span> temp<span class="token punctuation">;</span>
-<span class="token keyword">assign</span> b <span class="token operator">=</span> temp<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
-<h2 id="task-和-function-中-reg-的使用">task 和 function 中 reg 的使用</h2>
-<ul>
-<li>任务(<code>task</code>)中，返回值是通过输出端口的变量决定的， 而task输出端口必须为<code>reg</code>类型。因此在调用<code>task</code>时，需要在调用前定义一个reg型变量，接收<code>task</code>的返回值。</li>
-<li>函数(<code>function</code>)中，调用函数的表达式的操作结果就是返回值。在函数的定义时，默认存在一个与函数同名的，在函数内部的寄存器(<code>reg</code>)，相当于C语言中的  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">function</span><span class="token punctuation">(</span>……<span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token keyword">assign</span> b <span class="token operator">=</span> temp<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+## task 和 function 中 reg 的使用<p></p></li>
+<li><p>任务(<code>task</code>)中，返回值是通过输出端口的变量决定的，
+而task输出端口必须为<code>reg</code>类型。因此在调用<code>task</code>时，需要在调用前定义一个reg型变量，接收<code>task</code>的返回值。</p></li>
+<li><p>函数(<code>function</code>)中，调用函数的表达式的操作结果就是返回值。在函数的定义时，默认存在一个与函数同名的，在函数内部的寄存器(<code>reg</code>)，相当于C语言中的<br>
+</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">function</span><span class="token punctuation">(</span>……<span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">int</span> temp_reg<span class="token punctuation">;</span> <span class="token comment">//建立临时变量，储存要返回的结果</span>
     <span class="token comment">/* 对temp_reg 进行操作*/</span>
     <span class="token keyword">return</span> temp_reg<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 
                 
@@ -815,7 +809,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

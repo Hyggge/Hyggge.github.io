@@ -430,10 +430,19 @@
                 </a>
                 
                 
+                <a href="/categories/ML/" title="ML: 5">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #85C1E9;">ML
+                        <span class="tag-length">5</span>
+                    </span>
+                </a>
+                
+                
                 <a href="/categories/Maven/" title="Maven: 3">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #85C1E9;">Maven
+                            style="background-color: #F8C471;">Maven
                         <span class="tag-length">3</span>
                     </span>
                 </a>
@@ -442,17 +451,8 @@
                 <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="面向对象: 4">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F8C471;">面向对象
+                            style="background-color: #F9E79F;">面向对象
                         <span class="tag-length">4</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/categories/ML/" title="ML: 5">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            style="background-color: #F9E79F;">ML
-                        <span class="tag-length">5</span>
                     </span>
                 </a>
                 
@@ -555,7 +555,8 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
                             
                                 实验思考题
 Thinking 6.1
-Q： 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？
+Q：
+示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？
 A： 只需要调换父子进程操作的内容即可——
 int main() {
     //...
@@ -610,8 +611,12 @@ int main() {
                             
                                 实验思考题
 Thinking 5.1
-Q： 查阅资料，了解 Linux/Unix 的 /proc 文件系统是什么？有什么作用？ Windows 操作系统又是如何实现这些功能的？proc 文件系统这样的设计有什么好处和可以改进的地方？
-A： 
+Q： 查阅资料，了解 Linux/Unix 的 /proc
+文件系统是什么？有什么作用？ Windows
+操作系统又是如何实现这些功能的？proc
+文件系统这样的设计有什么好处和可以改进的地方？
+A：
+
                             
                         </div>
                         <div class="publish-info">
@@ -662,11 +667,12 @@ A：
                         <div class="summary block-with-text">
                             
                                 IDE磁盘镜像
-在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件 gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
-fs/fsformat.c
+在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件
+gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
+### fs/fsformat.c
 函数之间的调用关系如下所示——
 
-reverse
+rev
                             
                         </div>
                         <div class="publish-info">
@@ -719,10 +725,12 @@ reverse
                                 实验思考题
 Thinking 4.1
 Q： 思考并回答下面的问题：
-
+-
 内核在保存现场的时候是如何避免破坏通用寄存器的？
+-
 系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？
-我们是怎么做到让
+-
+我们是
                             
                         </div>
                         <div class="publish-info">
@@ -775,8 +783,11 @@ Q： 思考并回答下面的问题：
                                 Lab3 实验报告
 实验思考题
 Thinking 3.1
-Q： 思考envid2env 函数:为什么envid2env中需要判断e-&gt;env_id != envid 的情况？如果没有这步判断会发生什么情况？
-A： 通过阅读该函数的代码
+Q： 思考envid2env
+函数:为什么envid2env中需要判断e-&gt;env_id != envid
+的情况？如果没有这步判断会发生什么情况？
+A：
+通过阅读该函数的代码
                             
                         </div>
                         <div class="publish-info">
@@ -829,8 +840,11 @@ A： 通过阅读该函数的代码
                                 Lab2 实验报告
 实验思考题
 Thinking 2.1
-Q： 在我们编写的 C 程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw, sw 使用的是虚拟地址还是物理地址？
-A： 因为CPU只会发出虚拟地址，因
+Q： 在我们编写的 C
+程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw,
+sw 使用的是虚拟地址还是物理地址？
+A：
+因为CPU只会发出虚拟地址，因
                             
                         </div>
                         <div class="publish-info">
@@ -881,13 +895,11 @@ A： 因为CPU只会发出虚拟地址，因
                         <div class="summary block-with-text">
                             
                                 进程调度实际上就是在就绪进程队列中选择一个进程执行，关于进程的调度我们需要考虑三个问题——
-
-调度的时机：何时进行进程调度
-调度的执行：调度时如何进行CPU上下文切换
-调度的策略：按照什么原则选择一个就绪进程进行调度
-
+- 调度的时机：何时进行进程调度
+- 调度的执行：调度时如何进行CPU上下文切换
+- 调度的策略：按照什么原则选择一个就绪进程进行调度
 调度的时机
-当遇到下
+
                             
                         </div>
                         <div class="publish-info">
@@ -935,7 +947,9 @@ A： 因为CPU只会发出虚拟地址，因
                             
                                 实验思考题
 Thinking 1.1
-Q： 请查阅并给出前述 objdump 中使用的参数的含义。使用其它体系结构的编译器（如课程平台的 MIPS 交叉编译器）重复上述各步编译过程，观察并在实验报告中提交相应的结果。
+Q： 请查阅并给出前述 objdump
+中使用的参数的含义。使用其它体系结构的编译器（如课程平台的 MIPS
+交叉编译器）重复上述各步编译过程，观察并在实验报告中提交相应的结果。
 A：
 objdump命
                             
@@ -989,8 +1003,10 @@ objdump命
                             
                                 实验思考题
 Thinking 0.1
-Q： 使用 cat Modified.txt ，观察它和第一次 add 之前的 status 一样吗，思考一下为什么？
-A： 这两个status不一样。第一次add之前是的status是Untracke
+Q： 使用 cat Modified.txt ，观察它和第一次
+add 之前的 status 一样吗，思考一下为什么？
+A：
+这两个status不一样。第一次add之前是的status是Untracke
                             
                         </div>
                         <div class="publish-info">
@@ -1052,7 +1068,7 @@ A： 这两个status不一样。第一次add之前是的status是Untracke
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

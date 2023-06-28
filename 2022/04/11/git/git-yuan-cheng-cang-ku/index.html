@@ -5,8 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Git」远程仓库, Hyggge&#39;s Blog">
-    <meta name="description" content="
-远程仓库操作
+    <meta name="description" content="远程仓库操作
+
+
+
+
 
 
 
@@ -16,12 +19,14 @@
 
 
 
-git remote add origin &amp;lt;ssh&amp;gt;
+git remote add origin
+&amp;lt;ssh&amp;gt;
 将远程仓库关联到本地版本库,并将origin作为远程库的名字
 
 
-git clone &amp;lt;ssh&amp;gt;
-直接将远程仓库克隆到">
+git clone
+&amp;lt;ssh&amp;gt;
+直接将远程仓库">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -397,112 +402,120 @@ git clone &amp;lt;ssh&amp;gt;
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="远程仓库操作">远程仓库操作</h2>
+                <h2 id="远程仓库操作">远程仓库操作</h2>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">解释</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">解释</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git remote add origin &lt;ssh&gt;</strong></td>
-<td style="text-align:center">将远程仓库关联到本地版本库,并将<code>origin</code>作为远程库的名字</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git remote add origin
+&lt;ssh&gt;</strong></td>
+<td style="text-align: center;">将远程仓库关联到本地版本库,并将<code>origin</code>作为远程库的名字</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git clone &lt;ssh&gt;</strong></td>
-<td style="text-align:center">直接将远程仓库克隆到本地</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git clone
+&lt;ssh&gt;</strong></td>
+<td style="text-align: center;">直接将远程仓库克隆到本地</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git remote rm origin</strong></td>
-<td style="text-align:center">删除<code>origin</code>代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用<code>git remote -v</code>来查看远程库的信息</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git remote rm
+origin</strong></td>
+<td style="text-align: center;">删除<code>origin</code>代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用<code>git remote -v</code>来查看远程库的信息</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git remote rename &lt;name1&gt; &lt;name2&gt;</strong></td>
-<td style="text-align:center">远程仓库重命名</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git remote rename &lt;name1&gt;
+&lt;name2&gt;</strong></td>
+<td style="text-align: center;">远程仓库重命名</td>
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="push命令">push命令</h2>
-<p><code>git push</code>时使用本地分支来更新远程分支，基本形式是——</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push <span class="token operator">&lt;</span>远程仓库名<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>本地分支名<span class="token operator">&gt;</span>:<span class="token operator">&lt;</span>远程分支名<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><strong>本地分支名</strong>为要被推送的分支，<strong>远程分支名</strong>是远程仓库中要被更新的分支。该指令有以下几种使用方法——</p>
+<p><code>git push</code>时使用本地分支来更新远程分支，基本形式是——<br>
+</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push <span class="token operator">&lt;</span>远程仓库名<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>本地分支名<span class="token operator">&gt;</span>:<span class="token operator">&lt;</span>远程分支名<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+<strong>本地分支名</strong>为要被推送的分支，<strong>远程分支名</strong>是远程仓库中要被更新的分支。该指令有以下几种使用方法——<p></p>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">解释</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">解释</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git push origin master:master</strong></td>
-<td style="text-align:center">使用完整性形式，表示用本地master分支来更新远程仓库origin的master分支</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git push origin
+master:master</strong></td>
+<td style="text-align: center;">使用完整性形式，表示用本地master分支来更新远程仓库origin的master分支</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push origin master</strong></td>
-<td style="text-align:center">省略了远程分支名，表示将本地master本支推送到origin的master分支，如果后者不存在，则会被新建</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git push origin
+master</strong></td>
+<td style="text-align: center;">省略了远程分支名，表示将本地master本支推送到origin的master分支，如果后者不存在，则会被新建</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push -u origin master</strong></td>
-<td style="text-align:center">作用同<code>git push origin master</code>，同时指定origin为默认远程仓库，以后就可以直接使用<code>git push</code>而不用带其他参数了</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git push -u origin
+master</strong></td>
+<td style="text-align: center;">作用同<code>git push origin master</code>，同时指定origin为默认远程仓库，以后就可以直接使用<code>git push</code>而不用带其他参数了</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push origin :master</strong></td>
-<td style="text-align:center">省略了本地分支名，表示用空分支来跟新origin的master分支，其实是删除了远程origin的master分支。该指令相当于<code>git push origin --delete master</code></td>
+<tr class="even">
+<td style="text-align: center;"><strong>git push origin
+:master</strong></td>
+<td style="text-align: center;">省略了本地分支名，表示用空分支来跟新origin的master分支，其实是删除了远程origin的master分支。该指令相当于<code>git push origin --delete master</code></td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push origin</strong></td>
-<td style="text-align:center">省略了远程分支名和本地分支名，只有在当前分支（HEAD指向的分支）和远程仓库中某分支存在追踪关系的时候才可以使用（一般是分支名相同）</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git push origin</strong></td>
+<td style="text-align: center;">省略了远程分支名和本地分支名，只有在当前分支（HEAD指向的分支）和远程仓库中某分支存在追踪关系的时候才可以使用（一般是分支名相同）</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push</strong></td>
-<td style="text-align:center">不带任何参数，默认只推送当前分支到默认远程仓库</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git push</strong></td>
+<td style="text-align: center;">不带任何参数，默认只推送当前分支到默认远程仓库</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push --all origin</strong></td>
-<td style="text-align:center">将所有的本地分支都推送到origin远程仓库</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git push --all
+origin</strong></td>
+<td style="text-align: center;">将所有的本地分支都推送到origin远程仓库</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git push --force origin</strong></td>
-<td style="text-align:center">如果远程仓库的版本比本地新，git会报错，如果一定要推送，则可以使用该指令强制推送</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git push --force
+origin</strong></td>
+<td style="text-align: center;">如果远程仓库的版本比本地新，git会报错，如果一定要推送，则可以使用该指令强制推送</td>
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="pull命令">pull命令</h2>
-<p><code>git pull</code>表示将远程仓库中某分支下拉并合并到本地某分支，指令基本形式是——</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push <span class="token operator">&lt;</span>远程仓库名<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>远程分支名<span class="token operator">&gt;</span>:<span class="token operator">&lt;</span>本地分支名<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>该指令有以下几种使用方法——</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>git pull origin master:master</strong></td>
-<td style="text-align:center">使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>git pull origin master</strong></td>
-<td style="text-align:center">省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）</td>
-</tr>
-</tbody>
-</table>
-<hr>
+<p><code>git pull</code>表示将远程仓库中某分支下拉并合并到本地某分支，指令基本形式是——<br>
+</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push <span class="token operator">&lt;</span>远程仓库名<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>远程分支名<span class="token operator">&gt;</span>:<span class="token operator">&lt;</span>本地分支名<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+该指令有以下几种使用方法——<br>
+|指令|解释|<br>
+|:-:|:-:|<br>
+|<strong>git pull origin
+master:master</strong>|使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上|<br>
+|<strong>git pull origin
+master</strong>|省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）|<p></p>
 <h2 id="常见问题及解决方式">常见问题及解决方式</h2>
-<p><strong>情景1：</strong> 假设你刚刚在<code>master</code>分支上干完一部分工作，commit到本地仓库后正准备上传到远程仓库，结果使用<code>push</code>是竟然报错了。原因是和你在同一分支上工作的大兄弟早早的干完活push上去了，而他的最新提交和你的提交是有冲突的。<br>
-<strong>解决方法：</strong> 先<code>git pull origin master:master</code>把最新的<code>origin/master</code>下并合并到本地<code>master</code>，当然此时会提示“合并有冲突”。我们手动解决冲突后再次commit，这时push就没有什么问题了。</p>
-<p><strong>情景2：</strong> 假设你对<code>master</code>进行了版本回退，在该回退版本上修改了一些问题后想要上传到远程分支，结果发现直接push也有问题。此时不可以先pull在push，因为pull之后代码就和远程仓库一样了。<br>
-<strong>解决方法：</strong> 我们可以先使用<code>git branch a</code>新建一个分支a，然后回到版本回退前的最新一次commit，使用<code>git merge a</code>即可将该修改合并到最新的分支。</p>
-<p><strong>情景3：</strong> 假设你正在<code>master</code>分支上工作，并已经对<code>master</code>分支上的内容进行了修改。此时你的同事已经将他的修改上传到远程仓库里，而你想将他的修改和你的修改合并在一起，如果此时直接pull也会出现错误。<br>
-<strong>解决方法：</strong> 先用<code>git stash</code>将本地的修改暂存，然后<code>git pull</code>拉取同事修改后的版本，最后<code>git stash pop</code>将自己的修改恢复。此时可能会有冲突，需要手动进行解决。</p>
+<p><strong>情景1：</strong>
+假设你刚刚在<code>master</code>分支上干完一部分工作，commit到本地仓库后正准备上传到远程仓库，结果使用<code>push</code>是竟然报错了。原因是和你在同一分支上工作的大兄弟早早的干完活push上去了，而他的最新提交和你的提交是有冲突的。<br>
+<strong>解决方法：</strong>
+先<code>git pull origin master:master</code>把最新的<code>origin/master</code>下并合并到本地<code>master</code>，当然此时会提示“合并有冲突”。我们手动解决冲突后再次commit，这时push就没有什么问题了。</p>
+<p><strong>情景2：</strong>
+假设你对<code>master</code>进行了版本回退，在该回退版本上修改了一些问题后想要上传到远程分支，结果发现直接push也有问题。此时不可以先pull在push，因为pull之后代码就和远程仓库一样了。<br>
+<strong>解决方法：</strong>
+我们可以先使用<code>git branch a</code>新建一个分支a，然后回到版本回退前的最新一次commit，使用<code>git merge a</code>即可将该修改合并到最新的分支。</p>
+<p><strong>情景3：</strong>
+假设你正在<code>master</code>分支上工作，并已经对<code>master</code>分支上的内容进行了修改。此时你的同事已经将他的修改上传到远程仓库里，而你想将他的修改和你的修改合并在一起，如果此时直接pull也会出现错误。<br>
+<strong>解决方法：</strong>
+先用<code>git stash</code>将本地的修改暂存，然后<code>git pull</code>拉取同事修改后的版本，最后<code>git stash pop</code>将自己的修改恢复。此时可能会有冲突，需要手动进行解决。</p>
 
                 
             </div>
@@ -888,7 +901,7 @@ git clone &amp;lt;ssh&amp;gt;
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

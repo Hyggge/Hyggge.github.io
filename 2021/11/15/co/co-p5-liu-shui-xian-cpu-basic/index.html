@@ -7,7 +7,8 @@
     <meta name="keywords" content="「BUAA-CO」P5_流水线cpu（Basic）, Hyggge&#39;s Blog">
     <meta name="description" content="流水线CPU设计方案
 设计概述
-​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Re">
+​
+本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,7 +363,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.3k
+                    9.4k
                 </div>
                 
 
@@ -387,147 +388,99 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="流水线CPU设计方案">流水线CPU设计方案</h2>
+                <h2 id="流水线cpu设计方案">流水线CPU设计方案</h2>
 <h3 id="设计概述">设计概述</h3>
-<p>​		本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU 等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
+<p>​
+本文所设计的CPU为Verilog实现的流水线MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，DM，D_Reg，E_Reg，M_Reg，W_Reg，MCU，
+HCU
+等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
 <h3 id="实现指令说明">实现指令说明</h3>
 <p>我们将本CPU实现的指令分为以下几类：</p>
 <ul>
-<li>
-<p><strong>calc_R</strong>: addu, subu, and, or, nor, xor, slt, sltu</p>
-</li>
-<li>
-<p><strong>calc_I</strong>: addiu, andi, ori, xori, slti, sltiu</p>
-</li>
-<li>
-<p><strong>shift</strong>: sll, sra, srl</p>
-</li>
-<li>
-<p><strong>shiftv</strong>: sllv, srav, srlv</p>
-</li>
-<li>
-<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
-</li>
-<li>
-<p><strong>store</strong>: sw, sh, sb</p>
-</li>
-<li>
-<p><strong>B类</strong>：beq， bne</p>
-</li>
-<li>
-<p><strong>J类</strong>：jal, j</p>
-</li>
-<li>
-<p><strong>特殊</strong>：jr, lui</p>
-</li>
+<li><p><strong>calc_R</strong>: addu, subu, and, or, nor, xor, slt,
+sltu</p></li>
+<li><p><strong>calc_I</strong>: addiu, andi, ori, xori, slti,
+sltiu</p></li>
+<li><p><strong>shift</strong>: sll, sra, srl</p></li>
+<li><p><strong>shiftv</strong>: sllv, srav, srlv</p></li>
+<li><p><strong>load</strong>: lw, lh, lhu, lb, lbu</p></li>
+<li><p><strong>store</strong>: sw, sh, sb</p></li>
+<li><p><strong>B类</strong>：beq， bne</p></li>
+<li><p><strong>J类</strong>：jal, j</p></li>
+<li><p><strong>特殊</strong>：jr, lui</p></li>
 </ul>
-<hr>
 <h2 id="工程模块定义">工程模块定义</h2>
 <h3 id="功能模块定义">功能模块定义</h3>
-<h4 id="IFU（取指令单元）">IFU（取指令单元）</h4>
-<p>​		该模块内部包含PC（程序计数器）和IM（指令存储器）。IM的容量为<strong>16KB</strong>(32bit/word×<strong>4096word</strong>)， 可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
+<h4 id="ifu取指令单元">IFU（取指令单元）</h4>
+<p>​
+该模块内部包含PC（程序计数器）和IM（指令存储器）。IM的容量为<strong>16KB</strong>(32bit/word×<strong>4096word</strong>)，
+可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong><br>
+| 信号名 | 方向 | 位宽 | 描述 |<br>
+| :----: | :--: | :--: | :--------------------------- |<br>
+| clk | I | 1 | 时钟信号 |<br>
+| reset | I | 1 | 异步复位信号 |<br>
+| en | I | 1 | 使能信号(stall信号取反) |<br>
+| npc | I | 32 | 下一条要被执行的指令的地址 |<br>
+| pc | O | 32 | 输出当前正在执行的指令的地址 |<br>
+| instr | O | 32 | 输出当前正在执行的指令 |<br>
+| pc8 | O | 32 | pc+8 |</p></li>
+<li><p><strong>功能定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 81%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">信号名</th>
-<th style="text-align:center">方向</th>
-<th style="text-align:center">位宽</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">clk</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">1</td>
-<td style="text-align:left">时钟信号</td>
-</tr>
-<tr>
-<td style="text-align:center">reset</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">1</td>
-<td style="text-align:left">异步复位信号</td>
-</tr>
-<tr>
-<td style="text-align:center">en</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">1</td>
-<td style="text-align:left">使能信号(stall信号取反)</td>
-</tr>
-<tr>
-<td style="text-align:center">npc</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">32</td>
-<td style="text-align:left">下一条要被执行的指令的地址</td>
-</tr>
-<tr>
-<td style="text-align:center">pc</td>
-<td style="text-align:center">O</td>
-<td style="text-align:center">32</td>
-<td style="text-align:left">输出当前正在执行的指令的地址</td>
-</tr>
-<tr>
-<td style="text-align:center">instr</td>
-<td style="text-align:center">O</td>
-<td style="text-align:center">32</td>
-<td style="text-align:left">输出当前正在执行的指令</td>
-</tr>
-<tr>
-<td style="text-align:center">pc8</td>
-<td style="text-align:center">O</td>
-<td style="text-align:center">32</td>
-<td style="text-align:left">pc+8</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><strong>功能定义</strong></p>
-<table>
-<thead>
-<tr>
+<tr class="header">
 <th>序号</th>
 <th>功能名称</th>
 <th>功能描述</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>1</td>
 <td>复位</td>
 <td>当reset信号有效时，将PC寄存器中的值置为0x00003000</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>停止</td>
 <td>当en信号失效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>写PC寄存器</td>
-<td>当en信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入PC寄存器</td>
+<td>当en信号失效且时钟上升沿来临时，将下一条指令的地址（next
+PC）写入PC寄存器</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>取指令</td>
 <td>根据当前pc的值从IM（指令存储器）中读出对应的指令到instr端口</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="GRF（通用寄存器组）">GRF（通用寄存器组）</h4>
-<p>​		该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能，因此为了实现该机制，我们不再设置0号寄存器，每次对0进行特判）。GRF可以实现同步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
-<p>​		为了实现内部转发，我们将当前WD中输入的数据（但没有写入）实时反映到RD1和RD2端口上，用来解决数据冲突。</p>
+<h4 id="grf通用寄存器组">GRF（通用寄存器组）</h4>
+<p>​ 该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~
+$31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能，因此为了实现该机制，我们不再设置0号寄存器，每次对0进行特判）。GRF可以实现同步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
+<p>​
+为了实现内部转发，我们将当前WD中输入的数据（但没有写入）实时反映到RD1和RD2端口上，用来解决数据冲突。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 80%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -535,107 +488,115 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>pc</td>
 <td>I</td>
 <td>32</td>
 <td>输出当前正在执行的</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>同步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A1</td>
 <td>I</td>
 <td>5</td>
 <td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A2</td>
 <td>I</td>
 <td>5</td>
 <td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A3</td>
 <td>I</td>
 <td>5</td>
 <td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>WD</td>
 <td>I</td>
 <td>32</td>
 <td>数据输入信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>写使能信号<br>1：写入有效<br>0：写入失效</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>RD1</td>
 <td>O</td>
 <td>32</td>
 <td>输出A1指定的寄存器中的32位数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>RD2</td>
 <td>O</td>
 <td>32</td>
 <td>输出A2指定的寄存器中的32位数据</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>功能定义</strong></p>
+</table></li>
+<li><p><strong>功能定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 11%">
+<col style="width: 83%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>序号</th>
 <th>功能名称</th>
 <th>功能描述</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>1</td>
 <td>复位</td>
 <td>reset信号有效时，所有寄存器中储存的值均被清零</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>读数据</td>
 <td>读出A1，A2地址对应的寄存器中储存的数据，将其加载到RD1和RD2</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>写数据</td>
 <td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A3地址对应的寄存器</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="NPC（下一指令计算单元）">NPC（下一指令计算单元）</h4>
-<p>​		该模块根据当前指令地址和其他控制信号（NPCOp），计算出下一指令所在的地址。</p>
+<h4 id="npc下一指令计算单元">NPC（下一指令计算单元）</h4>
+<p>​
+该模块根据当前指令地址和其他控制信号（NPCOp），计算出下一指令所在的地址。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 81%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -643,66 +604,72 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>F_pc</td>
 <td>I</td>
 <td>32</td>
 <td>F级指令地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>D_pc</td>
 <td>I</td>
 <td>32</td>
 <td>D级指令地址</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>offset</td>
 <td>I</td>
 <td>32</td>
 <td>地址偏移量，用于计算B类指令所要跳转的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>imm26</td>
 <td>I</td>
 <td>26</td>
 <td>当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>ra</td>
 <td>I</td>
 <td>32</td>
 <td>储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令</td>
 </tr>
-<tr>
+<tr class="even">
 <td>judge</td>
 <td>I</td>
 <td>1</td>
 <td>B类指令判断结果<br>1：说明当前B类指令的判断结果为真<br>0：说明判断结果为假</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>NPCOp</td>
 <td>I</td>
 <td>3</td>
-<td>NPC功能选择<br>0x000：顺序执行<br>0x001：B类指令分支地址<br>0x010:   jal/j跳转地址<br>0x011:   jr跳转地址</td>
+<td>NPC功能选择<br>0x000：顺序执行<br>0x001：B类指令分支地址<br>0x010:
+jal/j跳转地址<br>0x011: jr跳转地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>npc</td>
 <td>O</td>
 <td>32</td>
 <td>输出下一指令地址</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="EXT（扩展单元）">EXT（扩展单元）</h4>
-<p>​		该模块对16位立即数进行扩展，可以实现符号扩展，0扩展和加载高位（lui）操作。</p>
+<h4 id="ext扩展单元">EXT（扩展单元）</h4>
+<p>​
+该模块对16位立即数进行扩展，可以实现符号扩展，0扩展和加载高位（lui）操作。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 81%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -710,36 +677,42 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>in</td>
 <td>I</td>
 <td>16</td>
 <td>16位立即数</td>
 </tr>
-<tr>
+<tr class="even">
 <td>EXTOp</td>
 <td>I</td>
 <td>2</td>
-<td>EXT功能选择信号<br>0x000: 0扩展<br>0x001: 符号扩展<br>0x010: 加载到高位（lui指令使用）</td>
+<td>EXT功能选择信号<br>0x000: 0扩展<br>0x001: 符号扩展<br>0x010:
+加载到高位（lui指令使用）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>out</td>
 <td>O</td>
 <td>32</td>
 <td>扩展结果</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="CMP-B类指令比较单元">CMP(B类指令比较单元)</h4>
-<p>​		该单元根据输入的CMPOp信号对当前B指令的类型进行判断，进而对当前输入的数值进行相应比较，最后输出结果。</p>
+<h4 id="cmpb类指令比较单元">CMP(B类指令比较单元)</h4>
+<p>​
+该单元根据输入的CMPOp信号对当前B指令的类型进行判断，进而对当前输入的数值进行相应比较，最后输出结果。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 81%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -747,42 +720,42 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>D1</td>
 <td>I</td>
 <td>32</td>
 <td>输入CMP单元的第一个数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>D1</td>
 <td>I</td>
 <td>32</td>
 <td>输入CMP单元的第二个数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>CMPOp</td>
 <td>I</td>
 <td>3</td>
-<td>CMPOp功能选择信号<br>0x000：beq判断<br>0x001：bne判断<br>0x010：blez判断<br>0x011:   bgtz判断</td>
+<td>CMPOp功能选择信号<br>0x000：beq判断<br>0x001：bne判断<br>0x010：blez判断<br>0x011:
+bgtz判断</td>
 </tr>
-<tr>
+<tr class="even">
 <td>out</td>
 <td>O</td>
 <td>1</td>
 <td>判断结果输出<br>1: 判断结果为真<br>0：判断结果为假</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="ALU（逻辑运算单元）">ALU（逻辑运算单元）</h4>
-<p>该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
+<h4 id="alu逻辑运算单元">ALU（逻辑运算单元）</h4>
+<p>&nbsp;
+该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -790,44 +763,48 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>ALUOp</td>
 <td>I</td>
 <td>4</td>
 <td>ALU功能选择信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>src_A</td>
 <td>I</td>
 <td>32</td>
 <td>参与ALU计算的第一个值</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>src_B</td>
 <td>I</td>
 <td>32</td>
 <td>参与ALU计算的第二个值S</td>
 </tr>
-<tr>
+<tr class="even">
 <td>shamt</td>
 <td>I</td>
 <td>5</td>
 <td>移位数输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>out</td>
 <td>O</td>
 <td>32</td>
 <td>输出ALU计算结果</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>功能定义</strong></p>
+</table></li>
+<li><p><strong>功能定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 71%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>序号</th>
 <th>功能名称</th>
 <th>ALU_Op</th>
@@ -835,84 +812,89 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>1</td>
 <td>加</td>
 <td>0b0000</td>
 <td>ALU_Result = Src_A + Src_B</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>减</td>
 <td>0b0001</td>
 <td>ALU_Result = Src_A - Src_B</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>按位与</td>
 <td>0b0010</td>
 <td>ALU_Result = Src_A &amp; Src_B</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>按位或</td>
 <td>0b0011</td>
 <td>ALU_Result = Src_A | Src_B</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>5</td>
 <td>按位异或</td>
 <td>0b0100</td>
 <td>ALU_Result = Src_A ⊕ Src_B</td>
 </tr>
-<tr>
+<tr class="even">
 <td>6</td>
 <td>按位或非</td>
 <td>0b0101</td>
 <td>ALU_Result = ~(Src_A | Src_B)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>7</td>
 <td>逻辑左移</td>
 <td>0b0110</td>
 <td>ALU_Result = Src_B &lt;&lt; Shift</td>
 </tr>
-<tr>
+<tr class="even">
 <td>8</td>
 <td>逻辑右移</td>
 <td>0b0111</td>
 <td>ALU_Result = Src_B &gt;&gt; Shift</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>9</td>
 <td>算术右移</td>
 <td>0b1000</td>
 <td>ALU_Result = Src_B &gt;&gt;&gt; Shift</td>
 </tr>
-<tr>
+<tr class="even">
 <td>10</td>
 <td>带符号比较</td>
 <td>0b1001</td>
 <td>ALU_Result = (Src_A &gt; Src_B) ? 1 : 0（带符号比较）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>11</td>
 <td>无符号比较</td>
 <td>0b1010</td>
 <td>ALU_Result = (Src_A &gt; Src_B) ? 1 : 0（无符号比较）</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="DM-（数据存储器）">DM （数据存储器）</h4>
-<p>​		该模块对数据进行访存，容量为容量为 <strong>12KB</strong>(32bit/word×<strong>3072word</strong>),不仅可以实现对字的访问和存储，还可以实现对半字和字节的操作。</p>
+<h4 id="dm-数据存储器">DM （数据存储器）</h4>
+<p>​ 该模块对数据进行访存，容量为容量为
+<strong>12KB</strong>(32bit/word×<strong>3072word</strong>),不仅可以实现对字的访问和存储，还可以实现对半字和字节的操作。</p>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 81%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -920,95 +902,96 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>pc</td>
 <td>I</td>
 <td>32</td>
 <td>当前指令地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>异步复位信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>A</td>
 <td>I</td>
 <td>5</td>
 <td>地址输入信号，指向数据储存器中某个存储单元</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>WD</td>
 <td>I</td>
 <td>32</td>
 <td>数据输入信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>写使能信号<br>1：写入有效<br>0：写入失效</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>LSOp</td>
 <td>I</td>
 <td>3</td>
 <td>DM访存功能选择信号<br>0x000：lw<br>0x001：lh<br>0x010：lhu<br>0x011：lb<br>0x100：lbu<br>0x101：sw<br>0x110：sh<br>0x111：sb</td>
 </tr>
-<tr>
+<tr class="even">
 <td>RD</td>
 <td>O</td>
 <td>32</td>
 <td>输出A指定的存储单元中的32位数据</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>功能定义</strong></p>
+</table></li>
+<li><p><strong>功能定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 11%">
+<col style="width: 83%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>序号</th>
 <th>功能名称</th>
 <th>功能描述</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>1</td>
 <td>复位</td>
 <td>reset信号有效时，所有寄存器中储存的值均被清零</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>读数据</td>
 <td>读出A地址对应的存储单元中的数据，将其加载到RD</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>写数据</td>
 <td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A地址对应的存储单元</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
 <h3 id="流水寄存器模块定义">流水寄存器模块定义</h3>
-<h4 id="D-Reg（IF-ID流水寄存器）">D_Reg（IF/ID流水寄存器）</h4>
+<h4 id="d_regifid流水寄存器">D_Reg（IF/ID流水寄存器）</h4>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>方向</th>
 <th>信号名</th>
 <th>位宽</th>
@@ -1017,70 +1000,70 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>clk</td>
 <td>1</td>
 <td>时钟信号</td>
 <td>mips.v中的clk</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>reset</td>
 <td>1</td>
 <td>同步复位信号</td>
 <td>mips.v中的reset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>en</td>
 <td>1</td>
 <td>D级寄存器使能信号</td>
 <td>HCU中stall信号取反</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>clr</td>
 <td>1</td>
 <td>D级寄存器清空信号</td>
 <td>默认为1‘b0</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>F_instr</td>
 <td>32</td>
 <td>F级instr输入</td>
 <td>IFU_instr</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>F_pc</td>
 <td>32</td>
 <td>F级pc输入</td>
 <td>IFU_pc</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>F_pc8</td>
 <td>32</td>
 <td>F级pc8输入</td>
 <td>IFU_pc + 8</td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>D_instr</td>
 <td>32</td>
 <td>D级instr输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>D_pc</td>
 <td>32</td>
 <td>D级pc输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>D_pc8</td>
 <td>32</td>
@@ -1088,16 +1071,21 @@
 <td></td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<h4 id="E-Reg（ID-EX流水寄存器）">E_Reg（ID/EX流水寄存器）</h4>
+<h4 id="e_regidex流水寄存器">E_Reg（ID/EX流水寄存器）</h4>
 <ul>
-<li>
-<p><strong>端口定义</strong></p>
+<li><p><strong>端口定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 15%">
+<col style="width: 6%">
+<col style="width: 35%">
+<col style="width: 36%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>方向</th>
 <th>信号名</th>
 <th>位宽</th>
@@ -1106,273 +1094,273 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>clk</td>
 <td>1</td>
 <td>时钟信号</td>
 <td>mips.v中的clk</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>reset</td>
 <td>1</td>
 <td>同步复位信号</td>
 <td>mips.v中的reset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>clr</td>
 <td>1</td>
 <td>E级寄存器清空信号</td>
 <td>HCU中stall信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>D_instr_s</td>
 <td>5</td>
 <td>移位指令的位移数</td>
 <td>D_instr的s域数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>D_V1</td>
 <td>32</td>
 <td>D级V1输入</td>
 <td>通过MUX_CMP_D1选择的数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>D_V2</td>
 <td>32</td>
 <td>D级V2输入</td>
 <td>通过MUX_CMP_D1选择的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>D_A1</td>
 <td>5</td>
 <td>D级A1输入</td>
 <td>D_instr的rs域数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>D_A2</td>
 <td>5</td>
 <td>D级A2输入</td>
 <td>D_instr的rt域数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>D_A3</td>
 <td>5</td>
 <td>D级A3输入</td>
 <td>通过MUX_A3选择出的数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>D_E32</td>
 <td>32</td>
 <td>D级E32输入</td>
 <td>通过EXT模块扩展出的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>D_pc</td>
 <td>32</td>
 <td>D级pc输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>D_pc8</td>
 <td>32</td>
 <td>D级pc输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>Tnew_D</td>
 <td>2</td>
 <td>D级指令的Tnew输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>RFWrite_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>MemWrite_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>SelEMOut_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>SelWOut_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>SelALUS_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>SelALUB_D</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>LSOp_D</td>
 <td>3</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>ALUOp_D</td>
 <td>4</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>E_instr_s</td>
 <td>5</td>
 <td>移位指令的位移数</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>E_V1</td>
 <td>32</td>
 <td>E级V1输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>E_V2</td>
 <td>32</td>
 <td>E级V2输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>E_A1</td>
 <td>5</td>
 <td>E级A1输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>E_A2</td>
 <td>5</td>
 <td>E级A2输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>E_A3</td>
 <td>5</td>
 <td>E级A3输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>E_E32</td>
 <td>32</td>
 <td>E级E32输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>E_pc</td>
 <td>32</td>
 <td>E级pc输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>E_pc8</td>
 <td>32</td>
 <td>E级pc输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>Tew_E</td>
 <td>2</td>
 <td>E级指令的Tnew输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>RFWrite_E</td>
 <td>1</td>
 <td>E级控制信号输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>MemWrite_E</td>
 <td>1</td>
 <td>E级控制信号输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>SelEMOut_E</td>
 <td>1</td>
 <td>E级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>SelWOut_E</td>
 <td>1</td>
 <td>E级控制信号输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>SelALUS_E</td>
 <td>1</td>
 <td>E级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>SelALUB_E</td>
 <td>1</td>
 <td>E级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>LSOp_E</td>
 <td>3</td>
 <td>E级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>ALUOp_E</td>
 <td>4</td>
@@ -1380,20 +1368,24 @@
 <td></td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>运算功能</strong></p>
-<p>$Tnew_E = (Tnew_D &gt;   0)   ? Tnew_D - 1: 0$</p>
-</li>
+</table></li>
+<li><p><strong>运算功能</strong></p>
+<p><span class="math inline">\(Tnew\_E = (Tnew\_D &gt; 0) ? Tnew\_D - 1:
+0\)</span></p></li>
 </ul>
-<h4 id="M-Reg（EX-MEM流水寄存器）">M_Reg（EX/MEM流水寄存器）</h4>
+<h4 id="m_regexmem流水寄存器">M_Reg（EX/MEM流水寄存器）</h4>
 <ul>
-<li>
-<p>端口定义</p>
+<li><p>端口定义</p>
 <table>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 16%">
+<col style="width: 6%">
+<col style="width: 37%">
+<col style="width: 33%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>方向</th>
 <th>信号名</th>
 <th>位宽</th>
@@ -1402,182 +1394,182 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>clk</td>
 <td>1</td>
 <td>时钟信号</td>
 <td>mips.v中的clk</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>reset</td>
 <td>1</td>
 <td>同步复位信号</td>
 <td>mips.v中的reset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>E_AO</td>
 <td>32</td>
 <td>E级AO输入</td>
 <td>ALU_out数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>E_V2</td>
 <td>32</td>
 <td>E级V2输入</td>
 <td>MUX_ALU选择出来的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>E_A2</td>
 <td>32</td>
 <td>E级A2输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>E_A3</td>
 <td>5</td>
 <td>E级A3输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>E_pc</td>
 <td>32</td>
 <td>E级pc输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>E_pc8</td>
 <td>32</td>
 <td>E级pc8输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>Tnew_E</td>
 <td>2</td>
 <td>E级Tnew输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>SelEMOut_E</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>SelWOut_E</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>RFWrite_E</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>MemWrite_E</td>
 <td>1</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>LSOp_E</td>
 <td>3</td>
 <td>D级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>M_AO</td>
 <td>32</td>
 <td>M级AO输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>M_V2</td>
 <td>32</td>
 <td>M级V2输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>M_A2</td>
 <td>32</td>
 <td>M级A2输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>M_A3</td>
 <td>5</td>
 <td>M级A3输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>M_pc</td>
 <td>32</td>
 <td>M级pc输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>M_pc8</td>
 <td>32</td>
 <td>M级pc8输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>Tnew_M</td>
 <td>2</td>
 <td>M级Tnew输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>SelEMOut_M</td>
 <td>1</td>
 <td>D级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>SelWOut_M</td>
 <td>1</td>
 <td>D级控制信号输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>RFWrite_M</td>
 <td>1</td>
 <td>D级控制信号输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>MemWrite_M</td>
 <td>1</td>
 <td>D级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>LSOp_M</td>
 <td>3</td>
@@ -1585,20 +1577,17 @@
 <td></td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>运算功能</strong></p>
-<p>$Tnew_M = (Tnew_E &gt;   0)   ? Tnew_E - 1: 0$</p>
-</li>
+</table></li>
+<li><p><strong>运算功能</strong></p>
+<p><span class="math inline">\(Tnew\_M = (Tnew\_E &gt; 0) ? Tnew\_E - 1:
+0\)</span></p></li>
 </ul>
-<h4 id="W-Reg（MEM-WB流水寄存器）">W_Reg（MEM/WB流水寄存器）</h4>
+<h4 id="w_regmemwb流水寄存器">W_Reg（MEM/WB流水寄存器）</h4>
 <ul>
-<li>
-<p><strong>接口定义</strong></p>
+<li><p><strong>接口定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>方向</th>
 <th>信号名</th>
 <th>位宽</th>
@@ -1607,112 +1596,112 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>clk</td>
 <td>1</td>
 <td>时钟信号</td>
 <td>mips.v中的clk</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>reset</td>
 <td>1</td>
 <td>同步复位信号</td>
 <td>mips.v中的reset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>M_AO</td>
 <td>32</td>
 <td>M级AO输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>M_DR</td>
 <td>32</td>
 <td>M级DR输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>M_A3</td>
 <td>5</td>
 <td>M级A3输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>M_pc</td>
 <td>32</td>
 <td>M级pc输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>M_pc8</td>
 <td>32</td>
 <td>M级pc8输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>I</td>
 <td>RFWrite_M</td>
 <td>1</td>
 <td>M级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I</td>
 <td>SelWOut_M</td>
 <td>2</td>
 <td>M级控制信号输入</td>
 <td>前一级相同信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>W_AO</td>
 <td>32</td>
 <td>W级AO输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>W_DR</td>
 <td>32</td>
 <td>W级DR输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>W_A3</td>
 <td>5</td>
 <td>W级A3输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>W_pc</td>
 <td>32</td>
 <td>W级pc输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>W_pc8</td>
 <td>32</td>
 <td>W级pc8输出</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>O</td>
 <td>RFWrite_W</td>
 <td>1</td>
 <td>W级控制信号输出（使用）</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>O</td>
 <td>SelWOut_W</td>
 <td>2</td>
@@ -1720,18 +1709,19 @@
 <td></td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
 <h3 id="控制模块定义">控制模块定义</h3>
-<h4 id="MCU（主控制器模块）">MCU（主控制器模块）</h4>
-<p>​		在主控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等19条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND Logic）和或逻辑（OR Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
+<h4 id="mcu主控制器模块">MCU（主控制器模块）</h4>
+<p>​
+在主控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等19条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND
+Logic）和或逻辑（OR
+Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
 <ul>
-<li>
-<p><strong>输入端口定义</strong></p>
+<li><p><strong>输入端口定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -1739,26 +1729,31 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>opcode</td>
 <td>I</td>
 <td>6</td>
 <td>输入D_instr_opcode域数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>funt</td>
 <td>I</td>
 <td>6</td>
 <td>输入D_instr_funct域数据</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>输出端口（控制信号）定义</strong></p>
+</table></li>
+<li><p><strong>输出端口（控制信号）定义</strong></p>
 <table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 49%">
+<col style="width: 26%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>位宽</th>
 <th>作用级</th>
@@ -1767,84 +1762,84 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>RFWrite</td>
 <td>1</td>
 <td>W</td>
 <td>GRF写使能信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>MemWrite</td>
 <td>1</td>
 <td>M</td>
 <td>DM写入使能信号</td>
 <td>store型：sw, sb, sh</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SelA3</td>
 <td>2</td>
 <td>D</td>
 <td>对MUX_A3的输出进行选择</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>SelEMOut</td>
 <td>1</td>
 <td>E、M</td>
 <td>对MUX_E_out和MUX_M_out的输出进行选择</td>
 <td>jr</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SelWOut</td>
 <td>2</td>
 <td>W</td>
 <td>对MUX_W_out的输出进行选择</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>SelALUB</td>
 <td>1</td>
 <td>E</td>
 <td>对MUX_ALU_B的输出进行选择</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SelALUS</td>
 <td>1</td>
 <td>E</td>
 <td>对MUX_ALU_S的输出进行选择</td>
 <td>shift型、shiftv型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>NPCOp</td>
 <td>3</td>
 <td>D</td>
 <td>NPC模块功能选择信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>CMPOp</td>
 <td>3</td>
 <td>D</td>
 <td>CMP模块功能选择信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>EXTOp</td>
 <td>2</td>
 <td>D</td>
 <td>EXT模块功能选择信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>LSOp</td>
 <td>3</td>
 <td>M</td>
 <td>DM模块功能选择信号</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>ALUOp</td>
 <td>4</td>
 <td>E</td>
@@ -1852,20 +1847,17 @@
 <td></td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p>注：该模块中的“Sel”型信号均作用于功能MUX</p>
-</li>
+</table></li>
+<li><p>注：该模块中的“Sel”型信号均作用于功能MUX</p></li>
 </ul>
-<h4 id="HCU（冒险控制器模块）">HCU（冒险控制器模块）</h4>
-<p>​		在冒险控制模块中，我们通过对传入的**“A”<strong>（A1，A2，A3）和</strong>“T”**（Tnew，Tuse）进行分析，判断当前需要进行转发（<strong>forward</strong>）还是暂停（<strong>stall</strong>），并通过组合逻辑生成相应控制信号。</p>
+<h4 id="hcu冒险控制器模块">HCU（冒险控制器模块）</h4>
+<p>​
+在冒险控制模块中，我们通过对传入的<strong>“A”</strong>（A1，A2，A3）和<strong>“T”</strong>（Tnew，Tuse）进行分析，判断当前需要进行转发（<strong>forward</strong>）还是暂停（<strong>stall</strong>），并通过组合逻辑生成相应控制信号。</p>
 <ul>
-<li>
-<p><strong>输入端口定义</strong></p>
+<li><p><strong>输入端口定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -1873,92 +1865,90 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>D_A1</td>
 <td>I</td>
 <td>5</td>
 <td>D级A1输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>D_A2</td>
 <td>I</td>
 <td>5</td>
 <td>D级A2输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>E_A1</td>
 <td>I</td>
 <td>5</td>
 <td>E级A1输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>E_A2</td>
 <td>I</td>
 <td>5</td>
 <td>E级A2输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>M_A2</td>
 <td>I</td>
 <td>5</td>
 <td>M级A2输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>E_A3</td>
 <td>I</td>
 <td>5</td>
 <td>E级A3输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>M_A3</td>
 <td>I</td>
 <td>5</td>
 <td>M级A3输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>W_A3</td>
 <td>I</td>
 <td>5</td>
 <td>W级A3输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Tuse_rs</td>
 <td>I</td>
 <td>2</td>
 <td>D级MCU中输出的Tuse_rs信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Tuse_rt</td>
 <td>I</td>
 <td>2</td>
 <td>D级MCU中输出的Tuse_rt信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Tnew_E</td>
 <td>I</td>
 <td>2</td>
 <td>E级Tnew_E信号输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Tnew_M</td>
 <td>I</td>
 <td>2</td>
 <td>M级Tnew_M信号输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Tnew_W</td>
 <td>I</td>
 <td>2</td>
 <td>W级Tnew_W信号输入</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>输出端口（控制信号）定义</strong></p>
+</table></li>
+<li><p><strong>输出端口（控制信号）定义</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>位宽</th>
 <th>作用级</th>
@@ -1966,57 +1956,59 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>FwdCMPD1</td>
 <td>2</td>
 <td>D</td>
 <td>对HMUX_CMP_D1的输出进行选择</td>
 </tr>
-<tr>
+<tr class="even">
 <td>FwdCMPD2</td>
 <td>2</td>
 <td>D</td>
 <td>对HMUX_CMP_D2的输出进行选择</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>FwdALUA</td>
 <td>2</td>
 <td>E</td>
 <td>对HMUX_ALU_A的输出进行选择</td>
 </tr>
-<tr>
+<tr class="even">
 <td>FwdALUB</td>
 <td>2</td>
 <td>E</td>
 <td>对HMUX_ALU_B的输出进行选择</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>FwdDM</td>
 <td>1</td>
 <td>M</td>
 <td>对HMUX_DM的输出进行选择</td>
 </tr>
-<tr>
+<tr class="even">
 <td>stall</td>
 <td>1</td>
 <td>F、D、M</td>
 <td>暂停信号</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p>注：该模块中的“Fwd”型信号均作用于转发MUX</p>
-</li>
-<li>
-<p>注：该模块中的stall信号同时作用与IFU，D_Reg，E_Reg</p>
-</li>
+</table></li>
+<li><p>注：该模块中的“Fwd”型信号均作用于转发MUX</p></li>
+<li><p>注：该模块中的stall信号同时作用与IFU，D_Reg，E_Reg</p></li>
 </ul>
 <h3 id="选择器模块">选择器模块</h3>
-<h4 id="功能MUX">功能MUX</h4>
+<h4 id="功能mux">功能MUX</h4>
 <table>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 63%">
+<col style="width: 10%">
+<col style="width: 8%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>MUX名</th>
 <th>选择数量</th>
 <th>描述</th>
@@ -2025,42 +2017,42 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>MUX_A3</td>
 <td>3</td>
 <td>D级中A3输入信号进行选择<br>0：D_instr_rt<br>1：D_instr_rd<br>2：0x1f</td>
 <td>D_A3</td>
 <td>SelA3</td>
 </tr>
-<tr>
+<tr class="even">
 <td>MUX_ALU_B</td>
 <td>2</td>
 <td>对E级ALU模块src_B接口的信号进行选择<br>0：E_V2_f<br>1：E_E32</td>
 <td>ALU_B</td>
 <td>SelALUB</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>MUX_ALU_S</td>
 <td>2</td>
 <td>对E级ALU模块src_S接口的信号进行选择<br>0：E_instr_s<br>1：E_V1_f</td>
 <td>ALU_S</td>
 <td>SelALUS</td>
 </tr>
-<tr>
+<tr class="even">
 <td>MUX_E_out</td>
 <td>2</td>
 <td>对E级储存的计算结果进行选择<br>0：E_32<br>1：E_pc8</td>
 <td>E_out</td>
 <td>SelEMOut</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>MUX_M_out</td>
 <td>2</td>
 <td>对M级储存的计算结果进行选择<br>0：M_AO<br>1：M_pc8</td>
 <td>M_out</td>
 <td>SelEMOut</td>
 </tr>
-<tr>
+<tr class="even">
 <td>MUX_W_out</td>
 <td>3</td>
 <td>对W级储存的计算结果进行选择<br>0：W_AO<br>1：W_DR<br>2：W_pc8</td>
@@ -2069,10 +2061,17 @@
 </tr>
 </tbody>
 </table>
-<h4 id="转发MUX">转发MUX</h4>
+<h4 id="转发mux">转发MUX</h4>
 <table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 61%">
+<col style="width: 10%">
+<col style="width: 8%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>MUX名</th>
 <th>选择数量</th>
 <th>描述</th>
@@ -2081,35 +2080,35 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>HMUX_CMP_D1</td>
 <td>3</td>
 <td>将数据转发到CMP_D1接口<br>0：GRF_RD1<br>1：M_out<br>2：E_out</td>
 <td>D_V1_f</td>
 <td>FwdCMPD1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>HMUX_CMP_D2</td>
 <td>3</td>
 <td>将数据转发到CMP_D2接口<br>0：GRF_RD2<br>1：M_out<br>2：E_out</td>
 <td>D_V2_f</td>
 <td>FwdCMPD2</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>HMUX_ALU_A</td>
 <td>3</td>
 <td>将数据转发到ALU_A接口<br>0：E_V1<br>1：W_out<br>2：M_out</td>
 <td>E_V1_f</td>
 <td>FwdALUA</td>
 </tr>
-<tr>
+<tr class="even">
 <td>HMUX_ALU_B</td>
 <td>3</td>
 <td>将数据转发到ALU_B接口<br>0：E_V2<br>1：W_out<br>2：M_out</td>
 <td>E_V2_f</td>
 <td>FwdALUB</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>HMUX_DM</td>
 <td>2</td>
 <td>将数据转发到DM_WD接口<br>0：M_V2<br>1：W_out</td>
@@ -2118,27 +2117,33 @@
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="重要机制实现方法">重要机制实现方法</h2>
 <h3 id="分支转移实现">分支转移实现</h3>
-<h4 id="B类指令">B类指令</h4>
-<p>​		为了减少因控制冲突导致的暂停（<strong>stall</strong>），我们将B类指令的判断进行前置，单独使用CMP模块进行判断。当B类指令进入D级后（此时F级的指令为编译优化调度的指令），CMP模块的判断结果进入NPC，如过CMP结果为真（CMP_out = 1）而且NPCOp信号为0x001（说明当前指令为B类指令），NPC输出转移的地址npc并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
+<h4 id="b类指令">B类指令</h4>
+<p>​
+为了减少因控制冲突导致的暂停（<strong>stall</strong>），我们将B类指令的判断进行前置，单独使用CMP模块进行判断。当B类指令进入D级后（此时F级的指令为编译优化调度的指令），CMP模块的判断结果进入NPC，如过CMP结果为真（CMP_out
+=
+1）而且NPCOp信号为0x001（说明当前指令为B类指令），NPC输出转移的地址npc并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
 <h4 id="j和jal">j和jal</h4>
-<p>​		当j或jal进入D级后（此时F级的指令为编译优化调度的指令），D_instr中imm26域的数据进入NPC进行处理，如果当前NPCOp信号为0x010（说明当前指令为jal或j指令），NPC输出转移的地址npc，并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
-<p>​		jal指令在实现跳转的同时，还需要将下一条指令的地址存入31号寄存器中，因此我们需要在IFU中计算出改地址，并随着jal指令进行流水，最终在W级写入GRF的31号寄存器。由于存在延迟槽，pc+4地址中的指令是编译优化机制调度过来的，因此我们要保存的地址应该为pc+8。</p>
+<p>​
+当j或jal进入D级后（此时F级的指令为编译优化调度的指令），D_instr中imm26域的数据进入NPC进行处理，如果当前NPCOp信号为0x010（说明当前指令为jal或j指令），NPC输出转移的地址npc，并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
+<p>​
+jal指令在实现跳转的同时，还需要将下一条指令的地址存入31号寄存器中，因此我们需要在IFU中计算出改地址，并随着jal指令进行流水，最终在W级写入GRF的31号寄存器。由于存在延迟槽，pc+4地址中的指令是编译优化机制调度过来的，因此我们要保存的地址应该为pc+8。</p>
 <h4 id="jr">jr</h4>
-<p>​		当jr进入D级后（此时F级的指令为编译优化调度的指令），D_V1_f（经过转发后的D_V1值）进入NPC，如果当前NPCOp信号为0x011（说明当前指令为jr指令），NPC输出转移的地址npc，并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
+<p>​
+当jr进入D级后（此时F级的指令为编译优化调度的指令），D_V1_f（经过转发后的D_V1值）进入NPC，如果当前NPCOp信号为0x011（说明当前指令为jr指令），NPC输出转移的地址npc，并进入IFU的输入端，在下一时钟沿上升时进入F级，实现转移。</p>
 <h3 id="冒险处理">冒险处理</h3>
 <p>冒险处理我们均通过“A_T”法实现——</p>
-<h4 id="转发（forward）">转发（forward）</h4>
-<p>​		当前面的指令要写寄存器但还未写入，而后面的指令需要用到没有被写入的值时，这时候会产生<strong>数据冒险</strong>，我们首先考虑进行转发。我们<strong>假设所有的数据冒险均可通过转发解决</strong>。也就是说，当某一指令前进到必须使用某一寄存器的值的流水阶段时，这个寄存器的值一定已经产生，并<strong>存储于后续某个流水线寄存器中</strong>。</p>
-<p>​		在这一阶段，我们不管需要的值有没由计算出，都要进行转发，即暴力转发。为实现这一机制，我们要清楚哪些模块需要转发后的数据（<strong>需求者</strong>）和保存着写入值的流水寄存器（<strong>供应者</strong>）</p>
+<h4 id="转发forward">转发（forward）</h4>
+<p>​
+当前面的指令要写寄存器但还未写入，而后面的指令需要用到没有被写入的值时，这时候会产生<strong>数据冒险</strong>，我们首先考虑进行转发。我们<strong>假设所有的数据冒险均可通过转发解决</strong>。也就是说，当某一指令前进到必须使用某一寄存器的值的流水阶段时，这个寄存器的值一定已经产生，并<strong>存储于后续某个流水线寄存器中</strong>。</p>
+<p>​
+在这一阶段，我们不管需要的值有没由计算出，都要进行转发，即暴力转发。为实现这一机制，我们要清楚哪些模块需要转发后的数据（<strong>需求者</strong>）和保存着写入值的流水寄存器（<strong>供应者</strong>）</p>
 <ul>
-<li>
-<p><strong>供应者及其产生的数据</strong></p>
+<li><p><strong>供应者及其产生的数据</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>流水级</th>
 <th>产生数据</th>
 <th>MUX名&amp;选择信号名</th>
@@ -2146,32 +2151,36 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>E</td>
 <td>E_E32，E_pc8</td>
-<td>MUX_E_out  &amp;  SelEMOut</td>
+<td>MUX_E_out &amp; SelEMOut</td>
 <td>E_out</td>
 </tr>
-<tr>
+<tr class="even">
 <td>M</td>
 <td>M_AO，M_pc8</td>
-<td>MUX_M_out  &amp;  SelEMOut</td>
+<td>MUX_M_out &amp; SelEMOut</td>
 <td>M_out</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>W</td>
 <td>W_AO，W_RD，W_pc8</td>
-<td>MUX_W_out  &amp;  SelWOut</td>
+<td>MUX_W_out &amp; SelWOut</td>
 <td>W_out</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>需求者及其产生的数据</strong></p>
+</table></li>
+<li><p><strong>需求者及其产生的数据</strong></p>
 <table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 29%">
+<col style="width: 36%">
+<col style="width: 13%">
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>接收端口</th>
 <th>选择数据</th>
 <th>HMUX名&amp;选择信号名</th>
@@ -2179,120 +2188,128 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>CMP_D1/NPC_ra</td>
 <td>D_V1，M_out，E_out</td>
-<td>HMUX_CMP_D1  &amp;  FwdCMPD1</td>
+<td>HMUX_CMP_D1 &amp; FwdCMPD1</td>
 <td>D_V1_f</td>
 </tr>
-<tr>
+<tr class="even">
 <td>CMP_D2</td>
 <td>D_v1，M_out，E_out</td>
-<td>HMUX_CMP_D2  &amp;  FwdCMPD2</td>
+<td>HMUX_CMP_D2 &amp; FwdCMPD2</td>
 <td>D_V2_f</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>ALU_A</td>
 <td>E_V1， W_out，M_out</td>
-<td>HMUX_ALU_A  &amp;  FwdALUA</td>
+<td>HMUX_ALU_A &amp; FwdALUA</td>
 <td>E_V1_f</td>
 </tr>
-<tr>
+<tr class="even">
 <td>ALU_B</td>
 <td>E_V2，W_out，M_out</td>
-<td>HMUX_ALU_B  &amp;  FwdALUB</td>
+<td>HMUX_ALU_B &amp; FwdALUB</td>
 <td>E_V1_f</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DM_WD</td>
 <td>M_V2， W_out</td>
-<td>HMUX_DM  &amp;  FwdDM</td>
+<td>HMUX_DM &amp; FwdDM</td>
 <td>M_V2_f</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<p>​		从上表可以看出，W级中的数据没有转发到D级，原因是我们在GRF内实现了内部转发机制，将GRF输入端的数据（还未写入）及时反映到RD1或这RD2，判断条件为<code>A3 ==  A2 </code>或者<code>A3 == A1</code>。</p>
-<p>​		此时为了生成HMUX的选择信号，我们需要向HCU（冒险控制器）输入”A”数据，然后进行选择信号的计算，执行转发的条件为——</p>
+<p>​
+从上表可以看出，W级中的数据没有转发到D级，原因是我们在GRF内实现了内部转发机制，将GRF输入端的数据（还未写入）及时反映到RD1或这RD2，判断条件为<code>A3 ==  A2</code>或者<code>A3 == A1</code>。</p>
+<p>​
+此时为了生成HMUX的选择信号，我们需要向HCU（冒险控制器）输入”A”数据，然后进行选择信号的计算，执行转发的条件为——</p>
 <ul>
-<li><strong>前位点的读取寄存器地址和某转发输入来源的写入寄存器地址相等且不为 0</strong></li>
+<li><strong>前位点的读取寄存器地址和某转发输入来源的写入寄存器地址相等且不为
+0</strong></li>
 <li><strong>写使能信号有效</strong></li>
 </ul>
-<p>​	根据以上条件我们可以生成上面的5个HMUX选择信号，选择信号的输出值应遵循“就近原则”，及最先产生的数据最先被转发。</p>
-<h4 id="暂停（stall）">暂停（stall）</h4>
-<p>​		接下来，我们来处理通过转发不能处理的数据冒险。在这种情况下，新的数据还未来得及产生。我们只能暂停流水线，等待新的数据产生。为了方便处理，我们仅仅为D级的指令进行暂停处理。</p>
-<p>​		我们把Tuse和Tnew作为暂停的判断依据——</p>
+<p>​
+根据以上条件我们可以生成上面的5个HMUX选择信号，选择信号的输出值应遵循“就近原则”，及最先产生的数据最先被转发。</p>
+<h4 id="暂停stall">暂停（stall）</h4>
+<p>​
+接下来，我们来处理通过转发不能处理的数据冒险。在这种情况下，新的数据还未来得及产生。我们只能暂停流水线，等待新的数据产生。为了方便处理，我们仅仅为D级的指令进行暂停处理。</p>
+<p>​ 我们把Tuse和Tnew作为暂停的判断依据——</p>
 <ul>
-<li>Tuse：指令进入 <strong>D 级</strong>后，其后的某个功能部件<strong>再</strong>经过多少时钟周期就<strong>必须</strong>要使用寄存器值。对于有两个操作数的指令，其<strong>每个操作数的 Tuse 值可能不等</strong>（如 store 型指令 rs、rt 的 Tuse 分别为 1 和 2 ）。</li>
-<li>Tnew：位于 <strong>E 级及其后各级</strong>的指令，再经过多少周期就能够产生要写入寄存器的结果。在我们目前的 CPU 中，W 级的指令Tnew 恒为 0；对于同一条指令，Tnew@M = max(Tnew@E - 1, 0)</li>
+<li>Tuse：指令进入 <strong>D
+级</strong>后，其后的某个功能部件<strong>再</strong>经过多少时钟周期就<strong>必须</strong>要使用寄存器值。对于有两个操作数的指令，其<strong>每个操作数的
+Tuse 值可能不等</strong>（如 store 型指令 rs、rt 的 Tuse 分别为 1 和 2
+）。</li>
+<li>Tnew：位于 <strong>E
+级及其后各级</strong>的指令，再经过多少周期就能够产生要写入寄存器的结果。在我们目前的
+CPU 中，W 级的指令Tnew 恒为 0；对于同一条指令，Tnew@M = max(Tnew@E - 1,
+0)</li>
 </ul>
-<p>​		在这一阶段，我们找到D级生成的Tuse_rs和Tuse_rt和在E,M,W级寄存器中流水的Tnew_D，Tnew_M，Tnew_W，如下表所示</p>
+<p>​
+在这一阶段，我们找到D级生成的Tuse_rs和Tuse_rt和在E,M,W级寄存器中流水的Tnew_D，Tnew_M，Tnew_W，如下表所示</p>
 <ul>
-<li>
-<p><strong>Tuse表</strong></p>
+<li><p><strong>Tuse表</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>指令类型</th>
 <th>Tuse_rs</th>
 <th>Tuse_rt</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>calc_R</td>
 <td>1</td>
 <td>1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>calc_I</td>
 <td>1</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>shift</td>
 <td>X</td>
 <td>1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>shiftv</td>
 <td>1</td>
 <td>1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>load</td>
 <td>1</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="even">
 <td>store</td>
 <td>1</td>
 <td>2</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>branch</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="even">
 <td>jump</td>
 <td>X</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>jr</td>
 <td>0</td>
 <td>X</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p><strong>Tnew表</strong></p>
+</table></li>
+<li><p><strong>Tnew表</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>指令类型</th>
 <th>Tnew_D</th>
 <th>Tnew_E</th>
@@ -2301,70 +2318,70 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>calc_R</td>
 <td>2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="even">
 <td>calc_I</td>
 <td>2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>shift</td>
 <td>2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="even">
 <td>shiftv</td>
 <td>2</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>load</td>
 <td>3</td>
 <td>2</td>
 <td>1</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="even">
 <td>store</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>branch</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="even">
 <td>jal</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>jr</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 </tr>
-<tr>
+<tr class="even">
 <td>lui</td>
 <td>1</td>
 <td>0</td>
@@ -2372,22 +2389,22 @@
 <td>0</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<p>​		然后我们Tnew和Tuse传入HCU（冒险控制器中），然后进行stall信号的计算。如果Tnew &gt; TuseHCU中的stall信号值为1，此时执行以下操作——</p>
+<p>​
+然后我们Tnew和Tuse传入HCU（冒险控制器中），然后进行stall信号的计算。如果Tnew
+&gt; TuseHCU中的stall信号值为1，此时执行以下操作——</p>
 <ul>
 <li><strong>冻结PC寄存器（IFU_en = ~stall = 0）</strong></li>
 <li><strong>冻结D级寄存器（D_en = ~stall = 0）</strong></li>
 <li><strong>清空E级寄存器（E_clr = stall = 1）</strong></li>
 </ul>
-<hr>
 <h2 id="测试方案">测试方案</h2>
 <h3 id="典型测试样例">典型测试样例</h3>
 <h4 id="运算指令测试">运算指令测试</h4>
 <p>该部分测试通过随机数随机生成，以保证测试数据的任意性，然后与同学代码进行对拍，以确定正确性。（随机生成程序与对拍程序均由同学设计）<br>
 其中一组测试数据如下所示</p>
-  <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">li <span class="token kernel-function property">$0</span> <span class="token number">1856279938</span>
+<p></p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">li <span class="token kernel-function property">$0</span> <span class="token number">1856279938</span>
 li <span class="token kernel-function property">$1</span> <span class="token number">1934446801</span>
 li <span class="token kernel-function property">$2</span> <span class="token operator">-</span><span class="token number">1722438048</span>
 li <span class="token kernel-function property">$3</span> <span class="token operator">-</span><span class="token number">1916920114</span>
@@ -2582,8 +2599,8 @@ sll <span class="token kernel-function property">$6</span><span class="token pun
 jr <span class="token kernel-function property">$ra</span>
 <span class="token keyword">final</span><span class="token punctuation">:</span>
 nop
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="转移指令（B类和J类）测试">转移指令（B类和J类）测试</h4>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="转移指令b类和j类测试">转移指令（B类和J类）测试</h4>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">main<span class="token punctuation">:</span>	
 li	<span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token number">0</span>
 li	<span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1000</span>
@@ -2754,8 +2771,7 @@ li	<span class="token kernel-function property">$v0</span><span class="token pun
 syscall<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="自动测试工具">自动测试工具</h3>
 <ul>
-<li>
-<p><strong>测试代码生成工具（python）</strong></p>
+<li><p><strong>测试代码生成工具（python）</strong></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">  
   <span class="token keyword">import</span> random
   
@@ -3021,59 +3037,60 @@ syscall<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
       file_cmp<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
   
   
-  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<hr>
 <h2 id="思考题">思考题</h2>
 <h3 id="流水线冒险">流水线冒险</h3>
-<ol>
-<li>
-<p><strong>在采用本节所述的控制冒险处理方式下，PC 的值应当如何被更新？请从数据通路和控制信号两方面进行说明。</strong></p>
-<p><strong>A</strong>：当需要进行暂停时，IFU的使能信号失效，PC值不变。当不需要进行分支转移和跳转时，NPC中将F_pc信号加4处理返回IFU，下一时钟沿来临时更新为F_pc+4。当执行分支指令时，NPC将D_pc +4和符号扩展后的imm16相加，返回IFU，下一时钟沿上升时更新。当执行j/jal指令时，NPC将imm26进行扩展（前四位补D_pc的前四位，后两位补0），返回IFU，下一时钟沿上升时更新。当执行jr指令时，NPC将从GRF的RD1端口（考虑转发）输出的值输出，返回IFU下一时钟沿上升时更新。</p>
-</li>
-<li>
-<p><strong>对于 jal 等需要将指令地址写入寄存器的指令，为什么需要回写 PC+8 ？</strong></p>
-<p><strong>A</strong>：因为需要考虑编译优化，jal的下一条指令是延迟槽中的指令，在jal执行前会被执行。如果回写PC+4的话，当出现“jr $ra”时，将会回到延迟槽，重复执行延迟槽中的指令。因此需要回写PC+8。</p>
-</li>
+<ol type="1">
+<li><p><strong>在采用本节所述的控制冒险处理方式下，PC
+的值应当如何被更新？请从数据通路和控制信号两方面进行说明。</strong></p>
+<p><strong>A</strong>：当需要进行暂停时，IFU的使能信号失效，PC值不变。当不需要进行分支转移和跳转时，NPC中将F_pc信号加4处理返回IFU，下一时钟沿来临时更新为F_pc+4。当执行分支指令时，NPC将D_pc
++4和符号扩展后的imm16相加，返回IFU，下一时钟沿上升时更新。当执行j/jal指令时，NPC将imm26进行扩展（前四位补D_pc的前四位，后两位补0），返回IFU，下一时钟沿上升时更新。当执行jr指令时，NPC将从GRF的RD1端口（考虑转发）输出的值输出，返回IFU下一时钟沿上升时更新。</p></li>
+<li><p><strong>对于 jal 等需要将指令地址写入寄存器的指令，为什么需要回写
+PC+8 ？</strong></p>
+<p><strong>A</strong>：因为需要考虑编译优化，jal的下一条指令是延迟槽中的指令，在jal执行前会被执行。如果回写PC+4的话，当出现“jr
+$ra”时，将会回到延迟槽，重复执行延迟槽中的指令。因此需要回写PC+8。</p></li>
 </ol>
 <h3 id="数据冒险的分析">数据冒险的分析</h3>
-<ol>
-<li>
-<p><strong>为什么所有的供给者都是存储了上一级传来的各种数据的流水级寄存器，而不是由 ALU 或者 DM 等部件来提供数据？</strong></p>
-<p><strong>A</strong>：因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</p>
-</li>
+<ol type="1">
+<li><p><strong>为什么所有的供给者都是存储了上一级传来的各种数据的流水级寄存器，而不是由
+ALU 或者 DM 等部件来提供数据？</strong></p>
+<p><strong>A</strong>：因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</p></li>
 </ol>
-<h3 id="AT-法处理流水线数据冒险">AT 法处理流水线数据冒险</h3>
-<ol>
-<li>
-<p><strong>“转发（旁路）机制的构造”中的 Thinking 1-4；</strong></p>
-<p><strong>Thinking 1</strong>：如果不采用已经转发过的数据，而采用上一级中的原始数据，会出现怎样的问题？试列举指令序列说明这个问题。</p>
+<h3 id="at-法处理流水线数据冒险">AT 法处理流水线数据冒险</h3>
+<ol type="1">
+<li><p><strong>“转发（旁路）机制的构造”中的 Thinking 1-4；</strong></p>
+<p><strong>Thinking
+1</strong>：如果不采用已经转发过的数据，而采用上一级中的原始数据，会出现怎样的问题？试列举指令序列说明这个问题。</p>
 <p><strong>A</strong>：例如：</p>
 <pre class="line-numbers language-none"><code class="language-none">$s0, $0, 4
 andi	$s1, $s0, 5
 sw      $s1, 4($s0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><strong>Thinking 2</strong>：我们为什么要对 GPR 采用内部转发机制？如果不采用内部转发机制，我们要怎样才能解决这种情况下的转发需求呢？</p>
+<p><strong>Thinking 2</strong>：我们为什么要对 GPR
+采用内部转发机制？如果不采用内部转发机制，我们要怎样才能解决这种情况下的转发需求呢？</p>
 <p><strong>A</strong>：因为需要使得W级保存的将要写入得数据及时反馈到GRF的输出端口，从而规避数据冒险。如果不采用内部转发，我们可以在GRF的输出端口加入多路选择器，将W级的数据进行转发。</p>
 <p><strong>Thinking 3</strong>：为什么 0 号寄存器需要特殊处理？</p>
 <p><strong>A</strong>：因为对0号寄存器的写入是无效的，如果不特殊处理，则会使得向0号寄存器写入的数据（无效输入）被错误转发，从而造成BUG。</p>
 <p><strong>Thinking 4</strong>：什么是“最新产生的数据”？</p>
-<p><strong>A</strong>: 距离当前需求者最近的流水寄存器中储存的数据。</p>
-</li>
-<li>
-<p><strong>在 AT 方法讨论转发条件的时候，只提到了“供给者需求者的A相同，且不为 0”，但在 CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。为何在 AT 方法中不需要特判 we 呢？为了用且仅用 A 和 T 完成转发，在翻译出 A 的时候，要结合 we 做什么操作呢？</strong></p>
-<p><strong>A</strong>： 因为当we信号为0时我们就把RF写入地址置为0，因此如果“供给者的A不为0”，就已经排除了“写入信号为0”的情况。</p>
-</li>
+<p><strong>A</strong>:
+距离当前需求者最近的流水寄存器中储存的数据。</p></li>
+<li><p><strong>在 AT
+方法讨论转发条件的时候，只提到了“供给者需求者的A相同，且不为 0”，但在
+CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。为何在 AT
+方法中不需要特判 we 呢？为了用且仅用 A 和 T 完成转发，在翻译出 A
+的时候，要结合 we 做什么操作呢？</strong></p>
+<p><strong>A</strong>：
+因为当we信号为0时我们就把RF写入地址置为0，因此如果“供给者的A不为0”，就已经排除了“写入信号为0”的情况。</p></li>
 </ol>
 <h3 id="在线测试相关说明">在线测试相关说明</h3>
 <p>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
-<p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略，<strong>比如构造连续数据冒险序列，请你描述一下你使用的策略如何</strong>结合了随机性</strong>达到强测的效果。</p>
-<p>此思考题请同学们结合自己测试 CPU 使用的具体手段，按照自己的实际情况进行回答。</p>
+<p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略，</strong>比如构造连续数据冒险序列，请你描述一下你使用的策略如何<strong>结合了随机性</strong>达到强测的效果。</p>
+<p>此思考题请同学们结合自己测试 CPU
+使用的具体手段，按照自己的实际情况进行回答。</p>
 <p><strong>A</strong>：我是采用半随机生成半手动构造的方法。对于功能型指令，完全通过python脚本自动生成。并且为了提高数据冲突的概率，我们仅仅使用0~7号寄存器进行测试。对于跳转指令，我们先使用一定模板进行构建，然后为了增加数据冒险和控制冒险，我们又手动进行一定修改，使得测试样例尽可能更多的覆盖所有可能的情况</p>
-<hr>
 <h2 id="附录">附录</h2>
-<p><img src="RTL%E7%BB%BC%E5%90%88%E8%A1%A8.png" alt=""></p>
-<p><img src="pipline.jpg" alt=""></p>
+<p><img src="RTL综合表.png"></p>
+<p><img src="pipline.jpg"></p>
 
                 
             </div>
@@ -3471,7 +3488,7 @@ sw      $s1, 4($s0)<span aria-hidden="true" class="line-numbers-rows"><span></sp
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

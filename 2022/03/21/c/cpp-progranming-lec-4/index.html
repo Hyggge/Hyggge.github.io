@@ -9,8 +9,9 @@
 static local variable
 
 静态局部变量的特点是”一次构造，永不析构，直到程序结束“。因此静态局部变量可以用来保值，这和全局变量行为相似）
-静态变量放在全局变量区  void func() {
-    ">
+静态变量放在全局变量区
+void func() {
+    s">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -394,7 +395,8 @@ static local variable
 <h3 id="static-local-variable">static local variable</h3>
 <ul>
 <li>静态局部变量的特点是”<strong>一次构造，永不析构，直到程序结束</strong>“。因此静态局部变量可以用来保值，这和全局变量行为相似）</li>
-<li>静态变量放在<strong>全局变量区</strong>  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<li>静态变量放在<strong>全局变量区</strong><br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">static</span> <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
     cout <span class="token operator">&lt;&lt;</span> i<span class="token operator">++</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -403,14 +405,12 @@ static local variable
     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h3 id="static-function">static function</h3>
 <ul>
 <li>函数前用<code>static</code>修饰，表示此函数<strong>为本文件专用</strong>，其他文件无法<strong>进行访问</strong>。</li>
-<li>函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>。<code>static</code>可将函数默认的全局域改为文件域</li>
-</ul>
+<li>函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>。<code>static</code>可将函数默认的全局域改为文件域<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//a.cpp</span>
 <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">//.......</span>
@@ -421,17 +421,16 @@ static local variable
     <span class="token function">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//报错！！！</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>，这也就说明为什么我们在使用外部变量（定义在其他文件的变量）前需要用 <code>extern</code>进行声明，而使用外部函数是不需要(当然也是可以的)</p>
-</blockquote>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+&gt;函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>，这也就说明为什么我们在使用外部变量（定义在其他文件的变量）前需要用
+<code>extern</code>进行声明，而使用外部函数是不需要(当然也是可以的)</li>
+</ul>
 <h3 id="static-data-member">static data member</h3>
 <ul>
 <li>类中可以定义静态变量，一次性初始化，所有对象共享。</li>
 <li>类中的静态变量，<strong>既可以通过对象访问，也可以通过类名访问</strong>。</li>
 <li>静态变量必须在类外进行初始化，而且只能初始化一次。</li>
-<li>不能在构造函数中为静态变量赋值。</li>
-</ul>
+<li>不能在构造函数中为静态变量赋值。<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Static</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">static</span> <span class="token keyword">int</span> i<span class="token punctuation">;</span>
@@ -446,12 +445,14 @@ static local variable
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Static <span class="token function">s1</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">s2</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     cout <span class="token operator">&lt;&lt;</span> s1<span class="token punctuation">.</span>i <span class="token operator">&lt;&lt;</span>s2<span class="token punctuation">.</span>i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 <h3 id="static-function-member">static function member</h3>
 <ul>
 <li>类中的静态函数，<strong>既可以通过对象访问，也可以通过类名访问</strong></li>
 <li>静态函数中没有this指针</li>
-<li>静态函数只能访问类中的静态变量，不能访问类的对象。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">    <span class="token keyword">class</span> <span class="token class-name">Static</span> <span class="token punctuation">{</span>
+<li>静态函数只能访问类中的静态变量，不能访问类的对象。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">    <span class="token keyword">class</span> <span class="token class-name">Static</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span><span class="token operator">:</span>
         <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             cout <span class="token operator">&lt;&lt;</span> <span class="token string">"static!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
@@ -465,13 +466,12 @@ static local variable
     <span class="token comment">//通过类名调用</span>
     <span class="token class-name">Static</span><span class="token double-colon punctuation">::</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <blockquote>
 <p>设计模式：单例模式（<code>signleton</code>）<br>
-单例模式是指某个类全局只有一个对象,一个单例模式的例子如下——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Single</span> <span class="token punctuation">{</span>
+单例模式是指某个类全局只有一个对象,一个单例模式的例子如下——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Single</span> <span class="token punctuation">{</span>
    <span class="token keyword">static</span> Single<span class="token operator">*</span> self <span class="token comment">//定义一个指向该类唯一对象的指针</span>
    <span class="token function">Single</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//构造函数私有化</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -489,15 +489,16 @@ Single<span class="token operator">*</span> <span class="token class-name">Singl
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
    Single<span class="token operator">*</span> p <span class="token operator">=</span> <span class="token class-name">Single</span><span class="token double-colon punctuation">::</span><span class="token function">get_instance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 </blockquote>
 <h2 id="const限定符">const限定符</h2>
 <h3 id="const-parameter">const parameter</h3>
 <ul>
-<li>函数参数定义为const, 则只能<strong>使用</strong>该参数的值，不能改变该参数，也不能将该参数作为左值(<code>l-value</code>)使用。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> <span class="token operator">*</span>p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<li>函数参数定义为const,
+则只能<strong>使用</strong>该参数的值，不能改变该参数，也不能将该参数作为左值(<code>l-value</code>)使用。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> <span class="token operator">*</span>p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token punctuation">(</span><span class="token operator">*</span>p<span class="token punctuation">)</span><span class="token operator">++</span><span class="token punctuation">;</span> <span class="token comment">//error! 不能将(*p)作为左值使用，因为p指向的是const int</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h3 id="const-data-member">const data member</h3>
 <ul>
@@ -507,21 +508,18 @@ Single<span class="token operator">*</span> <span class="token class-name">Singl
 <li>使用类内初始值</li>
 <li>使用构造函数的初始化列表<br>
 如果同时使用以上两种方式，则已初始化列表中的值为最终初始化结果</li>
-</ul>
-</li>
-<li>不能在构造函数和其他成员函数内部对<code>const</code>数据成员进行赋值！</li>
-</ul>
+</ul></li>
+<li>不能在构造函数和其他成员函数内部对<code>const</code>数据成员进行赋值！<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">{</span>
     <span class="token keyword">const</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>早期C++中没有const data member这种语法，党史如果要在类中定义常量，一般需要用枚举型<code>enum</code>。</p>
-</blockquote>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+&gt;早期C++中没有const data
+member这种语法，党史如果要在类中定义常量，一般需要用枚举型<code>enum</code>。</li>
+</ul>
 <h3 id="const-function-member">const function member</h3>
 <ul>
 <li>一般来说，<code>const</code>对象是不可以调用函数的，这是为了防止函数会修改<code>const</code>对象中的值。但是如果真的需要其调用函数怎么办（前提是被调用的函数不能修改对象的值）？</li>
-<li>我们可以将被调用的函数用<code>const</code>来限定，这样就可以让<code>const</code>对象调用该函数了。写法如下——</li>
-</ul>
+<li>我们可以将被调用的函数用<code>const</code>来限定，这样就可以让<code>const</code>对象调用该函数了。写法如下——<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">void</span> <span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span> <span class="token comment">//const限定符写在最后</span>
@@ -534,20 +532,24 @@ Single<span class="token operator">*</span> <span class="token class-name">Singl
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">const</span> Student s<span class="token punctuation">;</span>
     s<span class="token punctuation">.</span><span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//可以进行调用</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 <h2 id="关于new和delete">关于new和delete</h2>
 <ul>
 <li><code>new</code>和<code>malloc</code>都可以用于<strong>动态申请堆空间来建立新对象</strong>。但是，<code>new</code>一个对象时会调用该类的构造函数，而<code>malloc</code>不会。因此，<code>new</code>和<code>malloc</code>有以下关系——<br>
-$$new = malloc + construction$$</li>
+<span class="math display">\[new = malloc + construction\]</span></li>
 <li>同理，<code>delete</code>和<code>free</code>也有相似的关系。（注意：<code>destruction</code>应该在<code>free</code>前面）<br>
-$$delete = destruction + free$$</li>
+<span class="math display">\[delete = destruction + free\]</span></li>
 </ul>
 <h2 id="运算符重载">运算符重载</h2>
-<p>一般情况下, <code>+</code>, <code>-</code>, <code>*</code>, <code>++</code>, <code>[]</code>等运算符只能作用于基本类型,不能作用于对象。但是，我们可以在类中对这些运算符进行重载，这样我们就可以将运算符应用于对象了。重载运算符的写法如下——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">[</span>返回值类型<span class="token punctuation">]</span> <span class="token keyword">operator</span> <span class="token punctuation">[</span>运算符<span class="token punctuation">]</span><span class="token punctuation">(</span> 形参表<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>一般情况下, <code>+</code>, <code>-</code>, <code>*</code>,
+<code>++</code>,
+<code>[]</code>等运算符只能作用于基本类型,不能作用于对象。但是，我们可以在类中对这些运算符进行重载，这样我们就可以将运算符应用于对象了。重载运算符的写法如下——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">[</span>返回值类型<span class="token punctuation">]</span> <span class="token keyword">operator</span> <span class="token punctuation">[</span>运算符<span class="token punctuation">]</span><span class="token punctuation">(</span> 形参表<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-<span class="token punctuation">}</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>下面以<code>+</code>, <code>++</code>两个运算符为例，介绍一下具体的写法——</p>
+<span class="token punctuation">}</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+下面以<code>+</code>,
+<code>++</code>两个运算符为例，介绍一下具体的写法——<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Account</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> balance<span class="token punctuation">;</span>
     <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">;</span>
@@ -580,9 +582,11 @@ Account Account<span class="token double-colon punctuation">::</span><span class
     Account early <span class="token operator">=</span> <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token operator">-&gt;</span>balance<span class="token operator">++</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> early<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><code>++</code>这个运算符比较玄学，因为既可以<strong>前自加</strong>，还可以<strong>后自加</strong>。<strong>前自加</strong>我们可以直接使用<code>Object&amp; operator ++{}</code>来进行定义。<strong>后自加</strong>为了与之区分，使用了一个<code>int</code>作为占位参数, 即使用<code>Object&amp; operator ++(int) {}</code>来进行定义（注意只能是<code>int</code>，不能是<code>char</code>或者其他）。</p>
-<p>注意在后自加的函数定义中，有一句是<code>Account early = *this;</code>,这句话实际上<strong>是通过传值来进行拷贝</strong>，会默认调用一个 <strong>拷贝构造</strong>（在上一节课的笔记中讲过）。本来，这种写法是不推荐的，但是，为了配合后自加"<strong>先返回原值，再自加</strong>"这一变态的要求，我们又不得不这样写……</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+<code>++</code>这个运算符比较玄学，因为既可以<strong>前自加</strong>，还可以<strong>后自加</strong>。<strong>前自加</strong>我们可以直接使用<code>Object&amp; operator ++{}</code>来进行定义。<strong>后自加</strong>为了与之区分，使用了一个<code>int</code>作为占位参数,
+即使用<code>Object&amp; operator ++(int) {}</code>来进行定义（注意只能是<code>int</code>，不能是<code>char</code>或者其他）。<p></p>
+<p>注意在后自加的函数定义中，有一句是<code>Account early = *this;</code>,这句话实际上<strong>是通过传值来进行拷贝</strong>，会默认调用一个
+<strong>拷贝构造</strong>（在上一节课的笔记中讲过）。本来，这种写法是不推荐的，但是，为了配合后自加"<strong>先返回原值，再自加</strong>"这一变态的要求，我们又不得不这样写……</p>
 <hr>
 <blockquote>
 <p>作业：使用SQLite，实现一个借书、还书的流程。<br>
@@ -985,7 +989,7 @@ ORMapping</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

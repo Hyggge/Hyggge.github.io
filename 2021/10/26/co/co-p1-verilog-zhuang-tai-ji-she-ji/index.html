@@ -5,13 +5,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「BUAA-CO」P1_Verilog状态机设计, Hyggge&#39;s Blog">
-    <meta name="description" content="在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
-
+    <meta name="description" content="在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用
+always 语句和 case 语句。下面具体说明用 Verilog
+设计有限状态机的一般步骤：
 
 逻辑抽象，得出状态转换图。
-
-
-状态化简（该步骤可以省略">
+状态化简（该步骤可以省略），如">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -391,28 +390,27 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：</p>
+                <p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用
+always 语句和 case 语句。下面具体说明用 Verilog
+设计有限状态机的一般步骤：</p>
 <ul>
-<li>
-<p>逻辑抽象，得出状态转换图。</p>
-</li>
-<li>
-<p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p>
-</li>
-<li>
-<p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray 编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为 FPGA 有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p>
-</li>
-<li>
-<p>根据状态转移图得出次态逻辑和输出逻辑。</p>
-</li>
-<li>
-<p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else 语句描述出状态的转移。</p>
-</li>
+<li><p>逻辑抽象，得出状态转换图。</p></li>
+<li><p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p></li>
+<li><p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray
+编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为
+FPGA
+有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p></li>
+<li><p>根据状态转移图得出次态逻辑和输出逻辑。</p></li>
+<li><p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。
+要注意同步复位和异步复位的不同， 尽量用 case 或 if-else
+语句描述出状态的转移。<br>
+#### 设计建议</p></li>
 </ul>
-<h4 id="设计建议">设计建议</h4>
-<ol>
-<li>一般用case、casez 或 casex语句进行状态判断，比用 if-else 语句更加清晰明了。</li>
-<li>在 case 语句的最后，要加上 default 分支语句，以避免锁存器的产生。</li>
+<ol type="1">
+<li>一般用case、casez 或 casex语句进行状态判断，比用 if-else
+语句更加清晰明了。</li>
+<li>在 case 语句的最后，要加上 default
+分支语句，以避免锁存器的产生。</li>
 <li>状态机一般应设计为同步方式，并由一个时钟信号来触发。</li>
 <li>实用的状态机都应设计为由唯一的时钟边沿触发的同步运行方式。</li>
 </ol>
@@ -813,7 +811,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

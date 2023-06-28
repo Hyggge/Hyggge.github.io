@@ -5,13 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「CS229」Lecture3： 局部加权回归、Logistic回归和牛顿方法, Hyggge&#39;s Blog">
-    <meta name="description" content="局部加权回归
+    <meta name="description" content="局部加权线性回归
 参数学习算法和非参数学习算法
 在机器学习中，我们有参数学习算法和非参数学习算法
 
-
 参数学习算法是指对具有特定参数的模型进行拟合的算法。
-
 
 在该算法中，模型具有一组已知的参数。也就是说，我们明确知道“模型的表示形式”——例如">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -393,102 +391,109 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="局部加权回归">局部加权回归</h2>
+                <h2 id="局部加权线性回归">局部加权线性回归</h2>
 <h3 id="参数学习算法和非参数学习算法">参数学习算法和非参数学习算法</h3>
-<p>在机器学习中，我们有参数学习算法和非参数学习算法</p>
+<p>在机器学习中，我们有<strong>参数学习算法和非参数学习算法</strong></p>
 <ul>
-<li>
-<p>参数学习算法是指对具有特定参数的模型进行拟合的算法。</p>
+<li><p><strong>参数学习算法是指对具有特定参数的模型进行拟合的算法。</strong></p>
 <ul>
-<li>
-<p>在该算法中，模型具有一组已知的参数。也就是说，我们明确知道“模型的表示形式”——例如对于下面这个散点图，我们一眼就能看出模型应该形如$y = \theta x$。</p>
-<p><img src="./1.png" alt=""></p>
-</li>
-<li>
-<p>算法的主要任务是：基于训练数据集来估计这些参数的值，以使模型能够预测未来的数据。也就是说，模型训练完成之后，训练集（数据）就可以从计算机内存中“扔掉”，只需要保留模型的参数值即可完成后续预测任务。</p>
-</li>
-<li>
-<p>常见的参数学习算法：一元线性回归</p>
-</li>
-</ul>
-</li>
-<li>
-<p>非参数学习算法是指对没有特定参数的模型进行拟合的算法。</p>
+<li><p>在该算法中，模型具有一组已知的参数。也就是说，我们明确知道“模型的表示形式”——例如对于下面这个散点图，我们一眼就能看出模型应该形如<span class="math inline">\(y = \theta x\)</span>。</p>
+<p><img src="./1.png"></p></li>
+<li><p>算法的主要任务是：基于训练数据集来估计这些参数的值，以使模型能够预测未来的数据。也就是说，模型训练完成之后，训练集（数据）就可以从计算机内存中“扔掉”，只需要保留模型的参数值即可完成后续预测任务。</p></li>
+<li><p>常见的参数学习算法：一元线性回归</p></li>
+</ul></li>
+<li><p><strong>非参数学习算法是指对没有特定参数的模型进行拟合的算法。</strong></p>
 <ul>
-<li>
-<p>在该算法中，模型没有固定的参数，因此它们能够学习和适应数据的不同特征和复杂性。也就是说，我们不知道“模型的表示形式”——例如下面这个散点图，我们一眼无法看出哪一种模型拟合的最好。</p>
-<p><img src="./2.png" alt=""></p>
-</li>
-<li>
-<p>每一次预测都需要用到所有的数据</p>
-</li>
-<li>
-<p>常见的非参数学习算法：局部加权回归、决策树等等</p>
-</li>
+<li><p>在该算法中，模型没有固定的参数，因此它们能够学习和适应数据的不同特征和复杂性。也就是说，我们不知道“模型的表示形式”——例如下面这个散点图，我们一眼无法看出哪一种模型拟合的最好。</p>
+<p><img src="./2.png"></p></li>
+<li><p>每一次预测都需要用到所有的数据</p></li>
+<li><p>常见的非参数学习算法：局部加权线性回归、决策树等等</p></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="局部加权回归-2">局部加权回归</h3>
-<p>局部加权回归的基本思想是：如果要预测 $x^<em>$ 对应的 label, 我们可以根据其附近的数据点进行拟合。最简单的方式是，根据 x 附近的数据点拟合一条直线（当然是在 x 维度为1的前提下），根据这条直线对 $x^</em>$ 进行预测。如下图所示</p>
-<p><img src="./3.png" alt=""></p>
-<p>此时，局部加权回归的成本函数我们可以写作——<br>
-$$<br>
-J(\theta) = \sum_{i=1}^m w^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2<br>
-$$<br>
-可以看出，和线性回归的成本函数相比，该成本函数的每一项都乘了一个权重$w^{(i)}$。 根据局部加权回归的思想，我们需要更加关注 $x^<em>$ (需要预测的数据)附近的数据点。因此，$x^{</em>}$ 附近的数据点 $x^{(i)}$ 我们应该赋予更高的权重，也就是更关注该数据点处的“损失”。一种常用的$w^{(i)}$ 的计算方式是：<br>
-$$<br>
-w^{(i)} = \exp{(-\frac{(x^{(i)} - x^<em>)^2}{2})}<br>
-$$<br>
-显然，当 $x^{(i)}$ 距离 $x^</em>$ 非常近的时候，$w^{(i)}$ 接近 1；当 $x^{(i)}$ 距离 $x^*$ 非常远的时候，$w^{(i)}$ 接近 0。$w$ 的图像如下图所示:</p>
-<p><img src="./4.png" alt=""></p>
-<p>有的时候，我们想要控制这个图像的“胖瘦”——即有的时候我们需要更大范围内的"邻居"，有的时候我们只需要非常靠近$x^<em>$的"邻居"。此时，我们可以在$w^{(i)}$中增加一个参数$\sigma$，通过$\sigma$ 来控制：<br>
-$$<br>
-w^{(i)} = \exp{(-\frac{(x^{(i)} - x^</em>)^2}{2 \sigma^2})}<br>
-$$</p>
+<h3 id="局部加权线性回归-1">局部加权线性回归</h3>
+<p>局部加权线性回归的基本思想是：<strong>如果要预测 <span class="math inline">\(x^*\)</span>对应的 label,
+我们可以根据其附近的数据点进行拟合</strong>。最简单的方式是，根据 x
+附近的数据点拟合一条直线（当然是在 x 维度为1的前提下），根据这条直线对
+<span class="math inline">\(x^*\)</span> 进行预测。如下图所示</p>
+<p><img src="./3.png"></p>
+<p>此时，局部加权线性回归的成本函数我们可以写作——<br>
+<span class="math display">\[
+J(\theta) = \sum_{i=1}^m w^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2
+\]</span><br>
+可以看出，和线性回归的成本函数相比，该成本函数的每一项都乘了一个权重<span class="math inline">\(w^{(i)}\)</span>。
+根据局部加权线性回归的思想，我们需要更加关注 <span class="math inline">\(x^*\)</span>
+(需要预测的数据)附近的数据点。因此，<span class="math inline">\(x^{*}\)</span> 附近的数据点 <span class="math inline">\(x^{(i)}\)</span>
+我们应该赋予更高的权重，也就是更关注该数据点处的“损失”。一种常用的<span class="math inline">\(w^{(i)}\)</span> 的计算方式是：<br>
+<span class="math display">\[
+w^{(i)} = \exp{(-\frac{(x^{(i)} - x^*)^2}{2})}
+\]</span><br>
+显然，当 <span class="math inline">\(x^{(i)}\)</span> 距离 <span class="math inline">\(x^*\)</span> 非常近的时候，<span class="math inline">\(w^{(i)}\)</span> 接近 1；当 <span class="math inline">\(x^{(i)}\)</span> 距离 <span class="math inline">\(x^*\)</span> 非常远的时候，<span class="math inline">\(w^{(i)}\)</span> 接近 0。<span class="math inline">\(w\)</span> 的图像如下图所示:</p>
+<p><img src="./4.png"></p>
+<p>有的时候，我们想要控制这个图像的“胖瘦”——即有的时候我们需要更大范围内的"邻居"，有的时候我们只需要非常靠近<span class="math inline">\(x^*\)</span>的"邻居"。此时，我们可以在<span class="math inline">\(w^{(i)}\)</span>中增加一个带宽（bandwidth）参数<span class="math inline">\(\sigma\)</span>，通过<span class="math inline">\(\sigma\)</span> 来控制：<br>
+<span class="math display">\[
+w^{(i)} = \exp{(-\frac{(x^{(i)} - x^*)^2}{2 \sigma^2})}
+\]</span></p>
 <h3 id="适用范围">适用范围</h3>
-<p>当数据量比较大，且特征值比较少时（例如n=2, 3），我们可以采用加权线性回归。</p>
+<p>当数据量比较大，且特征值比较少时（例如n=2,
+3），我们可以采用加权线性回归。</p>
 <h2 id="线性回归的概率解释">线性回归的概率解释</h2>
 <h3 id="问题引入">问题引入</h3>
 <p>我们在线性回归中，使用“所有误差的平方和”作为成本函数，即：<br>
-$$<br>
-J(\theta) =  \frac{1}{2} \sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2<br>
-$$<br>
+<span class="math display">\[
+J(\theta) =  \frac{1}{2} \sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2
+\]</span><br>
 在这里我们为什么要采用平方，而不是采用四次方，或者直接取绝对值呢？</p>
 <h3 id="概率解释">概率解释</h3>
-<p>对于每一个数据点$(x^{(i)}, y^{(i)})$ ，我们可以写作<br>
-$$<br>
-y^{(i)} = \theta^Tx^{(i)} + \varepsilon^{(i)}<br>
-$$<br>
-其中，$\varepsilon^{(i)}$ 是误差项。在这里，我们假设$\varepsilon^{(i)}$ 服从“均值为0, 方差为$\sigma^2$ ”的正态分布，即$\varepsilon^{(i)} \sim \mathcal{N}(0, \sigma^2) $ 。且所有的$\varepsilon^{(i)}$ 都是独立同分布的（i.i.d.）。<br>
-$$<br>
-P(\epsilon^{(i)}) = \frac{1}{\sqrt{2\pi} \sigma} \exp (-\frac{(\varepsilon^{(i)})^2}{2 \sigma^2})<br>
-$$<br>
+<p>对于每一个数据点<span class="math inline">\((x^{(i)},
+y^{(i)})\)</span> ，我们可以写作<br>
+<span class="math display">\[
+y^{(i)} = \theta^Tx^{(i)} + \varepsilon^{(i)}
+\]</span><br>
+其中，<span class="math inline">\(\varepsilon^{(i)}\)</span>
+是误差项。在这里，我们假设<span class="math inline">\(\varepsilon^{(i)}\)</span> 服从“均值为0,
+方差为<span class="math inline">\(\sigma^2\)</span>
+”的正态分布，即$^{(i)} (0, ^2) $ 。且所有的<span class="math inline">\(\varepsilon^{(i)}\)</span>
+都是独立同分布的（i.i.d.）。<br>
+<span class="math display">\[
+P(\epsilon^{(i)}) = \frac{1}{\sqrt{2\pi} \sigma} \exp
+(-\frac{(\varepsilon^{(i)})^2}{2 \sigma^2})
+\]</span><br>
 根据前面的假设，有<br>
-$$<br>
-P(y^{(i)} \mid x^{(i)}; \theta) = \frac{1}{\sqrt{2\pi} \sigma} \exp (-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2})<br>
-$$<br>
-我们的目标是根据训练数据，得到最佳的参数值，也就是$\theta$。我们可以根据最大似然估计的思想，“固定”训练数据（即把训练数据当做已知量），得到 $\theta$ 的似然函数 $\mathcal{L}(\theta)$：<br>
-$$<br>
-\begin{aligned}<br>
-\mathcal{L}(\theta) &amp;= P(Y \mid X; \theta) \<br>
-&amp;= \prod_{i=1}^{m} P(y^{(i)} \mid x^{(i)}; \theta) \<br>
-&amp;= \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi} \sigma} \exp (-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2}) \<br>
-\end{aligned}<br>
-$$<br>
-通常情况下，为了便于求解，我们经常对$\mathcal{L}(\theta)$ 取对数，得到$\ell(\theta)$<br>
-$$<br>
-\begin{aligned}<br>
-\ell(\theta) &amp;= \log (\mathcal{L}(\theta)) \<br>
-&amp;= \log(\prod_{i=1}^{m} \frac{1}{\sqrt{2\pi} \sigma} \exp (-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2})) \<br>
-&amp;=\sum_{i=1}^m \log(\frac{1}{\sqrt{2 \pi} \sigma} ) - \frac{1}{2 \sigma^2} \sum_{i=1}^m (y^{(i)} - \theta^Tx^{(i)})^2<br>
-\end{aligned}<br>
-$$<br>
-根据最大似然估计，我们应该找到一个$\theta$，使得最大化$\mathcal{L}(\theta)$，也就是最大化$\ell(\theta)$。因此有<br>
-$$<br>
-\theta = \mathop{\arg\max}\limits_{\theta} \ \ell(\theta)<br>
-$$</p>
-<p>根据$\ell(\theta)$ 的表示，很容易可以看出，我们只需要 $\sum_{i=1}^m (y^{(i)} - \theta^Tx^{(i)})^2$ 最大即可。这不就是线性回归成本函数$J(x)$的表示嘛！</p>
-<p>当然了，还是需要注意——所有的推导都是基于一开始的假设：误差$\varepsilon^{(i)}$服从“均值为0, 方差为$\sigma^2$ ”的正态分布，即$\varepsilon^{(i)} \sim \mathcal{N}(0, \sigma^2) $。尽管这看上去非常理想，但是在实践中通常拟合的很好（满足中心极限定律）。</p>
+<span class="math display">\[
+P(y^{(i)} \mid x^{(i)}; \theta) = \frac{1}{\sqrt{2\pi} \sigma} \exp
+(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2})
+\]</span><br>
+我们的目标是根据训练数据，得到最佳的参数值，也就是<span class="math inline">\(\theta\)</span>。我们可以根据最大似然估计的思想，“固定”训练数据（即把训练数据当做已知量），得到
+<span class="math inline">\(\theta\)</span> 的似然函数 <span class="math inline">\(\mathcal{L}(\theta)\)</span>：<br>
+<span class="math display">\[
+\begin{aligned}
+\mathcal{L}(\theta) &amp;= P(Y \mid X; \theta) \\
+&amp;= \prod_{i=1}^{m} P(y^{(i)} \mid x^{(i)}; \theta) \\
+&amp;= \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi} \sigma} \exp
+(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2}) \\
+\end{aligned}
+\]</span><br>
+通常情况下，为了便于求解，我们经常对<span class="math inline">\(\mathcal{L}(\theta)\)</span> 取对数，得到<span class="math inline">\(\ell(\theta)\)</span><br>
+<span class="math display">\[
+\begin{aligned}
+\ell(\theta) &amp;= \log (\mathcal{L}(\theta)) \\
+&amp;= \log(\prod_{i=1}^{m} \frac{1}{\sqrt{2\pi} \sigma} \exp
+(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2 \sigma^2})) \\
+&amp;=\sum_{i=1}^m \log(\frac{1}{\sqrt{2 \pi} \sigma} ) - \frac{1}{2
+\sigma^2} \sum_{i=1}^m (y^{(i)} - \theta^Tx^{(i)})^2
+\end{aligned}
+\]</span><br>
+根据最大似然估计，我们应该找到一个<span class="math inline">\(\theta\)</span>，使得最大化<span class="math inline">\(\mathcal{L}(\theta)\)</span>，也就是最大化<span class="math inline">\(\ell(\theta)\)</span>。因此有<br>
+<span class="math display">\[
+\theta = \mathop{\arg\max}\limits_{\theta} \ \ell(\theta)
+\]</span></p>
+<p>根据<span class="math inline">\(\ell(\theta)\)</span>
+的表示，很容易可以看出，我们只需要 <span class="math inline">\(\sum_{i=1}^m (y^{(i)} -
+\theta^Tx^{(i)})^2\)</span> 最大即可。这不就是线性回归成本函数<span class="math inline">\(J(x)\)</span>的表示嘛！</p>
+<p>当然了，还是需要注意——所有的推导都是基于一开始的假设：误差<span class="math inline">\(\varepsilon^{(i)}\)</span>服从“均值为0,
+方差为<span class="math inline">\(\sigma^2\)</span>
+”的正态分布，即$^{(i)} (0, ^2)
+$。尽管这看上去非常理想，但是在实践中通常拟合的很好（满足中心极限定律）。</p>
 <blockquote>
 <p>似然（likehood）和概率（probably）的区别：</p>
 <ul>
@@ -496,90 +501,125 @@ $$</p>
 <li>概率是数据的概率，参数是固定的</li>
 </ul>
 </blockquote>
-<h2 id="Logistics-回归">Logistics 回归</h2>
+<h2 id="logistics-回归">Logistics 回归</h2>
 <h3 id="基本形式">基本形式</h3>
-<p>Logistics 回归主要是为了解决二分类问题。在分类问题中， y 是离散的，如 $y \in {0, 1}$ 。 对于二分类问题，一个典型的散点图如下所示（我们可以将它应用于肿瘤性质的预测 —— x 表示肿瘤的大小， y 表示肿瘤是恶性还是良性）</p>
-<p><img src="./5.png" alt=""></p>
-<p>很显然，我们不能简单的用线性回归来拟合它，因为线性拟合很容易受到“离群值”的影响。在这里我们使用 Logistics 回归来拟合它，函数 $h_\theta(x)$ 可以表示为<br>
-$$<br>
-h_\theta(x) = g(\theta^Tx) = \frac{1}{1+e^{-\theta^Tx}} \<br>
-g(z) = \frac{1}{1 + e^{-z}}<br>
-$$<br>
-其中函数 $g(z)$ 我们称为 Logistics 函数，函数图像如下所示</p>
-<p><img src="./6.png" alt=""></p>
-<p>不难看出$h_\theta \in [0, 1]$。当$h_\theta(x) &gt; 0.5$ 时，我们可以认为预测值为 1；当$h_\theta(x) \leq 0.5$ 时，我们可以认为预测值为 0 。</p>
+<p>Logistics 回归主要是为了解决二分类问题。在分类问题中， y 是离散的，如
+<span class="math inline">\(y \in \{0, 1\}\)</span> 。
+对于二分类问题，一个典型的散点图如下所示（我们可以将它应用于肿瘤性质的预测
+—— x 表示肿瘤的大小， y 表示肿瘤是恶性还是良性）</p>
+<p><img src="./5.png"></p>
+<p>很显然，我们不能简单的用线性回归来拟合它，因为线性拟合很容易受到“离群值”的影响。在这里我们使用
+Logistics 回归来拟合它，函数 <span class="math inline">\(h_\theta(x)\)</span> 可以表示为<br>
+<span class="math display">\[
+h_\theta(x) = g(\theta^Tx) = \frac{1}{1+e^{-\theta^Tx}} \\
+g(z) = \frac{1}{1 + e^{-z}}
+\]</span><br>
+其中函数 <span class="math inline">\(g(z)\)</span> 我们称为 Logistics
+函数，函数图像如下所示</p>
+<p><img src="./6.png"></p>
+<p>不难看出<span class="math inline">\(h_\theta \in [0,
+1]\)</span>。当<span class="math inline">\(h_\theta(x) &gt; 0.5\)</span>
+时，我们可以认为预测值为 1；当<span class="math inline">\(h_\theta(x)
+\leq 0.5\)</span> 时，我们可以认为预测值为 0 。</p>
 <h3 id="损失函数">损失函数</h3>
-<p>利用$h_\theta(x)$ 的定义，我们可以写出“给定 x 时 y = 1 的概率” 以及 “给定 x 时 y = 0 的概率”：<br>
-$$<br>
-P(y = 1 \mid x; \theta) = h_\theta(x) \<br>
-P(y = 0 \mid x; \theta) = 1 - h_\theta(x)<br>
-$$<br>
-因为 $y \in {0, 1}$ ，所以我们可以利用这一点将上面两个式子合成一个：<br>
-$$<br>
-P(y \mid x;\theta) = h_\theta(x)^{y} \cdot (1 - h_\theta(x))^{1-y}<br>
-$$<br>
+<p>利用<span class="math inline">\(h_\theta(x)\)</span>
+的定义，我们可以写出“给定 x 时 y = 1 的概率” 以及 “给定 x 时 y = 0
+的概率”：<br>
+<span class="math display">\[
+P(y = 1 \mid x; \theta) = h_\theta(x) \\
+P(y = 0 \mid x; \theta) = 1 - h_\theta(x)
+\]</span><br>
+因为 <span class="math inline">\(y \in \{0, 1\}\)</span>
+，所以我们可以利用这一点将上面两个式子合成一个：<br>
+<span class="math display">\[
+P(y \mid x;\theta) = h_\theta(x)^{y} \cdot (1 - h_\theta(x))^{1-y}
+\]</span><br>
 我们继续用极大似然估计来推导损失函数。似然函数可以写作<br>
-$$<br>
-\begin{aligned}<br>
-\mathcal{L}(\theta) &amp;= P(Y \mid X; \theta) \<br>
-&amp;= \prod_{i=1}^{m} P(y^{(i)} \mid x^{(i)}; \theta) \<br>
-&amp;= \prod_{i=1}^{m}  h_\theta(x^{(i)})^{y^{(i)}} \cdot (1 - h_\theta(x^{(i)}))^{1-y^{(i)}}<br>
-\end{aligned}<br>
-$$<br>
-同样为了便于计算，需要对 $\mathcal{L}(\theta)$ 取对数<br>
-$$<br>
-\begin{aligned}<br>
-\ell(\theta) &amp;= \log (\mathcal{L}(\theta)) \<br>
-&amp;= \log(\prod_{i=1}^{m}  h_\theta(x^{(i)})^{y^{(i)}} \cdot (1 - h_\theta(x^{(i)}))^{1-y^{(i)}}) \<br>
-&amp;=\sum_{i=1}^m  y^{(i)} \cdot \log(h_\theta(x^{(i)}))  + (1 - y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))<br>
-\end{aligned}<br>
-$$<br>
-$\theta$ 的最优值应该使得 $\ell(\theta)$ 最大化。因此，成本函数$J(\theta)$可以定义为<br>
-$$<br>
-J(\theta) = \sum_{i=1}^m  - \ y^{(i)} \cdot \log(h_\theta(x^{(i)}))  - (1 - y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))<br>
-$$<br>
-当$J(\theta)$ 最小时，$\ell(\theta)$ 最大，此时$\theta$ 是最优值。接下来，我们同样可以使用梯度下降求解 $\theta$<br>
-$$<br>
-\theta_j := \theta_j - \alpha \frac{\partial \ J(\theta)}{\partial\  \theta_j} \ \ \tt{(repeat \ until \ convergence)}<br>
-$$<br>
-将$\frac{\partial \ J(\theta)}{\partial\  \theta_j}$ 的值计算并代入，即可得到<br>
-$$<br>
-\theta_j := \theta_j - \alpha \sum_{i=1}^m (h_\theta(x ^{(i)})  -  y^{(i)}) \cdot x_j^{(i)} <br>
-$$</p>
+<span class="math display">\[
+\begin{aligned}
+\mathcal{L}(\theta) &amp;= P(Y \mid X; \theta) \\
+&amp;= \prod_{i=1}^{m} P(y^{(i)} \mid x^{(i)}; \theta) \\
+&amp;= \prod_{i=1}^{m}  h_\theta(x^{(i)})^{y^{(i)}} \cdot (1 -
+h_\theta(x^{(i)}))^{1-y^{(i)}}
+\end{aligned}
+\]</span><br>
+同样为了便于计算，需要对 <span class="math inline">\(\mathcal{L}(\theta)\)</span> 取对数<br>
+<span class="math display">\[
+\begin{aligned}
+\ell(\theta) &amp;= \log (\mathcal{L}(\theta)) \\
+&amp;= \log(\prod_{i=1}^{m}  h_\theta(x^{(i)})^{y^{(i)}} \cdot (1 -
+h_\theta(x^{(i)}))^{1-y^{(i)}}) \\
+&amp;=\sum_{i=1}^m  y^{(i)} \cdot \log(h_\theta(x^{(i)}))  + (1 -
+y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))
+\end{aligned}
+\]</span><br>
+<span class="math inline">\(\theta\)</span> 的最优值应该使得 <span class="math inline">\(\ell(\theta)\)</span> 最大化。因此，成本函数<span class="math inline">\(J(\theta)\)</span>可以定义为<br>
+<span class="math display">\[
+J(\theta) = \sum_{i=1}^m  - \ y^{(i)} \cdot \log(h_\theta(x^{(i)}))  -
+(1 - y^{(i)}) \cdot \log(1 - h_\theta(x^{(i)}))
+\]</span><br>
+当<span class="math inline">\(J(\theta)\)</span> 最小时，<span class="math inline">\(\ell(\theta)\)</span> 最大，此时<span class="math inline">\(\theta\)</span>
+是最优值。接下来，我们同样可以使用梯度下降求解 <span class="math inline">\(\theta\)</span><br>
+<span class="math display">\[
+\theta_j := \theta_j - \alpha \frac{\partial \
+J(\theta)}{\partial\  \theta_j} \ \\ \tt{(repeat \ until \ convergence)}
+\]</span><br>
+将<span class="math inline">\(\frac{\partial \
+J(\theta)}{\partial\  \theta_j}\)</span> 的值计算并代入，即可得到<br>
+<span class="math display">\[
+\theta_j := \theta_j - \alpha \sum_{i=1}^m (h_\theta(x
+^{(i)})  -  y^{(i)}) \cdot x_j^{(i)} \
+\]</span></p>
 <h2 id="牛顿法">牛顿法</h2>
-<h3 id="问题引入-2">问题引入</h3>
-<p>无论是线性回归，还是 Logistics 回归，他们的局部最优值就是全局最优值。也就是说，他们的似然函数 $\ell(\theta)$  的唯一极值也就是最值。因此，我们可以直接对似然函数对$\theta$ 求导数，并令导数等于0，即<br>
-$$<br>
-\ell^{\prime}(\theta) = 0<br>
-$$<br>
-对于$\ell(\theta)$ ，求导数是很容易的，但是求解 $\ell^{\prime}(\theta)$ 的零点却不简单。</p>
+<h3 id="问题引入-1">问题引入</h3>
+<p>无论是线性回归，还是 Logistics
+回归，他们的局部最优值就是全局最优值。也就是说，他们的似然函数 <span class="math inline">\(\ell(\theta)\)</span>
+的唯一极值也就是最值。因此，我们可以直接对似然函数对<span class="math inline">\(\theta\)</span> 求导数，并令导数等于0，即<br>
+<span class="math display">\[
+\ell^{\prime}(\theta) = 0
+\]</span><br>
+对于<span class="math inline">\(\ell(\theta)\)</span>
+，求导数是很容易的，但是求解 <span class="math inline">\(\ell^{\prime}(\theta)\)</span>
+的零点却不简单。</p>
 <h3 id="基本思想">基本思想</h3>
 <p>我们可以采用牛顿法来解决上述问题。假设我们求解的方程是<br>
-$$<br>
-f(x) = 0<br>
-$$<br>
+<span class="math display">\[
+f(x) = 0
+\]</span><br>
 牛顿方法的基本过程是：</p>
-<ol>
-<li>随机挑选一个 x 值 ，设定一个终止误差值$\varepsilon$</li>
-<li>找到$f(x)$ 在 x 处的切线，该切线与 x 轴交于一点 m</li>
-<li>当 $|x - m| &lt; \varepsilon$ 时，结束迭代，反之令 x = m ，继续第2步…</li>
+<ol type="1">
+<li>随机挑选一个 x 值 ，设定一个终止误差值<span class="math inline">\(\varepsilon\)</span></li>
+<li>找到<span class="math inline">\(f(x)\)</span> 在 x
+处的切线，该切线与 x 轴交于一点 m</li>
+<li>当 <span class="math inline">\(|x - m| &lt; \varepsilon\)</span>
+时，结束迭代，反之令 x = m ，继续第2步...</li>
 </ol>
 <p>整个过程可以用下图来表示</p>
-<p><img src="./7.png" alt=""></p>
+<p><img src="./7.png"></p>
 <p>该过程可以形式化表示为<br>
-$$<br>
-x := x - \frac{f(x)}{f^{\prime}(x)}<br>
-$$<br>
-将牛顿法应用到求解$\ell^{\prime}(\theta)$ 零点的问题上，则$\theta$ 目标值的求解过程可以形式化的表示为<br>
-$$<br>
-\theta := \theta - \frac{\ell^{\prime}(\theta)}{\ell^{\prime\prime}(\theta)} \ \tt{(repeat \ until \ convergence)}<br>
-$$<br>
-上述公式只是适用于$\theta$ 是0维的时候。当$\theta$ 为一个向量时，求解过程可以写作<br>
-$$<br>
-\theta := \theta - H^{-1} \nabla_{\theta}\ell(\theta)<br>
-$$</p>
-<p>其中$H$ 表示Hession矩阵。</p>
-<p>牛顿法具有二次收敛的特性，即每次迭代有效数字的位数加倍，因此有很高的迭代速度。另外，牛顿法适用于参数量不是很大的情况（也就是$\theta$ 的分量数），参数量在 10~50 之间比较适合。如果参数量比较大，梯度下降法比较适合。</p>
+<span class="math display">\[
+x := x - \frac{f(x)}{f^{\prime}(x)}
+\]</span><br>
+将牛顿法应用到求解<span class="math inline">\(\ell^{\prime}(\theta)\)</span>
+零点的问题上，则<span class="math inline">\(\theta\)</span>
+目标值的求解过程可以形式化的表示为<br>
+<span class="math display">\[
+\theta := \theta -
+\frac{\ell^{\prime}(\theta)}{\ell^{\prime\prime}(\theta)} \\ \tt{(repeat
+\ until \ convergence)}
+\]</span><br>
+上述公式只是适用于<span class="math inline">\(\theta\)</span>
+是0维的时候。当<span class="math inline">\(\theta\)</span>
+为一个向量时，牛顿法可以扩展为<br>
+<span class="math display">\[
+\theta := \theta - H^{-1} \nabla_{\theta}\ell(\theta)
+\]</span></p>
+<p>其中<span class="math inline">\(H\)</span>
+表示Hession矩阵。这个方法也叫牛顿-拉普森法（Newton-Raphson）。</p>
+<p>牛顿法具有二次收敛的特性，即每次迭代有效数字的位数加倍，因此和梯度下降相比有很高的迭代速度。但是，每次迭代的开销比梯度下降要高很多，因为要计算
+<span class="math inline">\(n \times n\)</span> 规模的 <span class="math inline">\(H\)</span> 矩阵。
+所以，牛顿法适用于参数量不是很大的情况（也就是<span class="math inline">\(\theta\)</span> 的分量数），参数量在 10~50
+之间比较适合。如果参数量比较大，梯度下降法比较适合。</p>
 
                 
             </div>
@@ -977,7 +1017,7 @@ $$</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

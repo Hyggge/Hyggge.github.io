@@ -361,7 +361,8 @@
                             
                                 单周期CPU设计方案
 设计概述
- 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control Unite，Branc
+ 本文所设计的CPU为Losgisim实现的单周期MIPS架构CPU，该CPU支持43条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，ALU，DM，Control
+Unite，Branc
                             
                         </div>
                         <div class="publish-info">
@@ -423,10 +424,10 @@ CPU执行程序的过程
 
 RISC的设计思想：
 CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令
-
-加速大概率事件
-简单意味着更容易设计、电路频率更高
-简单功能由硬件实现；
+- 加速大概率事件
+- 简单意味着更容易设计、电路频率更高
+-
+简单功能由
                             
                         </div>
                         <div class="publish-info">
@@ -480,7 +481,8 @@ CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指�
                         <div class="summary block-with-text">
                             
                                 算数右移符号&gt;&gt;&gt;
-我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)， 算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
+我们都知道，逻辑左移符号是&gt;&gt;(即最高位补零)，
+算数右移符号是&gt;&gt;&gt;(即最高位补符号位，但是以下例子是错误的)
 wire [15:0] A, B, C;
 
 assign 
@@ -538,11 +540,10 @@ assign
                             
                                 定义和实例化模块时reg的使用
 
-
-在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg 类型的信号只能被连接至元件的输入端口上。
-
-
-在声明元件时，我们可以将任意端口声明为 wire 类型，但只能将输出端口声明为 reg 
+在实例化元件时，wire 类型信号可以被连接至任意端口上，但 reg
+类型的信号只能被连接至元件的输入端口上。
+在声明元件时，我们可以将任意端口声明为 wire
+类型，但只能将输出端口声明为 reg 类型，
                             
                         </div>
                         <div class="publish-info">
@@ -651,13 +652,12 @@ parameter可用作在顶层模块中例化底层模块时传递参数的接口�
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：
-
+                                在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用
+always 语句和 case 语句。下面具体说明用 Verilog
+设计有限状态机的一般步骤：
 
 逻辑抽象，得出状态转换图。
-
-
-状态化简（该步骤可以省略
+状态化简（该步骤可以省略），如
                             
                         </div>
                         <div class="publish-info">
@@ -746,7 +746,7 @@ parameter可用作在顶层模块中例化底层模块时传递参数的接口�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

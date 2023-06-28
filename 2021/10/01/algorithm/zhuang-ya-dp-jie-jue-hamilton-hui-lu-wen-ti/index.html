@@ -6,7 +6,9 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「Algorithm」状压DP解决Hamilton回路问题, Hyggge&#39;s Blog">
     <meta name="description" content="序言
-刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过 深度优先搜索(DFS) 解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数">
+刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过
+深度优先搜索(DFS)
+解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -387,91 +389,130 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="序言">序言</h2>
-<p>刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过 <strong>深度优先搜索(DFS)</strong> 解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数、还有在调用过程中使用过的并希望保存的寄存器（笔者曾因为堆栈处理不当陷入了十分抓狂的境地）。</p>
-<p>后来听翔宇哥哥说这个题可以采用 <strong>状压DP</strong> 的方法解决（xyggyyds！），于是笔者便开始<s>面向百度和CSDN</s>，最后终于用非递归的方法解决了这道题，于是便写了本篇文章分享一下心得。</p>
-<hr>
-<h2 id="为什么可以使用状压DP？">为什么可以使用<strong>状压DP</strong>？</h2>
-<p>首先，本题满足DP算法的三个条件——</p>
+<p>刚看到这个哈密顿回路的题时，第一感觉就是可以采用回溯法并通过
+<strong>深度优先搜索(DFS)</strong>
+解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数、还有在调用过程中使用过的并希望保存的寄存器（笔者曾因为堆栈处理不当陷入了十分抓狂的境地）。</p>
+<p>后来听翔宇哥哥说这个题可以采用 <strong>状压DP</strong>
+的方法解决（xyggyyds！），于是笔者便开始<del>面向百度和CSDN</del>，最后终于用非递归的方法解决了这道题，于是便写了本篇文章分享一下心得。<br>
+*<strong><br>
+## 为什么可以使用</strong>状压DP**？<br>
+首先，本题满足DP算法的三个条件——</p>
 <ul>
 <li>重复子问题</li>
 <li>最优子结构</li>
 <li>无后效性</li>
 </ul>
 <p>在此就不具体展开，有兴趣的同学可以参考CSDN上这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/lw_power/article/details/105356074">博客</a>。如果暂时不想了解也可以跳过，相信不会影响对本题算法的理解。</p>
-<p>其次，“<strong>状压</strong>”顾名思义就是“<strong>状态压缩</strong>”，也就是 <strong>“将一个阶段或集合的状态压缩到一个二进制整数</strong>，其中 <strong><code>0</code></strong> 和 <strong><code>1</code></strong> 分别表示两种不同的状态，从而达到节省储存空间和提高查找效率的作用。以本题为例，我们把图中每个顶点的状态压缩到二进制的位，用 <strong><code>1</code></strong> 表示该点被访问过，<strong><code>0</code></strong> 表示该点没有被访问过。于是，我们就可以用一个二进制正数表示 <strong>所有被访问过的点构成的集合S（以下简称“点集”）</strong>。例如，当S=39时，二进制表示为100111，说明此时编号为0、1、2、6的点在集合中。</p>
+<p>其次，“<strong>状压</strong>”顾名思义就是“<strong>状态压缩</strong>”，也就是
+<strong>“将一个阶段或集合的状态压缩到一个二进制整数</strong>，其中
+<strong><code>0</code></strong> 和 <strong><code>1</code></strong>
+分别表示两种不同的状态，从而达到节省储存空间和提高查找效率的作用。以本题为例，我们把图中每个顶点的状态压缩到二进制的位，用
+<strong><code>1</code></strong>
+表示该点被访问过，<strong><code>0</code></strong>
+表示该点没有被访问过。于是，我们就可以用一个二进制正数表示
+<strong>所有被访问过的点构成的集合S（以下简称“点集”）</strong>。例如，当S=39时，二进制表示为100111，说明此时编号为0、1、2、6的点在集合中。</p>
 <p>既然状态压缩使用二进制数，那么必然和位运算脱不了干系。以下是常用的状态压缩操作和相应的位运算表示——</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">操作</th>
-<th style="text-align:center">位运算表示</th>
+<tr class="header">
+<th style="text-align: center;">操作</th>
+<th style="text-align: center;">位运算表示</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">取出整数n在二进制表示下的第k位</td>
-<td style="text-align:center">（n&gt;&gt;k）&amp;1</td>
+<tr class="odd">
+<td style="text-align: center;">取出整数n在二进制表示下的第k位</td>
+<td style="text-align: center;">（n&gt;&gt;k）&amp;1</td>
 </tr>
-<tr>
-<td style="text-align:center">取出整数n在二进制表示下的第0~k-1位（后k位）</td>
-<td style="text-align:center">n&amp;((1&lt;&lt;k)-1)</td>
+<tr class="even">
+<td style="text-align: center;">取出整数n在二进制表示下的第0~k-1位（后k位）</td>
+<td style="text-align: center;">n&amp;((1&lt;&lt;k)-1)</td>
 </tr>
-<tr>
-<td style="text-align:center">取出整数n在二进制表示下的第k位取反</td>
-<td style="text-align:center">n^(1&lt;&lt;k)</td>
+<tr class="odd">
+<td style="text-align: center;">取出整数n在二进制表示下的第k位取反</td>
+<td style="text-align: center;">n^(1&lt;&lt;k)</td>
 </tr>
-<tr>
-<td style="text-align:center">取出整数n在二进制表示下的第k位赋值为1</td>
-<td style="text-align:center">n|(1&lt;&lt;k)</td>
+<tr class="even">
+<td style="text-align: center;">取出整数n在二进制表示下的第k位赋值为1</td>
+<td style="text-align: center;">n|(1&lt;&lt;k)</td>
 </tr>
-<tr>
-<td style="text-align:center">取出整数n在二进制表示下的第k位赋值为0</td>
-<td style="text-align:center">n&amp;(~(1&lt;&lt;k))</td>
+<tr class="odd">
+<td style="text-align: center;">取出整数n在二进制表示下的第k位赋值为0</td>
+<td style="text-align: center;">n&amp;(~(1&lt;&lt;k))</td>
 </tr>
 </tbody>
 </table>
 <hr>
 <h2 id="解题思路">解题思路</h2>
-<p>为判断图中的是否存在 <strong>哈密顿回路</strong>，我们可以先判断是否存在 <strong>哈密顿路径</strong>（ 即沿着边访问每个顶点，每个顶点恰好访问一次 ），然后再判断 <strong>最后访问的点</strong> 和 <strong>最初访问的点</strong> 之间是否有通路即可。为方便判断，我们选取 <strong>0号点</strong> 为最初访问的点。</p>
-<h3 id="判断是否存在哈密顿路径（状压DP）"><strong>判断是否存在哈密顿路径（状压DP）</strong></h3>
+<p>为判断图中的是否存在
+<strong>哈密顿回路</strong>，我们可以先判断是否存在
+<strong>哈密顿路径</strong>（ 即沿着边访问每个顶点，每个顶点恰好访问一次
+），然后再判断 <strong>最后访问的点</strong> 和
+<strong>最初访问的点</strong> 之间是否有通路即可。为方便判断，我们选取
+<strong>0号点</strong> 为最初访问的点。</p>
+<h3 id="判断是否存在哈密顿路径状压dp"><strong>判断是否存在哈密顿路径（状压DP）</strong></h3>
 <p>解决本题我们需要两个数组——</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">N</span> <span class="token expression"><span class="token number">8</span></span></span>
 <span class="token keyword">int</span> edge<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> dp<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>其中，<strong><code>edge</code></strong> 是储存无向图的邻接矩阵，<strong><code>edge[u][v] = 1</code></strong> 表示点v和点u之间有通路；<strong><code>dp</code></strong> 表示状态，以 <strong><code>dp[S][v]</code></strong> 为例，<strong><code>S</code></strong> 表示点集，即<strong>此时已经被访问的所有点的集合</strong>，<strong><code>v</code></strong> 表示<strong>该点集中最后一个被访问的点的序号</strong>。</p>
-<p>例如，<strong><code>dp[39][2]</code><strong>表示 <strong>点集“100111”中最后被访问的点的序号是2</strong>。访问顺序可以是 <strong>“0-&gt;6-&gt;1-&gt;2”</strong>，也可以是 <strong>“0-&gt;1-&gt;6-&gt;2”</strong>。也就是说，</strong><code>dp[39][2]</code></strong> 之前的状态可以是 <strong><code>dp[35][6]</code></strong>（点集S为”100011“， 最后访问的点是6号点），也可以是 <strong><code>dp[35][1]</code></strong>（点集S为”100011“， 最后访问的点是1号点）</p>
-<p>dp[S][v]的值只能是0和1。<strong><code>1</code></strong> 表示此时S中的点可以形成 <strong><code>哈密顿路径</code></strong>，而且该哈密顿路径的终点为 <strong>v</strong>；<strong><code>0</code></strong> 表示此时S中的点无法形成哈密顿路径。</p>
-<p>因为我们默认最早访问的点为0号点，所以我们首先规定</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">dp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token comment">//表示0号点第一个被访问</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>为找出状态转移方程，我们可以先从小问题入手分析：</p>
+<p>其中，<strong><code>edge</code></strong>
+是储存无向图的邻接矩阵，<strong><code>edge[u][v] = 1</code></strong>
+表示点v和点u之间有通路；<strong><code>dp</code></strong> 表示状态，以
+<strong><code>dp[S][v]</code></strong>
+为例，<strong><code>S</code></strong>
+表示点集，即<strong>此时已经被访问的所有点的集合</strong>，<strong><code>v</code></strong>
+表示<strong>该点集中最后一个被访问的点的序号</strong>。</p>
+<p>例如，<strong><code>dp[39][2]</code></strong>表示
+<strong>点集“100111”中最后被访问的点的序号是2</strong>。访问顺序可以是
+<strong>"0-&gt;6-&gt;1-&gt;2"</strong>，也可以是
+<strong>"0-&gt;1-&gt;6-&gt;2"</strong>。也就是说，<strong><code>dp[39][2]</code></strong>
+之前的状态可以是
+<strong><code>dp[35][6]</code></strong>（点集S为”100011“，
+最后访问的点是6号点），也可以是
+<strong><code>dp[35][1]</code></strong>（点集S为”100011“，
+最后访问的点是1号点）</p>
+<p>dp[S][v]的值只能是0和1。<strong><code>1</code></strong>
+表示此时S中的点可以形成
+<strong><code>哈密顿路径</code></strong>，而且该哈密顿路径的终点为
+<strong>v</strong>；<strong><code>0</code></strong>
+表示此时S中的点无法形成哈密顿路径。</p>
+<p>因为我们默认最早访问的点为0号点，所以我们首先规定<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">dp<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token comment">//表示0号点第一个被访问</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+为找出状态转移方程，我们可以先从小问题入手分析：<p></p>
 <ul>
-<li>
-<p><strong>Q</strong>：图中现在有4个点（标号为0，1，2，3），我们怎么判断存在哈密顿路径呢？</p>
-</li>
-<li>
-<p><strong>A</strong>：只需要求得 <strong><code>dp[0b1111][1] = 1</code></strong> 或者 <strong><code>dp[0b1111][2] = 1</code></strong> 或者 <strong><code>dp[ob1111][3] = 1</code></strong> 即可。</p>
-</li>
-<li>
-<p><strong>Q</strong>：那我们怎么求 <strong><code>dp[0b1111][1]</code></strong> 的值呢？？？（其他同理）</p>
-</li>
-<li>
-<p><strong>A</strong>：此时我们转移到上一个状态（点集S = ”1101“）。只需要0号点，2号点和3号点可以形成哈密顿路，并且其中至少有一个点（除了0号点）与1号点之间存在通路，即 <strong>“<code>dp[0b1101][2] = 1</code> 并且 <code>edge[2][1] = 1</code>”</strong> 或者 <strong>“<code>dp[0b1101][3] = 1</code> 并且 <code>edge[3][1] = 1</code>”</strong> ，那么 <strong><code>dp[0b1111][1]</code></strong> 的值就是1，否则为0。</p>
-</li>
-<li>
-<p><strong>Q</strong>：那我们怎么求 <strong><code>dp[0b1101][2]</code></strong> 的值呢？？？（其他同理）</p>
-</li>
-<li>
-<p><strong>A</strong>：我们再次转移到上一个状态（点集S = ”1001“）。只需要0号点与3号点之间有哈密顿路径，并且3号点和2号点之间有通路（因为0号点是初始点，所以没有必要判断0号点和2号点之间是否有通路），即 <strong>“<code>dp[0b1001][3] = 1</code> 并且 <code>edge[3][2] = 1</code>”</strong>， 那么 <strong><code>dp[ob1101][2]</code></strong> 的值就是1，否则是0。</p>
-</li>
-<li>
-<p><strong>Q</strong>：我们怎么求 <strong><code>dp[0b1001][3]</code></strong> 的值呢？？？</p>
-</li>
-<li>
-<p><strong>A</strong>：呃……好像结束了，只需要判断 <strong><code>edge[0][3]</code></strong> 就行了。</p>
-</li>
+<li><p><strong>Q</strong>：图中现在有4个点（标号为0，1，2，3），我们怎么判断存在哈密顿路径呢？</p></li>
+<li><p><strong>A</strong>：只需要求得
+<strong><code>dp[0b1111][1] = 1</code></strong> 或者
+<strong><code>dp[0b1111][2] = 1</code></strong> 或者
+<strong><code>dp[ob1111][3] = 1</code></strong> 即可。</p></li>
+<li><p><strong>Q</strong>：那我们怎么求
+<strong><code>dp[0b1111][1]</code></strong>
+的值呢？？？（其他同理）</p></li>
+<li><p><strong>A</strong>：此时我们转移到上一个状态（点集S =
+”1101“）。只需要0号点，2号点和3号点可以形成哈密顿路，并且其中至少有一个点（除了0号点）与1号点之间存在通路，即
+<strong>"<code>dp[0b1101][2] = 1</code> 并且
+<code>edge[2][1] = 1</code>"</strong> 或者
+<strong>"<code>dp[0b1101][3] = 1</code> 并且
+<code>edge[3][1] = 1</code>"</strong> ，那么
+<strong><code>dp[0b1111][1]</code></strong>
+的值就是1，否则为0。</p></li>
+<li><p><strong>Q</strong>：那我们怎么求
+<strong><code>dp[0b1101][2]</code></strong>
+的值呢？？？（其他同理）</p></li>
+<li><p><strong>A</strong>：我们再次转移到上一个状态（点集S =
+”1001“）。只需要0号点与3号点之间有哈密顿路径，并且3号点和2号点之间有通路（因为0号点是初始点，所以没有必要判断0号点和2号点之间是否有通路），即
+<strong>"<code>dp[0b1001][3] = 1</code> 并且
+<code>edge[3][2] = 1</code>"</strong>， 那么
+<strong><code>dp[ob1101][2]</code></strong>
+的值就是1，否则是0。</p></li>
+<li><p><strong>Q</strong>：我们怎么求
+<strong><code>dp[0b1001][3]</code></strong> 的值呢？？？</p></li>
+<li><p><strong>A</strong>：呃……好像结束了，只需要判断
+<strong><code>edge[0][3]</code></strong> 就行了。</p></li>
 </ul>
 <p>经过以上的Q&amp;A，你大概可以发现，每一个状态的计算都依赖他的上一个状态（即子过程）的值，状态转移方程可以写作</p>
-<p>$\mathsf{DP[S][v]=\bigcup_{i=1}^n \ (DP[S_prev][u_i]} \ \  &amp;\ \    \mathsf{road[u_i][v])}$</p>
+<p><span class="math inline">\(\mathsf{DP[S][v]=\bigcup_{i=1}^n \
+(DP[S\_prev][u_i]} \ \  \&amp;\ \  \mathsf{road[u_i][v])}\)</span></p>
 <p>相信你已经对状态转移的具体过程有了大致的了解，那么我们结合下面的代码来进一步分析</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span><span class="token punctuation">(</span>S <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> S <span class="token operator">&lt;</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span> S<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">for</span><span class="token punctuation">(</span>v <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> v <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> v<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -484,24 +525,47 @@
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在最外层的循环 <strong><code>for(S = 1; S &lt; (1 &lt;&lt; n); S++)</code></strong> 中，我们让 <strong>子集S</strong> 从 <strong>1 (0b00000001)</strong> 到 <strong>1&lt;&lt;8 (0b1111111)</strong> （假设n=8）进行遍历。因为表示子集状态的值S是从小到大变化的，所以可以保证当计算当前状态时，其子状态一定被计算过。</p>
-<p>在第二层循环 <strong><code>for(v = 0; v &lt; n; v++)</code></strong> 中，我们遍历所有的点，通过 <strong><code>(S &gt;&gt; v) &amp; 1</code></strong> 来判断序号为 <strong>v</strong> 的点是否在点集 <strong>S</strong> 中，如果结果为1，我们便找出计算对象 <strong><code>dp[S][v]</code></strong>，并找出上一状态对应的点集 <strong><code>S_prev = S ^ (1 &lt;&lt; v)</code></strong> ，然后进入第三层循环。</p>
-<p>在第三层循环 <strong><code>for(u = 0; u &lt; n; u++)</code></strong> 中，我们继续遍历所有点，找出可以作为上一状态终点的所有点的序号 <strong>u</strong>，进一步可以找出 <strong><code>dp[S_prev][u]</code></strong> 的值（因为 <strong><code>S_prev &lt; S</code></strong>，因此之前必然计算过 <strong><code>dp[S_prev][u]</code></strong> 的值）。</p>
-<p>最后我们让 <strong><code>dp[S][v]</code></strong> <strong>或上</strong> <strong><code>dp[S_prev][u] &amp; edge[u][v]</code></strong> 即可。因为只要存在一个 <strong>u</strong> 使得 <strong><code>dp[S_prev][u] &amp; edge[u][v] = 1</code></strong>，就说明 <strong>0号点到v号点之间有哈密顿路径</strong>（0号点到u号点之间存在哈密顿路径，u号点和v号点之间有通路）。</p>
+<p>在最外层的循环
+<strong><code>for(S = 1; S &lt; (1 &lt;&lt; n); S++)</code></strong>
+中，我们让 <strong>子集S</strong> 从 <strong>1 (0b00000001)</strong> 到
+<strong>1&lt;&lt;8 (0b1111111)</strong>
+（假设n=8）进行遍历。因为表示子集状态的值S是从小到大变化的，所以可以保证当计算当前状态时，其子状态一定被计算过。</p>
+<p>在第二层循环 <strong><code>for(v = 0; v &lt; n; v++)</code></strong>
+中，我们遍历所有的点，通过
+<strong><code>(S &gt;&gt; v) &amp; 1</code></strong> 来判断序号为
+<strong>v</strong> 的点是否在点集 <strong>S</strong>
+中，如果结果为1，我们便找出计算对象
+<strong><code>dp[S][v]</code></strong>，并找出上一状态对应的点集
+<strong><code>S_prev = S ^ (1 &lt;&lt; v)</code></strong>
+，然后进入第三层循环。</p>
+<p>在第三层循环 <strong><code>for(u = 0; u &lt; n; u++)</code></strong>
+中，我们继续遍历所有点，找出可以作为上一状态终点的所有点的序号
+<strong>u</strong>，进一步可以找出
+<strong><code>dp[S_prev][u]</code></strong> 的值（因为
+<strong><code>S_prev &lt; S</code></strong>，因此之前必然计算过
+<strong><code>dp[S_prev][u]</code></strong> 的值）。</p>
+<p>最后我们让 <strong><code>dp[S][v]</code></strong>
+<strong>或上</strong>
+<strong><code>dp[S_prev][u] &amp; edge[u][v]</code></strong>
+即可。因为只要存在一个 <strong>u</strong> 使得
+<strong><code>dp[S_prev][u] &amp; edge[u][v] = 1</code></strong>，就说明
+<strong>0号点到v号点之间有哈密顿路径</strong>（0号点到u号点之间存在哈密顿路径，u号点和v号点之间有通路）。</p>
 <h3 id="判断是否有哈密顿回路"><strong>判断是否有哈密顿回路</strong></h3>
-<p>经过上面的计算，我们已经得出点集"<strong><code>11111111</code></strong>"（假设点的个数n = 8）中存在的所有哈密顿路径，现在只要存在<strong>某个哈密顿路径的终点与0号点（起点）之间有通路</strong>即可。该过程仅需一个循环便可解决</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<p>经过上面的计算，我们已经得出点集"<strong><code>11111111</code></strong>"（假设点的个数n
+=
+8）中存在的所有哈密顿路径，现在只要存在<strong>某个哈密顿路径的终点与0号点（起点）之间有通路</strong>即可。该过程仅需一个循环便可解决<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">if</span><span class="token punctuation">(</span>dp<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span>n<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&amp;</span> edge<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         cout <span class="token operator">&lt;&lt;</span> <span class="token string">"1"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 cout <span class="token operator">&lt;&lt;</span> <span class="token string">"0"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>思路比较简单，此处不再赘述。</p>
-<hr>
-<h2 id="后记">后记</h2>
-<p>本题的解题方法也可以用于解决<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42505741/article/details/97788303?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link">最短哈密顿回路</a>问题，有兴趣的同学可以尝试一下。另外，因为笔者之前也没有学过算法，能力也十分有限，如果本篇题解中有纰漏甚至错误之处，还望各位dl不吝赐教！</p>
+<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+思路比较简单，此处不再赘述。<br>
+***<br>
+## 后记<br>
+本题的解题方法也可以用于解决<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42505741/article/details/97788303?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link">最短哈密顿回路</a>问题，有兴趣的同学可以尝试一下。另外，因为笔者之前也没有学过算法，能力也十分有限，如果本篇题解中有纰漏甚至错误之处，还望各位dl不吝赐教！<p></p>
 
                 
             </div>
@@ -883,7 +947,7 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token string">"0"
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

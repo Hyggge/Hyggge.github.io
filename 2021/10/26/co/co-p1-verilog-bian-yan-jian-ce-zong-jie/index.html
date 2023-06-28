@@ -389,9 +389,9 @@ module top_">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="上升沿（或下降沿）检测">上升沿（或下降沿）检测</h2>
+                <h2 id="上升沿或下降沿检测">上升沿（或下降沿）检测</h2>
 <p>如图所示，当检测到上升沿时，<strong>out</strong>会变为高电平，同时维持一个周期，然后变为低电平等待下一次检测。<br>
-<img src="%E4%B8%8A%E5%8D%87%E6%B2%BF%E8%AF%86%E5%88%AB.png" alt="上升沿识别"><br>
+<img src="上升沿识别.png" alt="上升沿识别"><br>
 只需要设定一个临时<code>reg</code>类型变量来储存上一次的<strong>in</strong>值，然后在下一上升沿进行识别即可，代码如下</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> top_module <span class="token punctuation">(</span>
     <span class="token keyword">input</span> clk<span class="token punctuation">,</span>
@@ -409,20 +409,20 @@ module top_">
 <span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="上升沿和下降沿同时检测">上升沿和下降沿同时检测</h2>
 <p>时序图如下<br>
-<img src="%E4%B8%8A%E5%8D%87%E6%B2%BF%E5%92%8C%E4%B8%8B%E9%99%8D%E6%B2%BF%E5%90%8C%E6%97%B6%E8%AF%86%E5%88%AB.png" alt=""><br>
-该问题比较简单，只需要稍微修改以下计算<code>out</code>的表达式即可</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> in_temp<span class="token punctuation">;</span>
+<img src="上升沿和下降沿同时识别.png"><br>
+该问题比较简单，只需要稍微修改以下计算<code>out</code>的表达式即可<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> in_temp<span class="token punctuation">;</span>
 <span class="token important">always @</span> <span class="token punctuation">(</span><span class="token keyword">posedge</span> clk<span class="token punctuation">)</span>
     <span class="token keyword">begin</span>
         in_temp <span class="token operator">&lt;=</span> in<span class="token punctuation">;</span>
         anyedge <span class="token operator">&lt;=</span> in <span class="token operator">^</span> in_temp<span class="token punctuation">;</span>
     <span class="token keyword">end</span>
-<span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="下降沿（或上升沿）捕获">下降沿（或上升沿）捕获</h2>
+<span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h2 id="下降沿或上升沿捕获">下降沿（或上升沿）捕获</h2>
 <p>捕获的意思是，只要检测到下降沿，就使得输出信号<code>out</code>一直保持高电平，直至复位信号<code>reset</code>值为<strong>1</strong>（此处为同步复位）。时序图如下——<br>
-<img src="%E4%B8%8B%E9%99%8D%E6%B2%BF%E6%8D%95%E8%8E%B7.png" alt=""><br>
-此时我们需要注意，“使<code>out</code>在复位之前一直保持值为1”的方法。</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> top_module <span class="token punctuation">(</span>
+<img src="下降沿捕获.png"><br>
+此时我们需要注意，“使<code>out</code>在复位之前一直保持值为1”的方法。<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> top_module <span class="token punctuation">(</span>
     <span class="token keyword">input</span> clk<span class="token punctuation">,</span>
     <span class="token keyword">input</span> reset<span class="token punctuation">,</span>
     <span class="token keyword">input</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> in<span class="token punctuation">,</span>
@@ -437,12 +437,13 @@ module top_">
             out <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>in_temp <span class="token operator">&amp;</span> <span class="token operator">~</span>in<span class="token punctuation">)</span> <span class="token operator">|</span> out<span class="token punctuation">;</span>
         <span class="token keyword">end</span>
     <span class="token keyword">end</span> 
-<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h2 id="双边沿检测触发器">双边沿检测触发器</h2>
 <p>此时我们要构造一个触发器使其可以同时检测时钟的上升沿和下降沿，时序图如下——<br>
-<img src="%E5%8F%8C%E8%BE%B9%E6%B2%BF%E6%A3%80%E6%B5%8B%E8%A7%A6%E5%8F%91%E5%99%A8.png" alt=""><br>
-由于<code>always</code>中的敏感列表不支持(posedge clk or negedge clk)，因此我们可以使用两个always语句然后结合MUX实现</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> top_module <span class="token punctuation">(</span>
+<img src="双边沿检测触发器.png"><br>
+由于<code>always</code>中的敏感列表不支持(posedge clk or negedge
+clk)，因此我们可以使用两个always语句然后结合MUX实现<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> top_module <span class="token punctuation">(</span>
     <span class="token keyword">input</span> clk<span class="token punctuation">,</span>
     <span class="token keyword">input</span> d<span class="token punctuation">,</span>
     <span class="token keyword">output</span> q
@@ -456,8 +457,8 @@ module top_">
     <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">negedge</span> clk<span class="token punctuation">)</span> <span class="token keyword">begin</span>
         b <span class="token operator">&lt;=</span> d<span class="token punctuation">;</span>
     <span class="token keyword">end</span>
-<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>还有以下使用XOR的方法解决,可以说是非常巧妙了。</p>
+<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+还有以下使用XOR的方法解决,可以说是非常巧妙了。<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> <span class="token function">top_module</span><span class="token punctuation">(</span>
     <span class="token keyword">input</span> clk<span class="token punctuation">,</span>
     <span class="token keyword">input</span> d<span class="token punctuation">,</span>
@@ -485,7 +486,7 @@ module top_">
     end*/</span>
 
 
-<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">endmodule</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 
                 
             </div>
@@ -883,7 +884,7 @@ module top_">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

@@ -389,57 +389,36 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="MIPS微系统设计方案">MIPS微系统设计方案</h2>
+                <h2 id="mips微系统设计方案">MIPS微系统设计方案</h2>
 <h3 id="设计概述">设计概述</h3>
 <p>本文设计的是由Verilog实现的MIPS微系统，该微系统支持45条MIPS汇编指令（不含乘除指令），支持系统中断，最终实现在FPGA（可编程逻辑门阵列）上的系统验证。</p>
 <p><img src="xlinx.png" alt="xlinx"></p>
 <p>为了实现该功能，我们需要对P7工程代码进行一定修改，包括删除乘除指令模块和系统任务使其可综合、增加Tube、UART、GPIO等外设驱动模块、对系统桥Bridge进行调整等等。</p>
-<p><img src="P8%E7%BB%93%E6%9E%84%E6%A8%A1%E5%9E%8B.png" alt="P8结构模型"></p>
+<p><img src="P8结构模型.png" alt="P8结构模型"></p>
 <h3 id="实现指令说明">实现指令说明</h3>
 <p>我们将本CPU实现的指令分为以下几类：</p>
 <ul>
-<li>
-<p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor, slt, sltu</p>
-</li>
-<li>
-<p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti, sltiu</p>
-</li>
-<li>
-<p><strong>shift</strong>: sll, sra, srl</p>
-</li>
-<li>
-<p><strong>shiftv</strong>: sllv, srav, srlv</p>
-</li>
-<li>
-<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
-</li>
-<li>
-<p><strong>store</strong>: sw, sh, sb</p>
-</li>
-<li>
-<p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p>
-</li>
-<li>
-<p><strong>J类</strong>：j, jal, jr, jalr</p>
-</li>
-<li>
-<p><strong>特殊</strong>：lui</p>
-</li>
-<li>
-<p><strong>CP0相关指令</strong>：mfc0，mtc0</p>
-</li>
-<li>
-<p><strong>异常中断返回：</strong> eret</p>
-</li>
+<li><p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor,
+slt, sltu</p></li>
+<li><p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti,
+sltiu</p></li>
+<li><p><strong>shift</strong>: sll, sra, srl</p></li>
+<li><p><strong>shiftv</strong>: sllv, srav, srlv</p></li>
+<li><p><strong>load</strong>: lw, lh, lhu, lb, lbu</p></li>
+<li><p><strong>store</strong>: sw, sh, sb</p></li>
+<li><p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p></li>
+<li><p><strong>J类</strong>：j, jal, jr, jalr</p></li>
+<li><p><strong>特殊</strong>：lui</p></li>
+<li><p><strong>CP0相关指令</strong>：mfc0，mtc0</p></li>
+<li><p><strong>异常中断返回：</strong> eret</p></li>
 </ul>
-<hr>
 <h2 id="工程模块定义">工程模块定义</h2>
 <p>该部分我们仅介绍与P7不同的模块——Bridge，Tube，UART，GPIO</p>
-<h3 id="fpga-top（顶层模块）">fpga_top（顶层模块）</h3>
+<h3 id="fpga_top顶层模块">fpga_top（顶层模块）</h3>
 <p>该模块替代P7中的mips模块，增加了和外设（数码管、LED等等）通信的IO接口。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -447,121 +426,121 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk_in</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>sys_rstn</td>
 <td>I</td>
 <td>1</td>
 <td>低电平同步复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc0</td>
 <td>I</td>
 <td>8</td>
 <td>第0组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc1</td>
 <td>I</td>
 <td>8</td>
 <td>第1组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc2</td>
 <td>I</td>
 <td>8</td>
 <td>第2组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc3</td>
 <td>I</td>
 <td>8</td>
 <td>第3组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc4</td>
 <td>I</td>
 <td>8</td>
 <td>第4组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc5</td>
 <td>I</td>
 <td>8</td>
 <td>第5组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc6</td>
 <td>I</td>
 <td>8</td>
 <td>第6组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_switch7</td>
 <td>I</td>
 <td>8</td>
 <td>第7组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>user_key</td>
 <td>I</td>
 <td>8</td>
 <td>用户按键开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>led_light</td>
 <td>O</td>
 <td>31</td>
 <td>LED灯控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube2</td>
 <td>O</td>
 <td>8</td>
 <td>第2组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel2</td>
 <td>O</td>
 <td>1</td>
 <td>第2组四段数码管片选信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube1</td>
 <td>O</td>
 <td>8</td>
 <td>第1组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel1</td>
 <td>O</td>
 <td>3</td>
 <td>第1组四段数码管片选信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube0</td>
 <td>O</td>
 <td>8</td>
 <td>第0组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel0</td>
 <td>O</td>
 <td>3</td>
 <td>第0组四段数码管片选信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>uart_rxd</td>
 <td>I</td>
 <td>1</td>
 <td>UART接收信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>uart_txd</td>
 <td>O</td>
 <td>1</td>
@@ -569,10 +548,10 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Bridge（系统桥）">Bridge（系统桥）</h3>
+<h3 id="bridge系统桥">Bridge（系统桥）</h3>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -580,115 +559,115 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>高电平同步复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A_in</td>
 <td>I</td>
 <td>32</td>
 <td>写入/读取的外设单元的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD_in</td>
 <td>I</td>
 <td>32</td>
 <td>写入外设单元的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>byteen</td>
 <td>I</td>
 <td>4</td>
 <td>写入外设单元的使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DM_RD</td>
 <td>I</td>
 <td>32</td>
 <td>DM读取值的输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Timer_RD</td>
 <td>I</td>
 <td>32</td>
 <td>Timer读取值的输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>UART_RD</td>
 <td>I</td>
 <td>32</td>
 <td>UART读取值的输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Tube_RD</td>
 <td>I</td>
 <td>32</td>
 <td>Tube读取值的输入</td>
 </tr>
-<tr>
+<tr class="even">
 <td>GPIO_RD</td>
 <td>I</td>
 <td>32</td>
 <td>GPIO读取值的输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A_out</td>
 <td>O</td>
 <td>32</td>
 <td>写入/读取的外设单元的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD_out</td>
 <td>O</td>
 <td>32</td>
 <td>写入外设单元的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>RD_out</td>
 <td>O</td>
 <td>32</td>
 <td>外设单元的读取值输出</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DM_WE</td>
 <td>O</td>
 <td>4</td>
 <td>DM写入使能</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Timer_WE</td>
 <td>O</td>
 <td>1</td>
 <td>Timer写入使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>UART_WE</td>
 <td>O</td>
 <td>1</td>
 <td>UART写入使能</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Tube_WE</td>
 <td>O</td>
 <td>4</td>
 <td>Tube写入使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>GPIO_WE</td>
 <td>O</td>
 <td>4</td>
 <td>GPIO写入使能</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>UART_STB</td>
 <td>O</td>
 <td>1</td>
@@ -696,10 +675,10 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Tube（数码管驱动模块）">Tube（数码管驱动模块）</h3>
+<h3 id="tube数码管驱动模块">Tube（数码管驱动模块）</h3>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -707,73 +686,73 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>高电平同步复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A</td>
 <td>I</td>
 <td>32</td>
 <td>读/写数码管的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD</td>
 <td>I</td>
 <td>32</td>
 <td>写入数码管的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>数码管写入使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>RD</td>
 <td>I</td>
 <td>32</td>
 <td>数码管读取数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube2</td>
 <td>O</td>
 <td>8</td>
 <td>第2组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel2</td>
 <td>O</td>
 <td>1</td>
 <td>第2组四段数码管片选信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube1</td>
 <td>O</td>
 <td>8</td>
 <td>第1组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel1</td>
 <td>O</td>
 <td>3</td>
 <td>第1组四段数码管片选信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>digital_tube0</td>
 <td>O</td>
 <td>8</td>
 <td>第0组四段数码管驱动信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>digital_tube_sel0</td>
 <td>O</td>
 <td>3</td>
@@ -781,11 +760,11 @@
 </tr>
 </tbody>
 </table>
-<h3 id="GPIO（通用IO驱动模块）">GPIO（通用IO驱动模块）</h3>
+<h3 id="gpio通用io驱动模块">GPIO（通用IO驱动模块）</h3>
 <p>该模块位于CPU模块中，主要用于获取外部中断信息和内部异常信息，进行判断后输出异常/中断请求。同时该模块中设有四个寄存器——SR，Cause，EPC和PRIP。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -793,97 +772,97 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>clk</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>reset</td>
 <td>I</td>
 <td>1</td>
 <td>复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>A</td>
 <td>I</td>
 <td>32</td>
 <td>读GPIO的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WD</td>
 <td>I</td>
 <td>32</td>
 <td>写入GPIO的数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>WE</td>
 <td>I</td>
 <td>1</td>
 <td>GPIO写入使能</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc0</td>
 <td>I</td>
 <td>8</td>
 <td>第0组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc1</td>
 <td>I</td>
 <td>8</td>
 <td>第1组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc2</td>
 <td>I</td>
 <td>8</td>
 <td>第2组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc3</td>
 <td>I</td>
 <td>8</td>
 <td>第3组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc4</td>
 <td>I</td>
 <td>8</td>
 <td>第4组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_swithc5</td>
 <td>I</td>
 <td>8</td>
 <td>第5组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>dip_swithc6</td>
 <td>I</td>
 <td>8</td>
 <td>第6组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>dip_switch7</td>
 <td>I</td>
 <td>8</td>
 <td>第7组拨码开关控制信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>user_key</td>
 <td>I</td>
 <td>8</td>
 <td>用户按键开关控制信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>RD</td>
 <td>O</td>
 <td>8</td>
 <td>GPIO的读取数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>led_light</td>
 <td>O</td>
 <td>32</td>
@@ -891,11 +870,11 @@
 </tr>
 </tbody>
 </table>
-<h3 id="UART模块">UART模块</h3>
+<h3 id="uart模块">UART模块</h3>
 <p>该模块为系统桥，实际上是区分地址的组合逻辑模块，用于CPU和DM、Timer1、Timer0之间的的数据交换。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>信号名</th>
 <th>方向</th>
 <th>位宽</th>
@@ -903,67 +882,67 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>CLK_I</td>
 <td>I</td>
 <td>1</td>
 <td>时钟信号</td>
 </tr>
-<tr>
+<tr class="even">
 <td>RST_I</td>
 <td>I</td>
 <td>1</td>
 <td>高电平同步复位信号</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>ADD_I</td>
 <td>I</td>
 <td>3（[4:2]）</td>
 <td>读/写UART的地址</td>
 </tr>
-<tr>
+<tr class="even">
 <td>WE_I</td>
 <td>I</td>
 <td>1</td>
 <td>UART写使能信号（和CPU交互）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DAT_I</td>
 <td>I</td>
 <td>32</td>
 <td>UART写入数据（和CPU交互）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>STB_I</td>
 <td>I</td>
 <td>1</td>
 <td>UART片选信号输入</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>RxD</td>
 <td>I</td>
 <td>1</td>
 <td>UART接收数据（和外设交互）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DAT_O</td>
 <td>O</td>
 <td>32</td>
 <td>UART读取数据（和CPU交互）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>ACK_O</td>
 <td>O</td>
 <td>1</td>
 <td>UART片选信号输出</td>
 </tr>
-<tr>
+<tr class="even">
 <td>TxD</td>
 <td>O</td>
 <td>1</td>
 <td>UART发送数据（和外设交互）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>inter</td>
 <td>O</td>
 <td>1</td>
@@ -971,9 +950,8 @@
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="重要机制实现方法">重要机制实现方法</h2>
-<h3 id="IP-Core-的使用和相关调整">IP Core 的使用和相关调整</h3>
+<h3 id="ip-core-的使用和相关调整">IP Core 的使用和相关调整</h3>
 <p>因为在P8实验中，为了使得我们的微系统是“可综合的”，我们需要将<strong>用常规方法描述的DM和IM</strong>删去，同时用FPGA内封装好的特殊功能部件——“<strong>块储存器</strong>”（<strong>“IP核”的一种</strong>）来替换。我们在ISE中生成后，直接在我们的微系统中调用即可。调用模板如</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">IM <span class="token function">u_IM</span><span class="token punctuation">(</span><span class="token comment">//input</span>
         <span class="token punctuation">.</span>clka           <span class="token punctuation">(</span> clk_in                    <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// input clka</span>
@@ -990,14 +968,21 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
         <span class="token comment">//output</span>
         <span class="token punctuation">.</span>douta          <span class="token punctuation">(</span> DM_RD              <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token punctuation">)</span>  <span class="token comment">// output [31 : 0] douta</span>
         <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>与我们之前使用的IM和DM不同，P8中使用的块储存器是 <strong>“同步读出”</strong>，这种行为差异造成了数据读出的时机不同，为了适应这一变化，需要对流水线的结构作出一定的修改。笔者采用的是<strong>修改流水寄存器</strong>的方法，即<strong>短接法</strong>。教程中的描述为——</p>
+<p>与我们之前使用的IM和DM不同，P8中使用的块储存器是
+<strong>“同步读出”</strong>，这种行为差异造成了数据读出的时机不同，为了适应这一变化，需要对流水线的结构作出一定的修改。笔者采用的是<strong>修改流水寄存器</strong>的方法，即<strong>短接法</strong>。教程中的描述为——</p>
 <blockquote>
-<p><strong>修改流水级寄存器</strong>。由于 Block RAM/ROM 的读端口可以抽象成组合逻辑与寄存器的连接，而 P6/P7 的流水线则是将组合逻辑读出的值输入 M/W 级流水寄存器；因此若将 M/W 级流水寄存器中的流水m_data_rdata的寄存器短接，就等价于将 Block RAM 读出端的"寄存器"移到了 M/W 流水寄存器上。这样修改后，流水线的结构与修改前几乎是相同的。</p>
+<p><strong>修改流水级寄存器</strong>。由于 Block RAM/ROM
+的读端口可以抽象成组合逻辑与寄存器的连接，而 P6/P7
+的流水线则是将组合逻辑读出的值输入 M/W 级流水寄存器；因此若将 M/W
+级流水寄存器中的流水m_data_rdata的寄存器短接，就等价于将 Block RAM
+读出端的"寄存器"移到了 M/W
+流水寄存器上。这样修改后，流水线的结构与修改前几乎是相同的。</p>
 </blockquote>
 <p>此外，我们该需要对D级流水寄存器和Bridge进行相应调整</p>
 <ul>
-<li>
-<p><strong>D级寄存器</strong>的调整：为保证D 级发生阻塞时，指令被正确地 stall 在 D 级，我们需要D级流水寄存器中增加一个l临时寄存器来存储<strong>上一次在D级的instruction</strong>。然后再通过一个选择信号来选择当前进入D级的instruction是<strong>IM同步读出的instrcution</strong>还是<strong>临时寄存器中的instruction</strong>。清空延迟槽时<strong>将D级instruction置0</strong>的操作也类似。</p>
+<li><p><strong>D级寄存器</strong>的调整：为保证D
+级发生阻塞时，指令被正确地 stall 在 D
+级，我们需要D级流水寄存器中增加一个l临时寄存器来存储<strong>上一次在D级的instruction</strong>。然后再通过一个选择信号来选择当前进入D级的instruction是<strong>IM同步读出的instrcution</strong>还是<strong>临时寄存器中的instruction</strong>。清空延迟槽时<strong>将D级instruction置0</strong>的操作也类似。</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//D级流水寄存器</span>
 	<span class="token keyword">reg</span>        stall_tag<span class="token punctuation">;</span>
     <span class="token keyword">reg</span>        clr_tag<span class="token punctuation">;</span>
@@ -1019,10 +1004,8 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
             stall_tag      <span class="token operator">&lt;=</span> <span class="token punctuation">(</span><span class="token operator">~</span>en<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
             clr_tag        <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>reset <span class="token operator">|</span> req <span class="token operator">|</span> BD_clr<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
         <span class="token keyword">end</span>
-    <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>Bridge</strong>的调整：由于Bridge沟通的外设既有同步读的DM，也有异步读的Timer，Tube，UART，GPIO等设备，这样在Bridge向CPU传数据的时候会产生冲突。因此笔者将他们的读方式统一成“同步读”，方法是——在Bridge为每一个外设设置一个数据寄存器（DM除外），每个时钟上升沿更新<strong>从这些外设中异步读出的值</strong>。此外，我们还需要将<strong>被访问的外设的地址</strong>存进一个临时寄存器，每次根据这个<strong>临时寄存器</strong>的地址从若干<strong>数据寄存器</strong>中选择相应的值，返回到CPU中。</p>
+    <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p><strong>Bridge</strong>的调整：由于Bridge沟通的外设既有同步读的DM，也有异步读的Timer，Tube，UART，GPIO等设备，这样在Bridge向CPU传数据的时候会产生冲突。因此笔者将他们的读方式统一成“同步读”，方法是——在Bridge为每一个外设设置一个数据寄存器（DM除外），每个时钟上升沿更新<strong>从这些外设中异步读出的值</strong>。此外，我们还需要将<strong>被访问的外设的地址</strong>存进一个临时寄存器，每次根据这个<strong>临时寄存器</strong>的地址从若干<strong>数据寄存器</strong>中选择相应的值，返回到CPU中。</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//read</span>
 <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> Timer_RD_reg<span class="token punctuation">;</span>
 <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> UART_RD_reg<span class="token punctuation">;</span>
@@ -1051,8 +1034,7 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
                 <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f00</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f0b</span><span class="token punctuation">)</span> <span class="token operator">?</span> Timer_RD_reg <span class="token punctuation">:</span>
                 <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f20</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f3b</span><span class="token punctuation">)</span> <span class="token operator">?</span> UART_RD_reg <span class="token punctuation">:</span>
                 <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f40</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f47</span><span class="token punctuation">)</span> <span class="token operator">?</span> Tube_RD_reg <span class="token punctuation">:</span>
-                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f50</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f5b</span> <span class="token operator">||</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f60</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f63</span><span class="token punctuation">)</span> <span class="token operator">?</span> GPIO_RD_reg <span class="token punctuation">:</span> <span class="token number">32'd0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+                <span class="token punctuation">(</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f50</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f5b</span> <span class="token operator">||</span>A_reg <span class="token operator">&gt;=</span> <span class="token number">32'h7f60</span> <span class="token operator">&amp;&amp;</span> A_reg <span class="token operator">&lt;=</span> <span class="token number">32'h7f63</span><span class="token punctuation">)</span> <span class="token operator">?</span> GPIO_RD_reg <span class="token punctuation">:</span> <span class="token number">32'd0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h3 id="数码管驱动设计">数码管驱动设计</h3>
 <p>数码管驱动中有两个寄存器，和对其他外设的操作一样，我们需要实现CPU对寄存器的读写。代码比较简单，如下所示</p>
@@ -1086,79 +1068,79 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
        <span class="token keyword">end</span>
    <span class="token keyword">end</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在数码管驱动设计中，我们不仅要能够向驱动中的寄存器读写数据，还要根据驱动内部寄存器的值向真正的数码管传递对应的电平信号，来控制数码管的亮灭。四段数码管为一组，每组数码管由一个驱动信号、一个片选信号控制。原理如下</p>
-<p><img src="%E5%85%AB%E6%AE%B5%E6%95%B0%E7%A0%81%E7%AE%A1png.png" alt=""></p>
+<p><img src="八段数码管png.png"></p>
 <p>一段数码管显示的16进制数与控制信号的关系如下表所示(注意：实验中采用的是共阳极数码管，低电平时亮，高电平时灭)</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">数码管显示的16进制数</th>
-<th style="text-align:center">数码管控制信号{DP,G,F,E,D,C,B,A}</th>
+<tr class="header">
+<th style="text-align: center;">数码管显示的16进制数</th>
+<th style="text-align: center;">数码管控制信号{DP,G,F,E,D,C,B,A}</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0xC0</td>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0xC0</td>
 </tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">0xF9</td>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0xF9</td>
 </tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">0xA4</td>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0xA4</td>
 </tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">0xB0</td>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0xB0</td>
 </tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">0x99</td>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0x99</td>
 </tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">0x92</td>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0x92</td>
 </tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">0x82</td>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0x82</td>
 </tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">0xF8</td>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0xF8</td>
 </tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">0x80</td>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">0x80</td>
 </tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">0x90</td>
+<tr class="even">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">0x90</td>
 </tr>
-<tr>
-<td style="text-align:center">A</td>
-<td style="text-align:center">0x88</td>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">0x88</td>
 </tr>
-<tr>
-<td style="text-align:center">B</td>
-<td style="text-align:center">0x83</td>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">0x83</td>
 </tr>
-<tr>
-<td style="text-align:center">C</td>
-<td style="text-align:center">0xC6</td>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">0xC6</td>
 </tr>
-<tr>
-<td style="text-align:center">D</td>
-<td style="text-align:center">0xA1</td>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">0xA1</td>
 </tr>
-<tr>
-<td style="text-align:center">E</td>
-<td style="text-align:center">0x86</td>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: center;">0x86</td>
 </tr>
-<tr>
-<td style="text-align:center">F</td>
-<td style="text-align:center">0x8E</td>
+<tr class="even">
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">0x8E</td>
 </tr>
 </tbody>
 </table>
@@ -1231,15 +1213,14 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
     
 
 <span class="token keyword">endmodule</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="通用IO驱动设计">通用IO驱动设计</h3>
-<p>通用IO包括三部分——<strong>64 位用户输入微动开关</strong>、 <strong>8 个通用按键开关和LED</strong>、<strong>LED</strong>。前两个是输入设备，只有LED是输出设备。</p>
+<h3 id="通用io驱动设计">通用IO驱动设计</h3>
+<p>通用IO包括三部分——<strong>64 位用户输入微动开关</strong>、 <strong>8
+个通用按键开关和LED</strong>、<strong>LED</strong>。前两个是输入设备，只有LED是输出设备。</p>
 <ul>
-<li>
-<p>对于输入设备（<strong>64 位用户输入微动开关</strong>、 <strong>8 个通用按键开关</strong>）而言，外部传来的数据只有在<strong>CPU读取该设备数据的时候</strong>才是有效的，也就是说，在CPU读其他外设时，无论该输入设备输进什么值，都是无效值，也就没有必要用寄存器将外界读取的值存储下来，只需要将输入设备的引脚直接连接到控制模块的读数据端口，使 CPU 将它们当作一个只读的寄存器。</p>
-</li>
-<li>
-<p>对于输出设备（<strong>LED</strong>）而言，每次CPU写进设备驱动的数据都应该保存下来，这样才能保证CPU读写其他外设时，该驱动仍然向<strong>真正的输出外设</strong>稳定地输出数据。</p>
-</li>
+<li><p>对于输入设备（<strong>64 位用户输入微动开关</strong>、 <strong>8
+个通用按键开关</strong>）而言，外部传来的数据只有在<strong>CPU读取该设备数据的时候</strong>才是有效的，也就是说，在CPU读其他外设时，无论该输入设备输进什么值，都是无效值，也就没有必要用寄存器将外界读取的值存储下来，只需要将输入设备的引脚直接连接到控制模块的读数据端口，使
+CPU 将它们当作一个只读的寄存器。</p></li>
+<li><p>对于输出设备（<strong>LED</strong>）而言，每次CPU写进设备驱动的数据都应该保存下来，这样才能保证CPU读写其他外设时，该驱动仍然向<strong>真正的输出外设</strong>稳定地输出数据。</p></li>
 </ul>
 <p>整体写法也比较简单，如下所示——</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> led_reg<span class="token punctuation">;</span>
@@ -1264,7 +1245,7 @@ DM u_DM <span class="token punctuation">(</span><span class="token comment">//in
                <span class="token function">if</span><span class="token punctuation">(</span>WE<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> led_reg<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> WD<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">;</span> 
        <span class="token keyword">end</span>
    <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="UART的修改">UART的修改</h3>
+<h3 id="uart的修改">UART的修改</h3>
 <p>为了实现UART中断功能，即<strong>接收到一次完整的数据后向CPU产生中断信号，CPU对其进行响应</strong>，我们需要对UART进行一定的修改。其实也比较简单，仔细阅读高老板的代码后就知道，只需要两行代码即可实现。</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">output</span> inter<span class="token punctuation">;</span>
 <span class="token keyword">assign</span> inter <span class="token operator">=</span> rs<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -1285,19 +1266,19 @@ eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span
 <ul>
 <li>Warning:一定要修改UART的头文件中有关时钟频率的宏定义（根据教程来，一般是将时钟频率改为50MHz）！否则会导致波特率不匹配！</li>
 </ul>
-<h3 id="软件代码编写——计算器和计数器">软件代码编写——计算器和计数器</h3>
+<h3 id="软件代码编写计算器和计数器">软件代码编写——计算器和计数器</h3>
 <p>硬件搭好后，我们可以编写mips程序（即软件），将机器码加载进IM中，这样就可以通过软硬件的交互实现一定的功能。下面说明<strong>计算器</strong>和<strong>计数器</strong>两个题目的软件代码的编写</p>
 <p><strong>1.计算器</strong></p>
 <ul>
-<li>
-<p>题目描述</p>
+<li><p>题目描述</p>
 <blockquote>
-<p>用 64 个拨码开关输入 2 个操作数，其中第 7~4 组代表第一个操作数，第 3~0 组代表第二个操作数。用 8 个用户按键代表 8 种二元运算（可自行定义）。每次按下一个用户按键后（假设同一时刻至多有 1 个用户按键会被按下），将对应的运算结果输出至数码管。当没有用户按键按下时，保持之前的结果。</p>
-</blockquote>
-</li>
-<li>
-<p>mips代码</p>
-  <pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">li	$s0, 0x7f58
+<p>用 64 个拨码开关输入 2 个操作数，其中第 7~4 组代表第一个操作数，第
+3~0 组代表第二个操作数。用 8 个用户按键代表 8
+种二元运算（可自行定义）。每次按下一个用户按键后（假设同一时刻至多有 1
+个用户按键会被按下），将对应的运算结果输出至数码管。当没有用户按键按下时，保持之前的结果。</p>
+</blockquote></li>
+<li><p>mips代码<br>
+</p><pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">li	$s0, 0x7f58
 li	$s1, 0x7f54
 li	$s2, 0x7f50
 li	$s3, 0x7f40
@@ -1381,17 +1362,16 @@ loop:
 
     j	loop
     nop
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
-<p><strong>2.计数器的实现</strong></p>
-<ul>
-<li>题目描述
-<blockquote>
-<p>用第 3~0 组拨码开关输入一个初始值。当系统复位后，程序读取拨码开关的值并从这个值开始向下计数（每秒减1）至 0，你需要使用 timer 来实现此功能。当程序运行时，若拨码开关的值发生变化，则重新从拨码开关读取初值，并重新计数。</p>
-</blockquote>
-</li>
-<li>mips代码<pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">.ktext 0x4180
+<p><strong>2.计数器的实现</strong><br>
+- 题目描述<br>
+&gt;用第 3~0
+组拨码开关输入一个初始值。当系统复位后，程序读取拨码开关的值并从这个值开始向下计数（每秒减1）至
+0，你需要使用 timer
+来实现此功能。当程序运行时，若拨码开关的值发生变化，则重新从拨码开关读取初值，并重新计数。<br>
+- mips代码<br>
+</p><pre class="line-numbers language-mips" data-language="mips"><code class="language-mips">.ktext 0x4180
 handler:
 	beq	$t2, $0, end
 	nop
@@ -1431,10 +1411,7 @@ begin:
 	sw	$s4, 0($s2)
 	j	loop
 	nop
-	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
-<hr>
+	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h2 id="自动化生成coe文件">自动化生成coe文件</h2>
 <p>当我们写完软件部分的代码时，需要将其转换成机器码，同时还需要根据coe文件格式进行一定处理——文件开头加相应前缀，每行机器码后面需要加逗号。如果手动进行修改的话费时费力，可以通过下面的python脚本自动生成coe文件。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
@@ -1866,7 +1843,7 @@ mips_handler_path <span class="token operator">=</span> <span class="token strin
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

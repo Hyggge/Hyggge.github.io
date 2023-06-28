@@ -6,18 +6,16 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」字符串, Hyggge&#39;s Blog">
     <meta name="description" content="Java中和字符串相关类有以下3种——
-
-String类
-StringBuild类
-StringBuffer类
-
-
+- String类
+- StringBuild类
+- StringBuffer类
 String类
 对象创建
 
-例程  String s_1 = &#34;Hyggge&#34;;
+例程
+String s_1 = &#34;Hyggge&#34;;
 String s_2 = s_1;
-Str">
+S">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -393,85 +391,95 @@ Str">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Java中和字符串相关类有以下3种——</p>
-<ul>
-<li><strong>String类</strong></li>
-<li><strong>StringBuild类</strong></li>
-<li><strong>StringBuffer类</strong></li>
-</ul>
-<hr>
-<h2 id="String类">String类</h2>
+                <p>Java中和字符串相关类有以下3种——<br>
+- <strong>String类</strong><br>
+- <strong>StringBuild类</strong><br>
+- <strong>StringBuffer类</strong></p>
+<h2 id="string类">String类</h2>
 <h3 id="对象创建">对象创建</h3>
 <ul>
-<li>例程  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> s_1 <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span>
+<li>例程<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> s_1 <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span>
 <span class="token class-name">String</span> s_2 <span class="token operator">=</span> s_1<span class="token punctuation">;</span>
 <span class="token class-name">String</span> s_3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"Czh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> s_4 <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token char">'C'</span><span class="token punctuation">,</span> <span class="token char">'Z'</span><span class="token punctuation">,</span> <span class="token char">'H'</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token class-name">String</span> s_5 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>s_4<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>需要注意的是，String类对象是不可变的(本质上用<code>final</code>修饰)，如以下程序  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span> 
-<span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Czh"</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-虽然程序最后<code>a</code>引用的对象是"Czh", 但是一开始创建的"Hyggge"对象并没有消失。相当于以下C++程序  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// C++</span>
+<span class="token class-name">String</span> s_5 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>s_4<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>需要注意的是，String类对象是不可变的(本质上用<code>final</code>修饰)，如以下程序<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span> 
+<span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Czh"</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>
+虽然程序最后<code>a</code>引用的对象是"Czh",
+但是一开始创建的"Hyggge"对象并没有消失。相当于以下C++程序<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// C++</span>
 string s_1 <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span>
 string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_1<span class="token punctuation">;</span>
 string s_2 <span class="token operator">=</span> <span class="token string">"Czh"</span><span class="token punctuation">;</span>
-string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
-<h3 id="字符串连接">字符串连接</h3>
-<ul>
-<li>第一种方法——使用<code>concat()</code>函数  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span><span class="token punctuation">;</span>
+string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+### 字符串连接</li>
+<li>第一种方法——使用<code>concat()</code>函数<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span><span class="token punctuation">;</span>
 <span class="token class-name">String</span> b <span class="token operator">=</span> a<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">"Czh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">String</span> c <span class="token operator">=</span> <span class="token string">"Hyggge is "</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">"Czh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>第二种方法——使用<code>+</code>  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span> <span class="token operator">+</span> <span class="token string">"Czh "</span> <span class="token operator">+</span> <span class="token string">"!!!"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-</ul>
-<h3 id="创建格式化字符串">创建格式化字符串</h3>
-<ul>
-<li>格式化输出和已通过printf和format实现。其中，format是String类中的静态方法。  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">int</span> age <span class="token operator">=</span> <span class="token number">19</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li>第二种方法——使用<code>+</code><br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span> <span class="token operator">+</span> <span class="token string">"Czh "</span> <span class="token operator">+</span> <span class="token string">"!!!"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+### 创建格式化字符串</li>
+<li>格式化输出和已通过printf和format实现。其中，format是String类中的静态方法。<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">int</span> age <span class="token operator">=</span> <span class="token number">19</span><span class="token punctuation">;</span>
 <span class="token comment">//method one</span>
 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Hyggge's age is %d\n"</span><span class="token punctuation">,</span> age<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">//method two</span>
 <span class="token class-name">String</span> s<span class="token punctuation">;</span>
 s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Hyggge's age is %d\n"</span><span class="token punctuation">,</span> age<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<h3 id="String-类中的常用方法">String 类中的常用方法</h3>
+<h3 id="string-类中的常用方法">String 类中的常用方法</h3>
 <ul>
 <li><strong><code>int length()</code></strong> 字符串长度</li>
-<li><strong><code>boolean isEmpty()</code></strong> 检查字符串是否非空</li>
-<li><strong><code>int compareTo(String anotherString)</code></strong> 字符串比较（字典序）</li>
-<li><strong><code>int indexOf(int ch)</code></strong> 返回指定字符第一次出现处的索引</li>
-<li><strong><code>int indexOf(String str)</code></strong> 返回指定子字符串在此字符串中第一次出现处的索引</li>
-<li><strong><code>String concat(String str)</code></strong> 字符串连接（原对象不变，需要使用中间对象，严重消耗内存，<strong>不推荐使用</strong>）</li>
-<li>**<code>boolean equals(Object anObject)</code>**将字符串和一个对象进行比较</li>
+<li><strong><code>boolean isEmpty()</code></strong>
+检查字符串是否非空</li>
+<li><strong><code>int compareTo(String anotherString)</code></strong>
+字符串比较（字典序）</li>
+<li><strong><code>int indexOf(int ch)</code></strong>
+返回指定字符第一次出现处的索引</li>
+<li><strong><code>int indexOf(String str)</code></strong>
+返回指定子字符串在此字符串中第一次出现处的索引</li>
+<li><strong><code>String concat(String str)</code></strong>
+字符串连接（原对象不变，需要使用中间对象，严重消耗内存，<strong>不推荐使用</strong>）</li>
+<li><strong><code>boolean equals(Object anObject)</code></strong>将字符串和一个对象进行比较</li>
 <li><a target="_blank" rel="noopener" href="https://www.runoob.com/manual/jdk11api/java.base/java/lang/String.html">其他方法</a></li>
 </ul>
-<hr>
-<h2 id="StringBuffer-和-StringBuilder-类">StringBuffer 和 StringBuilder 类</h2>
-<p>和 <code>String</code> 类不同的是，<code>StringBuffer</code> 和 <code>StringBuilder</code> 类的对象能够被多次的修改，并且不产生新的未使用对象。他们的区别是——</p>
-<ul>
-<li><code>StringBuffer</code> 线程安全 <code>StringBuilder</code> 线程不安全</li>
-<li><code>StringBuilder</code> 相较于 <code>StringBuffer</code> 有速度优势（绝大多数情况下使用<code>StringBuilder</code>）<br>
-类</li>
-</ul>
-<h3 id="对象创建（以StringBuilder类为例）">对象创建（以StringBuilder类为例）</h3>
+<h2 id="stringbuffer-和-stringbuilder-类">StringBuffer 和 StringBuilder
+类</h2>
+<p>和 <code>String</code> 类不同的是，<code>StringBuffer</code> 和
+<code>StringBuilder</code>
+类的对象能够被多次的修改，并且不产生新的未使用对象。他们的区别是——<br>
+- <code>StringBuffer</code> 线程安全 <code>StringBuilder</code>
+线程不安全<br>
+- <code>StringBuilder</code> 相较于 <code>StringBuffer</code>
+有速度优势（绝大多数情况下使用<code>StringBuilder</code>）<br>
+类</p>
+<h3 id="对象创建以stringbuilder类为例">对象创建（以StringBuilder类为例）</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">StringBuilder</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
 <span class="token class-name">StringBuilder</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//可以显式的规定大小</span>
 <span class="token class-name">StringBuilder</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"Hyggge"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//可以显式的规定大小</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h3 id="常用方法（以StringBuilder类为例）">常用方法（以StringBuilder类为例）</h3>
+<h3 id="常用方法以stringbuilder类为例">常用方法（以StringBuilder类为例）</h3>
 <ul>
-<li><strong><code>StringBuilder append(String str)</code></strong> 将指定的字符串追加到此字符序列</li>
-<li>** <code>StringBuilder insert(int offset, String str)</code>** 将 str 参数的字符串插入此序列中</li>
-<li><strong><code>String substring(int start)</code></strong> 返回一个新的 String，它包含此字符序列当前所包含的字符子序列</li>
-<li><strong><code>StringBuilder reverse(String str)</code></strong> 翻转字符串</li>
-<li><strong><code>StringBuilder delete(int start, int end)</code></strong> 注意左闭右开</li>
-<li><strong><code>StringBuilder replace((int start, int end, String str)</code></strong> 使用给定 String 中的字符替换此序列的子字符串中的字符</li>
-<li><strong><code>String toString()</code></strong> 返回此序列中数据的字符串表示形式</li>
-<li><strong><code>int indexOf(String str)</code></strong> 返回第一次出现的指定子字符串在该字符串中的索引。</li>
+<li><strong><code>StringBuilder append(String str)</code></strong>
+将指定的字符串追加到此字符序列</li>
+<li>** <code>StringBuilder insert(int offset, String str)</code>** 将
+str 参数的字符串插入此序列中</li>
+<li><strong><code>String substring(int start)</code></strong>
+返回一个新的 String，它包含此字符序列当前所包含的字符子序列</li>
+<li><strong><code>StringBuilder reverse(String str)</code></strong>
+翻转字符串</li>
+<li><strong><code>StringBuilder delete(int start, int end)</code></strong>
+注意左闭右开</li>
+<li><strong><code>StringBuilder replace((int start, int end, String str)</code></strong>
+使用给定 String 中的字符替换此序列的子字符串中的字符</li>
+<li><strong><code>String toString()</code></strong>
+返回此序列中数据的字符串表示形式</li>
+<li><strong><code>int indexOf(String str)</code></strong>
+返回第一次出现的指定子字符串在该字符串中的索引。</li>
 <li><strong><code>int length()</code></strong> 返回长度（字符数）。</li>
 <li><a target="_blank" rel="noopener" href="https://www.runoob.com/manual/jdk11api/java.base/java/lang/StringBuilder.html">其他方法</a></li>
 </ul>
@@ -853,7 +861,7 @@ s <span class="token operator">=</span> <span class="token class-name">String</s
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

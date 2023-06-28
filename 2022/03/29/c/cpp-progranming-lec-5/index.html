@@ -5,12 +5,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「BUAA-C++」Lec5:继承和组合, Hyggge&#39;s Blog">
-    <meta name="description" content="C++中有两种实现**代码重用（reuse）**的方式——继承（inheritance）和组合（composition）
+    <meta name="description" content="C++中有两种实现代码重用（reuse）的方式——继承（inheritance）和组合（composition）
 继承inheritance
 继承：共性和特性的关系——
-
+-
 子类拥有父类所有数据成员和函数，这是所有子类的共性。
-子类可">
+- 子类可以">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -390,25 +390,24 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>C++中有两种实现**代码重用（<code>reuse</code>）**的方式——<strong>继承（<code>inheritance</code>）和组合（<code>composition</code>）</strong></p>
+                <p>C++中有两种实现<strong>代码重用（<code>reuse</code>）</strong>的方式——<strong>继承（<code>inheritance</code>）和组合（<code>composition</code>）</strong></p>
 <h2 id="继承inheritance">继承inheritance</h2>
-<p>继承：<strong>共性和特性的关系</strong>——</p>
-<ul>
-<li><strong>子类拥有父类所有数据成员和函数，这是所有子类的共性。</strong></li>
-<li><strong>子类可以父类实现的函数进行重写， 成为子类自己的特性。（一代更比一代强）</strong></li>
-</ul>
-<blockquote>
-<p>通常情况下，一旦在子类中对父类函数进行了改写，在子类中的该函数中通常会以某种方式调用了父类的同名函数。相反，如果子类和父类的同名函数没有任何关系，那么“继承”则没有任何意义。</p>
-</blockquote>
-<p>继承的语法如下所示</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token punctuation">[</span>子类名<span class="token punctuation">]</span> ： <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<blockquote>
-<p>父类名前通常使用关键字<code>public</code>来修饰。当然使用<code>private</code>在语法上是没有任何问题的，但是这样的话继承方式就会变成<strong>私有继承</strong>。如果是私有继承，则子类中无法使用父类的<code>public</code>方法。<br>
-私有继承的存在仅仅是为了维护语法完整性，<strong>没有实质性的作用</strong>。</p>
-</blockquote>
+<p>继承：<strong>共性和特性的关系</strong>——<br>
+-
+<strong>子类拥有父类所有数据成员和函数，这是所有子类的共性。</strong><br>
+- <strong>子类可以父类实现的函数进行重写，
+成为子类自己的特性。（一代更比一代强）</strong><br>
+&gt;
+通常情况下，一旦在子类中对父类函数进行了改写，在子类中的该函数中通常会以某种方式调用了父类的同名函数。相反，如果子类和父类的同名函数没有任何关系，那么“继承”则没有任何意义。</p>
+<p>继承的语法如下所示<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token punctuation">[</span>子类名<span class="token punctuation">]</span> ： <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+&gt;
+父类名前通常使用关键字<code>public</code>来修饰。当然使用<code>private</code>在语法上是没有任何问题的，但是这样的话继承方式就会变成<strong>私有继承</strong>。如果是私有继承，则子类中无法使用父类的<code>public</code>方法。<br>
+&gt;
+私有继承的存在仅仅是为了维护语法完整性，<strong>没有实质性的作用</strong>。<p></p>
 <h3 id="重载函数的重写">重载函数的重写</h3>
-<p>如果父类中有重载函数，且子类想要对其重写，则它应该重写父类所有的重载函数。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+<p>如果父类中有重载函数，且子类想要对其重写，则它应该重写父类所有的重载函数。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"base func()"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"base func(int)"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
@@ -417,10 +416,11 @@
 <span class="token keyword">class</span> <span class="token class-name">Dervied</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Base</span></span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="构造函数的调用问题">构造函数的调用问题</h3>
-<p>在调用子类构造函数时，会默认调用父类的<strong>无参构造函数</strong>调用顺序是—— <strong>先父类，后子类</strong>。（在调用子类析构函数时，顺序是<strong>先子类，后父类</strong>）</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//父类</span>
+<p>在调用子类构造函数时，会默认调用父类的<strong>无参构造函数</strong>调用顺序是——
+<strong>先父类，后子类</strong>。（在调用子类析构函数时，顺序是<strong>先子类，后父类</strong>）<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//父类</span>
 <span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span>
     <span class="token keyword">int</span> i<span class="token punctuation">;</span>
@@ -445,8 +445,8 @@
 <span class="token punctuation">}</span>
 <span class="token comment">//输出为</span>
 <span class="token comment">//constructor of Base</span>
-<span class="token comment">//constructor of Derived</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>但是，如果此时父类中只有<strong>有参构造函数</strong>，则需要在子类构造函数中<strong>显式地调用父类构造函数</strong>。显式调用的语法为——<code>Dervied::Dervied(...) : Base(...)</code></p>
+<span class="token comment">//constructor of Derived</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+但是，如果此时父类中只有<strong>有参构造函数</strong>，则需要在子类构造函数中<strong>显式地调用父类构造函数</strong>。显式调用的语法为——<code>Dervied::Dervied(...) : Base(...)</code><br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//父类</span>
 <span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span>
@@ -471,11 +471,13 @@
 <span class="token class-name">Dervied</span><span class="token double-colon punctuation">::</span><span class="token function">Dervied</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">,</span> <span class="token keyword">int</span> j<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token function">Base</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">this</span><span class="token operator">-&gt;</span>j <span class="token operator">=</span> j<span class="token punctuation">;</span>
     cout <span class="token operator">&lt;&lt;</span> <span class="token string">"constructor of Derived"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="多重继承问题">多重继承问题</h3>
-<p>和Java不同，C++是允许使用多重继承的，即 <strong>“一个儿子可以有多个父亲”</strong> 。多重继承的语法为——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token punctuation">[</span>子类名<span class="token punctuation">]</span> ： <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>子类同样可以<strong>使用所有父类中的所有<code>public</code>函数和所有<code>public</code>成员变量</strong>, 如下所示</p>
+<p>和Java不同，C++是允许使用多重继承的，即
+<strong>“一个儿子可以有多个父亲”</strong> 。多重继承的语法为——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token punctuation">[</span>子类名<span class="token punctuation">]</span> ： <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">public</span> <span class="token punctuation">[</span>父类名<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+子类同样可以<strong>使用所有父类中的所有<code>public</code>函数和所有<code>public</code>成员变量</strong>,
+如下所示<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base1</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">void</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -495,8 +497,8 @@
     d<span class="token punctuation">.</span><span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//调用父类Base1中的f()函数</span>
     d<span class="token punctuation">.</span><span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//调用父类Base2中的g()函数</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>但是如果两个父类<strong>有同名的函数</strong>，则在调用该函数时编译器会报错。</p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+但是如果两个父类<strong>有同名的函数</strong>，则在调用该函数时编译器会报错。<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base1</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">void</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -515,8 +517,9 @@
     d<span class="token punctuation">.</span><span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
     d<span class="token punctuation">.</span><span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//error!!!</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>当然这个问题也是能解决的。我们可以<strong>用组合消除多重继承</strong>，即可以将<code>Base2</code>作为子类的一个组成部分（即属性）， 然后在子类中重写父类<code>Base1</code>的<code>g()</code>函数，重写后的函数内容为——<strong>调用数据成员<code>Base2</code>的<code>g()</code>函数。</strong></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+当然这个问题也是能解决的。我们可以<strong>用组合消除多重继承</strong>，即可以将<code>Base2</code>作为子类的一个组成部分（即属性），
+然后在子类中重写父类<code>Base1</code>的<code>g()</code>函数，重写后的函数内容为——<strong>调用数据成员<code>Base2</code>的<code>g()</code>函数。</strong><br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Derived</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Base1</span></span><span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span> 
     Base2 base2<span class="token punctuation">;</span>
@@ -527,13 +530,11 @@
 <span class="token keyword">void</span> <span class="token class-name">Derived</span><span class="token double-colon punctuation">::</span><span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
     base2<span class="token punctuation">.</span><span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>注意：<code>data member</code>不一定是属性。在上一个例子中，<code>base2</code>是<code>Derived</code>的<code>data member</code>,但是，我们只是用它来访问<code>Base2</code>类中的<code>g()</code>函数。因此<code>base2</code>不能称作<code>Derived</code>的属性！</p>
-</blockquote>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+&gt;注意：<code>data member</code>不一定是属性。在上一个例子中，<code>base2</code>是<code>Derived</code>的<code>data member</code>,但是，我们只是用它来访问<code>Base2</code>类中的<code>g()</code>函数。因此<code>base2</code>不能称作<code>Derived</code>的属性！<p></p>
 <h2 id="组合composition">组合composition</h2>
-<p>组合其实描述的就是<strong>在一个类里内嵌了其他类的对象作为成员的情况</strong>，它们之间的关系是一种<strong>包含与被包含</strong>的关系。在下面这个例子中，发动机类（<code>Engine</code>）作为汽车类（<code>Car</code>）的一个<code>data member</code>，他们之间的关系就是组合。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Engine</span> <span class="token punctuation">{</span>
+<p>组合其实描述的就是<strong>在一个类里内嵌了其他类的对象作为成员的情况</strong>，它们之间的关系是一种<strong>包含与被包含</strong>的关系。在下面这个例子中，发动机类（<code>Engine</code>）作为汽车类（<code>Car</code>）的一个<code>data member</code>，他们之间的关系就是组合。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Engine</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span>
     <span class="token keyword">int</span> power<span class="token punctuation">;</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -554,18 +555,18 @@
 <span class="token class-name">Car</span><span class="token double-colon punctuation">::</span><span class="token function">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     cout <span class="token operator">&lt;&lt;</span> <span class="token string">"constructor of Car"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="构造函数的调用问题-2">构造函数的调用问题</h3>
-<p>组合中构造函数的调用<strong>和继承相似</strong>，即当<code>Car</code>的构造函数被调用时，<code>Engine</code>的构造函数也会被调用（默认调用<strong>无参构造函数</strong>）。这一点也很显然，我们想要造一辆汽车时，作为其组成部分的<code>Engine</code>当然也会被造出来，否则汽车就无法被开动。</p>
-<p>在调用顺序上，同样是<strong>被包含的类的构造函数首先被调用</strong>，如下所示——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+### 构造函数的调用问题<br>
+组合中构造函数的调用<strong>和继承相似</strong>，即当<code>Car</code>的构造函数被调用时，<code>Engine</code>的构造函数也会被调用（默认调用<strong>无参构造函数</strong>）。这一点也很显然，我们想要造一辆汽车时，作为其组成部分的<code>Engine</code>当然也会被造出来，否则汽车就无法被开动。<p></p>
+<p>在调用顺序上，同样是<strong>被包含的类的构造函数首先被调用</strong>，如下所示——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Car car<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 <span class="token comment">//输出:</span>
 <span class="token comment">//constructor of Engine</span>
-<span class="token comment">//constructor of Car</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>但是，如果此时<strong>被包含的类</strong>中只有<strong>含参构造函数</strong>，则需要在<strong>外层类</strong>中<strong>显式地调用被包含类的构造函数</strong>。调用的语法和继承中的也很相似，可以从下面的例子看出——</p>
+<span class="token comment">//constructor of Car</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+但是，如果此时<strong>被包含的类</strong>中只有<strong>含参构造函数</strong>，则需要在<strong>外层类</strong>中<strong>显式地调用被包含类的构造函数</strong>。调用的语法和继承中的也很相似，可以从下面的例子看出——<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Engine</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> part<span class="token punctuation">;</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -585,10 +586,10 @@
 <span class="token class-name">Car</span><span class="token double-colon punctuation">::</span><span class="token function">Car</span><span class="token punctuation">(</span><span class="token keyword">int</span> power<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token function">engine</span><span class="token punctuation">(</span>power<span class="token punctuation">)</span><span class="token punctuation">{</span>
     cout <span class="token operator">&lt;&lt;</span> <span class="token string">"constructor of Car"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="构造初始化列表">构造初始化列表</h3>
-<p>上面<strong>被包含的类的对象</strong>的初始化方式同样适用于<code>int</code>等基本类型，这种方式叫做<strong>构造初始化列表</strong>，具体方式是"<strong>在构造函数后以一个冒号开始，接着是以逗号分隔的数据成员列表，每个数据成员后面跟一个放在括号中的初始化式</strong>"。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>上面<strong>被包含的类的对象</strong>的初始化方式同样适用于<code>int</code>等基本类型，这种方式叫做<strong>构造初始化列表</strong>，具体方式是"<strong>在构造函数后以一个冒号开始，接着是以逗号分隔的数据成员列表，每个数据成员后面跟一个放在括号中的初始化式</strong>"。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> id<span class="token punctuation">;</span>
     <span class="token keyword">int</span> grade<span class="token punctuation">;</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -597,12 +598,11 @@
 
 <span class="token class-name">Student</span><span class="token double-colon punctuation">::</span><span class="token function">Student</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">,</span> <span class="token keyword">int</span> grade<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token function">id</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">grade</span><span class="token punctuation">(</span>grade<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>因为<code>const</code>对象或引用类型只能初始化，不能二次赋值，也不能在构造函数中进行赋值，所以他们只能通过<strong>构造初始化列表的方式进行赋初值（初始化）</strong>。</p>
-</blockquote>
-<p>需要注意的是，初始化顺序与构造初始化列表中的顺序无关，<strong>只与类中变量被定义的顺序有关</strong>。在下面这个例子中，无论构造初始化列表中的顺序怎样，首先被初始化的都是<code>j</code>,而因为用来初始化<code>j</code>的<code>i</code>是未定义的，所以最后<code>j</code>的值一个 <strong>“垃圾数”</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+&gt;因为<code>const</code>对象或引用类型只能初始化，不能二次赋值，也不能在构造函数中进行赋值，所以他们只能通过<strong>构造初始化列表的方式进行赋初值（初始化）</strong>。<p></p>
+<p>需要注意的是，初始化顺序与构造初始化列表中的顺序无关，<strong>只与类中变量被定义的顺序有关</strong>。在下面这个例子中，无论构造初始化列表中的顺序怎样，首先被初始化的都是<code>j</code>,而因为用来初始化<code>j</code>的<code>i</code>是未定义的，所以最后<code>j</code>的值一个
+<strong>“垃圾数”</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
     <span class="token keyword">int</span> i<span class="token punctuation">;</span>
     <span class="token keyword">int</span> j<span class="token punctuation">;</span>
@@ -616,7 +616,8 @@
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Test <span class="token function">t</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+
                 
             </div>
             <hr/>
@@ -1013,7 +1014,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

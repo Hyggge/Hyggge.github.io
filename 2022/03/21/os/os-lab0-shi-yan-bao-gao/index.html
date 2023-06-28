@@ -7,8 +7,10 @@
     <meta name="keywords" content="「BUAA-OS」 Lab0：Linux基础操作, Hyggge&#39;s Blog">
     <meta name="description" content="实验思考题
 Thinking 0.1
-Q： 使用 cat Modified.txt ，观察它和第一次 add 之前的 status 一样吗，思考一下为什么？
-A： 这两个status不一样。第一次add之前是的status是Untracke">
+Q： 使用 cat Modified.txt ，观察它和第一次
+add 之前的 status 一样吗，思考一下为什么？
+A：
+这两个status不一样。第一次add之前是的status是Untracke">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,42 +391,70 @@ A： 这两个status不一样。第一次add之前是的status是Untracke">
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="实验思考题">实验思考题</h2>
-<h3 id="Thinking-0-1">Thinking 0.1</h3>
-<p><strong>Q：</strong> <strong>使用 cat Modified.txt ，观察它和第一次 add 之前的 status 一样吗，思考一下为什么？</strong><br>
-<strong>A：</strong> 这两个status不一样。第一次add之前是的status是<code>Untracked files</code>, 修改README.txt之后的status是<code>Changes not staged for commit</code>，并提示<code>modified: README.txt</code>。<br>
+<h3 id="thinking-0.1">Thinking 0.1</h3>
+<p><strong>Q：</strong> <strong>使用 cat Modified.txt ，观察它和第一次
+add 之前的 status 一样吗，思考一下为什么？</strong><br>
+<strong>A：</strong>
+这两个status不一样。第一次add之前是的status是<code>Untracked files</code>,
+修改README.txt之后的status是<code>Changes not staged for commit</code>，并提示<code>modified: README.txt</code>。<br>
 原因是，第一次add之前我们刚刚在工作区新建README.md文件，该文件没有被add过，即在暂存区中没有README.txt,所以显示该文件没有被追踪（<code>untracked</code>）。而修改README.txt后，这时候在工作区和暂存区都存在file，即该文件已被追踪到，因此会显示该文件已被修改（<code>mofified</code>）而不是<code>untracked</code>。</p>
-<h3 id="Thinking-0-2">Thinking 0.2</h3>
-<p><strong>Q：</strong> <strong>思考一下箭头中的 <code>add the file</code> 、 <code>stage the file</code> 和<code>commit</code> 分别对应的是 Git 里的哪些命令呢？</strong><br>
-<img src="git.png" alt=""><br>
-<strong>A：</strong> <code>add the file</code> 对应得是<code>git add</code>和<code>git commit</code>, 表示新建的文件被加入暂存区，并加入到本地版本库。 <code>staged the file</code>对应的也是<code>git add</code>，表示的是把在版本库中有备份的，且已被修改的文件加入暂存区。<code>commit</code>对应的是<code>git commit</code>表示的是将暂存区中的文件加入本地版本库。</p>
-<h3 id="Thinking-0-3">Thinking 0.3</h3>
-<p><strong>Q1：</strong> <strong>困意一阵阵袭来，小明睡倒在了键盘上。等到小明早上醒来的时候，他惊恐地发现，他把一个重要的代码文件 printf.c删除掉了。你该怎样帮他把代码文件恢复呢？</strong><br>
-<strong>A1：</strong> 此时小明没有把修改<code>add</code>到暂存区，只需要使用<code>git checkout -- printf.c </code>即可恢复。</p>
-<p><strong>Q2：</strong> <strong>小红很爽快地在键盘上敲下了 <code>git rm printf.c</code>，这下事情更复杂了，现在你又该如何处理才能弥补小红的过错呢？</strong><br>
-<strong>A2：</strong> 此时小红把暂存区中的printf.c也删去了，只需要<code>git reset HEAD printf.c</code>命令即可将文件在暂存区中恢复，然后再<code>git checkout -- printf.c</code> 即可。</p>
-<p><strong>Q3：</strong> <strong>突然发现小明的仓库里有一个叫 Tucao.txt，你好奇地打开一看，发现是吐槽操作系统实验的，且该文件已经被添加到暂存区了，面对这样的情况，你该如何设置才能使 Tucao.txt在不从工作区删除的情况下不会被 git commit 指令提交到版本库？</strong><br>
-<strong>A3：</strong> 我们只需要使用<code>git rm --cached Tucao.txt</code>命令即可将暂存区里的Tucao.txt中删除。</p>
-<h3 id="Thinking-0-4">Thinking 0.4</h3>
-<p><strong>Q：</strong> <strong>对<code>git reset --hard</code>使用的理解？</strong><br>
-<strong>A：</strong> <code>git reset --hard</code>实际上是用来改变当前的仓库状态，使用该指令，我们可以将当前仓库的状态变为以前任一次<code>commit后的状态</code>，即可以实现版本回退。此时我们既可以使用<code> git reset --hard HEAD^</code>也可以使用<code>git reset --hard &lt;Hash-code&gt;</code>。hashcode我们需要通过<code>git log</code>指令获取。<br>
-<code>git reset --hard</code>可退也可回。我们只需要记住后面某一次commit时的hashcode，再通过<code>git reset --hard &lt;Hash-code&gt;</code> 即可从未来会到现在</p>
-<h3 id="Thinking-0-5">Thinking 0.5</h3>
-<p><strong>Q：</strong> <strong>指出下面的描述哪些正确那些错误——</strong><br>
-<strong>1. 克隆时所有分支均被克隆，但只有 HEAD 指向的分支被检出。</strong><br>
-<strong>2. 克隆出的工作区中执行 git log、 git status、 git checkout、 git commit 等操作不会去访问远程版本库。</strong><br>
+<h3 id="thinking-0.2">Thinking 0.2</h3>
+<p><strong>Q：</strong> <strong>思考一下箭头中的
+<code>add the file</code> 、 <code>stage the file</code>
+和<code>commit</code> 分别对应的是 Git 里的哪些命令呢？</strong><br>
+<img src="git.png"><br>
+<strong>A：</strong> <code>add the file</code>
+对应得是<code>git add</code>和<code>git commit</code>,
+表示新建的文件被加入暂存区，并加入到本地版本库。
+<code>staged the file</code>对应的也是<code>git add</code>，表示的是把在版本库中有备份的，且已被修改的文件加入暂存区。<code>commit</code>对应的是<code>git commit</code>表示的是将暂存区中的文件加入本地版本库。</p>
+<h3 id="thinking-0.3">Thinking 0.3</h3>
+<p><strong>Q1：</strong>
+<strong>困意一阵阵袭来，小明睡倒在了键盘上。等到小明早上醒来的时候，他惊恐地发现，他把一个重要的代码文件
+printf.c删除掉了。你该怎样帮他把代码文件恢复呢？</strong><br>
+<strong>A1：</strong>
+此时小明没有把修改<code>add</code>到暂存区，只需要使用<code>git checkout -- printf.c</code>即可恢复。</p>
+<p><strong>Q2：</strong> <strong>小红很爽快地在键盘上敲下了
+<code>git rm printf.c</code>，这下事情更复杂了，现在你又该如何处理才能弥补小红的过错呢？</strong><br>
+<strong>A2：</strong>
+此时小红把暂存区中的printf.c也删去了，只需要<code>git reset HEAD printf.c</code>命令即可将文件在暂存区中恢复，然后再<code>git checkout -- printf.c</code>
+即可。</p>
+<p><strong>Q3：</strong> <strong>突然发现小明的仓库里有一个叫
+Tucao.txt，你好奇地打开一看，发现是吐槽操作系统实验的，且该文件已经被添加到暂存区了，面对这样的情况，你该如何设置才能使
+Tucao.txt在不从工作区删除的情况下不会被 git commit
+指令提交到版本库？</strong><br>
+<strong>A3：</strong>
+我们只需要使用<code>git rm --cached Tucao.txt</code>命令即可将暂存区里的Tucao.txt中删除。</p>
+<h3 id="thinking-0.4">Thinking 0.4</h3>
+<p><strong>Q：</strong>
+<strong>对<code>git reset --hard</code>使用的理解？</strong><br>
+<strong>A：</strong>
+<code>git reset --hard</code>实际上是用来改变当前的仓库状态，使用该指令，我们可以将当前仓库的状态变为以前任一次<code>commit后的状态</code>，即可以实现版本回退。此时我们既可以使用<code>git reset --hard HEAD^</code>也可以使用<code>git reset --hard &lt;Hash-code&gt;</code>。hashcode我们需要通过<code>git log</code>指令获取。<br>
+<code>git reset --hard</code>可退也可回。我们只需要记住后面某一次commit时的hashcode，再通过<code>git reset --hard &lt;Hash-code&gt;</code>
+即可从未来会到现在</p>
+<h3 id="thinking-0.5">Thinking 0.5</h3>
+<p><strong>Q：</strong>
+<strong>指出下面的描述哪些正确那些错误——</strong><br>
+<strong>1. 克隆时所有分支均被克隆，但只有 HEAD
+指向的分支被检出。</strong><br>
+<strong>2. 克隆出的工作区中执行 git log、 git status、 git checkout、
+git commit 等操作不会去访问远程版本库。</strong><br>
 <strong>3. 克隆时只有远程版本库 HEAD 指向的分支被克隆。</strong><br>
 <strong>4. 克隆后工作区的默认分支处于 master 分支。</strong></p>
 <p><strong>A：</strong><br>
-<strong>1.正确。</strong> 我们可以做一个实验。首先我们可以在家目录下新建一个文件夹learnGit，然后进入该文件夹。在该文件夹下使用命令<code>git clone git@git.os.buaa.edu.cn:os2022/20373379.git</code>之后我们可以在看到出现了新文件夹20373379。</p>
-<p><img src="git%20clone.png" alt=""></p>
+<strong>1.正确。</strong>
+我们可以做一个实验。首先我们可以在家目录下新建一个文件夹learnGit，然后进入该文件夹。在该文件夹下使用命令<code>git clone git@git.os.buaa.edu.cn:os2022/20373379.git</code>之后我们可以在看到出现了新文件夹20373379。</p>
+<p><img src="git%20clone.png"></p>
 <p>之后我们进入该文件夹，使用<code>git branch -a</code>查看当前所有分支——</p>
-<p><img src="git%20branch.png" alt=""><br>
+<p><img src="git%20branch.png"><br>
 从中可以发现，本地分支(绿色)只有<code>main</code>被检出。虽然其他分支没有出现，但我们实际上已经将其clone下来了，只需要使用<code>git checkout</code>命令即可将其检出。例如我们使用<code>git checkout lab0</code>，<code>lab0</code>分支即可被检出。</p>
-<p><strong>2.正确。</strong> 在<code>git</code>中，只有<code>git pull</code>，<code>git push</code>, <code>git remote</code>等命令和远程库有关。</p>
-<p><img src="git%20checkout.png" alt=""></p>
+<p><strong>2.正确。</strong>
+在<code>git</code>中，只有<code>git pull</code>，<code>git push</code>,
+<code>git remote</code>等命令和远程库有关。</p>
+<p><img src="git%20checkout.png"></p>
 <p><strong>3.错误。</strong> 解析同第一问。<br>
-<strong>4.正确。</strong> 我们在第一问的实验中已经发现，当我们刚刚克隆时，<code>HEAD</code>指向的是远程仓库中的默认分支，即<code>main</code>。实际上<code>main</code>和<code>master</code>是一样的意思，只不过是远程仓库默认分支的两种叫法。</p>
-<h3 id="Thinking-0-6">Thinking 0.6</h3>
+<strong>4.正确。</strong>
+我们在第一问的实验中已经发现，当我们刚刚克隆时，<code>HEAD</code>指向的是远程仓库中的默认分支，即<code>main</code>。实际上<code>main</code>和<code>master</code>是一样的意思，只不过是远程仓库默认分支的两种叫法。</p>
+<h3 id="thinking-0.6">Thinking 0.6</h3>
 <p><strong>Q：</strong> <strong>执行如下命令, 并查看结果</strong></p>
 <ul>
 <li><strong>echo first</strong></li>
@@ -432,23 +462,41 @@ A： 这两个status不一样。第一次add之前是的status是Untracke">
 <li><strong>echo third &gt; output.txt</strong></li>
 <li><strong>echo forth &gt;&gt; output.txt</strong></li>
 </ul>
-<p><strong>A：</strong> 命令执行结果如下（对于重定向的命令，我们使用<code>cat</code>来查看<code>output.txt</code>中的结果）</p>
-<p><img src="echo.png" alt=""></p>
-<h3 id="Thinking-0-7">Thinking 0.7</h3>
-<p><strong>Q：</strong> <strong>使用你知道的方法（包括重定向）创建下图内容的文件（文件命名为test），将创建该文件的命令序列保存在 command 文件中，并将 test 文件作为批处理文件运行，将运行结果输出至 result 文件中。给出 command 文件和 result文件的内容，并对最后的结果进行解释说明（可以从 test 文件的内容入手） . 具体实现的过程中思考下列问题: <code>echo echo Shell Start</code> 与 <code>echo ‘echo Shell Start’</code> 效果是否有区别; <code>echo echo $c&gt;file1</code> 与 <code>echo ‘echo $c&gt;file1’</code> 效果是否有区别.</strong></p>
-<p><img src="thinking0.6.png" alt=""></p>
+<p><strong>A：</strong>
+命令执行结果如下（对于重定向的命令，我们使用<code>cat</code>来查看<code>output.txt</code>中的结果）</p>
+<p><img src="echo.png"></p>
+<h3 id="thinking-0.7">Thinking 0.7</h3>
+<p><strong>Q：</strong>
+<strong>使用你知道的方法（包括重定向）创建下图内容的文件（文件命名为test），将创建该文件的命令序列保存在
+command 文件中，并将 test 文件作为批处理文件运行，将运行结果输出至
+result 文件中。给出 command 文件和
+result文件的内容，并对最后的结果进行解释说明（可以从 test
+文件的内容入手） . 具体实现的过程中思考下列问题:
+<code>echo echo Shell Start</code> 与
+<code>echo ‘echo Shell Start’</code> 效果是否有区别;
+<code>echo echo $c&gt;file1</code> 与
+<code>echo ‘echo $c&gt;file1’</code> 效果是否有区别.</strong></p>
+<p><img src="thinking0.6.png"></p>
 <p><strong>A：</strong> <strong>command</strong>文件中的内容为</p>
-<p><img src="command.png" alt=""></p>
+<p><img src="command.png"></p>
 <p><strong>result</strong> 文件中的内容为</p>
-<p><img src="result.png" alt=""></p>
+<p><img src="result.png"></p>
 <p><strong>结果分析</strong>：我们在test中先将a和b分别赋值为1和2，然后令c等于a与b的和，即c的结果为.我们将c，b，a的值分别写入file1、file2、<br>
-file3，此时这三个文件中的值分别为3, 2, 1。然后我们使用cat将这三个文件的值 <strong>追加</strong> 写入file4，再把file4中的内容写入result。因此result中的值为3, 2, 1。</p>
-<p>在实验过程中我们还发现，<code>echo echo Shell Start</code> 与 <code>echo ‘echo Shell Start’</code> 效果是没有区别的； <code>echo echo $c&gt;file1</code> 与 <code>echo ‘echo $c&gt;file1’</code> 效果是有区别的，前者会将"echo $c"重定向到file1，而后者会将"echo $c&gt;file"这一字符串在终端中显示。</p>
+file3，此时这三个文件中的值分别为3, 2,
+1。然后我们使用cat将这三个文件的值 <strong>追加</strong>
+写入file4，再把file4中的内容写入result。因此result中的值为3, 2, 1。</p>
+<p>在实验过程中我们还发现，<code>echo echo Shell Start</code> 与
+<code>echo ‘echo Shell Start’</code> 效果是没有区别的；
+<code>echo echo $c&gt;file1</code> 与
+<code>echo ‘echo $c&gt;file1’</code> 效果是有区别的，前者会将"echo
+$c"重定向到file1，而后者会将"echo
+$c&gt;file"这一字符串在终端中显示。</p>
 <h2 id="实验难点图示">实验难点图示</h2>
 <p>我认为该实验的难点主要包含以下难点——<strong>git的使用（撤销、版本回退和本地远程同步）、三种文件操作命令的使用（awk、grep、sed）、shell脚本中不同括号的用法。</strong></p>
-<p><img src="%E5%AE%9E%E9%AA%8C%E9%9A%BE%E7%82%B9.png" alt=""></p>
+<p><img src="实验难点.png"></p>
 <h2 id="体会与感想">体会与感想</h2>
-<p>Lab0主要让我们学习如何使用Linux控制终端来进行文件操作，实验任务难度不大， 我花费的时间约六七个小时左右，其中大部分都是在学习新的命令和新的用法。因为指导书所提供的学习内容比较局限，在一些常用的命令介绍上也仅仅是抛砖引玉（例如awk，sed等），所以许多重要的用法还需要在csdn等网站上查找资料自学。</p>
+<p>Lab0主要让我们学习如何使用Linux控制终端来进行文件操作，实验任务难度不大，
+我花费的时间约六七个小时左右，其中大部分都是在学习新的命令和新的用法。因为指导书所提供的学习内容比较局限，在一些常用的命令介绍上也仅仅是抛砖引玉（例如awk，sed等），所以许多重要的用法还需要在csdn等网站上查找资料自学。</p>
 <p>终端操作和以往在可视化界面上进行的操作不同，一开始面对这些陌生的命令，以及让人迎接不暇的各种参数，我还并不是很适应，甚至有些望而生畏的感觉。但当我多次在shell里使用后，这些命令逐渐变得熟悉，使用起来也更加得心应手。正如荣文戈老师说的那样——“<strong>程序员的提高是一种体力活</strong>”，诚哉斯言！</p>
 
                 
@@ -847,7 +895,7 @@ file3，此时这三个文件中的值分别为3, 2, 1。然后我们使用cat�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

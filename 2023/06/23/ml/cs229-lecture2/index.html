@@ -7,14 +7,14 @@
     <meta name="keywords" content="「CS229」Lecture2： 线性回归和梯度下降, Hyggge&#39;s Blog">
     <meta name="description" content="线性回归
 
-
 线性回归是最简单的监督学习回归问题。监督学习的基本流程：
 
-测试数据集，包含一系列$(x, y)$对
+测试数据集，包含一系列\((x,
+y)\)对
 数据输入到学习算法
-输出一个函数$h$，使得该函数可以很好地为输入的 x 生成对应的 y
-使用函数$h$对其他数据进行预测
-">
+输出一个函数\(h\)，使得该函数可以很好地为输入的 x
+生成对应的 y
+使用函数\(h\)对其他数据">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -369,14 +369,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    712
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    5 分
                 </div>
                 
 
@@ -396,121 +396,176 @@
             <div id="articleContent">
                 <h2 id="线性回归">线性回归</h2>
 <ul>
-<li>
-<p>线性回归是最简单的监督学习回归问题。监督学习的基本流程：</p>
-<ol>
-<li>测试数据集，包含一系列$(x, y)$对</li>
+<li><p>线性回归是最简单的监督学习回归问题。监督学习的基本流程：</p>
+<ol type="1">
+<li>测试数据集，包含一系列<span class="math inline">\((x,
+y)\)</span>对</li>
 <li>数据输入到学习算法</li>
-<li>输出一个函数$h$，使得该函数可以很好地为输入的 x 生成对应的 y</li>
-<li>使用函数$h$对其他数据进行预测</li>
+<li>输出一个函数<span class="math inline">\(h\)</span>，使得该函数可以很好地为输入的 x
+生成对应的 y</li>
+<li>使用函数<span class="math inline">\(h\)</span>对其他数据进行预测</li>
 </ol>
-<p><img src="./1.png" alt=""></p>
-</li>
-<li>
-<p>函数的表示<br>
-$$<br>
-h = \theta_{1}x_1 + \theta_{2}x_2 + … + \theta_nx_n + b = \sum_{j=0}^{n}\theta_i x_i<br>
-$$<br>
-其中，$x_0$始终为1。如果写成矩阵形式，即 $\theta = \begin{bmatrix}\theta_0 \ \theta_2 \ \vdots\end{bmatrix}, \ x = \begin{bmatrix}x_0 \ x_1 \ \vdots \end{bmatrix}$ , 则上述公式可以写成:<br>
-$$<br>
-h_\theta(x) = \theta^T x<br>
-$$</p>
-</li>
-<li>
-<p>常用符号</p>
+<p><img src="./1.png" alt="image-20230622000802916"></p></li>
+<li><p>函数的表示<br>
+<span class="math display">\[
+h = \theta_{1}x_1 + \theta_{2}x_2 + ... + \theta_nx_n + b =
+\sum_{j=0}^{n}\theta_i x_i
+\]</span><br>
+其中，<span class="math inline">\(x_0\)</span>始终为1。如果写成矩阵形式，即 <span class="math inline">\(\theta = \begin{bmatrix}\theta_0 \\ \theta_2 \\
+\vdots\end{bmatrix}, \ x = \begin{bmatrix}x_0 \\ x_1 \\ \vdots
+\end{bmatrix}\)</span> , 则上述公式可以写成:<br>
+<span class="math display">\[
+h_\theta(x) = \theta^T x
+\]</span></p></li>
+<li><p>常用符号</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">含义</th>
+<tr class="header">
+<th style="text-align: center;">符号</th>
+<th style="text-align: center;">含义</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">$\theta$</td>
-<td style="text-align:center">参数</td>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\theta\)</span></td>
+<td style="text-align: center;">参数</td>
 </tr>
-<tr>
-<td style="text-align:center">$m$</td>
-<td style="text-align:center">训练集的大小</td>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(m\)</span></td>
+<td style="text-align: center;">训练集的大小</td>
 </tr>
-<tr>
-<td style="text-align:center">$x$</td>
-<td style="text-align:center">输入 / 特征</td>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(x\)</span></td>
+<td style="text-align: center;">输入 / 特征</td>
 </tr>
-<tr>
-<td style="text-align:center">$y$</td>
-<td style="text-align:center">输出 / 目标变量</td>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(y\)</span></td>
+<td style="text-align: center;">输出 / 目标变量</td>
 </tr>
-<tr>
-<td style="text-align:center">$(x^{(i)}, y^{(i)})$</td>
-<td style="text-align:center">训练集中第 i 个训练样本</td>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\((x^{(i)},
+y^{(i)})\)</span></td>
+<td style="text-align: center;">训练集中第 i 个训练样本</td>
 </tr>
-<tr>
-<td style="text-align:center">$(x, y)$</td>
-<td style="text-align:center">训练集中某一个训练样本</td>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\((x,
+y)\)</span></td>
+<td style="text-align: center;">训练集中某一个训练样本</td>
 </tr>
-<tr>
-<td style="text-align:center">$x_j^{(i)}$</td>
-<td style="text-align:center">第 i 个训练样例的第 j 个特征</td>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(x_j^{(i)}\)</span></td>
+<td style="text-align: center;">第 i 个训练样例的第 j 个特征</td>
 </tr>
-<tr>
-<td style="text-align:center">$n$</td>
-<td style="text-align:center">特征数量</td>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(n\)</span></td>
+<td style="text-align: center;">特征数量</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li>
-<p>参数的选择<br>
-$$<br>
-\tt{choose} \ \theta \ st. h(x) \approx y \ \ \ \tt{for \ every \ training \ example}<br>
-$$<br>
+</table></li>
+<li><p>参数的选择<br>
+<span class="math display">\[
+\tt{choose} \ \theta \\ st. h(x) \approx y \ \ \ \tt{for \ every \
+training \ example}
+\]</span><br>
 对于线性回归问题，目标参数可以形式化的表示为<br>
-$$<br>
-J(\theta) =  \frac{1}{2} \sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2 \ \<br>
-\theta = \mathop{\arg\min}\limits_{\theta} \ J(\theta)<br>
-$$<br>
-$J(x)$ 通常被称为<strong>成本函数</strong>，即 cost function.</p>
-</li>
+<span class="math display">\[
+J(\theta) =  \frac{1}{2} \sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2
+\\ \\
+\theta = \mathop{\arg\min}\limits_{\theta} \ J(\theta)
+\]</span><br>
+<span class="math inline">\(J(x)\)</span>
+通常被称为<strong>成本函数</strong>，即 cost function.</p></li>
 </ul>
-<h2 id="批梯度下降和随机梯度下降">批梯度下降和随机梯度下降</h2>
-<h3 id="批梯度下降">批梯度下降</h3>
-<p><img src="./2.png" alt=""></p>
+<h2 id="批量梯度下降和随机梯度下降">批量梯度下降和随机梯度下降</h2>
+<h3 id="批量梯度下降">批量梯度下降</h3>
+<p><img src="./2.png" alt="image-20230621094424151"></p>
 <ul>
-<li>批梯度下降形式化表示：<br>
-$$<br>
-\theta_j := \theta_j - \alpha \frac{\partial \ J(\theta)}{\partial\  \theta_j} \ \ \tt{(repeat \ until \ convergence)}<br>
-$$</li>
+<li>批量梯度下降形式化表示：<br>
+<span class="math display">\[
+\theta_j := \theta_j - \alpha \frac{\partial \
+J(\theta)}{\partial\  \theta_j} \ \\ \tt{(repeat \ until \ convergence)}
+\]</span></li>
 </ul>
-<p>​	其中，$\alpha$表示学习率。对于线性回归来说，$\frac{\partial \ J(\theta)}{\partial\  \theta_j}$的计算如下所示：<br>
-$$<br>
-\frac{\partial \ J(\theta)}{\partial\  \theta_j} = \sum_{i = 1}^n (h_\theta(x^{(i)}) - y^{(i)}) \ x_j^{(i)}<br>
-$$<br>
-​	因此，线性回归的梯度下降公式就可以表示为：<br>
-$$<br>
-\theta_j := \theta_j - \alpha \sum_{i = 1}^n (h_\theta(x^{(i)}) - y^{(i)}) \ x_j^{(i)} \ \tt{(repeat \ until \ convergence)}<br>
-$$</p>
+<p>​ 其中，<span class="math inline">\(\alpha\)</span>表示学习率。对于线性回归来说，<span class="math inline">\(\frac{\partial \
+J(\theta)}{\partial\  \theta_j}\)</span>的计算如下所示：<br>
+<span class="math display">\[
+\frac{\partial \ J(\theta)}{\partial\  \theta_j} = \sum_{i = 1}^m
+(h_\theta(x^{(i)}) - y^{(i)}) \ x_j^{(i)}
+\]</span><br>
+​因此，线性回归的梯度下降公式就可以表示为：<br>
+<span class="math display">\[
+\theta_j := \theta_j - \alpha \sum_{i = 1}^m (h_\theta(x^{(i)}) -
+y^{(i)}) \ x_j^{(i)} \\ \tt{(repeat \ until \ convergence)}
+\]</span></p>
 <ul>
-<li>这里的“批“的意思是：每一次进行梯度下降更新参数时，都用到了一批数据参与运算。在上面的例子中，我们将训练集中所有的数据作为“一批”。每一次参数更新时，计算该批中每一条数据对应的“损失”，最终将所有的损失求和，其实也就是$J(\theta)$。然后根据$J(\theta)$ 和公式$\theta_j := \theta_j - \alpha \frac{\partial \ J(\theta)}{\partial\  \theta_j} \ \ $ 对每个参数进行“一次“更新。</li>
+<li>这里的“批“的意思是：每一次进行梯度下降更新参数时，都用到了一批数据参与运算。在上面的例子中，我们将训练集中所有的数据作为“一批”。每一次参数更新时，计算该批中每一条数据对应的“损失”，最终将所有的损失求和，其实也就是<span class="math inline">\(J(\theta)\)</span>。然后根据<span class="math inline">\(J(\theta)\)</span> 和公式$_j := _j - &nbsp;\ $
+对每个参数进行“一次“更新。</li>
 </ul>
 <h3 id="随机梯度下降">随机梯度下降</h3>
-<p>对于每一条数据，即$(x^{(i)}, y^{(i)})$，都进行一次梯度下降。此时梯度下降的过程就变为<br>
-$$<br>
-\begin{aligned}<br>
-&amp;\tt{repeat \ until \ convergence} \ { \</p>
-<p>&amp;\qquad\tt{for \ \ i \ = \ 0 \ \ to \ \ m } \ {  \</p>
-<p>&amp;\qquad\qquad  \theta_j := \theta_j - \alpha \frac{(h_{\theta}(x^{(i)}) - y^{(i)})^2}{\theta_j} \</p>
-<p>&amp;\qquad} \</p>
-<p>&amp;}</p>
-<p>\end{aligned}<br>
-$$</p>
+<p>对于每一条数据，即<span class="math inline">\((x^{(i)},
+y^{(i)})\)</span>，都进行一次梯度下降。此时梯度下降的过程就变为<br>
+<span class="math display">\[
+\begin{aligned}
+&amp;\tt{repeat \ until \ convergence} \ \{ \\
+&amp;\qquad\tt{for \ \ i \ = \ 0 \ \ to \ \ m } \ \{  \\
+&amp;\qquad\qquad  \theta_j := \theta_j - \alpha
+\frac{(h_{\theta}(x^{(i)}) - y^{(i)})^2}{\theta_j} \\
+&amp;\qquad\} \\
+&amp;\}
+\end{aligned}
+\]</span><br>
+批量梯度下降法在进行一次迭代之前必须扫描整个训练集，如果m很大的话，计算开销非常高。而随机梯度下降法每次只针对一条数据进行梯度下降，因此能够更快地使
+<span class="math inline">\(\theta\)</span>
+“接近”最小值。但是需要注意的是，随机梯度下降可能永远不会“收敛”到最小值，并且参数
+<span class="math inline">\(\theta\)</span> 将在 <span class="math inline">\(\theta\)</span>
+的最小值周围振荡；但在实践中，大多数“接近最小值的值”就是对真实最小值的合理近似。</p>
+<p>因此，通常更推荐使用随机梯度下降，尤其是数据集合规模较大的时候。</p>
 <h2 id="正规方程">正规方程</h2>
-<p>正规方程其实就是对上述的$J(\theta)$ 求偏导、并令偏导数等于0得到的。因此他只适用于线性回归。<br>
-$$<br>
-\theta = (X^TX)^{-1}X^TY \ \<br>
-X = \begin{bmatrix}\ (x^{(1)})^T \ (x^{(2)})^T \ \vdots\end{bmatrix},\ \ \  Y = \begin{bmatrix}\ y^{(1)} \ y^{(2)} \ \vdots\end{bmatrix}<br>
-$$</p>
+<h3 id="基本形式">基本形式</h3>
+<p>正规方程其实就是对上述的<span class="math inline">\(J(\theta)\)</span>
+求偏导、并令偏导数等于0得到的。因此他只适用于线性回归。<br>
+<span class="math display">\[
+\theta = (X^TX)^{-1}X^TY \\ \\
+X = \begin{bmatrix} — \ (x^{(1)})^T \ — \\ — \ (x^{(2)})^T \ — \\ \vdots
+\\ — \  (x^{(m)})^T  —\end{bmatrix},\ \ \  Y = \begin{bmatrix}\ y^{(1)}
+\\ y^{(2)} \\ \vdots \\ y^{(m)}\end{bmatrix}
+\]</span></p>
+<h3 id="推导">推导</h3>
+<p>在推导之前我们需要用到以下公式：<br>
+<span class="math display">\[
+\begin{aligned}
+\nabla_Atr AB &amp;= B^T \\
+\nabla_{A^T} f(A)&amp;= (\nabla_A f(A))^T \\
+\nabla_A tr ABA^TC &amp;= CAB + C^TAB^T \\
+\nabla_A |A| &amp;= |A|(A^{-1})^T
+\end{aligned}
+\]</span><br>
+下面就可以开始推导啦<br>
+<span class="math display">\[
+\begin{aligned}
+\nabla_\theta J(\theta) &amp;= \nabla_\theta
+\frac{1}{2}(X\theta-Y)^T(X\theta-Y) \\
+&amp;= \frac{1}{2} \nabla_\theta(\theta^TX^T - Y^T)(X\theta - Y) \\
+&amp;= \frac{1}{2} \nabla_\theta(\theta^TX^TX\theta - \theta^TX^TY -
+Y^TX\theta + Y^TY) \\
+&amp;= \frac{1}{2} \nabla_\theta tr(\theta^TX^TX\theta - \theta^TX^TY -
+Y^TX\theta + Y^TY) \\
+&amp;= \frac{1}{2} \nabla_\theta (tr \theta^TX^TX\theta - 2 tr
+Y^TX\theta) \\
+&amp;= \frac{1}{2} (\nabla_\theta tr \theta^TX^TX\theta - 2
+\nabla_\theta tr Y^TX\theta) \\
+&amp;= \frac{1}{2} ((\nabla_{\theta^T} tr \theta^T(X^TX)\theta I)^T - 2
+\nabla_\theta tr Y^TX\theta) \\
+&amp;= \frac{1}{2} (X^TX\theta + X^TX\theta - 2 \nabla_\theta tr
+Y^TX\theta) \\
+&amp;= X^TX\theta - X^TY
+\end{aligned}
+\]</span><br>
+令 <span class="math inline">\(\nabla_\theta J(\theta) = 0\)</span>
+即可得到正规方程：<br>
+<span class="math display">\[
+\theta = (X^TX)^{-1}X^TY
+\]</span></p>
 
                 
             </div>
@@ -908,7 +963,7 @@ $$</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

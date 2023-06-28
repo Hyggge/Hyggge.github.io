@@ -381,10 +381,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Block是Ruby中比较重要的概念，也算是一块比较难啃的骨头。笔者在学Ruby基础的时候，碰到了很多关于块的“神奇操作“，但是在google上搜了很久也没有找到满意的答案（毕竟Ruby相对小众一点）。本想先跳过，在学完rails之后再补习ruby基础，没成想打开rails官方教程后，密密麻麻的全是块的操作…（晕）。于是不得不回来继续啃，特以此篇博客作为记录。</p>
-<h2 id="Proc和Lambda">Proc和Lambda</h2>
-<p>在理解Block之前，我们必须要清楚另一个概念——Proc。Proc实际上就是“一小段代码”，它在定义之后可以在其他地方被调用，在调用时也可以传入一些变量，这跟函数是很相似的。不过与函数不同的是，Proc对象必须通过<code>call</code>方法才能被调用。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token comment"># 创建方式</span>
+                <p>Block是Ruby中比较重要的概念，也算是一块比较难啃的骨头。笔者在学Ruby基础的时候，碰到了很多关于块的“神奇操作“，但是在google上搜了很久也没有找到满意的答案（毕竟Ruby相对小众一点）。本想先跳过，在学完rails之后再补习ruby基础，没成想打开rails官方教程后，密密麻麻的全是块的操作...（晕）。于是不得不回来继续啃，特以此篇博客作为记录。</p>
+<h2 id="proc和lambda">Proc和Lambda</h2>
+<p>在理解Block之前，我们必须要清楚另一个概念——Proc。Proc实际上就是“一小段代码”，它在定义之后可以在其他地方被调用，在调用时也可以传入一些变量，这跟函数是很相似的。不过与函数不同的是，Proc对象必须通过<code>call</code>方法才能被调用。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token comment"># 创建方式</span>
 <span class="token comment"># 创建一般Proc</span>
 p <span class="token operator">=</span> <span class="token class-name">Proc</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span>
 p <span class="token operator">=</span> proc <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span>
@@ -393,28 +393,28 @@ p <span class="token operator">=</span> <span class="token operator">-</span><sp
 p <span class="token operator">=</span> lambda <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span> 
 
 <span class="token comment"># 调用方式</span>
-p<span class="token punctuation">.</span>call<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>lambda是一种特殊的Proc，它和普通Proc有以下两点区别——</p>
-<ul>
-<li>lambda在调用时会检查参数的个数。如果传入的参数太多或太少，都会抛出<code>ArgumentError</code>异常。而普通Proc不会对参数个数进行检查。</li>
-<li>lambda可以使用return返回某个对象，其行为和函数很相似。但是普通Proc不可以使用return，否则会抛出<code>LocalJumpError</code>异常。</li>
-</ul>
+p<span class="token punctuation">.</span>call<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+lambda是一种特殊的Proc，它和普通Proc有以下两点区别——<br>
+-
+lambda在调用时会检查参数的个数。如果传入的参数太多或太少，都会抛出<code>ArgumentError</code>异常。而普通Proc不会对参数个数进行检查。<br>
+-
+lambda可以使用return返回某个对象，其行为和函数很相似。但是普通Proc不可以使用return，否则会抛出<code>LocalJumpError</code>异常。<p></p>
 <blockquote>
 <p>Q: 如何判断一个Proc对象是lambda还是普通Proc?<br>
-A: 只需要puts一下该对象即可。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby">puts proc <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span> <span class="token comment"># 输出#&lt;Proc:0x00005635d72eb518 /home/hyggge/Desktop/test.rb:1&gt;</span>
-puts lambda <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span> <span class="token comment"># 输出#&lt;Proc:0x00005635d72eb310 /home/hyggge/Desktop/test.rb:2 (lambda)&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+A: 只需要puts一下该对象即可。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby">puts proc <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span> <span class="token comment"># 输出#&lt;Proc:0x00005635d72eb518 /home/hyggge/Desktop/test.rb:1&gt;</span>
+puts lambda <span class="token punctuation">{</span><span class="token operator">|</span>x<span class="token operator">|</span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">}</span> <span class="token comment"># 输出#&lt;Proc:0x00005635d72eb310 /home/hyggge/Desktop/test.rb:2 (lambda)&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
 </blockquote>
-<h2 id="Block">Block</h2>
+<h2 id="block">Block</h2>
 <h3 id="隐式传递">隐式传递</h3>
-<p>Block实际上就是一种特殊的Proc，但是它不能独立存在，不能被保存（一次性的，不能赋值给某个变量），只能与函数结合来使用。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
+<p>Block实际上就是一种特殊的Proc，但是它不能独立存在，不能被保存（一次性的，不能赋值给某个变量），只能与函数结合来使用。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
     <span class="token keyword">yield</span> <span class="token string-literal"><span class="token string">'hyggge'</span></span>
 <span class="token keyword">end</span>
 
 func <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span>
-    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在这里，我们可以把Block理解成传给函数一个“特殊实参”，不过这种传递是一种“隐式传递”，因为函数不需要设置对应的形参。要想在函数里调用这个Block，我们只需使用<code>yield</code>关键字即可。感觉很像在C语言中把一个函数的指针传递给另一个函数——</p>
+    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+在这里，我们可以把Block理解成传给函数一个“特殊实参”，不过这种传递是一种“隐式传递”，因为函数不需要设置对应的形参。要想在函数里调用这个Block，我们只需使用<code>yield</code>关键字即可。感觉很像在C语言中把一个函数的指针传递给另一个函数——<br>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">(</span><span class="token operator">*</span>block<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">block</span><span class="token punctuation">(</span><span class="token string">"hyggge"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -427,47 +427,47 @@ func <span class="token punctuation">{</span><span class="token operator">|</spa
     <span class="token function">func</span><span class="token punctuation">(</span>block<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="显式传递">显式传递</h3>
-<p>当然，我们也可以在函数的定义中增加一个形参，该形参用于接收要将要传入的块，这种传递就是“显式传递”。需要注意的是，这个特殊形参的前面需要加一个前缀<code>&amp;</code>。</p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+### 显式传递<br>
+当然，我们也可以在函数的定义中增加一个形参，该形参用于接收要将要传入的块，这种传递就是“显式传递”。需要注意的是，这个特殊形参的前面需要加一个前缀<code>&amp;</code>。<br>
 <pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span>
     p<span class="token punctuation">.</span>call <span class="token string-literal"><span class="token string">'hyggge'</span></span>
     <span class="token keyword">yield</span> <span class="token string-literal"><span class="token string">'hyggge'</span></span>
 <span class="token keyword">end</span>
 
-func <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>此时，我们既可以用yield关键字来调用块，也可以通过形参p的call方法来调用。</p>
+func <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+此时，我们既可以用yield关键字来调用块，也可以通过形参p的call方法来调用。<p></p>
 <h2 id="的使用">&amp;的使用</h2>
-<p>在不同的上下文环境下，&amp;的作用和意义也不甚相同，在这里我们只介绍&amp;和Block、Proc相关的一些用法。</p>
-<h3 id="作用于Block">&amp;作用于Block</h3>
-<p>当&amp;作用于Block时，会将Block转化为普通Proc，这其实就是“显式传递”背后的原理。</p>
+<p>在不同的上下文环境下，&amp;的作用和意义也不甚相同，在这里我们只介绍&amp;和Block、Proc相关的一些用法。<br>
+### &amp;作用于Block<br>
+当&amp;作用于Block时，会将Block转化为普通Proc，这其实就是“显式传递”背后的原理。</p>
 <pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span>
     p<span class="token punctuation">.</span>call <span class="token string-literal"><span class="token string">'hyggge'</span></span>
     puts p <span class="token comment"># 输出&lt;Proc:0x000055987014f0b0 /home/hyggge/Desktop/test.rb:6&gt;</span>
 <span class="token keyword">end</span>
 
 func <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="作用于Proc">&amp;作用于Proc</h3>
-<p>如果&amp;作用于Proc（包括普通Proc和lambda），那么它就会将这个Proc转换成一个Block。因为Block是不能独立存在的，所以<code>&amp;proc</code>必须结合函数来使用。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
+<h3 id="作用于proc">&amp;作用于Proc</h3>
+<p>如果&amp;作用于Proc（包括普通Proc和lambda），那么它就会将这个Proc转换成一个Block。因为Block是不能独立存在的，所以<code>&amp;proc</code>必须结合函数来使用。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
     <span class="token keyword">yield</span> <span class="token string-literal"><span class="token string">'hyggge'</span></span>
 <span class="token keyword">end</span>
 
 p <span class="token operator">=</span> proc <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span>
-func<span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="作用于非Proc对象">&amp;作用于非Proc对象</h3>
-<p>如果&amp;作用于非Proc对象（例如Symbol、Hash等等），它会先调用该对象的<code>to_proc</code>方法将该对象转换成Proc，然后再将其转化成一个Block。同样，这个用法也需要结合函数来使用。</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
+func<span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="作用于非proc对象">&amp;作用于非Proc对象</h3>
+<p>如果&amp;作用于非Proc对象（例如Symbol、Hash等等），它会先调用该对象的<code>to_proc</code>方法将该对象转换成Proc，然后再将其转化成一个Block。同样，这个用法也需要结合函数来使用。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span>
     puts <span class="token keyword">yield</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
 <span class="token keyword">end</span>
 
 hash <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span> <span class="token operator">=&gt;</span> <span class="token string-literal"><span class="token string">'a'</span></span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token operator">=&gt;</span> <span class="token string-literal"><span class="token string">'b'</span></span><span class="token punctuation">}</span>
-func<span class="token punctuation">(</span><span class="token operator">&amp;</span>hash<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>下面重点讨论一下&amp;作用于Symbol的情形。我们经常看到这样的代码——</p>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>map<span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token symbol">:to_i</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>通过上面的讲解我们知道，这里的<code>:to_i</code>首先通过自身的<code>to_proc</code>方法转换成一个Proc对象，然后再转换成一个Block，最后被传入<code>map</code>函数。但问题是，<code>to_proc</code>是如何将<code>:to_i</code>转化成一个Proc的呢？</p>
+func<span class="token punctuation">(</span><span class="token operator">&amp;</span>hash<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<p>下面重点讨论一下&amp;作用于Symbol的情形。我们经常看到这样的代码——<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>map<span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token symbol">:to_i</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+通过上面的讲解我们知道，这里的<code>:to_i</code>首先通过自身的<code>to_proc</code>方法转换成一个Proc对象，然后再转换成一个Block，最后被传入<code>map</code>函数。但问题是，<code>to_proc</code>是如何将<code>:to_i</code>转化成一个Proc的呢？<p></p>
 <p>假设<code>:obj</code>是我们研究的Symbol对象，那么<code>:obj.to_proc</code>的返回值可以理解为<code>proc{|x| x.obj()}</code>，这是一种比较直接的理解方式。但是，如果调用者向这个Proc传入的参数(对象)x中没有<code>obj()</code>这样一个成员方法该怎么办呢？换句话说，对象x怎么检查自己有没有obj()这个方法的？</p>
-<p>实际上，<code>:obj</code>的to_proc的返回值应该理解为<code> { |x| x.send(:obj) }</code>。调用send方法时，相当于外界给对象x传入了一个信息，信息的内容是<code>:obj</code>（当然也可以时字符串），如果send方法发现x中有一个和<code>:obj</code>同名的方法，那么这个方法就会接着被调用。</p>
+<p>实际上，<code>:obj</code>的to_proc的返回值应该理解为<code>{ |x| x.send(:obj) }</code>。调用send方法时，相当于外界给对象x传入了一个信息，信息的内容是<code>:obj</code>（当然也可以时字符串），如果send方法发现x中有一个和<code>:obj</code>同名的方法，那么这个方法就会接着被调用。</p>
 
                 
             </div>
@@ -853,7 +853,7 @@ func<span class="token punctuation">(</span><span class="token operator">&amp;</
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

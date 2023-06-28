@@ -388,41 +388,33 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>&gt;&gt;&gt; <a href="Lab4%20%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1-2022.pdf">指导书链接</a><br>
-&gt;&gt;&gt; <a href="OS-LAB4-%E6%8C%91%E6%88%98%E6%80%A7%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1/OS%E7%AD%94%E8%BE%A9.pptx">答辩PPT链接</a></p>
+                <p>&gt;&gt;&gt; <a href="Lab4%20挑战性任务-2022.pdf">指导书链接</a><br>
+&gt;&gt;&gt; <a href="OS-LAB4-挑战性任务设计/OS答辩.pptx">答辩PPT链接</a></p>
 <h2 id="任务简介">任务简介</h2>
 <p>Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进行修改，实现线程相关机制，将作业调度的粒度缩小到线程，提高MOS的并发能力。此外，同一进程中的所有线程都共享进程中的资源，因此难免会出现资源竞争的现象。为了更好的控制线程之间的同步互斥关系，我们还需要实现信号量机制，从而保证各个线程能够按照我们的预期运行。</p>
-<p>最终，我在任务中实现了以下用户态函数，并成功通过了自己的测试样例，达到了预期效果。</p>
-<ul>
-<li><strong>线程相关函数</strong>
-<ul>
-<li><strong>pthread_create</strong></li>
-<li><strong>pthread_exit</strong></li>
-<li><strong>pthread_cancel</strong></li>
-<li><strong>pthread_join</strong></li>
-<li><strong>pthread_testcancel</strong></li>
-<li><strong>pthread_self</strong></li>
-<li><strong>pthread_detach</strong></li>
-<li><strong>pthread_setcanceltype</strong><br>
- </li>
-</ul>
-</li>
-<li><strong>信号量相关函数</strong>
-<ul>
-<li><strong>sem_init</strong></li>
-<li><strong>sem_destroy</strong></li>
-<li><strong>sem_wait</strong></li>
-<li><strong>sem_trywait</strong></li>
-<li><strong>sem_post</strong></li>
-<li><strong>sem_getvalue</strong></li>
-</ul>
-</li>
-</ul>
+<p>最终，我在任务中实现了以下用户态函数，并成功通过了自己的测试样例，达到了预期效果。<br>
+- <strong>线程相关函数</strong><br>
+- <strong>pthread_create</strong><br>
+- <strong>pthread_exit</strong><br>
+- <strong>pthread_cancel</strong><br>
+- <strong>pthread_join</strong><br>
+- <strong>pthread_testcancel</strong><br>
+- <strong>pthread_self</strong><br>
+- <strong>pthread_detach</strong><br>
+- <strong>pthread_setcanceltype</strong><br>
+ <br>
+- <strong>信号量相关函数</strong><br>
+- <strong>sem_init</strong><br>
+- <strong>sem_destroy</strong><br>
+- <strong>sem_wait</strong><br>
+- <strong>sem_trywait</strong><br>
+- <strong>sem_post</strong><br>
+- <strong>sem_getvalue</strong></p>
 <h2 id="线程相关机制">线程相关机制</h2>
 <h3 id="数据结构">数据结构</h3>
 <h4 id="线程控制块的设置">线程控制块的设置</h4>
-<p>首先，我们需要引入记录线程相关状态的数据结构，从而实现对线程的控制。这个数据结构就是线程控制块——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token punctuation">{</span>
+<p>首先，我们需要引入记录线程相关状态的数据结构，从而实现对线程的控制。这个数据结构就是线程控制块——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token punctuation">{</span>
     u_int thread_id<span class="token punctuation">;</span>        
     u_int thread_pri<span class="token punctuation">;</span>       
     u_int thread_tag<span class="token punctuation">;</span>       
@@ -433,30 +425,36 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span> thread_retval_ptr<span class="token punctuation">;</span>
     u_int thread_join_caller<span class="token punctuation">;</span>
     u_int thread_cancel_type<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ul>
-<li><code>thread_id</code>是线程的<code>id</code>。<code>thread_id</code>包括两部分，0-4位表示该线程是所属进程中的第几号线程（每个进程中最多同时运行32个线程），4-31位记录线程所属进程的<code>envid</code>；</li>
-<li><code>thread_pri</code>是线程的优先级。线程通过优先级来确定时间片的大小，属于同一进程的所有线程优先级相同。</li>
-<li><code>thread_tag</code>是线程的标志位集合。这里采用状态压缩的方式，每一位分别表示不同的标志位。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_CANCELED</span>    <span class="token expression"><span class="token number">1</span>    </span><span class="token comment">// bit0为1表示线程已经被cancel</span></span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+-
+<code>thread_id</code>是线程的<code>id</code>。<code>thread_id</code>包括两部分，0-4位表示该线程是所属进程中的第几号线程（每个进程中最多同时运行32个线程），4-31位记录线程所属进程的<code>envid</code>；<br>
+-
+<code>thread_pri</code>是线程的优先级。线程通过优先级来确定时间片的大小，属于同一进程的所有线程优先级相同。<br>
+-
+<code>thread_tag</code>是线程的标志位集合。这里采用状态压缩的方式，每一位分别表示不同的标志位。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_CANCELED</span>    <span class="token expression"><span class="token number">1</span>    </span><span class="token comment">// bit0为1表示线程已经被cancel</span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_JOINED</span>      <span class="token expression"><span class="token number">2</span>    </span><span class="token comment">// bit1为1表示线程已经被joined</span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_EXITED</span>      <span class="token expression"><span class="token number">4</span>    </span><span class="token comment">// bit2为1表示线程已经调用过pthread_exit函数</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_DETACHED</span>    <span class="token expression"><span class="token number">8</span>    </span><span class="token comment">// bit3为1表示线程已经是分离状态</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><code>thread_status</code>表示线程的运行状态，可取值有<code>THREAD_FREE</code>，<code>THREAD_RUNNABLE</code>，<code>THREAD_NOT_RUNNABLE</code>。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_FREE</span>	            <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_TAG_DETACHED</span>    <span class="token expression"><span class="token number">8</span>    </span><span class="token comment">// bit3为1表示线程已经是分离状态</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><br>
+-
+<code>thread_status</code>表示线程的运行状态，可取值有<code>THREAD_FREE</code>，<code>THREAD_RUNNABLE</code>，<code>THREAD_NOT_RUNNABLE</code>。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_FREE</span>	            <span class="token expression"><span class="token number">0</span></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_RUNNABLE</span>		    <span class="token expression"><span class="token number">1</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_NOT_RUNNABLE</span>	    <span class="token expression"><span class="token number">2</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><code>thread_tf</code>是用来存储寄存器现场的数据结构。在线程调出时，内核会将上下文存入其中，等到线程重新获得处理机资源时再恢复。</li>
-<li><code>thread_retval</code>用来保存线程返回值。</li>
-<li><code>thread_retval_ptr</code>是指向线程返回值的指针。该指针的拥有者是"调用join的线程"，指针指向的是"被join作用的线程的返回值"。</li>
-<li><code>thread_join_caller</code>保存的是"调用join的线程"，而拥有这个变量的是"join作用的线程"。当某个线程结束时，如果它本身是被join的，则会将自身返回值<code>thread_retval</code>存储到<code>*(caller-&gt;thread_retval_ptr)</code>中。</li>
-<li><code>thread_cancel_type</code>表示线程的撤销类型，可以取<code>THREAD_CANCEL_DEFREERD</code>和<code>THREAD_CANCEL_ASYNCHRONOUS</code>两个值。如果是前者，则表示被cancel作用后不立刻结束，需等待取消点的到来；如果是后者，则被cancel作用后会立即结束。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_CANCEL_DEFERRED</span>          <span class="token expression"><span class="token number">0</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_CANCEL_ASYNCHRONOUS</span>	<span class="token expression"><span class="token number">1</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-</ul>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_NOT_RUNNABLE</span>	    <span class="token expression"><span class="token number">2</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+-
+<code>thread_tf</code>是用来存储寄存器现场的数据结构。在线程调出时，内核会将上下文存入其中，等到线程重新获得处理机资源时再恢复。<br>
+- <code>thread_retval</code>用来保存线程返回值。<br>
+-
+<code>thread_retval_ptr</code>是指向线程返回值的指针。该指针的拥有者是"调用join的线程"，指针指向的是"被join作用的线程的返回值"。<br>
+-
+<code>thread_join_caller</code>保存的是"调用join的线程"，而拥有这个变量的是"join作用的线程"。当某个线程结束时，如果它本身是被join的，则会将自身返回值<code>thread_retval</code>存储到<code>*(caller-&gt;thread_retval_ptr)</code>中。<br>
+-
+<code>thread_cancel_type</code>表示线程的撤销类型，可以取<code>THREAD_CANCEL_DEFREERD</code>和<code>THREAD_CANCEL_ASYNCHRONOUS</code>两个值。如果是前者，则表示被cancel作用后不立刻结束，需等待取消点的到来；如果是后者，则被cancel作用后会立即结束。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_CANCEL_DEFERRED</span>          <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">THREAD_CANCEL_ASYNCHRONOUS</span>	<span class="token expression"><span class="token number">1</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
 <h4 id="进程控制块的修改">进程控制块的修改</h4>
-<p>引入线程之后，进程的作用和地位就发生了改变，进程只作为系统资源的分配单元。因此，原来进程控制块中与调度相关的数据就不再需要了，例如<code>env_pop_tf</code>和<code>env_status</code>，取而代之的是和线程控制相关的数据。更改之后的进程控制块如下</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token punctuation">{</span>
+<p>引入线程之后，进程的作用和地位就发生了改变，进程只作为系统资源的分配单元。因此，原来进程控制块中与调度相关的数据就不再需要了，例如<code>env_pop_tf</code>和<code>env_status</code>，取而代之的是和线程控制相关的数据。更改之后的进程控制块如下<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token punctuation">{</span>
     <span class="token comment">// struct Trapframe env_tf;         // Saved registers</span>
     <span class="token function">LIST_ENTRY</span><span class="token punctuation">(</span>Env<span class="token punctuation">)</span> env_link<span class="token punctuation">;</span>           <span class="token comment">// Free list</span>
     u_int env_id<span class="token punctuation">;</span>                       <span class="token comment">// Unique environment identifier</span>
@@ -487,20 +485,19 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token comment">// Lab 4 challenge</span>
     u_int env_thread_bitmap<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> env_threads<span class="token punctuation">[</span><span class="token number">32</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以发现，删除<code>env_pop_tf</code>和<code>env_status</code>后，我们又新增了三个数据——<code>env_ipc_dst_thread</code>，<code>env_thread_bitmap</code>和<code>env_therads</code>。</p>
-<ul>
-<li><code>env_ipc_dst_thread</code>保存IPC交互过程中"读线程"的id。</li>
-<li><code>env_thread_bitmap</code>是用来记录线程使用状态的位图。一个进程中最多有32个线程，正好对应整数的32个位。1表示线程已经被分配出去，状态可能是<code>RUNNABLE</code>或者<code>NOT_RUNNABLE</code>；0表示线程仍然是<code>FREE</code>状态，可以被申请。</li>
-<li><code>env_threads</code>中存储被该进程管理的32个线程的线程控制块。</li>
-</ul>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+可以发现，删除<code>env_pop_tf</code>和<code>env_status</code>后，我们又新增了三个数据——<code>env_ipc_dst_thread</code>，<code>env_thread_bitmap</code>和<code>env_therads</code>。<br>
+- <code>env_ipc_dst_thread</code>保存IPC交互过程中"读线程"的id。<br>
+-
+<code>env_thread_bitmap</code>是用来记录线程使用状态的位图。一个进程中最多有32个线程，正好对应整数的32个位。1表示线程已经被分配出去，状态可能是<code>RUNNABLE</code>或者<code>NOT_RUNNABLE</code>；0表示线程仍然是<code>FREE</code>状态，可以被申请。<br>
+- <code>env_threads</code>中存储被该进程管理的32个线程的线程控制块。<p></p>
 <h3 id="线程的创建和销毁">线程的创建和销毁</h3>
 <p>每个进程的0号线程是该进程的主线程，主线程的PC初始值是用户程序镜像中的<code>entry point</code>，从而保证线程运行时直接执行用户程序中的<code>main</code>函数。每当创建一个新的进程时，该进程的主线程也随之被分配出去了。为了保证进程及其主线程同时创建、以及主线程能够从正确的PC开始运行，我们需要对原来的<code>env_alloc</code>、<code>env_create_priority</code>、<code>load_icode</code>等函数进行修改。</p>
 <p>进程中的1-31号线程都是通过<code>pthread_create</code>函数创建出来的，我们姑且把这些线程称为子线程。子线程的运行入口是某个由用户创建的"线程运行函数"（相当于Java中的<code>run</code>方法），而并非是<code>main</code>函数，这是子线程和主线程的根本区别。</p>
-<p>不论是子线程和主线程，在运行时都需要一定的栈空间。为了保证每个线程都拥有独立的栈空间，同时尽量避免不同线程的栈之间发生冲突，我从<code>USTACKTOP</code>开始为0-31号线程依次划分了4MB大小的空间，<code>USTACKTOP</code>是0号线程的栈顶，<code>USTACKTOP+4M</code>是1号线程的栈顶…以此类推。</p>
-<p><img src="stack.png" alt=""></p>
-<p>接下来我们就可以编写进程的创建函数，从进程控制块中申请一个线程控制块，并对这个线程可控制块进行初始化。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">thread_alloc</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token keyword">new</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>不论是子线程和主线程，在运行时都需要一定的栈空间。为了保证每个线程都拥有独立的栈空间，同时尽量避免不同线程的栈之间发生冲突，我从<code>USTACKTOP</code>开始为0-31号线程依次划分了4MB大小的空间，<code>USTACKTOP</code>是0号线程的栈顶，<code>USTACKTOP+4M</code>是1号线程的栈顶...以此类推。</p>
+<p><img src="stack.png"></p>
+<p>接下来我们就可以编写进程的创建函数，从进程控制块中申请一个线程控制块，并对这个线程可控制块进行初始化。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">thread_alloc</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token keyword">new</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
     u_int thread_id<span class="token punctuation">;</span>
@@ -526,8 +523,8 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
     <span class="token operator">*</span><span class="token keyword">new</span> <span class="token operator">=</span> t<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在线程运行函数正常结束，或者线程自己调用<code>pthread_exit</code>退出，或者线程被<code>join</code>作用时，需要释放相应的线程控制块，我们通过<code>thread_free</code>和<code>thread_destroy</code>函数实现。前者主要是将线程控制块标记成<code>FREE</code>，并在修改对应进程控制块的位图。后者在调用前者的基础上，判断进程中所有的线程是否都已经结束，如果是，则顺便调用<code>env_free</code>将进程也释放掉，随后直接<code>sched_yield</code>进行切换。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+在线程运行函数正常结束，或者线程自己调用<code>pthread_exit</code>退出，或者线程被<code>join</code>作用时，需要释放相应的线程控制块，我们通过<code>thread_free</code>和<code>thread_destroy</code>函数实现。前者主要是将线程控制块标记成<code>FREE</code>，并在修改对应进程控制块的位图。后者在调用前者的基础上，判断进程中所有的线程是否都已经结束，如果是，则顺便调用<code>env_free</code>将进程也释放掉，随后直接<code>sched_yield</code>进行切换。<p></p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">thread_free</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">;</span>
     e <span class="token operator">=</span> envs <span class="token operator">+</span> <span class="token function">ENVX</span><span class="token punctuation">(</span><span class="token function">THREAD2ENVID</span><span class="token punctuation">(</span>t<span class="token operator">-&gt;</span>thread_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -558,8 +555,8 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="线程的调度">线程的调度</h3>
 <p>线程创建出来后，还需要对其进行调度。线程的调度完全仿照进程的调度方法：<strong>采用两个队列（<code>thread_shced_list[2]</code>），用来存放可以被调度的线程的控制块。每创建出一个新的线程，我们就将该线程加入第一个队列的队首。在需要进行调度时，我们把当前已经用完时间片的线程放入另一个队列的队尾，并从当前队列的队首获取一个状态为<code>THREAD_RUNNABLE</code>的线程，让这个线程占用处理机资源。</strong></p>
-<p>为了实现线程调度机制，我们需要对<code>sched_yield</code>函数进行修改。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// sched.c</span>
+<p>为了实现线程调度机制，我们需要对<code>sched_yield</code>函数进行修改。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// sched.c</span>
 <span class="token keyword">extern</span> <span class="token keyword">struct</span> <span class="token class-name">Thread</span><span class="token operator">*</span> curthread<span class="token punctuation">;</span>
 <span class="token keyword">extern</span> <span class="token keyword">struct</span> <span class="token class-name">Thread_list</span> thread_sched_list<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
@@ -594,9 +591,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token punctuation">}</span>
     count<span class="token operator">--</span><span class="token punctuation">;</span>
     <span class="token function">thread_run</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>对应的，我们仿照<code>env_run</code>函数编写一个<code>thread_run</code>函数。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// thread.c</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<p>对应的，我们仿照<code>env_run</code>函数编写一个<code>thread_run</code>函数。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// thread.c</span>
 <span class="token keyword">void</span> <span class="token function">thread_run</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">;</span>
     e <span class="token operator">=</span> envs <span class="token operator">+</span> <span class="token function">ENVX</span><span class="token punctuation">(</span><span class="token function">THREAD2ENVID</span><span class="token punctuation">(</span>t<span class="token operator">-&gt;</span>thread_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -615,14 +612,13 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token comment">// 和curenv类似，我们设置一个全局变量curthread来指向当前运行的线程的线程控制块</span>
     curthread <span class="token operator">=</span> t<span class="token punctuation">;</span>   
     <span class="token function">env_pop_tf</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>t<span class="token operator">-&gt;</span>thread_tf<span class="token punctuation">,</span> <span class="token function">GET_ENV_ASID</span><span class="token punctuation">(</span>e<span class="token operator">-&gt;</span>env_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>有一个细节需要注意，如果换出的线程和换入的线程同属于一个进程，那我们不需要使用<code>lcontext</code>更换页表，这也就是线程切换比进程间的原因（线程很长一段时间被称作轻量级进程）。我们的MOS是运行在gxemul模拟器上的，虚实地址的转换也是采用软件模拟的（并没有采用硬件MMU）。当发生tlb中断时，模拟器会根据全局变量<code>context</code>中存储的页表地址来找到页表，并找到对应的页表项。因此，进程间切换时只需要把新进程页表的物理地址传给<code>context</code>变量即可，开销看上去也不大。<strong>但是如果运行在真正的硬件上，进程间切换时还涉及到进程页表从主存和内存之间的换入和换出，以及MMU的相关调整，时间开销就会比较大</strong>。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+有一个细节需要注意，如果换出的线程和换入的线程同属于一个进程，那我们不需要使用<code>lcontext</code>更换页表，这也就是线程切换比进程间的原因（线程很长一段时间被称作轻量级进程）。我们的MOS是运行在gxemul模拟器上的，虚实地址的转换也是采用软件模拟的（并没有采用硬件MMU）。当发生tlb中断时，模拟器会根据全局变量<code>context</code>中存储的页表地址来找到页表，并找到对应的页表项。因此，进程间切换时只需要把新进程页表的物理地址传给<code>context</code>变量即可，开销看上去也不大。<strong>但是如果运行在真正的硬件上，进程间切换时还涉及到进程页表从主存和内存之间的换入和换出，以及MMU的相关调整，时间开销就会比较大</strong>。<p></p>
 <h3 id="相关系统调用">相关系统调用</h3>
-<p>为了便于用户态函数的实现，我们需要设置一些系统调用函数提供内核服务——包括<strong>申请新的线程控制块、销毁线程控制块、获得当前运行线程的id、将线程加入或移出调度队列</strong>等等。线程操作相关的系统调用包括——</p>
-<ul>
-<li>
-<p><strong>syscall_thread_alloc</strong>：该函数用于申请新的线程控制块，直接调用<code>thread_alloc</code>函数即可。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_thread_alloc</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>为了便于用户态函数的实现，我们需要设置一些系统调用函数提供内核服务——包括<strong>申请新的线程控制块、销毁线程控制块、获得当前运行线程的id、将线程加入或移出调度队列</strong>等等。线程操作相关的系统调用包括——<br>
+-
+<strong>syscall_thread_alloc</strong>：该函数用于申请新的线程控制块，直接调用<code>thread_alloc</code>函数即可。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_thread_alloc</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
 
@@ -630,11 +626,10 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
 
     <span class="token keyword">return</span> t<span class="token operator">-&gt;</span>thread_id<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>syscall_thread_destroy</strong>：该函数在线程运行函数正常结束、线程自己调用exit退出、线程被join作用时被调用，释放线程占用的资源。需要注意的是，如果被结束的线程拥有<code>THREAD_TAG_CANCELED</code>这一标志位，还需要将自身的返回值"告知"join函数的调用者。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li><p><strong>syscall_thread_destroy</strong>：该函数在线程运行函数正常结束、线程自己调用exit退出、线程被join作用时被调用，释放线程占用的资源。需要注意的是，如果被结束的线程拥有<code>THREAD_TAG_CANCELED</code>这一标志位，还需要将自身的返回值"告知"join函数的调用者。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">
 <span class="token keyword">int</span> <span class="token function">sys_thread_destroy</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> u_int threadid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
@@ -659,11 +654,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
     <span class="token function">thread_destroy</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 调用thread_destory函数来释放其他的内容</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><code>syscall_set_thread_status</code>：设置线程的运行状态，同时根据状态的改变将线程控制块加入或者移出调度队列。具体实现和<code>syscall_set_env_status</code>完全一样，照葫芦画瓢即可。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_set_thread_status</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> u_int threadid<span class="token punctuation">,</span> u_int status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><code>syscall_set_thread_status</code>：设置线程的运行状态，同时根据状态的改变将线程控制块加入或者移出调度队列。具体实现和<code>syscall_set_env_status</code>完全一样，照葫芦画瓢即可。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_set_thread_status</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> u_int threadid<span class="token punctuation">,</span> u_int status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
 
@@ -684,23 +677,19 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
     t<span class="token operator">-&gt;</span>thread_status <span class="token operator">=</span> status<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><code>syscall_get_thread_id</code>：获取当前运行的线程的id，直接调用从<code>curthread</code>指向的线程控制块中找即可。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_get_thread_id</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><code>syscall_get_thread_id</code>：获取当前运行的线程的id，直接调用从<code>curthread</code>指向的线程控制块中找即可。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_get_thread_id</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">return</span> curthread<span class="token operator">-&gt;</span>thread_id<span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 <h3 id="用户接口的实现">用户接口的实现</h3>
-<p>编写好系统调用之后，我们就可以利用它们实现用户态的接口函数。</p>
-<ul>
-<li>
-<p><strong>pthread_create</strong>：通过<code>syscall_thread_alloc</code>申请一个线程，然后对<code>pc</code>、<code>a0</code>、<code>sp</code>、<code>ra</code>等寄存器进行赋值，保证新创建的子线程能够正确的进入线程运行函数，并最终进入<code>exit</code>函数结束。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_create</span><span class="token punctuation">(</span>pthread_t <span class="token operator">*</span>thread<span class="token punctuation">,</span> <span class="token keyword">const</span> pthread_attr_t <span class="token operator">*</span>attr<span class="token punctuation">,</span>
+<p>编写好系统调用之后，我们就可以利用它们实现用户态的接口函数。<br>
+-
+<strong>pthread_create</strong>：通过<code>syscall_thread_alloc</code>申请一个线程，然后对<code>pc</code>、<code>a0</code>、<code>sp</code>、<code>ra</code>等寄存器进行赋值，保证新创建的子线程能够正确的进入线程运行函数，并最终进入<code>exit</code>函数结束。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_create</span><span class="token punctuation">(</span>pthread_t <span class="token operator">*</span>thread<span class="token punctuation">,</span> <span class="token keyword">const</span> pthread_attr_t <span class="token operator">*</span>attr<span class="token punctuation">,</span>
                      <span class="token keyword">void</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token operator">*</span>start_rountine<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     u_int thread_id<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
@@ -721,11 +710,10 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token function">syscall_set_thread_status</span><span class="token punctuation">(</span>thread_id<span class="token punctuation">,</span> THREAD_RUNNABLE<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token operator">*</span>thread <span class="token operator">=</span> thread_id<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_exit</strong>：调用这个函数会把线程本身中止，如果需要返回某个值，只需要将返回值作为参数传给该函数即可。这个函数首先获得当前运行的线程的线程控制块，然后把返回值复制给<code>thread_retval</code>，并标记上<code>THREAD_TAG_EXITED</code>，最后直接调用<code>exit</code>返回即可。当某个线程调用了join函数，而且join的目标时该进程，则它会从该线程的<code>thread_retval</code>中获得（在系统调用<code>sys_thread_destroy</code>中有这个机制）。</p>
-  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void pthread_exit(void *retval) {
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li><p><strong>pthread_exit</strong>：调用这个函数会把线程本身中止，如果需要返回某个值，只需要将返回值作为参数传给该函数即可。这个函数首先获得当前运行的线程的线程控制块，然后把返回值复制给<code>thread_retval</code>，并标记上<code>THREAD_TAG_EXITED</code>，最后直接调用<code>exit</code>返回即可。当某个线程调用了join函数，而且join的目标时该进程，则它会从该线程的<code>thread_retval</code>中获得（在系统调用<code>sys_thread_destroy</code>中有这个机制）。<br>
+</p><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void pthread_exit(void *retval) {
     u_int thread_id;
     struct Thread *cur;
     thread_id = syscall_get_thread_id();
@@ -734,16 +722,14 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     cur-&gt;thread_retval = retval;
     cur-&gt;thread_tag |= THREAD_TAG_EXITED;
     exit();
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_cancel</strong>：该函数可以将指定的线程撤销，不过还需要对目标线程的标志位进行检查。对于处于<code>FREE</code>状态的线程、处于分离状态的线程、已经被撤销过的线程、已经调用<code>pthread_exit</code>自杀的线程（自杀但是没来的及destroy），我们不能通过该函数取消它们。else里的内容才是正常情况下做出的操作——</p>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>pthread_cancel</strong>：该函数可以将指定的线程撤销，不过还需要对目标线程的标志位进行检查。对于处于<code>FREE</code>状态的线程、处于分离状态的线程、已经被撤销过的线程、已经调用<code>pthread_exit</code>自杀的线程（自杀但是没来的及destroy），我们不能通过该函数取消它们。else里的内容才是正常情况下做出的操作——</p>
 <ul>
 <li>将目标线程标记为THREAD_TAG_CANCELED</li>
 <li>将PTHREAD_CANCELED设置为返回值（笔者将其设置为666）</li>
 <li>如果目标线程的撤销类型时THREAD_CANCEL_ASYNCHRONOUS，我们需要让目标线程在下一次被调度时直接进入exit函数。</li>
 </ul>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_cancel</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p></p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_cancel</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
     t <span class="token operator">=</span> <span class="token operator">&amp;</span>env<span class="token operator">-&gt;</span>env_threads<span class="token punctuation">[</span><span class="token function">THREAD2INDEX</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
@@ -770,16 +756,13 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_join</strong>：调用该函数后，会将当前线程阻塞至目标线程结束。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>pthread_join</strong>：调用该函数后，会将当前线程阻塞至目标线程结束。</p>
 <ul>
 <li>对于已经处于分离状态、或者已经被join的线程，我们无法对其调用join。</li>
 <li>对于已经处于<code>FREE</code>状态、已经结束了的线程，我们不需要将join调用者阻塞，直接从目标线程的<code>thread_retval</code>中获取返回值即可。</li>
-<li>对于其他线程，我们可以对其调用join，但是调用线程必须等待。注意<code>curthread-&gt;thread_retval_ptr = retval_ptr</code>这步比较关键——将指针<code>retval_ptr</code>赋值给调用者的<code>thread_retval_ptr</code>，当目标进程结束后，会直接将返回值写入<code>*(调用者-&gt;thread_retval_ptr)</code>，这和写入<code>*retval_ptr</code>是等价的（在<code>sys_thread_destroy</code>中有相关机制）。</li>
-</ul>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_join</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>retval_ptr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<li>对于其他线程，我们可以对其调用join，但是调用线程必须等待。注意<code>curthread-&gt;thread_retval_ptr = retval_ptr</code>这步比较关键——将指针<code>retval_ptr</code>赋值给调用者的<code>thread_retval_ptr</code>，当目标进程结束后，会直接将返回值写入<code>*(调用者-&gt;thread_retval_ptr)</code>，这和写入<code>*retval_ptr</code>是等价的（在<code>sys_thread_destroy</code>中有相关机制）。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_join</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>retval_ptr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>dst<span class="token punctuation">;</span>
     dst <span class="token operator">=</span> <span class="token operator">&amp;</span>env<span class="token operator">-&gt;</span>env_threads<span class="token punctuation">[</span><span class="token function">THREAD2INDEX</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     
@@ -805,11 +788,10 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     curthread<span class="token operator">-&gt;</span>thread_status <span class="token operator">=</span> THREAD_NOT_RUNNABLE<span class="token punctuation">;</span>     <span class="token comment">// 将当前线程阻塞</span>
     <span class="token function">syscall_yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                    <span class="token comment">// 切换线程</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_detach</strong>：将目标线程设置为分离状态，对于处于分离状态的线程，其他线程无法对其使用join、detach、cancel等函数。此外，我们不能对已经是<code>FREE</code>状态的、或者已经处于分离状态、或者已经被join的线程使用该函数。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_detach</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul></li>
+<li><p><strong>pthread_detach</strong>：将目标线程设置为分离状态，对于处于分离状态的线程，其他线程无法对其使用join、detach、cancel等函数。此外，我们不能对已经是<code>FREE</code>状态的、或者已经处于分离状态、或者已经被join的线程使用该函数。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_detach</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>dst<span class="token punctuation">;</span>
     dst <span class="token operator">=</span> <span class="token operator">&amp;</span>env<span class="token operator">-&gt;</span>env_threads<span class="token punctuation">[</span><span class="token function">THREAD2INDEX</span><span class="token punctuation">(</span>thread<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
@@ -825,11 +807,10 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
     dst<span class="token operator">-&gt;</span>thread_tag <span class="token operator">|=</span> THREAD_TAG_DETACHED<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_setcanceltype</strong>：默认情况下，线程的cancel type都是<code>THREAD_CANCEL_DEFERRED</code>，而该函数修改进程的<code>cancel type</code>，并通过<code>oldtype</code>获得原值。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_setcanceltype</span><span class="token punctuation">(</span><span class="token keyword">int</span> type<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>oldtype<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>pthread_setcanceltype</strong>：默认情况下，线程的cancel
+type都是<code>THREAD_CANCEL_DEFERRED</code>，而该函数修改进程的<code>cancel type</code>，并通过<code>oldtype</code>获得原值。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_setcanceltype</span><span class="token punctuation">(</span><span class="token keyword">int</span> type<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>oldtype<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     u_int thread_id <span class="token operator">=</span> <span class="token function">syscall_get_thread_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>cur <span class="token operator">=</span> <span class="token operator">&amp;</span>env<span class="token operator">-&gt;</span>env_threads<span class="token punctuation">[</span><span class="token function">THREAD2INDEX</span><span class="token punctuation">(</span>thread_id<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
@@ -839,15 +820,12 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
     cur<span class="token operator">-&gt;</span>thread_cancel_type <span class="token operator">=</span> type<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_teatcancel</strong>：对于<code>cancel type</code>是<code>THREAD_CANCEL_DEFERRED</code>的线程来说，被cancel函数作用后并不会立刻结束，而是到达某一个"取消点"才会结束自己。而这个函数可以帮助手动设置取消点，当某一个线程运行到该函数时，如果满足条件就直接进入exit函数退出。必须满足条件有两个——</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>pthread_teatcancel</strong>：对于<code>cancel type</code>是<code>THREAD_CANCEL_DEFERRED</code>的线程来说，被cancel函数作用后并不会立刻结束，而是到达某一个"取消点"才会结束自己。而这个函数可以帮助手动设置取消点，当某一个线程运行到该函数时，如果满足条件就直接进入exit函数退出。必须满足条件有两个——</p>
 <ul>
 <li>当前进程必须join函数作用过，即存在<code>THREAD_CANCEL_DEFERRED</code>标记。</li>
-<li>当前进程的<code>cancel type</code>必须是<code>THREAD_CANCEL_DEFERRED</code>，即默认状态。</li>
-</ul>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">
+<li>当前进程的<code>cancel type</code>必须是<code>THREAD_CANCEL_DEFERRED</code>，即默认状态。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">
 <span class="token keyword">void</span> <span class="token function">pthread_testcancel</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     u_int thread_id<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>cur<span class="token punctuation">;</span>
@@ -858,21 +836,19 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
             cur<span class="token operator">-&gt;</span>thread_cancel_type <span class="token operator">==</span> THREAD_CANCEL_DEFERRED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">exit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>pthread_self</strong>：该函数可以让线程获得自己的id，只需要调用<code>syscall_get_thread_id</code>即可。</p>
-  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">pthread_t pthread_self() {
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul></li>
+<li><p><strong>pthread_self</strong>：该函数可以让线程获得自己的id，只需要调用<code>syscall_get_thread_id</code>即可。<br>
+</p><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">pthread_t pthread_self() {
 
     return syscall_get_thread_id();
 
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 <h3 id="其他细节">其他细节</h3>
 <h4 id="exit">exit</h4>
-<p>所有正常或者非正常结束的线程最后都会进入<code>exit</code>函数，而这个函数也有很多细节需要注意。笔者改写的<code>exit</code>函数如下图所示</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span>
+<p>所有正常或者非正常结束的线程最后都会进入<code>exit</code>函数，而这个函数也有很多细节需要注意。笔者改写的<code>exit</code>函数如下图所示<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span>
 <span class="token function">exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 <span class="token comment">//	writef("enter exit!");</span>
@@ -894,24 +870,28 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 		cur_thread<span class="token operator">-&gt;</span>thread_retval <span class="token operator">=</span> retval<span class="token punctuation">;</span>
 		<span class="token function">syscall_thread_destroy</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ul>
-<li>对于0号线程，也就是主线程，它先执行<code>umain</code>函数然后再进入<code>exit</code>，由于<code>umain</code>函数是没有返回值的，因此我们需要手动将<code>0</code>作为主线程返回值。但是实际上，一般不会出现"子线程获取主线程的返回值"，所以这里可有可无。</li>
-<li>对于标志位有<code>THREAD_TAG_CANCELED</code>或者<code>THREAD_TAG_EXITED</code>的子线程，这些线程都是通过exit或者cancel函数非正常结束的，而且在这两个函数中都已经把"返回值"赋值给<code>thread_retval</code>，所以在这里只需要调用<code>syscall_thread_destroy</code>释放线程资源即可。</li>
-<li>对于正常结束的子线程，尽管是有返回值，但是由于执行完"线程运行函数"后直接跳转到了<code>exit</code>，"线程运行函数"的返回值我们无法直接获取。为此，笔者特地写了一个汇编函数<code>get_retval</code>来获得"线程运行函数"的返回值。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token function">LEAF</span><span class="token punctuation">(</span>get_retval<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+-
+对于0号线程，也就是主线程，它先执行<code>umain</code>函数然后再进入<code>exit</code>，由于<code>umain</code>函数是没有返回值的，因此我们需要手动将<code>0</code>作为主线程返回值。但是实际上，一般不会出现"子线程获取主线程的返回值"，所以这里可有可无。<br>
+-
+对于标志位有<code>THREAD_TAG_CANCELED</code>或者<code>THREAD_TAG_EXITED</code>的子线程，这些线程都是通过exit或者cancel函数非正常结束的，而且在这两个函数中都已经把"返回值"赋值给<code>thread_retval</code>，所以在这里只需要调用<code>syscall_thread_destroy</code>释放线程资源即可。<br>
+-
+对于正常结束的子线程，尽管是有返回值，但是由于执行完"线程运行函数"后直接跳转到了<code>exit</code>，"线程运行函数"的返回值我们无法直接获取。为此，笔者特地写了一个汇编函数<code>get_retval</code>来获得"线程运行函数"的返回值。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token function">LEAF</span><span class="token punctuation">(</span>get_retval<span class="token punctuation">)</span>
  j	 ra
-<span class="token function">END</span><span class="token punctuation">(</span>get_retval<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-我们把<code>get_retval</code>作为<code>exit</code>中运行的第一个函数，由于<code>get_retval</code>没有修改<code>v0寄</code>存器，因此它的返回值和"线程运行函数"的返回值一致。</li>
-</ul>
-<h4 id="pthread-join的线程安全">pthread_join的线程安全</h4>
+<span class="token function">END</span><span class="token punctuation">(</span>get_retval<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+我们把<code>get_retval</code>作为<code>exit</code>中运行的第一个函数，由于<code>get_retval</code>没有修改<code>v0寄</code>存器，因此它的返回值和"线程运行函数"的返回值一致。<p></p>
+<h4 id="pthread_join的线程安全">pthread_join的线程安全</h4>
 <p>上面介绍的<code>pthread_join</code>函数的实现是在用户态中实现的，但是笔者在测试中发现，由于线程执行顺序的随机性会带来一些线程安全问题。</p>
-<p>假设线程A调用join函数，并作用于线程B。</p>
-<ul>
-<li>当线程A执行<code>if (dst-&gt;thread_status == THREAD_FREE)</code>时，发现线程B并不是FREE状态，接着发生时钟中断，切换到了线程B。</li>
-<li>线程B执行完并正常退出，状态变成了<code>FREE</code>，然后切换到了线程A。</li>
-<li>线程A由于此前判断出"线程B不是<code>FREE</code>状态"，因此跳过了if，执行后续操作（被阻塞）。</li>
-<li>线程A被阻塞了，但是线程B早就执行完<code>syscall_thread_destroy</code>恢复清白之身了，无法唤醒线程A</li>
-</ul>
+<p>假设线程A调用join函数，并作用于线程B。<br>
+-
+当线程A执行<code>if (dst-&gt;thread_status == THREAD_FREE)</code>时，发现线程B并不是FREE状态，接着发生时钟中断，切换到了线程B。<br>
+-
+线程B执行完并正常退出，状态变成了<code>FREE</code>，然后切换到了线程A。<br>
+-
+线程A由于此前判断出"线程B不是<code>FREE</code>状态"，因此跳过了if，执行后续操作（被阻塞）。<br>
+-
+线程A被阻塞了，但是线程B早就执行完<code>syscall_thread_destroy</code>恢复清白之身了，无法唤醒线程A</p>
 <p>为了解决这个问题，笔者将<code>pthread_join</code>函数中的操作封装成了系统调用——</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">pthread_join</span><span class="token punctuation">(</span>pthread_t thread<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>retval_ptr<span class="token punctuation">)</span> <span class="token punctuation">{</span>   
 
@@ -951,27 +931,27 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token function">sys_yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="信号量机制">信号量机制</h2>
-<h3 id="数据结构-2">数据结构</h3>
-<p>信号量机制的实现同样离不开一定的数据结构。笔者编写了<code>Semaphore</code>这一结构体，并将其作为信号量的类型(sem_t)。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Semaphore</span> <span class="token punctuation">{</span>
+<h3 id="数据结构-1">数据结构</h3>
+<p>信号量机制的实现同样离不开一定的数据结构。笔者编写了<code>Semaphore</code>这一结构体，并将其作为信号量的类型(sem_t)。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Semaphore</span> <span class="token punctuation">{</span>
     u_int sem_perm<span class="token punctuation">;</span>
     <span class="token keyword">int</span> sem_value<span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span><span class="token operator">*</span> sem_wait_queue<span class="token punctuation">[</span><span class="token number">32</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     u_int sem_queue_head<span class="token punctuation">;</span>
     u_int sem_queue_tail<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ul>
-<li><code>sem_perm</code>是信号量的标志位集合，同样采用了状态压缩的方式，<code>bit0</code>是信号量的"有效位"，<code>bit1</code>是信号量的"共享位"。  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SEM_PERM_VALID</span>          <span class="token expression"><span class="token number">1</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SEM_PERM_SHARE</span>          <span class="token expression"><span class="token number">2</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li><code>sem_value</code>是信号量的当前值。</li>
-<li><code>sem_wait_queue</code>是存储被阻塞线程的环形队列，因为进程最多只能同时运行32个线程，因此唤醒队列的长度也是32</li>
-<li><code>sem_queue_head</code>是环形队列的队首下标</li>
-<li><code>sem_queue_tail</code>是环形队列的队尾下标</li>
-</ul>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+-
+<code>sem_perm</code>是信号量的标志位集合，同样采用了状态压缩的方式，<code>bit0</code>是信号量的"有效位"，<code>bit1</code>是信号量的"共享位"。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SEM_PERM_VALID</span>          <span class="token expression"><span class="token number">1</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SEM_PERM_SHARE</span>          <span class="token expression"><span class="token number">2</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>
+- <code>sem_value</code>是信号量的当前值。<br>
+-
+<code>sem_wait_queue</code>是存储被阻塞线程的环形队列，因为进程最多只能同时运行32个线程，因此唤醒队列的长度也是32<br>
+- <code>sem_queue_head</code>是环形队列的队首下标<br>
+- <code>sem_queue_tail</code>是环形队列的队尾下标<p></p>
 <h3 id="用户接口函数的实现">用户接口函数的实现</h3>
-<p>信号量的使用是为了解决线程高并发带来的同步互斥问题，因此信号量本身的各种操作也必须是原子的。为了保证原子性，笔者为每一个用户接口函数设置了对应的系统调用函数。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sem_init</span> <span class="token punctuation">(</span>sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> pshared<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>信号量的使用是为了解决线程高并发带来的同步互斥问题，因此信号量本身的各种操作也必须是原子的。为了保证原子性，笔者为每一个用户接口函数设置了对应的系统调用函数。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sem_init</span> <span class="token punctuation">(</span>sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> pshared<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> <span class="token function">syscall_sem_init</span><span class="token punctuation">(</span>sem<span class="token punctuation">,</span> pshared<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
@@ -993,12 +973,11 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
 
 <span class="token keyword">int</span> <span class="token function">sem_getvalue</span> <span class="token punctuation">(</span>sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>valp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> <span class="token function">syscall_sem_getvalue</span><span class="token punctuation">(</span>sem<span class="token punctuation">,</span> valp<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>各个系统调用的实现如下——</p>
-<ul>
-<li>
-<p><strong>sys_sem_init</strong>：这个函数主要是对信号量进行初始化，需要将参数赋值给<code>sem_value</code>，设置标志位，并将其他数据成员的值设为0。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_init</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> pshared<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+各个系统调用的实现如下——<br>
+-
+<strong>sys_sem_init</strong>：这个函数主要是对信号量进行初始化，需要将参数赋值给<code>sem_value</code>，设置标志位，并将其他数据成员的值设为0。<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_init</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> pshared<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>sem <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_NOT_FOUND<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -1017,11 +996,10 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         sem<span class="token operator">-&gt;</span>sem_wait_queue<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>sys_sem_destroy</strong>：该函数需要销毁信号量，只需要将信号量的<code>VALID</code>标志位设置位0即可。但是需要注意的是，如果目前还有阻塞在信号量上的线程，则信号量无法被销毁。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_destroy</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li><p><strong>sys_sem_destroy</strong>：该函数需要销毁信号量，只需要将信号量的<code>VALID</code>标志位设置位0即可。但是需要注意的是，如果目前还有阻塞在信号量上的线程，则信号量无法被销毁。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_destroy</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;</span> SEM_PERM_VALID<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token comment">// 无法销毁无效的信号量</span>
         <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_INVALID<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -1030,11 +1008,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
     <span class="token punctuation">}</span>
     sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;=</span> <span class="token operator">~</span>SEM_PERM_VALID<span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>sys_sem_wait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会将调用者加入信号量的阻塞队列中，并将该线程状态设置为<code>THREAD_NOT_RUNNABLE</code>，实现阻塞。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_wait</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>sys_sem_wait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会将调用者加入信号量的阻塞队列中，并将该线程状态设置为<code>THREAD_NOT_RUNNABLE</code>，实现阻塞。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_wait</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;</span> SEM_PERM_VALID<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_INVALID<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -1059,11 +1035,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         <span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>KERNEL_SP <span class="token operator">-</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     tf<span class="token operator">-&gt;</span>regs<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>        <span class="token comment">// 将返回值设置为0</span>
     <span class="token function">sys_yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>sys_sem_trywait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会返回错误码，不会对调用者产生任何阻塞效果。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_trywait</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>sys_sem_trywait</strong>：调用该函数后，<code>sem_value</code>会自减。如果自减之后<code>sem_value</code>的值小于0，则会返回错误码，不会对调用者产生任何阻塞效果。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_trywait</span><span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;</span> SEM_PERM_VALID<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_INVALID<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -1073,11 +1047,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_TRYWAIT_FAIL<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>sys_sem_post</strong>：调用该函数后，<code>sem_value</code>会自增。如果自增之后<code>sem_value</code>的值是小于等于0，则说明当前有阻塞在该信号量上的线程，我们需要从队首获得一个线程并将其唤醒。</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_post</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>sys_sem_post</strong>：调用该函数后，<code>sem_value</code>会自增。如果自增之后<code>sem_value</code>的值是小于等于0，则说明当前有阻塞在该信号量上的线程，我们需要从队首获得一个线程并将其唤醒。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_post</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Thread</span> <span class="token operator">*</span>t<span class="token punctuation">;</span>
 
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;</span> SEM_PERM_VALID<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1091,11 +1063,9 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         t<span class="token operator">-&gt;</span>thread_status <span class="token operator">=</span> THREAD_RUNNABLE<span class="token punctuation">;</span>  <span class="token comment">// 唤醒线程</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p><strong>sys_sem_getvalue</strong>：该函数可以返回目标信号量的当前值，直接返回<code>sem_value</code>即可。对于没有被初始化的信号量，也就是<code>VALID</code>位是0的信号量，直接返回错误码</p>
-  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_getvalue</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>valp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p><strong>sys_sem_getvalue</strong>：该函数可以返回目标信号量的当前值，直接返回<code>sem_value</code>即可。对于没有被初始化的信号量，也就是<code>VALID</code>位是0的信号量，直接返回错误码<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">sys_sem_getvalue</span> <span class="token punctuation">(</span><span class="token keyword">int</span> sysno<span class="token punctuation">,</span> sem_t <span class="token operator">*</span>sem<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>valp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>sem<span class="token operator">-&gt;</span>sem_perm <span class="token operator">&amp;</span> SEM_PERM_VALID<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token operator">-</span>E_SEM_INVALID<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -1103,13 +1073,12 @@ Lab4的挑战性任务要求我们对MOS中以进程为单位的调度方式进�
         <span class="token operator">*</span>valp <span class="token operator">=</span> sem<span class="token operator">-&gt;</span>sem_value<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 <h2 id="关于测试">关于测试</h2>
-<h3 id="线程创建、等待、返回值测试">线程创建、等待、返回值测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<h3 id="线程创建等待返回值测试">线程创建、等待、返回值测试</h3>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1137,12 +1106,12 @@ pthread_t t2<span class="token punctuation">;</span>
 
     <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;32;40m thread %d returns: %d \033[0m\n"</span><span class="token punctuation">,</span> t1<span class="token punctuation">,</span> ret1<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;32;40m thread %d returns: %d \033[0m\n"</span><span class="token punctuation">,</span> t2<span class="token punctuation">,</span> ret2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0.jpg" alt=""></p>
-<h3 id="pthread-exit测试">pthread_exit测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><img src="线程创建基本函数.jpg"></p>
+<h3 id="pthread_exit测试">pthread_exit测试</h3>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1175,12 +1144,12 @@ pthread_t t2<span class="token punctuation">;</span>
     
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\033[0;32;40m thread %d returns: %d \033[0m\n"</span><span class="token punctuation">,</span> t1<span class="token punctuation">,</span> ret1<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\033[0;32;40m thread %d returns: %d \033[0m\n"</span><span class="token punctuation">,</span> t2<span class="token punctuation">,</span> ret2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="exit%E6%B5%8B%E8%AF%95.jpg" alt=""></p>
+<p><img src="exit测试.jpg"></p>
 <h3 id="cancel测试">cancel测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1222,12 +1191,12 @@ pthread_t t3<span class="token punctuation">;</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
             <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;31;40mthread 3 return with wrong value!\033[0m\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="%E6%B5%8B%E8%AF%95cancel.jpg" alt=""></p>
+<p><img src="测试cancel.jpg"></p>
 <h3 id="cancel返回值测试">cancel返回值测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 
@@ -1257,12 +1226,12 @@ pthread_t t1<span class="token punctuation">;</span>
         <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;31;40m t1 return with wrong value!\033[0m\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="cancel%E8%BF%94%E5%9B%9E%E5%80%BC%E6%B5%8B%E8%AF%95.jpg" alt=""></p>
+<p><img src="cancel返回值测试.jpg"></p>
 <h3 id="cancel-point测试">cancel point测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1308,12 +1277,12 @@ pthread_t t2<span class="token punctuation">;</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
         <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;31;40m t2 return with wrong value!\033[0m\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="cancel%20point%20%E6%B5%8B%E8%AF%95.jpg" alt=""></p>
+<p><img src="cancel%20point%20测试.jpg"></p>
 <h3 id="asynchronous-cancel测试-1">asynchronous cancel测试 1</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1361,12 +1330,12 @@ pthread_t t2<span class="token punctuation">;</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
         <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;31;40m t2 return with wrong value!\033[0m\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="asys%20cancel%E6%B5%8B%E8%AF%951.jpg" alt=""></p>
+<p><img src="asys%20cancel测试1.jpg"></p>
 <h3 id="asynchronous-cancel测试-2">asynchronous cancel测试 2</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1406,12 +1375,12 @@ pthread_t t2<span class="token punctuation">;</span>
 
     <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;34;40m t1 return the value of: %d\033[0m\n"</span><span class="token punctuation">,</span> ret1<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">writef</span><span class="token punctuation">(</span><span class="token string">"\033[0;34;40m t2 return the value of: %d\033[0m\n"</span><span class="token punctuation">,</span> ret2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong></p>
-<p><img src="asys%20cancel%E6%B5%8B%E8%AF%952.jpg" alt=""></p>
-<h3 id="信号量创建、取值、销毁测试">信号量创建、取值、销毁测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><img src="asys%20cancel测试2.jpg"></p>
+<h3 id="信号量创建取值销毁测试">信号量创建、取值、销毁测试</h3>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">;</span>
 pthread_t t2<span class="token punctuation">;</span>
@@ -1462,12 +1431,12 @@ sem_t s1<span class="token punctuation">;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>s1<span class="token punctuation">.</span>sem_perm <span class="token operator">!=</span> SEM_PERM_VALID<span class="token punctuation">)</span> 
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\033[0;34;40m s1 is invalid! \033[0m\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>测试结果</strong></p>
-<p><img src="sem%E5%9F%BA%E7%A1%80%E6%B5%8B%E8%AF%95.jpg" alt=""></p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+<strong>测试结果</strong><p></p>
+<p><img src="sem基础测试.jpg"></p>
 <h3 id="生产者消费者模型测试">生产者消费者模型测试</h3>
-<p><strong>测试例程</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
+<p><strong>测试例程</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"lib.h"</span></span>
 
 pthread_t t1<span class="token punctuation">,</span> t2<span class="token punctuation">;</span>
 sem_t mutex<span class="token punctuation">,</span> empty<span class="token punctuation">,</span> full<span class="token punctuation">;</span>
@@ -1510,9 +1479,9 @@ sem_t mutex<span class="token punctuation">,</span> empty<span class="token punc
     <span class="token function">pthread_join</span><span class="token punctuation">(</span>t1<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">pthread_join</span><span class="token punctuation">(</span>t2<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p><strong>测试结果</strong><br>
-<img src="%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85.jpg" alt=""></p>
+<img src="生产者消费者.jpg"></p>
 
                 
             </div>
@@ -1906,7 +1875,7 @@ sem_t mutex<span class="token punctuation">,</span> empty<span class="token punc
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

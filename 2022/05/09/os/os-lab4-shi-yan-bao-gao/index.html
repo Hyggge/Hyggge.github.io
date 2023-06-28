@@ -8,10 +8,12 @@
     <meta name="description" content="实验思考题
 Thinking 4.1
 Q： 思考并回答下面的问题：
-
+-
 内核在保存现场的时候是如何避免破坏通用寄存器的？
+-
 系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？
-我们是怎么做到让">
+-
+我们是">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -392,30 +394,38 @@ Q： 思考并回答下面的问题：
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="实验思考题">实验思考题</h2>
-<h3 id="Thinking-4-1">Thinking 4.1</h3>
-<p><strong>Q：</strong> <strong>思考并回答下面的问题：</strong></p>
-<ul>
-<li><strong>内核在保存现场的时候是如何避免破坏通用寄存器的？</strong></li>
-<li><strong>系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？</strong></li>
-<li><strong>我们是怎么做到让sys开头的函数“认为”我们提供了和用户调用msyscall时同样的参数的？</strong></li>
-<li><strong>内核处理系统调用的过程对Trapframe做了哪些更改？这种修改对应的用户态的变化是？</strong></li>
-</ul>
-<p><strong>A：</strong></p>
-<ul>
-<li>内核使用宏函数<code>SAVE_ALL</code>来保存现场，在该函数的代码实现里，只使用了k0和k1两个通用寄存器来进行操作，从而保证其他通用寄存器的值都不会被改变。</li>
-<li>可以。因为内核在陷入内核、保存现场的过程中，寄存器$a0-$a3中的值都没有被破坏。</li>
-<li>用户在调用<code>msyscall</code>时，传入的参数会被保存在$a0-$a3寄存器和堆栈中。当陷入内核时，$a0-$a3寄存器不会被破坏，而且用户栈中的内容会被原封不动地被拷贝到内核栈（<code>KERNEL_SP</code>）中。因此，<strong><code>sys_*</code>函数可以从寄存器和用户栈获得"用户调用<code>msyscall</code>时传入的参数值"</strong>。</li>
-<li>在处理过程中，将<code>Trapframe</code>中<code>epc</code>的值进行了一定处理，同时将<code>sys_*</code>函数的返回值存入<code>Trapframe</code>中的<code>v0</code>寄存器中。这种修改保证在进入用户态时，用户程序能够从正确的位置正确运行，同时也使得用户程序从<code>v0</code>寄存器中获得<strong>系统调用的返回值</strong>。</li>
-</ul>
-<h3 id="Thinking-4-2">Thinking 4.2</h3>
-<p><strong>Q：</strong> <strong>思考下面的问题，并对这个问题谈谈你的理解： 请回顾 lib/env.c 文件中 mkenvid() 函数的实现，该函数不会返回 0，请结合系统调用和 IPC 部分的实现 与 envid2env() 函数的行为进行解释。</strong><br>
-<strong>A：</strong> 回顾<code>mkenvid</code>的实现我们会发现，<code>envid</code>的第10位永远是1，即保证了生成的<code>envid</code>一定是非0的——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">mkenvid</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h3 id="thinking-4.1">Thinking 4.1</h3>
+<p><strong>Q：</strong> <strong>思考并回答下面的问题：</strong><br>
+-
+<strong>内核在保存现场的时候是如何避免破坏通用寄存器的？</strong><br>
+-
+<strong>系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？</strong><br>
+-
+<strong>我们是怎么做到让sys开头的函数“认为”我们提供了和用户调用msyscall时同样的参数的？</strong><br>
+-
+<strong>内核处理系统调用的过程对Trapframe做了哪些更改？这种修改对应的用户态的变化是？</strong></p>
+<p><strong>A：</strong><br>
+-
+内核使用宏函数<code>SAVE_ALL</code>来保存现场，在该函数的代码实现里，只使用了k0和k1两个通用寄存器来进行操作，从而保证其他通用寄存器的值都不会被改变。<br>
+-
+可以。因为内核在陷入内核、保存现场的过程中，寄存器$a0-$a3中的值都没有被破坏。<br>
+-
+用户在调用<code>msyscall</code>时，传入的参数会被保存在$a0-$a3寄存器和堆栈中。当陷入内核时，$a0-$a3寄存器不会被破坏，而且用户栈中的内容会被原封不动地被拷贝到内核栈（<code>KERNEL_SP</code>）中。因此，<strong><code>sys_*</code>函数可以从寄存器和用户栈获得"用户调用<code>msyscall</code>时传入的参数值"</strong>。<br>
+-
+在处理过程中，将<code>Trapframe</code>中<code>epc</code>的值进行了一定处理，同时将<code>sys_*</code>函数的返回值存入<code>Trapframe</code>中的<code>v0</code>寄存器中。这种修改保证在进入用户态时，用户程序能够从正确的位置正确运行，同时也使得用户程序从<code>v0</code>寄存器中获得<strong>系统调用的返回值</strong>。</p>
+<h3 id="thinking-4.2">Thinking 4.2</h3>
+<p><strong>Q：</strong>
+<strong>思考下面的问题，并对这个问题谈谈你的理解： 请回顾 lib/env.c
+文件中 mkenvid() 函数的实现，该函数不会返回 0，请结合系统调用和 IPC
+部分的实现 与 envid2env() 函数的行为进行解释。</strong><br>
+<strong>A：</strong>
+回顾<code>mkenvid</code>的实现我们会发现，<code>envid</code>的第10位永远是1，即保证了生成的<code>envid</code>一定是非0的——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">mkenvid</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     u_int idx <span class="token operator">=</span> e <span class="token operator">-</span> envs<span class="token punctuation">;</span>
     u_int asid <span class="token operator">=</span> <span class="token function">asid_alloc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token punctuation">(</span>asid <span class="token operator">&lt;&lt;</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> LOG2NENV<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> LOG2NENV<span class="token punctuation">)</span> <span class="token operator">|</span> idx<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>所以为什么将0作为一个保留值呢？我们能在<code>envid2env</code>函数中会找到答案——</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+所以为什么将0作为一个保留值呢？我们能在<code>envid2env</code>函数中会找到答案——<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">envid2env</span><span class="token punctuation">(</span>u_int envid<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">Env</span> <span class="token operator">*</span><span class="token operator">*</span>penv<span class="token punctuation">,</span> <span class="token keyword">int</span> checkperm<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment">/* Hint: If envid is zero, return curenv.*/</span>
@@ -425,67 +435,84 @@ Q： 思考并回答下面的问题：
     <span class="token punctuation">}</span>
     <span class="token comment">//...</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以发现，<strong>当<code>envid</code>的值是0时，函数会返回指向当前进程控制块的指针</strong>（通过形参<code>penv</code>返回）。当某些系统调用函数需要访问当前进程的进程控制块时，可以直接通过向<code>envid2env</code>传0来会获得指向当前进程控制块的指针，然后通过指针对进程控制块进行访问。</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+可以发现，<strong>当<code>envid</code>的值是0时，函数会返回指向当前进程控制块的指针</strong>（通过形参<code>penv</code>返回）。当某些系统调用函数需要访问当前进程的进程控制块时，可以直接通过向<code>envid2env</code>传0来会获得指向当前进程控制块的指针，然后通过指针对进程控制块进行访问。<p></p>
 <p>因此，<strong>0作为<code>envid</code>的保留值是为了方便程序直接通过<code>envid2env</code>函数来访问当前进程的进程控制块。</strong></p>
-<h3 id="Thinking-4-3">Thinking 4.3</h3>
-<p><strong>Q：</strong> <strong>思考下面的问题，并对这两个问题谈谈你的理解：</strong></p>
-<ul>
-<li><strong>子进程完全按照 fork() 之后父进程的代码执行，说明了什么？</strong></li>
-<li><strong>但是子进程却没有执行 fork() 之前父进程的代码，又说明了什么？</strong></li>
-</ul>
-<p><strong>A：</strong> <strong>前者说明子进程的代码段和父进程是完全一样的；后者说明子进程的初始上下文位置是在<code>fork</code>函数</strong>，也就是说，子进程的初始<code>PC</code>并不是在用户程序的入口，而是在父进程<code>EPC</code>指向的位置。</p>
-<blockquote>
-<p>子进程实际上是在”syscall_env_alloc的执行刚刚从内核态返回用户态“的时候开始运行的，更准确的说，是在msyscal函数返回的位置开始的。</p>
-</blockquote>
-<h3 id="Thinking-4-4">Thinking 4.4</h3>
-<p><strong>Q：</strong> <strong>关于 fork 函数的两个返回值，下面说法正确的是：</strong></p>
-<ul>
-<li><strong>A、fork 在父进程中被调用两次，产生两个返回值</strong></li>
-<li><strong>B、fork 在两个进程中分别被调用一次，产生两个不同的返回值</strong></li>
-<li><strong>C、fork 只在父进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
-<li><strong>D、fork 只在子进程中被调用了一次，在两个进程中各产生一个返回值</strong></li>
-</ul>
-<p><strong>A：</strong> 当子进程被调度时，恢复的上下文环境是在<code>fork</code>函数中（实际上是<code>syscall_env_alloc</code>函数之后），但是这并非是真正的调用了<code>fork</code>函数，只是复制了父进程的上下文而已。此外，执行完<code>fork</code>函数后，父进程返回的是子进程的<code>envid</code>，子进程返回的是0，因此父子进程的返回值是不同的。综上，答案为C。</p>
-<h3 id="Thinking-4-5">Thinking 4.5</h3>
-<p><strong>Q：</strong> <strong>我们并不应该对所有的用户空间页都使用duppage进行映射。那么究竟哪些用户空间页应该映射，哪些不应该呢？ 请结合本章的后续描述、mm/pmap.c 中 mips_vm_init 函数进行的页面映射以及 include/mmu.h 里的内存布局图进行思考。</strong></p>
-<p><strong>A：</strong> <code>UTOP</code>和<code>TLIM</code>之间储存的是<strong>和内核相关的页表信息</strong>。在执行<code>env_alloc()</code>函数时，这一部分的映射关系直接从<code>boot_pgdir</code>拷贝到进程页表中，因此不需要进行映射。</p>
-<p><code>UTOP</code>和<code>USTACKTOP</code>之间是<strong>异常处理栈（user exception stack）和无效内存（invalid memory）</strong>，前者是进行异常处理的地方， 后者一般也不会用到，所以父子进程不需要共享这部分的内存，也就不需要进行映射了。</p>
+<h3 id="thinking-4.3">Thinking 4.3</h3>
+<p><strong>Q：</strong>
+<strong>思考下面的问题，并对这两个问题谈谈你的理解：</strong><br>
+- <strong>子进程完全按照 fork()
+之后父进程的代码执行，说明了什么？</strong><br>
+- <strong>但是子进程却没有执行 fork()
+之前父进程的代码，又说明了什么？</strong></p>
+<p><strong>A：</strong>
+<strong>前者说明子进程的代码段和父进程是完全一样的；后者说明子进程的初始上下文位置是在<code>fork</code>函数</strong>，也就是说，子进程的初始<code>PC</code>并不是在用户程序的入口，而是在父进程<code>EPC</code>指向的位置。<br>
+&gt;
+子进程实际上是在”syscall_env_alloc的执行刚刚从内核态返回用户态“的时候开始运行的，更准确的说，是在msyscal函数返回的位置开始的。</p>
+<h3 id="thinking-4.4">Thinking 4.4</h3>
+<p><strong>Q：</strong> <strong>关于 fork
+函数的两个返回值，下面说法正确的是：</strong><br>
+- <strong>A、fork 在父进程中被调用两次，产生两个返回值</strong><br>
+- <strong>B、fork
+在两个进程中分别被调用一次，产生两个不同的返回值</strong><br>
+- <strong>C、fork
+只在父进程中被调用了一次，在两个进程中各产生一个返回值</strong><br>
+- <strong>D、fork
+只在子进程中被调用了一次，在两个进程中各产生一个返回值</strong></p>
+<p><strong>A：</strong>
+当子进程被调度时，恢复的上下文环境是在<code>fork</code>函数中（实际上是<code>syscall_env_alloc</code>函数之后），但是这并非是真正的调用了<code>fork</code>函数，只是复制了父进程的上下文而已。此外，执行完<code>fork</code>函数后，父进程返回的是子进程的<code>envid</code>，子进程返回的是0，因此父子进程的返回值是不同的。综上，答案为C。</p>
+<h3 id="thinking-4.5">Thinking 4.5</h3>
+<p><strong>Q：</strong>
+<strong>我们并不应该对所有的用户空间页都使用duppage进行映射。那么究竟哪些用户空间页应该映射，哪些不应该呢？
+请结合本章的后续描述、mm/pmap.c 中 mips_vm_init 函数进行的页面映射以及
+include/mmu.h 里的内存布局图进行思考。</strong></p>
+<p><strong>A：</strong>
+<code>UTOP</code>和<code>TLIM</code>之间储存的是<strong>和内核相关的页表信息</strong>。在执行<code>env_alloc()</code>函数时，这一部分的映射关系直接从<code>boot_pgdir</code>拷贝到进程页表中，因此不需要进行映射。</p>
+<p><code>UTOP</code>和<code>USTACKTOP</code>之间是<strong>异常处理栈（user
+exception stack）和无效内存（invalid
+memory）</strong>，前者是进行异常处理的地方，
+后者一般也不会用到，所以父子进程不需要共享这部分的内存，也就不需要进行映射了。</p>
 <p>所以，最终需要被映射的页面<strong>只有<code>USTACKTOP</code>之下的部分</strong>。</p>
-<h3 id="Thinking-4-6">Thinking 4.6</h3>
-<p><strong>Q：</strong> <strong>在遍历地址空间存取页表项时你需要使用到vpd和vpt这两个“指针的指针”，请参考 user/entry.S 和 include/mmu.h 中的相关实现，思考并回答这几个问题：</strong></p>
-<ul>
-<li><strong>vpt和vpd的作用是什么？怎样使用它们？</strong></li>
-<li><strong>从实现的角度谈一下为什么进程能够通过这种方式来存取自身的页表？</strong></li>
-<li><strong>它们是如何体现自映射设计的？</strong></li>
-<li><strong>进程能够通过这种方式来修改自己的页表项吗？</strong></li>
-</ul>
-<p><strong>A：</strong></p>
-<ul>
-<li><code>vpt</code>和<code>vpd</code>分别是指向用户页表和用户页目录的指针，可以用来对用户页表和页目录进行访问。在使用的时候，以<code>vpt</code>为例，先用<code>*</code>运算符获得页表基地址，然后从要访问的虚拟地址中获得页表项相对基地址的偏移，最后两个相加就得到指向页表项的指针，这样我们就可以通过这个指针来对页表项进行访问。vpd同理。</li>
-<li>在<code>entry.S</code>中我们可以找到<code>vpt</code>和<code>vpd</code>的定义——  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">.</span>globl vpt
+<h3 id="thinking-4.6">Thinking 4.6</h3>
+<p><strong>Q：</strong>
+<strong>在遍历地址空间存取页表项时你需要使用到vpd和vpt这两个“指针的指针”，请参考
+user/entry.S 和 include/mmu.h
+中的相关实现，思考并回答这几个问题：</strong><br>
+- <strong>vpt和vpd的作用是什么？怎样使用它们？</strong><br>
+-
+<strong>从实现的角度谈一下为什么进程能够通过这种方式来存取自身的页表？</strong><br>
+- <strong>它们是如何体现自映射设计的？</strong><br>
+- <strong>进程能够通过这种方式来修改自己的页表项吗？</strong></p>
+<p><strong>A：</strong><br>
+-
+<code>vpt</code>和<code>vpd</code>分别是指向用户页表和用户页目录的指针，可以用来对用户页表和页目录进行访问。在使用的时候，以<code>vpt</code>为例，先用<code>*</code>运算符获得页表基地址，然后从要访问的虚拟地址中获得页表项相对基地址的偏移，最后两个相加就得到指向页表项的指针，这样我们就可以通过这个指针来对页表项进行访问。vpd同理。<br>
+-
+在<code>entry.S</code>中我们可以找到<code>vpt</code>和<code>vpd</code>的定义——<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">.</span>globl vpt
 vpt<span class="token operator">:</span>
     <span class="token punctuation">.</span>word UVPT
 
 <span class="token punctuation">.</span>globl vpd
 vpd<span class="token operator">:</span>
-    <span class="token punctuation">.</span><span class="token function">word</span> <span class="token punctuation">(</span>UVPT<span class="token operator">+</span><span class="token punctuation">(</span>UVPT<span class="token operator">&gt;&gt;</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-可以发现，<code>vpt</code>和<code>vpd</code>分别指向了两个值——<code>UVPT</code>和<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，这两个值分别是用户地址空间中页表的首地址和页目录的首地址。所以我们可以直接通过<code>vpt</code>和<code>vpd</code>访问到用户进程页表和页目录。</li>
-<li>上面说到，<code>vpd</code>的值是<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，而这个地址正好在<code>UVPT</code>和<code>UVPT+PDMAP</code>之间，说明页目录被映射到了某一个页表的位置。我们知道，每一个页表都被页目录中的一个页表项所映射。因此"页目录被映射到某一个页表的位置"就意味着，<strong>在页目录中一定有一个页表项映射到了页目录本身</strong>，即实现了自映射。</li>
-<li>不能，页表是内核态程序维护的，用户进程只能对页表项其进行访问，而不能对其进行修改。</li>
-</ul>
-<h3 id="Thinking-4-7">Thinking 4.7</h3>
-<p><strong>Q：</strong> <strong>page_fault_handler 函数中，你可能注意到了一个向异常处理栈复制Trapframe运行现场的过程，请思考并回答这几个问题：</strong></p>
-<ul>
-<li><strong>这里实现了一个支持类似于“中断重入”的机制，而在什么时候会出现这种“中断重入”？</strong></li>
-<li><strong>内核为什么需要将异常的现场Trapframe复制到用户空间？</strong></li>
-</ul>
-<p><strong>A：</strong> 解答如下——</p>
-<ul>
-<li>
-<p>当用户程序写入了一个<code>COW</code>页，OS就会进入<strong>页写入异常的处理程序</strong>，最终调用<strong>用户态</strong>的<code>pgfault</code>函数进行处理。但是，如果在<code>pgfault</code>函数的处理过程中又写入了一个<code>COW</code>页，就会再次进入页写入异常处理程序，然后又调用<code>pgfault</code>函数……这就出现了”中断重入“的现象。<br>
-目前，<code>pgfault</code>函数的实现是不会出现中断重入的。因为在这个函数里，我们只对异常处理栈所在的页进行了读写（异常处理程序中的临时变量都保存在异常处理栈），而异常处理栈并非是父子进程共享的（详见Thinking 4.6），不可能会有<code>COW</code>标志位。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">pgfault</span><span class="token punctuation">(</span>u_int va<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">word</span> <span class="token punctuation">(</span>UVPT<span class="token operator">+</span><span class="token punctuation">(</span>UVPT<span class="token operator">&gt;&gt;</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+可以发现，<code>vpt</code>和<code>vpd</code>分别指向了两个值——<code>UVPT</code>和<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，这两个值分别是用户地址空间中页表的首地址和页目录的首地址。所以我们可以直接通过<code>vpt</code>和<code>vpd</code>访问到用户进程页表和页目录。<br>
+-
+上面说到，<code>vpd</code>的值是<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>，而这个地址正好在<code>UVPT</code>和<code>UVPT+PDMAP</code>之间，说明页目录被映射到了某一个页表的位置。我们知道，每一个页表都被页目录中的一个页表项所映射。因此"页目录被映射到某一个页表的位置"就意味着，<strong>在页目录中一定有一个页表项映射到了页目录本身</strong>，即实现了自映射。<br>
+-
+不能，页表是内核态程序维护的，用户进程只能对页表项其进行访问，而不能对其进行修改。<p></p>
+<h3 id="thinking-4.7">Thinking 4.7</h3>
+<p><strong>Q：</strong> <strong>page_fault_handler
+函数中，你可能注意到了一个向异常处理栈复制Trapframe运行现场的过程，请思考并回答这几个问题：</strong><br>
+-
+<strong>这里实现了一个支持类似于“中断重入”的机制，而在什么时候会出现这种“中断重入”？</strong><br>
+-
+<strong>内核为什么需要将异常的现场Trapframe复制到用户空间？</strong></p>
+<p><strong>A：</strong> 解答如下——<br>
+-
+当用户程序写入了一个<code>COW</code>页，OS就会进入<strong>页写入异常的处理程序</strong>，最终调用<strong>用户态</strong>的<code>pgfault</code>函数进行处理。但是，如果在<code>pgfault</code>函数的处理过程中又写入了一个<code>COW</code>页，就会再次进入页写入异常处理程序，然后又调用<code>pgfault</code>函数……这就出现了”中断重入“的现象。<br>
+目前，<code>pgfault</code>函数的实现是不会出现中断重入的。因为在这个函数里，我们只对异常处理栈所在的页进行了读写（异常处理程序中的临时变量都保存在异常处理栈），而异常处理栈并非是父子进程共享的（详见Thinking
+4.6），不可能会有<code>COW</code>标志位。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">pgfault</span><span class="token punctuation">(</span>u_int va<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     u_int <span class="token operator">*</span>tmp<span class="token punctuation">;</span>
     <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
@@ -517,13 +544,14 @@ vpd<span class="token operator">:</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">user_panic</span><span class="token punctuation">(</span><span class="token string">"In pgfault: MEMORY UNMAP FAILED!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>所以，我们的MOS为什么还要支持”中断重入“呢？</p>
-<p>实际上，用户态的页写入异常处理函数<strong>是用户态程序自行指定的</strong>，也就是说，每个用户程序都可以通过<code>syscall_set_pgfault_handler()</code>函数<strong>注册一个自己的页写入异常处理函数</strong>（直接向<code>syscall_set_pgfault_handler()</code>传递一个函数指针即可）。在MOS中，我们向<code>syscall_set_pgfault_handler()</code>传递的是<code>pgfault</code>函数指针，这个函数只对异常处理栈所在的页进行了写操作，所以不会出现异常重入。但如果用户程序注册了一个其他的函数呢？假设这个新函数写了某些全局变量，还是可能会出现”异常重入“。</p>
-<p>总而言之，<strong>支持”中断重入“可以使我们的程序有更好的可扩展性，使得用户程序可以根据需要注册自己的中断处理程序</strong>。如果内核不实现这个写入异常的重入的话，意味着用户处理函数甚至无法使用全局变量，这样就会有很大的局限性。</p>
-<blockquote>
-<p>补充：MOS中对”中断重入“的支持主要体现在——</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">page_fault_handler</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span> <span class="token operator">*</span>tf<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+所以，我们的MOS为什么还要支持”中断重入“呢？<p></p>
+<pre><code>实际上，用户态的页写入异常处理函数**是用户态程序自行指定的**，也就是说，每个用户程序都可以通过`syscall_set_pgfault_handler()`函数**注册一个自己的页写入异常处理函数**（直接向`syscall_set_pgfault_handler()`传递一个函数指针即可）。在MOS中，我们向`syscall_set_pgfault_handler()`传递的是`pgfault`函数指针，这个函数只对异常处理栈所在的页进行了写操作，所以不会出现异常重入。但如果用户程序注册了一个其他的函数呢？假设这个新函数写了某些全局变量，还是可能会出现”异常重入“。
+
+总而言之，**支持”中断重入“可以使我们的程序有更好的可扩展性，使得用户程序可以根据需要注册自己的中断处理程序**。如果内核不实现这个写入异常的重入的话，意味着用户处理函数甚至无法使用全局变量，这样就会有很大的局限性。
+
+&gt; 补充：MOS中对”中断重入“的支持主要体现在——
+&gt;<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">page_fault_handler</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span> <span class="token operator">*</span>tf<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">//...</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>tf<span class="token operator">-&gt;</span>regs<span class="token punctuation">[</span><span class="token number">29</span><span class="token punctuation">]</span> <span class="token operator">&gt;=</span> <span class="token punctuation">(</span>curenv<span class="token operator">-&gt;</span>env_xstacktop <span class="token operator">-</span> BY2PG<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
         tf<span class="token operator">-&gt;</span>regs<span class="token punctuation">[</span><span class="token number">29</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> <span class="token punctuation">(</span>curenv<span class="token operator">-&gt;</span>env_xstacktop <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -532,75 +560,67 @@ vpd<span class="token operator">:</span>
         <span class="token punctuation">}</span> 
     <span class="token comment">//...</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>一旦进入这个<code>if</code>分支，就说明上下文中的<code>sp</code>寄存器的值就是在异常处理栈，也就是说在中断处理的过程中又发生了页写入中断。</p>
-</blockquote>
-</li>
-<li>
-<p>因为异常的处理是在用户态进行的，而<strong>用户态只能访问用户空间（低2G空间）内的数据</strong>，所以需要将现场保存在用户空间。</p>
-</li>
-</ul>
-<h3 id="Thinking-4-8">Thinking 4.8</h3>
-<p><strong>Q：</strong> <strong>到这里我们大概知道了这是一个由用户程序处理并由用户程序自身来恢复运行现场的过程，请思考并回答以下几个问题：</strong></p>
+&gt; 一旦进入这个`if`分支，就说明上下文中的`sp`寄存器的值就是在异常处理栈，也就是说在中断处理的过程中又发生了页写入中断。</code></pre>
 <ul>
-<li><strong>在用户态处理页写入异常，相比于在内核态处理有什么优势？</strong></li>
-<li><strong>从通用寄存器的用途角度讨论，在可能被中断的用户态下进行现场的恢复，要如何做到不破坏现场中的通用寄存器？</strong></li>
+<li>因为异常的处理是在用户态进行的，而<strong>用户态只能访问用户空间（低2G空间）内的数据</strong>，所以需要将现场保存在用户空间。</li>
 </ul>
-<p><strong>A：</strong> 解答如下——</p>
-<ul>
-<li>尽量减少内核出现错误的可能，即使程序崩溃，也不会影响系统的稳定。同时微内核的模式下，用户态进行新页面的分配映射也更加灵活方便。</li>
-<li>在进入用户态的异常处理程序前，将通用寄存器中的值存储在一个特殊的栈空间——<strong>异常处理栈</strong>；执行完异常处理程序后，在从异常处理栈恢复到通用寄存器。</li>
-</ul>
-<h3 id="Thinking-4-9">Thinking 4.9</h3>
-<p><strong>Q：</strong> <strong>请思考并回答以下几个问题：</strong></p>
-<ul>
-<li><strong>为什么需要将set_pgfault_handler的调用放置在syscall_env_alloc之前？</strong></li>
-<li><strong>如果放置在写时复制保护机制完成之后会有怎样的效果？</strong></li>
-<li><strong>子进程是否需要对在entry.S定义的字__pgfault_handler赋值？</strong></li>
-</ul>
-<p><strong>A：</strong> 解答如下——</p>
-<ul>
-<li>
-<p>其实<code>set_pgfault_handler</code>并不一定要置在<code>syscall_env_alloc</code>之前， 只要放在“写时复制机制建立”之前即可。理由如下——<br>
+<h3 id="thinking-4.8">Thinking 4.8</h3>
+<p><strong>Q：</strong>
+<strong>到这里我们大概知道了这是一个由用户程序处理并由用户程序自身来恢复运行现场的过程，请思考并回答以下几个问题：</strong><br>
+-
+<strong>在用户态处理页写入异常，相比于在内核态处理有什么优势？</strong><br>
+-
+<strong>从通用寄存器的用途角度讨论，在可能被中断的用户态下进行现场的恢复，要如何做到不破坏现场中的通用寄存器？</strong></p>
+<p><strong>A：</strong> 解答如下——<br>
+-
+尽量减少内核出现错误的可能，即使程序崩溃，也不会影响系统的稳定。同时微内核的模式下，用户态进行新页面的分配映射也更加灵活方便。<br>
+-
+在进入用户态的异常处理程序前，将通用寄存器中的值存储在一个特殊的栈空间——<strong>异常处理栈</strong>；执行完异常处理程序后，在从异常处理栈恢复到通用寄存器。</p>
+<h3 id="thinking-4.9">Thinking 4.9</h3>
+<p><strong>Q：</strong>
+<strong>请思考并回答以下几个问题：</strong><br>
+-
+<strong>为什么需要将set_pgfault_handler的调用放置在syscall_env_alloc之前？</strong><br>
+-
+<strong>如果放置在写时复制保护机制完成之后会有怎样的效果？</strong><br>
+- **子进程是否需要对在entry.S定义的字__pgfault_handler赋值？**</p>
+<p><strong>A：</strong> 解答如下——<br>
+-
+其实<code>set_pgfault_handler</code>并不一定要置在<code>syscall_env_alloc</code>之前，
+只要放在“写时复制机制建立”之前即可。理由如下——<br>
  <br>
 我们知道，在子进程真正运行之前，父进程会将需要与子进程共享的页面共享给子进程，并同时设置写时复制机制。在这个过程中，<strong>父进程数据段里的全局变量也就变成了子进程的全局变量</strong>，因此只要在此之前父进程的<code>__pgfault_handler</code>已经被赋值过，那么设置完写时复制机制之后，子进程中<code>__pgfault_handler</code>的值就同样被"赋值"了（和父进程保持一致）<br>
  <br>
 <strong>因此，<code>set_pgfault_handler</code>必须在”写时复制机制“完成之前。</strong><code>set_pgfault_handler</code>无论是放<code>syscall_env_alloc</code>之前还是之后，其实都没有问题。</p>
-<p> <br>
-但是如果非要问为什么”<code>set_pgfault_handler</code>的调用放置在<code>syscall_env_alloc</code>之前“，大概是因为，这样可以节省子进程的运行时间，因为子进程是在"<strong><code>syscall_env_alloc</code>的执行刚刚从内核态返回用户态</strong>"的时候开始运行的。</p>
-<p> </p>
-</li>
-<li>
-<p>通过上面的解释可以知道，如果将<code>set_pgfault_handler</code>放置在写时复制保护机制完成之后，那么<strong>子进程中的全局变量<code>__pgfault_handler</code>就不会被赋值</strong>，那么页写入异常处理机制也就无法被建立起来。</p>
-</li>
-<li>
-<p>不需要，因为父进程已经通过<code>set_pgfault_handler</code>函数将<code>__pgfault_handler</code>赋值为<code>pgfault</code>的函数地址了，并且在写时复制机制建立时将数据段里的全局变量都"复制"到了子进程的数据段（包括<code>__pgfault_handler</code>），因此子进程不需要再对其进行赋值。</p>
-</li>
-</ul>
-<hr>
-<h2 id="实验难点图示">实验难点图示</h2>
-<p>本次实验实验主要包含以下两个难点——</p>
+<pre><code>&amp;emsp;
+但是如果非要问为什么”`set_pgfault_handler`的调用放置在`syscall_env_alloc`之前“，大概是因为，这样可以节省子进程的运行时间，因为子进程是在"**`syscall_env_alloc`的执行刚刚从内核态返回用户态**"的时候开始运行的。
+
+&amp;emsp;</code></pre>
 <ul>
-<li><strong>系统调用的处理流程</strong></li>
-<li><strong>页写入异常处理机制的建立</strong></li>
-<li><strong>页写入异常处理流程</strong></li>
+<li><p>通过上面的解释可以知道，如果将<code>set_pgfault_handler</code>放置在写时复制保护机制完成之后，那么<strong>子进程中的全局变量<code>__pgfault_handler</code>就不会被赋值</strong>，那么页写入异常处理机制也就无法被建立起来。</p></li>
+<li><p>不需要，因为父进程已经通过<code>set_pgfault_handler</code>函数将<code>__pgfault_handler</code>赋值为<code>pgfault</code>的函数地址了，并且在写时复制机制建立时将数据段里的全局变量都"复制"到了子进程的数据段（包括<code>__pgfault_handler</code>），因此子进程不需要再对其进行赋值。</p></li>
 </ul>
+<h2 id="实验难点图示">实验难点图示</h2>
+<p>本次实验实验主要包含以下两个难点——<br>
+- <strong>系统调用的处理流程</strong><br>
+- <strong>页写入异常处理机制的建立</strong><br>
+- <strong>页写入异常处理流程</strong></p>
 <h3 id="系统调用的处理流程">系统调用的处理流程</h3>
 <p>系统调用的处理流程和时钟中断的处理流程相似：用户使用系统调用后，CPU进入内核态，并通过异常分发程序的分发进入到了异常服务函数<code>handle_sys</code>。然后，<code>handle_sys</code>函数根据传入的系统调用号跳转到具体的处理函数<code>sys_*</code>。经过一系列处理，最后返回用户态。</p>
 <p>整个流程如下图所示——</p>
-<p><img src="1.svg" alt=""></p>
+<p><img src="1.svg"></p>
 <h3 id="页写入异常处理机制的建立">页写入异常处理机制的建立</h3>
-<p>为建立起页写入异常处理机制，我们需要完成以下三个任务——</p>
-<ul>
-<li>为进程的异常处理栈分配物理页面</li>
-<li>将进程控制块的异常处理栈地址设置为<code>UXSTACKTOP</code>，将异常处理函数地址设置为<code>__asm_pgfault_handle</code></li>
-<li>将全局变量<code>__pgfault_handler</code>赋值为<code>pgfault</code>函数的地址</li>
-</ul>
+<p>为建立起页写入异常处理机制，我们需要完成以下三个任务——<br>
+- 为进程的异常处理栈分配物理页面<br>
+-
+将进程控制块的异常处理栈地址设置为<code>UXSTACKTOP</code>，将异常处理函数地址设置为<code>__asm_pgfault_handle</code><br>
+-
+将全局变量<code>__pgfault_handler</code>赋值为<code>pgfault</code>函数的地址</p>
 <p>因为父子进程都需要建立页写入异常处理机制，所以两者都需要完成上述的三个任务，即总共有6个任务。而这6个任务都由父进程通过fork函数完成的，具体过程如下——</p>
-<p><img src="2.svg" alt=""></p>
+<p><img src="2.svg"></p>
 <h3 id="页写入异常处理流程">页写入异常处理流程</h3>
 <p>建立起页写入异常处理机制后，我们的操作系统就有了处理该异常的能力。每当写入<code>PTE_COW</code>为1的页面时，页写入异常就会被触发，处理流程如下所示——</p>
-<p><img src="3.svg" alt=""></p>
-<hr>
+<p><img src="3.svg"></p>
 <h2 id="体会与感想">体会与感想</h2>
 <p>个人感觉这次实验的难度确实比Lab3高了很多，主要有两方面原因——一方面，fork函数本身就不太好理解，需要同时考虑父子进程的行为逻辑；另一方面，本次填写的十几个函数彼此密切相关，无论哪一个出现了问题都会导致评测出锅，所以定位bug简直就是大海捞针。虽然debug很痛苦，但是在这个过程中我又将代码重读了很多遍，对代码理解也更加深刻了。</p>
 <p>最后，我还要在此感谢王廉杰学长，他帮我纠正了代码理解上的诸多错误，没有他的指导我也不可能这么顺利的完成Lab4的任务，再次表示感谢！！！</p>
@@ -1001,7 +1021,7 @@ vpd<span class="token operator">:</span>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

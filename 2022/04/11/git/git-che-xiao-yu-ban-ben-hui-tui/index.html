@@ -5,8 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Git」撤销、删除与版本回退, Hyggge&#39;s Blog">
-    <meta name="description" content="
-查看修改
+    <meta name="description" content="查看修改
+
+
+
+
 
 
 
@@ -16,12 +19,14 @@
 
 
 
-git diff &amp;lt;file&amp;gt;
+git diff
+&amp;lt;file&amp;gt;
 查看工作区中某文件的修改。
 
 
-git diff --cached &amp;lt;file&amp;gt; 或  git diff staged &amp;lt;file&amp;gt;
-">
+git diff --cached
+&amp;lt;file&amp;gt; 或 git diff staged
+&amp;lt;file&amp;gt">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -397,147 +402,172 @@ git diff --cached &amp;lt;file&amp;gt; 或  git diff staged &amp;lt;file&amp;gt;
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="查看修改">查看修改</h2>
+                <h2 id="查看修改">查看修改</h2>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">作用</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git diff &lt;file&gt;</strong></td>
-<td style="text-align:center">查看工作区中某文件的修改。</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git diff
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">查看工作区中某文件的修改。</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git diff --cached &lt;file&gt;</strong> 或<br>  <strong>git diff staged &lt;file&gt;</strong></td>
-<td style="text-align:center">显示暂存区(已add但未commit文件)和最后一次commit(HEAD)之间的所有不相同文件的增删改</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git diff --cached
+&lt;file&gt;</strong> 或<br> <strong>git diff staged
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">显示暂存区(已add但未commit文件)和最后一次commit(HEAD)之间的所有不相同文件的增删改</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git diff HEAD -- &lt;file&gt;</strong></td>
-<td style="text-align:center">查看工作区文件（没有add到暂存区）和版本库最后一次commit之间的区别</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git diff HEAD --
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">查看工作区文件（没有add到暂存区）和版本库最后一次commit之间的区别</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git diff HEAD~X -- &lt;file&gt;</strong></td>
-<td style="text-align:center">查看最近一次提交的版本与往过去时间线前数<code>X</code>个的版本之间的差别</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git diff HEAD~X --
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">查看最近一次提交的版本与往过去时间线前数<code>X</code>个的版本之间的差别</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git diff &lt;branch1&gt; &lt;branch2&gt;</strong></td>
-<td style="text-align:center">比较两个分支最后一次commit的内容的差别</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git diff &lt;branch1&gt;
+&lt;branch2&gt;</strong></td>
+<td style="text-align: center;">比较两个分支最后一次commit的内容的差别</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li>对<code>git diff &lt;file&gt;</code>指令：当工作区有改动、暂存区为空时，比较的是工作区和最后一次commit提交；当工作区有改动、暂存区不为空时，比较的是工作区和暂存区。</li>
 </ul>
-<hr>
 <h2 id="重命名指令">重命名指令</h2>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">作用</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git mv &lt;name1&gt; &lt;name2&gt;</strong></td>
-<td style="text-align:center">将名为<code>name1</code>的文件重命名为<code>name2</code></td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git mv &lt;name1&gt;
+&lt;name2&gt;</strong></td>
+<td style="text-align: center;">将名为<code>name1</code>的文件重命名为<code>name2</code></td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li>使用<code>git mv</code>指令后，工作区和暂存区的文件名都被修改。以<code>git mv file1.txt file2.txt</code>为例，它其实相当于三条指令——<code>mv file1.txt file2.txt</code>、<code>git rm file1.txt</code>、<code>git add file2.txt</code></li>
 </ul>
-<hr>
 <h2 id="撤销指令">撤销指令</h2>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">作用</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git checkout – &lt;file&gt;</strong></td>
-<td style="text-align:center">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git checkout --
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git checkout HEAD – &lt;file&gt;</strong></td>
-<td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git checkout HEAD --
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">将工作区、暂存区和HEAD的提交保持一致</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git reset HEAD &lt;file&gt;</strong></td>
-<td style="text-align:center">将暂存区和HEAD的提交保持一致（达到取消暂存的效果）</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git reset HEAD
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">将暂存区和HEAD的提交保持一致（达到取消暂存的效果）</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git reset --hard HEAD</strong></td>
-<td style="text-align:center">将工作区、暂存区和HEAD的提交保持一致</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git reset --hard
+HEAD</strong></td>
+<td style="text-align: center;">将工作区、暂存区和HEAD的提交保持一致</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git commit --amend</strong></td>
-<td style="text-align:center">如果提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了， 可以用该命令来重新提交将暂存区中的文件提交，并覆盖上一次提交信息。</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git commit --amend</strong></td>
+<td style="text-align: center;">如果提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了，
+可以用该命令来重新提交将暂存区中的文件提交，并覆盖上一次提交信息。</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>”</li>
-<li><code>git checkout HEAD -- &lt;file&gt;</code>和<code>git reset --hard HEAD &lt;file&gt;</code> 作用相似，都是可以使"工作区、暂存区和HEAD的提交保持一致"。但是两者并不完全一样：
+<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——"<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>"</li>
+<li><code>git checkout HEAD -- &lt;file&gt;</code>和<code>git reset --hard HEAD &lt;file&gt;</code>
+作用相似，都是可以使"工作区、暂存区和HEAD的提交保持一致"。但是两者并不完全一样：
 <ul>
 <li>首先，<code>git checkout HEAD -- &lt;file&gt;</code>可以指定文件，但是<code>git reset -- hard HEAD</code>指令会作用于所有的文件。</li>
 <li>其次，如果使用<code>git checkout HEAD -- .</code>时，不会对没有commit的新增文件起作用；但如果我们使用的是<code>git reset --head HEAD</code>，因为新增文件没有commit，即在版本库中找不到，所以执行该命令后未commmit新文件会消失（相比<code>git checkouit HEAD -- .</code>更加彻底）。具体示例可参考这篇<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59339986/is-there-a-difference-between-git-checkout-head-and-git-reset-hard-head">博客</a>。</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<hr>
 <h2 id="删除指令">删除指令</h2>
 <table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">作用</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git rm &lt;file&gt;</strong></td>
-<td style="text-align:center">工作区和暂存区的该文件都会被删除。<br>再使用<code>git commit</code>就可以将该文件从版本库中删除</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git rm
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">工作区和暂存区的该文件都会被删除。<br>再使用<code>git commit</code>就可以将该文件从版本库中删除</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git rm --cached &lt;file&gt;</strong></td>
-<td style="text-align:center">从暂存区删去该文件，而工作区不删除。<br>此时使用<code>git commit</code>可以将该文件从版本库中删除，但工作区不会被删</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git rm --cached
+&lt;file&gt;</strong></td>
+<td style="text-align: center;">从暂存区删去该文件，而工作区不删除。<br>此时使用<code>git commit</code>可以将该文件从版本库中删除，但工作区不会被删</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git clean &lt;file&gt; -f</strong></td>
-<td style="text-align:center">删除工作区中没有被追踪的文件</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git clean &lt;file&gt;
+-f</strong></td>
+<td style="text-align: center;">删除工作区中没有被追踪的文件</td>
 </tr>
 </tbody>
 </table>
-<hr>
 <h2 id="版本回退">版本回退</h2>
 <p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">指令</th>
-<th style="text-align:center">作用</th>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center"><strong>git reset --hard HEAD^</strong></td>
-<td style="text-align:center">回退到上一个版本，<code>^</code>的个数表示回滚的次数</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git reset --hard
+HEAD^</strong></td>
+<td style="text-align: center;">回退到上一个版本，<code>^</code>的个数表示回滚的次数</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git reset --hard HEAD~100</strong></td>
-<td style="text-align:center">回滚100次，<code>~</code>后的数字表示回滚的次数</td>
+<tr class="even">
+<td style="text-align: center;"><strong>git reset --hard
+HEAD~100</strong></td>
+<td style="text-align: center;">回滚100次，<code>~</code>后的数字表示回滚的次数</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>git reset --hard &lt;hashcode&gt;</strong></td>
-<td style="text-align:center">回滚到<code>&lt;hashcode&gt;</code>表示的版本</td>
+<tr class="odd">
+<td style="text-align: center;"><strong>git reset --hard
+&lt;hashcode&gt;</strong></td>
+<td style="text-align: center;">回滚到<code>&lt;hashcode&gt;</code>表示的版本</td>
 </tr>
 </tbody>
 </table>
@@ -930,7 +960,7 @@ git diff --cached &amp;lt;file&amp;gt; 或  git diff staged &amp;lt;file&amp;gt;
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

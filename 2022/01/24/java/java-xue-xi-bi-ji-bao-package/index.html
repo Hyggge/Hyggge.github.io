@@ -5,11 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」包(Package), Hyggge&#39;s Blog">
-    <meta name="description" content="
-包的定义
+    <meta name="description" content="包的定义
 
-在笔者看来，包其实就是一个 文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
-一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名">
+在笔者看来，包其实就是一个
+文件夹，包含者我们定义的功能相似或相关的类、接口、枚举和注释，可以看成一种特殊的封装。
+一个包中的类名字是不同的，不同的包中的类的名字是可以相同的，当同时调用两个不同包中相同类名的类时，应该加上包名加">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -385,74 +385,65 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="包的定义">包的定义</h2>
+                <h2 id="包的定义">包的定义</h2>
 <ul>
-<li>在笔者看来，包其实就是一个 <strong>文件夹</strong>，包含者我们定义的<strong>功能相似或相关</strong>的<strong>类、接口、枚举和注释</strong>，可以看成一种<strong>特殊的封装</strong>。</li>
+<li>在笔者看来，包其实就是一个
+<strong>文件夹</strong>，包含者我们定义的<strong>功能相似或相关</strong>的<strong>类、接口、枚举和注释</strong>，可以看成一种<strong>特殊的封装</strong>。</li>
 <li>一个包中的类名字是<strong>不同的</strong>，不同的包中的类的名字是可以<strong>相同的</strong>，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。</li>
 <li><strong>包的作用</strong>：防止命名冲突，访问控制，提供搜索和定位类（<code>class</code>）、接口(<code>interface</code>)、枚举（<code>enumerations</code>）和注释（<code>annotation</code>）等。</li>
 </ul>
-<hr>
-<h2 id="包的创建（package）">包的创建（package）</h2>
-<p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>test</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="包的命名规范">包的命名规范</h3>
-<p>本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br>
+<h2 id="包的创建package">包的创建（package）</h2>
+<p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>test</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+### 包的命名规范<br>
+本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br>
 Java的包名都有小写单词组成，应该避免使用与系统发生冲突的名字，如java.lang、java.swing等。多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀（如上例）。<br>
-<strong>个人和组织包命名规则如下：</strong></p>
+<strong>个人和组织包命名规则如下：</strong><p></p>
 <ul>
-<li>
-<p><strong>indi</strong> ：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。<br>
-包名为“indi.发起者名.项目名.模块名.……”。</p>
-</li>
-<li>
-<p><strong>pers</strong> ：个人项目，指个人发起，独自完成，可分享的项目，copyright主要属于个人。<br>
-包名为“pers.个人名.项目名.模块名.……”。</p>
-</li>
-<li>
-<p><strong>priv</strong> ：私有项目，指个人发起，独自完成，非公开的私人使用的项目，copyright属于个人。<br>
-包名为“priv.个人名.项目名.模块名.……”。</p>
-</li>
-<li>
-<p><strong>onem</strong> ：与“indi”相同，推荐使用“indi”。</p>
-</li>
-<li>
-<p><strong>team</strong> ：团队项目，指由团队发起，并由该团队开发的项目，copyright属于该团队所有。<br>
-包名为“team.团队名.项目名.模块名.……”。</p>
-</li>
-<li>
-<p><strong>com</strong> ：公司项目，copyright由项目发起的公司所有。<br>
-包名为“com.公司名.项目名.模块名.……”。</p>
-</li>
+<li><p><strong>indi</strong>
+：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。<br>
+包名为“indi.发起者名.项目名.模块名.……”。</p></li>
+<li><p><strong>pers</strong>
+：个人项目，指个人发起，独自完成，可分享的项目，copyright主要属于个人。<br>
+包名为“pers.个人名.项目名.模块名.……”。</p></li>
+<li><p><strong>priv</strong>
+：私有项目，指个人发起，独自完成，非公开的私人使用的项目，copyright属于个人。<br>
+包名为“priv.个人名.项目名.模块名.……”。</p></li>
+<li><p><strong>onem</strong> ：与“indi”相同，推荐使用“indi”。</p></li>
+<li><p><strong>team</strong>
+：团队项目，指由团队发起，并由该团队开发的项目，copyright属于该团队所有。<br>
+包名为“team.团队名.项目名.模块名.……”。</p></li>
+<li><p><strong>com</strong>
+：公司项目，copyright由项目发起的公司所有。<br>
+包名为“com.公司名.项目名.模块名.……”。</p></li>
 </ul>
 <h3 id="空包">空包</h3>
-<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
-<hr>
-<h2 id="包的导入（import）">包的导入（import）</h2>
+<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed
+package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
+<h2 id="包的导入import">包的导入（import）</h2>
 <h3 id="不同包之间的导入">不同包之间的导入</h3>
-<p>不同包之间的使用通常有以下3种方法——</p>
-<ol>
-<li>使用全名 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li>导入该类 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token class-name">Animal</span></span><span class="token punctuation">;</span>
+<p>不同包之间的使用通常有以下3种方法——<br>
+1. 使用全名<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+1. 导入该类<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token class-name">Animal</span></span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>导入整个包(使用通配符<code>*</code>) <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+1. 导入整个包(使用通配符<code>*</code>)<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ol>
-<p><strong>注意点</strong></p>
-<ul>
-<li>如果两个包（<code>com.hyggge</code> 和 <code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+<strong>注意点</strong><br>
+- 如果两个包（<code>com.hyggge</code> 和
+<code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong><br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>czh<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
@@ -460,24 +451,22 @@ Java的包名都有小写单词组成，应该避免使用与系统发生冲突�
     <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>czh<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。</li>
-</ul>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+-
+使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。<p></p>
 <h3 id="有包的类和无包的类互相访问">有包的类和无包的类互相访问</h3>
-<p>有包的类和无包的类互相访问有以下规则：</p>
-<ol>
-<li><strong>无包的类可以访问有包的类</strong>, 直接导入即可；</li>
-<li>2.有包的类无法访问无包的类, 直接访问是找同一个包中的, 由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；</li>
-<li>在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</li>
-</ol>
+<p>有包的类和无包的类互相访问有以下规则：<br>
+1. <strong>无包的类可以访问有包的类</strong>, 直接导入即可；<br>
+2. 2.有包的类无法访问无包的类, 直接访问是找同一个包中的,
+由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；<br>
+3. 在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</p>
 <h3 id="包的无等级性">包的无等级性</h3>
-<p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">impot com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
-impot com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span>czh<span class="token punctuation">.</span>*<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java">impot com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+impot com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span>czh<span class="token punctuation">.</span>*<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
 <h3 id="静态导入">静态导入</h3>
-<p>当我们需要频繁的访问某个类的常量或静态方法时，可以采用静态导入，即使用<code>import static</code>将类中的常量和静态方法导入。见下例（摘自该<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_30973431/article/details/82386978?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164298826316780265425850%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164298826316780265425850&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-6-82386978.pc_search_result_cache&amp;utm_term=Java%E5%8C%85&amp;spm=1018.2226.3001.4187">博客</a>）</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token static">PI</span></span><span class="token punctuation">;</span>
+<p>当我们需要频繁的访问某个类的常量或静态方法时，可以采用静态导入，即使用<code>import static</code>将类中的常量和静态方法导入。见下例（摘自该<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_30973431/article/details/82386978?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164298826316780265425850%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164298826316780265425850&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-6-82386978.pc_search_result_cache&amp;utm_term=Java%E5%8C%85&amp;spm=1018.2226.3001.4187">博客</a>）<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token static">PI</span></span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token static">cos</span></span><span class="token punctuation">;</span>
 
 
@@ -488,26 +477,19 @@ impot com<span class="token punctuation">.</span>hyggge<span class="token punctu
         <span class="token keyword">double</span> r2 <span class="token operator">=</span> <span class="token function">cos</span><span class="token punctuation">(</span><span class="token constant">PI</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>r<span class="token operator">+</span><span class="token string">" "</span><span class="token operator">+</span>r1<span class="token operator">+</span><span class="token string">" "</span><span class="token operator">+</span>r2<span class="token punctuation">)</span><span class="token punctuation">;</span>    
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>也可以使用通配符<code>*</code></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token operator">*</span></span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<hr>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+也可以使用通配符<code>*</code><br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token operator">*</span></span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p></p>
 <h2 id="包的路径">包的路径</h2>
 <ul>
-<li>
-<p>包的中<strong>java源文件的目录</strong>和<strong>编译后class文件的目录</strong>应该和包的名字对应起来，但是并不要求两者路径一样，可以分开来安排。如下所示——</p>
- <pre class="line-numbers language-none"><code class="language-none">&lt;path-one&gt;\sources\com\runoob\test\Runoob.java
-&lt;path-two&gt;\classes\com\runoob\test\Google.class<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p>类的目录的绝对路径叫做 <code>class path</code>。设置在系统变量 <code>CLASSPATH</code> 中。编辑器和java虚拟机将 <code>package</code> 名字加到<code> class path</code> 后来构造 .class 文件的路径</p>
-</li>
-<li>
-<p>设置CLASSPATT系统变量，方法见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42361112/article/details/114421658?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164299544416780264048339%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164299544416780264048339&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-114421658.pc_search_result_cache&amp;utm_term=%E8%AE%BE%E7%BD%AE+CLASSPATH+%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8Fjavaa&amp;spm=1018.2226.3001.4187">博客</a></p>
-</li>
-<li>
-<p>如果我们的文件都在运行目录下时，也可以不设置<code>CLASSPATH</code>。也就是说在没有配置<code>CLASSPATH</code>环境变量时，java命令在找class文件时是默认在当前目录下寻找的。</p>
-</li>
+<li><p>包的中<strong>java源文件的目录</strong>和<strong>编译后class文件的目录</strong>应该和包的名字对应起来，但是并不要求两者路径一样，可以分开来安排。如下所示——<br>
+</p><pre class="line-numbers language-none"><code class="language-none">&lt;path-one&gt;\sources\com\runoob\test\Runoob.java
+&lt;path-two&gt;\classes\com\runoob\test\Google.class<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
+<li><p>类的目录的绝对路径叫做 <code>class path</code>。设置在系统变量
+<code>CLASSPATH</code> 中。编辑器和java虚拟机将 <code>package</code>
+名字加到<code>class path</code> 后来构造 .class 文件的路径</p></li>
+<li><p>设置CLASSPATT系统变量，方法见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42361112/article/details/114421658?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164299544416780264048339%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164299544416780264048339&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-114421658.pc_search_result_cache&amp;utm_term=%E8%AE%BE%E7%BD%AE+CLASSPATH+%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8Fjavaa&amp;spm=1018.2226.3001.4187">博客</a></p></li>
+<li><p>如果我们的文件都在运行目录下时，也可以不设置<code>CLASSPATH</code>。也就是说在没有配置<code>CLASSPATH</code>环境变量时，java命令在找class文件时是默认在当前目录下寻找的。</p></li>
 </ul>
 
                 
@@ -887,7 +869,7 @@ impot com<span class="token punctuation">.</span>hyggge<span class="token punctu
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

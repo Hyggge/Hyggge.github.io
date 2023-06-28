@@ -6,8 +6,10 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」重写(Override), Hyggge&#39;s Blog">
     <meta name="description" content="
-重写是子类对父类的允许访问的方法的实现过程进行重新编写, 返回值和形参都不能改变。
-重写的好处在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。
+重写是子类对父类的允许访问的方法的实现过程进行重新编写,
+返回值和形参都不能改变。
+重写的好处在于子类可以根据需要，定义特定于自己的行为。
+也就是说子类能够根据需要实现父类的方法。
 
 重写父类中的方法
 概念
@@ -388,13 +390,15 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <hr>
-<p><strong>重写</strong>是子类对父类的允许访问的方法的实现过程进行重新编写, <strong>返回值和形参都不能改变</strong>。</p>
-<p><strong>重写的好处</strong>在于子类可以根据需要，定义特定于自己的行为。 也就是说子类能够根据需要实现父类的方法。</p>
+<p><strong>重写</strong>是子类对父类的允许访问的方法的实现过程进行重新编写,
+<strong>返回值和形参都不能改变</strong>。</p>
+<p><strong>重写的好处</strong>在于子类可以根据需要，定义特定于自己的行为。
+也就是说子类能够根据需要实现父类的方法。</p>
 <hr>
 <h2 id="重写父类中的方法">重写父类中的方法</h2>
 <h3 id="概念">概念</h3>
-<p>当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<p>当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>                      <span class="token comment">//输出英文欢迎</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -414,45 +418,30 @@
     b<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                               <span class="token comment">//调用子类中重写的方法</span>
     b<span class="token punctuation">.</span><span class="token function">sayBye</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                 <span class="token comment">//调用父类中的方法</span>
     <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="重写规则"><strong>重写规则</strong></h3>
-<ol>
-<li>
-<p>参数列表与被重写方法的<strong>参数列表必须完全相同</strong>。</p>
-</li>
-<li>
-<p>返回类型与被重写方法的<strong>返回类型可以不相同</strong>，但是必须是父类返回值的派生类（java5 及更早版本返回类型要一样，java7 及更高版本可以不同）。</p>
-</li>
-<li>
-<p>访问权限<strong>不能比父类中被重写的方法的访问权限更低</strong>。例如：如果父类的一个方法被声明为 public，那么在子类中重写该方法就不能声明为 protected。</p>
-</li>
-<li>
-<p>父类的成员方法只能被它的子类重写。</p>
-</li>
-<li>
-<p>声明为 <code>final</code> 的方法不能被重写。</p>
-</li>
-<li>
-<p>声明为 <code>static</code> 的方法不能被重写，但是能够<strong>被再次声明</strong>。</p>
-</li>
-<li>
-<p>子类和父类<strong>在同一个包</strong>中，那么子类可以重写父<strong>类所有方法</strong>，除了声明为 <code>private</code> 和 <code>final</code> 的方法。</p>
-</li>
-<li>
-<p>子类和父类<strong>不在同一个包</strong>中，那么子类只能够重写父类的声明为 <code>public</code> 和 <code>protected</code> 的非 <code>fina</code>l 方法。</p>
-</li>
-<li>
-<p>重写的方法能够抛出任何非强制异常，无论被重写的方法是否抛出异常。但是，重写的方法不能抛出新的强制性异常，或者比被重写方法声明的更广泛的强制性异常，反之则可以。</p>
-</li>
-<li>
-<p>构造方法不能被重写。</p>
-</li>
-<li>
-<p>如果不能继承一个类，则不能重写该类的方法。</p>
-</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+### <strong>重写规则</strong><br>
+1. 参数列表与被重写方法的<strong>参数列表必须完全相同</strong>。<p></p>
+<ol start="2" type="1">
+<li><p>返回类型与被重写方法的<strong>返回类型可以不相同</strong>，但是必须是父类返回值的派生类（java5
+及更早版本返回类型要一样，java7 及更高版本可以不同）。</p></li>
+<li><p>访问权限<strong>不能比父类中被重写的方法的访问权限更低</strong>。例如：如果父类的一个方法被声明为
+public，那么在子类中重写该方法就不能声明为 protected。</p></li>
+<li><p>父类的成员方法只能被它的子类重写。</p></li>
+<li><p>声明为 <code>final</code> 的方法不能被重写。</p></li>
+<li><p>声明为 <code>static</code>
+的方法不能被重写，但是能够<strong>被再次声明</strong>。</p></li>
+<li><p>子类和父类<strong>在同一个包</strong>中，那么子类可以重写父<strong>类所有方法</strong>，除了声明为
+<code>private</code> 和 <code>final</code> 的方法。</p></li>
+<li><p>子类和父类<strong>不在同一个包</strong>中，那么子类只能够重写父类的声明为
+<code>public</code> 和 <code>protected</code> 的非 <code>fina</code>l
+方法。</p></li>
+<li><p>重写的方法能够抛出任何非强制异常，无论被重写的方法是否抛出异常。但是，重写的方法不能抛出新的强制性异常，或者比被重写方法声明的更广泛的强制性异常，反之则可以。</p></li>
+<li><p>构造方法不能被重写。</p></li>
+<li><p>如果不能继承一个类，则不能重写该类的方法。</p></li>
 </ol>
 <ul>
-<li><strong>子类可以通过<code>super()</code>访问被重写的父类中的方法</strong><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
+<li><strong>子类可以通过<code>super()</code>访问被重写的父类中的方法</strong><br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>                      <span class="token comment">//输出英文欢迎</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -468,18 +457,15 @@
     <span class="token class-name">B</span> b<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">B</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                <span class="token comment">//创建子类B的一个实例对象，使用默认构造方法</span>
     b<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                               <span class="token comment">//调用子类中重写的方法</span>
     <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
-<hr>
-<h2 id="隐藏父类中的方法">隐藏父类中的方法</h2>
-<p>如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</p>
-<ul>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+----<br>
+## 隐藏父类中的方法<br>
+如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</li>
 <li>当调用被重写的方法时，调用的版本是子类的方法；</li>
 <li>当调用被隐藏的方法时，调用的版本取决于是从父类中调用还是从子类中调用。</li>
 </ul>
-<p>下面有一个例子(取材于该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52122271/article/details/114285424">博客</a>)，我暂时还没看懂,先挂一下…</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<p>下面有一个例子(取材于该<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52122271/article/details/114285424">博客</a>)，我暂时还没看懂,先挂一下...<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token comment">//原文链接：https://blog.csdn.net/weixin_52122271/article/details/114285424</span>
 <span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
 	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>             <span class="token comment">//静态类方法</span>
@@ -516,10 +502,15 @@
   大家好，这是B的实例方法
   大家好，这是B的实例方法
   大家好，这是A中的实例方法
-*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
-<h2 id="覆盖父类的中的变量">覆盖父类的中的变量</h2>
-<p>如果子类中重新定义了一个<strong>与父类中已有变量同名</strong>的变量，那么父类中的变量就被“覆盖”。</p>
+*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>## 覆盖父类的中的变量<br>
+如果子类中重新定义了一个<strong>与父类中已有变量同名</strong>的变量，那么父类中的变量就被“覆盖”。<br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">"Name"</span><span class="token punctuation">;</span> 
 <span class="token punctuation">}</span>
@@ -534,9 +525,11 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>cat<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span class="token comment">/*运行结果:cat*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
-<h2 id="关于-Override">关于<code>@Override</code></h2>
+<span class="token comment">/*运行结果:cat*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></td>
+</tr>
+</tbody>
+</table>
+<h2 id="关于override">关于<code>@Override</code></h2>
 <p><code>@Override</code>是<strong>伪代码</strong>，表示重写，在“<strong>子类重写父类</strong>”或“<strong>某类实现某接口</strong>”时使用。写上有如下好处:（详见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_32885165/article/details/102779323">博客</a>）</p>
 <ul>
 <li>可以当注释用,方便阅读；</li>
@@ -921,7 +914,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

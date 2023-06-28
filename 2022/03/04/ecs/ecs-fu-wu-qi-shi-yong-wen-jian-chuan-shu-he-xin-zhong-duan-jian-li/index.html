@@ -385,62 +385,60 @@
             <div id="articleContent">
                 <p>本篇博客介绍一下如何使用<strong>pscp</strong>在本地（Windows）和ECS服务器之间进行文件传输，以及如何在服务器中建立新终端。</p>
 <h2 id="前言">前言</h2>
-<p>今天想把OO第一次作业的自动评测程序放到在阿里云ECS服务器上运行，以减轻笔记本CPU的压力（<s>避免过早更换电脑</s>）。但是理想很丰满，现实很骨感，在一开始便遇到了两个问题——</p>
-<ul>
-<li><strong>如何将本地的文件传到服务器上？</strong></li>
-<li><strong>如何使程序在服务器后台运行？</strong>（一旦关闭服务器前端网页，在当前终端中运行的程序会被中断）</li>
-</ul>
+<p>今天想把OO第一次作业的自动评测程序放到在阿里云ECS服务器上运行，以减轻笔记本CPU的压力（<del>避免过早更换电脑</del>）。但是理想很丰满，现实很骨感，在一开始便遇到了两个问题——<br>
+- <strong>如何将本地的文件传到服务器上？</strong><br>
+-
+<strong>如何使程序在服务器后台运行？</strong>（一旦关闭服务器前端网页，在当前终端中运行的程序会被中断）</p>
 <p>通过查找资料和请教同学，最终让我找到了解决方案，用本篇博客记录一下。</p>
 <h2 id="文件的传输">文件的传输</h2>
-<p>ECS服务器和本地进行文件传输的方法有很多，主要有以下几种——</p>
-<ul>
-<li><strong>使用Windows中自带的“远程桌面连接”</strong></li>
-<li><strong>通过QQ软件，邮箱等第三方工具进行间接传输</strong></li>
-<li><strong>pscp</strong></li>
-</ul>
-<p>前两种方法相对比较复杂，第三种较为简单，只需要安装pscp软件，即可在cmd中通过命令实现两者之间的文件传输。</p>
-<h3 id="软件的安装">软件的安装</h3>
-<p>在一般情况下，pscp会和putty软件捆绑安装，我们可以直接在putty的安装目录下找到<code>pscp.exe</code>文件。此外，我们还可以在putty官网中单独下载pscp(<a target="_blank" rel="noopener" href="https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe">下载地址</a>)。</p>
-<p>接下来，我们需要将<code>pscp.exe</code>文件放在 <code>C:\Windows\system32\</code>路径下。然后在命令行中运行命令<code>pscp</code>,如果终端有以下输出，就说明pscp配置成功了。</p>
-<p><img src="pscp.png" alt=""><br>
+<p>ECS服务器和本地进行文件传输的方法有很多，主要有以下几种——<br>
+- <strong>使用Windows中自带的“远程桌面连接”</strong><br>
+- <strong>通过QQ软件，邮箱等第三方工具进行间接传输</strong><br>
+- <strong>pscp</strong></p>
+<p>前两种方法相对比较复杂，第三种较为简单，只需要安装pscp软件，即可在cmd中通过命令实现两者之间的文件传输。<br>
+### 软件的安装<br>
+在一般情况下，pscp会和putty软件捆绑安装，我们可以直接在putty的安装目录下找到<code>pscp.exe</code>文件。此外，我们还可以在putty官网中单独下载pscp(<a target="_blank" rel="noopener" href="https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe">下载地址</a>)。</p>
+<p>接下来，我们需要将<code>pscp.exe</code>文件放在
+<code>C:\Windows\system32\</code>路径下。然后在命令行中运行命令<code>pscp</code>,如果终端有以下输出，就说明pscp配置成功了。</p>
+<p><img src="pscp.png"><br>
 接下来，我们就可以快乐地<strong>通过命令行使用pscp</strong>了。（所以是不是很简单？</p>
 <h3 id="常用命令">常用命令</h3>
 <p>只需要掌握以下pscp命令，即可实现一般的文件传输需求</p>
 <h4 id="将本地文件复制到服务器">将本地文件复制到服务器</h4>
 <pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp [file_path] [ECS_user_name]@[ECS_ip]:[target_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如果想把桌面上的<code>test.txt</code>传到服务器<code>root/file</code>文件夹下，命令可以写为</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp C:\Users\dell\Desktop\test.txt root@10.10.10.10:/root/file/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="将本地文件夹和文件夹下的文件复制到服务器">将本地文件夹和文件夹下的文件复制到服务器</h4>
-<p>只需要在<code>pscp</code>后面加入<code>-r</code>即可</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r [dir_path] [ECS_user_name]@[ECS_ip]:[target_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如果想把桌面上的<code>test</code>文件夹传到服务器<code>root/file</code>文件夹下，命令可以写为</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r C:\Users\dell\Desktop\test root@10.10.10.10:/root/file/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="将远程服务器中的文件复制到本地">将远程服务器中的文件复制到本地</h4>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如果想把服务器<code>root/file</code>文件夹中<code>test.txt</code>传到本地<code>desktop</code>上，命令可以写为</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp root@10.10.10.10:/root/file/test.txt C:\Users\dell\Desktop\<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="将远程服务器中的文件夹和文件夹下的文件复制到本地">将远程服务器中的文件夹和文件夹下的文件复制到本地</h4>
-<p>同样，只需要在<code>pscp</code>后面加入<code>-r</code>即可</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如果想把服务器<code>root/file</code>文件夹传到本地<code>desktop</code>上，命令可以写为</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r root@10.10.10.10:/root/file/ C:\Users\dell\Desktop\<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果想把桌面上的<code>test.txt</code>传到服务器<code>root/file</code>文件夹下，命令可以写为<br>
+</p><pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp C:\Users\dell\Desktop\test.txt root@10.10.10.10:/root/file/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+#### 将本地文件夹和文件夹下的文件复制到服务器<br>
+只需要在<code>pscp</code>后面加入<code>-r</code>即可<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r [dir_path] [ECS_user_name]@[ECS_ip]:[target_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+如果想把桌面上的<code>test</code>文件夹传到服务器<code>root/file</code>文件夹下，命令可以写为<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r C:\Users\dell\Desktop\test root@10.10.10.10:/root/file/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+#### 将远程服务器中的文件复制到本地<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+如果想把服务器<code>root/file</code>文件夹中<code>test.txt</code>传到本地<code>desktop</code>上，命令可以写为<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp root@10.10.10.10:/root/file/test.txt C:\Users\dell\Desktop\<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+#### 将远程服务器中的文件夹和文件夹下的文件复制到本地<br>
+同样，只需要在<code>pscp</code>后面加入<code>-r</code>即可<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
+如果想把服务器<code>root/file</code>文件夹传到本地<code>desktop</code>上，命令可以写为<br>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">pscp -r root@10.10.10.10:/root/file/ C:\Users\dell\Desktop\<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p></p>
 <hr>
 <p>补充：后来我又发现了一个<strong>有UI界面</strong>的文件传输软件——<code>WinSCP</code>（<a target="_blank" rel="noopener" href="https://winscp.net/eng/docs/lang:chs">下载地址</a>）这个软件可以直接通过鼠标拖动来复制文件，比命令行快太多了，效果如下图所示。<br>
-<img src="WinSCP.png" alt=""></p>
+<img src="WinSCP.png"></p>
 <h2 id="建立新终端">建立新终端</h2>
-<p>为了使程序能够在服务器后台运行，我们可以先建立一个新终端，在这个新终端下运行我们的程序，然后暂时退出该终端即可。这样，即使服务器前端网页关闭，我们建立的新终端也不会被中断，我们的程序也会正常运行。常用命令如下——</p>
-<ul>
-<li>建立新终端 <code>screen -S [terminal_name]</code></li>
-<li>暂时退出新终端 <code>Ctrl+A+D</code></li>
-<li>查看已经创建的终端 <code>screen -ls</code></li>
-<li>进入已创建的终端 <code>screen -r [terminal_id]</code> (中端的id可以在<code>screen -ls</code> 中看到)</li>
-<li>关闭新终端 <code>exit</code></li>
-</ul>
-<p>如果shell提示<code>screen</code>命令不存在，可以输入下面的命令进行安装</p>
-<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">//第一种方法
+<p>为了使程序能够在服务器后台运行，我们可以先建立一个新终端，在这个新终端下运行我们的程序，然后暂时退出该终端即可。这样，即使服务器前端网页关闭，我们建立的新终端也不会被中断，我们的程序也会正常运行。常用命令如下——<br>
+- 建立新终端 <code>screen -S [terminal_name]</code><br>
+- 暂时退出新终端 <code>Ctrl+A+D</code><br>
+- 查看已经创建的终端 <code>screen -ls</code><br>
+- 进入已创建的终端 <code>screen -r [terminal_id]</code>
+(中端的id可以在<code>screen -ls</code> 中看到)<br>
+- 关闭新终端 <code>exit</code></p>
+<p>如果shell提示<code>screen</code>命令不存在，可以输入下面的命令进行安装<br>
+</p><pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">//第一种方法
 yum install screen
 //第二种方法
-apt install screen<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+apt install screen<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+
                 
             </div>
             <hr/>
@@ -833,7 +831,7 @@ apt install screen<span aria-hidden="true" class="line-numbers-rows"><span></spa
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

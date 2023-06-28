@@ -8,8 +8,11 @@
     <meta name="description" content="Lab2 实验报告
 实验思考题
 Thinking 2.1
-Q： 在我们编写的 C 程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw, sw 使用的是虚拟地址还是物理地址？
-A： 因为CPU只会发出虚拟地址，因">
+Q： 在我们编写的 C
+程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw,
+sw 使用的是虚拟地址还是物理地址？
+A：
+因为CPU只会发出虚拟地址，因">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,25 +392,33 @@ A： 因为CPU只会发出虚拟地址，因">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>Lab2 实验报告</h1>
+                <h1 id="lab2-实验报告">Lab2 实验报告</h1>
 <h2 id="实验思考题">实验思考题</h2>
-<h3 id="Thinking-2-1">Thinking 2.1</h3>
-<p><strong>Q：</strong> <strong>在我们编写的 C 程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw, sw 使用的是虚拟地址还是物理地址？</strong><br>
-<strong>A：</strong> 因为CPU只会发出虚拟地址，因此指针变量中储存的是虚拟地址。MIPS汇编程序中lw、sw中使用的也是虚拟地址。</p>
-<h3 id="Thinking-2-2">Thinking 2.2</h3>
-<p><strong>Q1：</strong> <strong>请从可重用性的角度，阐述用宏来实现链表的好处。</strong></p>
-<p><strong>A1：</strong> 使用宏定义对链表操作进行封装，可以实现代码的复用，既减少了工作量，也提高了程序的可读性</p>
-<p><strong>Q2：</strong> <strong>请你查看实验环境中的 /usr/include/sys/queue.h，了解其中单向链表与循环链表的实现，比较它们与本实验中使用的双向链表，分析三者在插入与删除操作上的性能差异</strong></p>
-<p><strong>A2：</strong>  三者的操作性能有以下差异——</p>
-<ul>
-<li><strong>对于单向链表</strong>，由于它只能获得每一项的后面一项，因此在删除时需要遍历整个链表；同样，如果是在某一项的前面插入，也需要从<code>head</code>开始遍历这个链表。但是如果是“在某一项之后插入”，单项链表可以直接进行该操作。</li>
-<li><strong>对于循环链表</strong>，因为它仍然是单向的，所以在“删除”、“某一项之前插入”、“某一项之后插入”三个操作的性能和单项链表相同。但是，由于循环链表首尾相连，同时维护了一个指向尾项的指针，因此它可以直接在尾部插入。</li>
-<li><strong>对于双向链表</strong>，因为它可以直接获得某一项的前后两项，所以无论是“删除”还是“在某一项前或后插入”都可以以O(1)的开销实现。但是，双向链表没有维护指向尾部的指针，因此无法直接将某一项插入链表尾部，如要实现该操作还需要遍历整个链表。</li>
-</ul>
-<h3 id="Thinking-2-3">Thinking 2.3</h3>
-<p><strong>Q：</strong> <strong>选择<code>Page_list</code>正确的展开结构。</strong><br>
-<strong>A：</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Page_list</span> <span class="token punctuation">{</span>
+<h3 id="thinking-2.1">Thinking 2.1</h3>
+<p><strong>Q：</strong> <strong>在我们编写的 C
+程序中，指针变量中存储的地址是虚拟地址还是物理地址？ MIPS 汇编程序中 lw,
+sw 使用的是虚拟地址还是物理地址？</strong><br>
+<strong>A：</strong>
+因为CPU只会发出虚拟地址，因此指针变量中储存的是虚拟地址。MIPS汇编程序中lw、sw中使用的也是虚拟地址。</p>
+<h3 id="thinking-2.2">Thinking 2.2</h3>
+<p><strong>Q1：</strong>
+<strong>请从可重用性的角度，阐述用宏来实现链表的好处。</strong></p>
+<p><strong>A1：</strong>
+使用宏定义对链表操作进行封装，可以实现代码的复用，既减少了工作量，也提高了程序的可读性</p>
+<p><strong>Q2：</strong> <strong>请你查看实验环境中的
+/usr/include/sys/queue.h，了解其中单向链表与循环链表的实现，比较它们与本实验中使用的双向链表，分析三者在插入与删除操作上的性能差异</strong></p>
+<p><strong>A2：</strong> 三者的操作性能有以下差异——<br>
+-
+<strong>对于单向链表</strong>，由于它只能获得每一项的后面一项，因此在删除时需要遍历整个链表；同样，如果是在某一项的前面插入，也需要从<code>head</code>开始遍历这个链表。但是如果是“在某一项之后插入”，单项链表可以直接进行该操作。<br>
+-
+<strong>对于循环链表</strong>，因为它仍然是单向的，所以在“删除”、“某一项之前插入”、“某一项之后插入”三个操作的性能和单项链表相同。但是，由于循环链表首尾相连，同时维护了一个指向尾项的指针，因此它可以直接在尾部插入。<br>
+-
+<strong>对于双向链表</strong>，因为它可以直接获得某一项的前后两项，所以无论是“删除”还是“在某一项前或后插入”都可以以O(1)的开销实现。但是，双向链表没有维护指向尾部的指针，因此无法直接将某一项插入链表尾部，如要实现该操作还需要遍历整个链表。</p>
+<h3 id="thinking-2.3">Thinking 2.3</h3>
+<p><strong>Q：</strong>
+<strong>选择<code>Page_list</code>正确的展开结构。</strong><br>
+<strong>A：</strong><br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Page_list</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token punctuation">{</span>
         <span class="token keyword">struct</span> <span class="token punctuation">{</span>
             <span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
@@ -416,26 +427,44 @@ A： 因为CPU只会发出虚拟地址，因">
         u_short pp_ref<span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span>   
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Thinking-2-4">Thinking 2.4</h3>
-<p><strong>Q：</strong> <strong>请你寻找上述两个<code>boot_*</code> 函数在何处被调用</strong><br>
-<strong>A：</strong> <code>boot_pgdir_walk()</code>在<code>boot_map_segment()</code>函数中被调用，用于在建立映射时根据 <strong>虚拟地址</strong>寻找二级页表项。<code>boot_map_segment()</code>在<code>mips_vm_init()</code>中调用，用于将<code>kuseg</code>中的<code>UPAGES</code>和<code>NENV</code>两个区域映射到物理地址空间。</p>
-<h3 id="Thinking-2-5">Thinking 2.5</h3>
-<p><strong>Q1：</strong> <strong>请阅读上面有关 R3000-TLB 的叙述，从虚拟内存的实现角度，阐述 <code>ASID</code> 的必要性</strong><br>
-<strong>A1：</strong> 操作系统会给每一个进程分配一个页表，每个页表都有自己的虚拟地址空间，而同一虚拟地址在不同地址空间中通常映射到不同的物理地址。如果没有<code>ASID</code>来区分<strong>当前虚拟地址是在哪个进程中使用</strong>，则可能会将该虚拟地址映射到错误的物理地址。</p>
-<p><strong>Q2：</strong> <strong>请阅读《IDT R30xx Family Software Reference Manual》的 Chapter 6，结合<code>ASID</code>段的位数，说明<code>R3000</code>中可容纳不同的地址空间的最大数量</strong><br>
-<strong>A2：</strong> <code>ASID</code>在<code>HntryHi</code>寄存器中占6位，可以被设置为64个不同的值，因此<br>
-<code>R3000</code>中可最多容纳<code>64</code>个不同的地址空间。</p>
-<blockquote>
-<p>"By setting up TLB entries with a particular ASID setting and with the EntryLo G bit zero, those entries will only ever match a program address when the CPU’s ASID register is set the same. This allows software to map up to <strong>64 different address spaces</strong> simultaneously, without requiring that the OS clear out the TLB on a context change. " ——《<em>IDT R30xx Family Software Reference Manual</em>》</p>
-</blockquote>
-<h3 id="Thinking-2-6">Thinking 2.6</h3>
-<p><strong>Q1：</strong> <strong><code>tlb_invalidate</code> 和 <code>tlb_out</code> 的调用关系是怎样的？</strong><br>
-<strong>A1：</strong> <code>tlb_invalidata</code>函数中调用了<code>tlb_out</code>函数。</p>
-<p><strong>Q2：</strong> <strong>请用一句话概括 <code>tlb_invalidate</code> 的作用</strong><br>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="thinking-2.4">Thinking 2.4</h3>
+<p><strong>Q：</strong> <strong>请你寻找上述两个<code>boot_*</code>
+函数在何处被调用</strong><br>
+<strong>A：</strong>
+<code>boot_pgdir_walk()</code>在<code>boot_map_segment()</code>函数中被调用，用于在建立映射时根据
+<strong>虚拟地址</strong>寻找二级页表项。<code>boot_map_segment()</code>在<code>mips_vm_init()</code>中调用，用于将<code>kuseg</code>中的<code>UPAGES</code>和<code>NENV</code>两个区域映射到物理地址空间。</p>
+<h3 id="thinking-2.5">Thinking 2.5</h3>
+<p><strong>Q1：</strong> <strong>请阅读上面有关 R3000-TLB
+的叙述，从虚拟内存的实现角度，阐述 <code>ASID</code>
+的必要性</strong><br>
+<strong>A1：</strong>
+操作系统会给每一个进程分配一个页表，每个页表都有自己的虚拟地址空间，而同一虚拟地址在不同地址空间中通常映射到不同的物理地址。如果没有<code>ASID</code>来区分<strong>当前虚拟地址是在哪个进程中使用</strong>，则可能会将该虚拟地址映射到错误的物理地址。</p>
+<p><strong>Q2：</strong> <strong>请阅读《IDT R30xx Family Software
+Reference Manual》的 Chapter
+6，结合<code>ASID</code>段的位数，说明<code>R3000</code>中可容纳不同的地址空间的最大数量</strong><br>
+<strong>A2：</strong>
+<code>ASID</code>在<code>HntryHi</code>寄存器中占6位，可以被设置为64个不同的值，因此<br>
+<code>R3000</code>中可最多容纳<code>64</code>个不同的地址空间。<br>
+&gt; "By setting up TLB entries with a particular ASID setting and with
+the EntryLo G bit zero, those entries will only ever match a program
+address when the CPU’s ASID register is set the same. This allows
+software to map up to <strong>64 different address spaces</strong>
+simultaneously, without requiring that the OS clear out the TLB on a
+context change. " ——《<em>IDT R30xx Family Software Reference
+Manual</em>》</p>
+<h3 id="thinking-2.6">Thinking 2.6</h3>
+<p><strong>Q1：</strong> <strong><code>tlb_invalidate</code> 和
+<code>tlb_out</code> 的调用关系是怎样的？</strong><br>
+<strong>A1：</strong>
+<code>tlb_invalidata</code>函数中调用了<code>tlb_out</code>函数。</p>
+<p><strong>Q2：</strong> <strong>请用一句话概括
+<code>tlb_invalidate</code> 的作用</strong><br>
 <strong>A2：</strong> 在页表内容改变后及时更新<code>TLB</code>。</p>
-<p><strong>Q3：</strong> <strong>逐行解释 <code>tlb_out</code> 中的汇编代码</strong><br>
-<strong>A3：</strong> <code>tlb_out</code>作用实际上就是<strong>使得某一虚拟地址对应的tlb表项失效</strong>，基本思路是——<strong>先将要查找的虚拟地址存入<code>EntryHi</code>寄存器，然后调用<code>tlbp</code>指令在TLB中查找</strong>（此时Index寄存器中保存了找到的对应表项的索引）。如果没有找到（索引小于0），则直接跳到最后；<strong>如果找到了，将索引对应的tlb项清空</strong>（需要将<code>EntryHi</code>和<code>EntryLo</code>寄存器清零后使用<code>tlbwi</code>指令）。注意在函数最后需要将“调用该函数前<code>EntryHi</code>寄存器中的值恢复”</p>
+<p><strong>Q3：</strong> <strong>逐行解释 <code>tlb_out</code>
+中的汇编代码</strong><br>
+<strong>A3：</strong>
+<code>tlb_out</code>作用实际上就是<strong>使得某一虚拟地址对应的tlb表项失效</strong>，基本思路是——<strong>先将要查找的虚拟地址存入<code>EntryHi</code>寄存器，然后调用<code>tlbp</code>指令在TLB中查找</strong>（此时Index寄存器中保存了找到的对应表项的索引）。如果没有找到（索引小于0），则直接跳到最后；<strong>如果找到了，将索引对应的tlb项清空</strong>（需要将<code>EntryHi</code>和<code>EntryLo</code>寄存器清零后使用<code>tlbwi</code>指令）。注意在函数最后需要将“调用该函数前<code>EntryHi</code>寄存器中的值恢复”</p>
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">LEAF(tlb_out)
 //1: j 1b
 nop
@@ -461,66 +490,68 @@ NOFOUND:
 	nop
 END(tlb_out)
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Thinking-2-7">Thinking 2.7</h3>
-<p><strong>Q：</strong>  <strong>在现代的<code>64</code>位系统中，提供了<code>64</code>位的字长，但实际上不是<code>64</code>位页式存储系统。假设在<code>64</code>位系统中采用三级页表机制，页面大小<code>4KB</code>。由于<code>64</code>位系统中字长为<code>8B</code>，且页目录也占用一页，因此页目录中有<code>512</code>个页目录项，因此每级页表都需要<code>9</code>位。因此在<code>64</code>位系统下，总共需要<code>3 × 9 + 12 = 39</code>位就可以实现三级页表机制，并不需要<code>64</code>位。现考虑上述<code>39</code>位的三级页式存储系统，虚拟地址空间为<code>512GB</code>，若记三级页表的基地址为$PT_{base}$，请你计算：</strong></p>
-<ul>
-<li><strong>三级页表页目录的基地址?</strong></li>
-<li><strong>映射到页目录自身的页目录项</strong></li>
-</ul>
+<h3 id="thinking-2.7">Thinking 2.7</h3>
+<p><strong>Q：</strong>
+<strong>在现代的<code>64</code>位系统中，提供了<code>64</code>位的字长，但实际上不是<code>64</code>位页式存储系统。假设在<code>64</code>位系统中采用三级页表机制，页面大小<code>4KB</code>。由于<code>64</code>位系统中字长为<code>8B</code>，且页目录也占用一页，因此页目录中有<code>512</code>个页目录项，因此每级页表都需要<code>9</code>位。因此在<code>64</code>位系统下，总共需要<code>3 × 9 + 12 = 39</code>位就可以实现三级页表机制，并不需要<code>64</code>位。现考虑上述<code>39</code>位的三级页式存储系统，虚拟地址空间为<code>512GB</code>，若记三级页表的基地址为<span class="math inline">\(PT_{base}\)</span>，请你计算：</strong><br>
+- <strong>三级页表页目录的基地址?</strong><br>
+- <strong>映射到页目录自身的页目录项</strong></p>
 <p><strong>A：</strong> 三级页表页目录的基地址为<br>
-$$PT_{base} + PT_{base}&lt;&lt;9 + PT_{base}&lt;&lt;18$$<br>
+<span class="math display">\[PT_{base} + PT_{base}&lt;&lt;9 +
+PT_{base}&lt;&lt;18\]</span><br>
 映射到页目录自身的页目录项<br>
-$$PT_{base} + PT_{base}&lt;&lt;9 + PT_{base}&lt;&lt;18 + PT_{base}&lt;&lt;27$$</p>
-<h3 id="Thinking-2-8">Thinking 2.8</h3>
-<p><strong>Q：简单了解并叙述 X86 体系结构中的内存管理机制，比较 X86 和 MIPS 在内存管理上的区别</strong><br>
-<strong>A：</strong> 两者有以下三点主要区别——</p>
-<ul>
-<li>
-<p>首先是内存管理机制上，MIPS主要采用的是页式管理系统，X86主要采用的是段页式</p>
-</li>
-<li>
-<p>其次，在对 TLB 不命中时的处理上，MIPS 会触发TLB Refill 异常，内核的 <code>tlb_refill_handler</code> 会以 <code>pgd_current</code> 为当前进程的 <code>PGD</code> 基址，索引获得转换失败的虚址对应的 <code>PTE</code>，并将其填入TLB，然后CPU再用刚刚转换失败的虚拟地址重新访问以下TLB。</p>
-<p>而X86在TLB不命中时，是由硬件MMU以<code>CR3</code>为当前进程的PGD基址，索引获得PFN后，直接输出PA。同时MMU会填充TLB以加快下次转换的速度。</p>
-<p>另外转换失败的虚址，MIPS使用<code>BadVAddr</code>寄存器存放，X86使用<code>CR2</code>存放。</p>
-</li>
-</ul>
+<span class="math display">\[PT_{base} + PT_{base}&lt;&lt;9 +
+PT_{base}&lt;&lt;18 + PT_{base}&lt;&lt;27\]</span></p>
+<h3 id="thinking-2.8">Thinking 2.8</h3>
+<p><strong>Q：简单了解并叙述 X86 体系结构中的内存管理机制，比较 X86 和
+MIPS 在内存管理上的区别</strong><br>
+<strong>A：</strong> 两者有以下三点主要区别——<br>
+-
+首先是内存管理机制上，MIPS主要采用的是页式管理系统，X86主要采用的是段页式<br>
+- 其次，在对 TLB 不命中时的处理上，MIPS 会触发TLB Refill 异常，内核的
+<code>tlb_refill_handler</code> 会以 <code>pgd_current</code>
+为当前进程的 <code>PGD</code> 基址，索引获得转换失败的虚址对应的
+<code>PTE</code>，并将其填入TLB，然后CPU再用刚刚转换失败的虚拟地址重新访问以下TLB。</p>
+<pre><code>而X86在TLB不命中时，是由硬件MMU以`CR3`为当前进程的PGD基址，索引获得PFN后，直接输出PA。同时MMU会填充TLB以加快下次转换的速度。
+
+另外转换失败的虚址，MIPS使用`BadVAddr`寄存器存放，X86使用`CR2`存放。</code></pre>
 <h2 id="实验难点图示">实验难点图示</h2>
-<p>我认为该实验主要包含以下两个难点——<strong>Page存储结构和二级页表查询机制</strong></p>
-<h3 id="Page存储结构">Page存储结构</h3>
-<p><code>Page</code>是我们用于管理物理内存块的结构体，该结构体包含两部分——一个是"数据域"（<code>pp_ref</code>）,另一个是"指针域"（<code>pp_link</code>）。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page</span><span class="token punctuation">{</span>
+<p>我认为该实验主要包含以下两个难点——<strong>Page存储结构和二级页表查询机制</strong><br>
+### Page存储结构<br>
+<code>Page</code>是我们用于管理物理内存块的结构体，该结构体包含两部分——一个是"数据域"（<code>pp_ref</code>）,另一个是"指针域"（<code>pp_link</code>）。<br>
+</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page</span><span class="token punctuation">{</span>
 	u_short pp_ref<span class="token punctuation">;</span>
 	<span class="token keyword">struct</span> <span class="token punctuation">{</span>
 		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
 		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span><span class="token operator">*</span>le_prec<span class="token punctuation">;</span>
 	<span class="token punctuation">}</span> pp_link<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其中，<code>pp_ref</code>代表着该物理内存块被引用的次数，即有多少个虚拟地址映射到该物理内存块。<code>pp_link</code>中包含两个指针变量——<code>le_next</code>和<code>le_prec</code>，前者是<strong>指向后一个Page结构体的指针</strong>，后者是指向<strong>前一个Page的<code>le_next</code>的指针</strong>。</p>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+其中，<code>pp_ref</code>代表着该物理内存块被引用的次数，即有多少个虚拟地址映射到该物理内存块。<code>pp_link</code>中包含两个指针变量——<code>le_next</code>和<code>le_prec</code>，前者是<strong>指向后一个Page结构体的指针</strong>，后者是指向<strong>前一个Page的<code>le_next</code>的指针</strong>。<p></p>
 <p>所以"前"、"后"是指什么意思呢？原来，我们为了便于对<strong>空闲物理内存块的管理</strong>，将<strong>所有空闲物理内存块对应的<code>Page</code>结构体</strong>用一个<strong>链表</strong>链接了起来，为了便于链表的增删改查，我们就需要上述<code>le_next</code>和<code>le_prec</code>发挥作用了。链表示意图如下所示<br>
-<img src="lab2_1.png" alt=""></p>
+<img src="lab2_1.png"></p>
 <p>可以看到，上面的链表实际上是一个<strong>双向链表</strong>，但和我们常见的双向链表又有区别。该双向链表可以直接通过<code>le_next</code>来访问下一个链表项，但却无法直接访问上一个链表项。因为<code>le_prec</code>仅仅是指向了前一个Page的<code>le_next</code>，换句话说，就是一个<strong>指向了"指向自己的指针"的指针</strong>。虽然<code>le_prec</code>无法帮助我们直接访问上一个链表项，但是，它却可以帮助我们以<code>O(1)</code>的开销<strong>实现链表的增删操作</strong>。</p>
-<p>此外，为了便于定位该链表的首项，我们还定义了一个结构体<code>page_free_list</code>用于存储<strong>指向链表首项的指针</strong></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page_list</span> <span class="token punctuation">{</span>
+<p>此外，为了便于定位该链表的首项，我们还定义了一个结构体<code>page_free_list</code>用于存储<strong>指向链表首项的指针</strong><br>
+</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page_list</span> <span class="token punctuation">{</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>lh_first<span class="token punctuation">;</span>
-<span class="token punctuation">}</span> page_free_list<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>因此，最终的链表结构为——<br>
-<img src="lab2_2.png" alt=""></p>
+<span class="token punctuation">}</span> page_free_list<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
+因此，最终的链表结构为——<br>
+<img src="lab2_2.png"><p></p>
 <h3 id="二级页表查询机制">二级页表查询机制</h3>
-<p>所谓二级页表机制，实际上就是<strong>将页表再进行分页</strong>，离散地将各个页表页面存放在不同的物理块中，同时也再建立一张"外部页表"用以记录页表页面对应的物理块号，这个"外部页表"实际上就是 “页目录”，也是第一级页表。示意图如下所示——<br>
-<img src="lab2_3.png" alt=""></p>
-<blockquote>
-<p>由于页目录自映射机制的存在，页目录实际上也是众多二级页表中的一个，并非是一个独立于外部的页表。</p>
-</blockquote>
-<p>我们将虚拟地址分成三部分——</p>
-<ul>
-<li><strong>31~22位是页目录中的表项号</strong>，我们可以根据该表项号从页目录中取出对应的页表项，该页表项中储存的是二级页表首地址。</li>
-<li><strong>21~12位是二级页表中的表项号</strong>，我们可以根据该表项号从二级页表中取出对应的页表项，该页表项中储存的是<strong>虚拟地址所对应的物理页框的首地址</strong>。</li>
-<li><strong>12~0位是页内偏移</strong>，通过将上面得到的<strong>物理页框的首地址</strong>和<strong>页内偏移</strong>相加，最终就可以得到虚拟地址对应的物理地址。</li>
-</ul>
+<p>所谓二级页表机制，实际上就是<strong>将页表再进行分页</strong>，离散地将各个页表页面存放在不同的物理块中，同时也再建立一张"外部页表"用以记录页表页面对应的物理块号，这个"外部页表"实际上就是
+“页目录”，也是第一级页表。示意图如下所示——<br>
+<img src="lab2_3.png"><br>
+&gt;
+由于页目录自映射机制的存在，页目录实际上也是众多二级页表中的一个，并非是一个独立于外部的页表。</p>
+<p>我们将虚拟地址分成三部分——<br>
+-
+<strong>31<sub>22位是页目录中的表项号<strong>，我们可以根据该表项号从页目录中取出对应的页表项，该页表项中储存的是二级页表首地址。<br>
+-
+</strong>21</sub>12位是二级页表中的表项号</strong>，我们可以根据该表项号从二级页表中取出对应的页表项，该页表项中储存的是<strong>虚拟地址所对应的物理页框的首地址</strong>。<br>
+-
+<strong>12~0位是页内偏移</strong>，通过将上面得到的<strong>物理页框的首地址</strong>和<strong>页内偏移</strong>相加，最终就可以得到虚拟地址对应的物理地址。</p>
 <p>二级页表的整个访存流程如下所示——<br>
-<img src="lab2_4.png" alt=""></p>
+<img src="lab2_4.png"></p>
 <h2 id="体会与感想">体会与感想</h2>
-<p>Lab2主要是实现MOS中的内存管理机制，包括物理内存管理、虚拟内存管理和TLB重填机制。和Lab1相比，本次Lab代码量剧增，而且链表操作部分<strong>使用了指向指针的指针</strong>，对代码的理解和补全也造成一定困难（有的时候甚至怀疑自己是不是真的学会了指针qwq）。虽然一路艰辛，但是做完整个Lab2之后，不仅让我巩固了理论课上学到的内存管理相关知识，还使我加深了对指针操作的理解，可以说是收获满满啦<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<p>Lab2主要是实现MOS中的内存管理机制，包括物理内存管理、虚拟内存管理和TLB重填机制。和Lab1相比，本次Lab代码量剧增，而且链表操作部分<strong>使用了指向指针的指针</strong>，对代码的理解和补全也造成一定困难（有的时候甚至怀疑自己是不是真的学会了指针qwq）。虽然一路艰辛，但是做完整个Lab2之后，不仅让我巩固了理论课上学到的内存管理相关知识，还使我加深了对指针操作的理解，可以说是收获满满啦<span class="emoji" data-emoji="smile">😄</span></p>
 
                 
             </div>
@@ -914,7 +945,7 @@ $$PT_{base} + PT_{base}&lt;&lt;9 + PT_{base}&lt;&lt;18 + PT_{base}&lt;&lt;27$$</
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

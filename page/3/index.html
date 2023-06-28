@@ -361,7 +361,8 @@
                             
                                 实验思考题
 Thinking 6.1
-Q： 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？
+Q：
+示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？
 A： 只需要调换父子进程操作的内容即可——
 int main() {
     //...
@@ -473,8 +474,12 @@ int main() {
                             
                                 实验思考题
 Thinking 5.1
-Q： 查阅资料，了解 Linux/Unix 的 /proc 文件系统是什么？有什么作用？ Windows 操作系统又是如何实现这些功能的？proc 文件系统这样的设计有什么好处和可以改进的地方？
-A： 
+Q： 查阅资料，了解 Linux/Unix 的 /proc
+文件系统是什么？有什么作用？ Windows
+操作系统又是如何实现这些功能的？proc
+文件系统这样的设计有什么好处和可以改进的地方？
+A：
+
                             
                         </div>
                         <div class="publish-info">
@@ -582,11 +587,12 @@ A：
                         <div class="summary block-with-text">
                             
                                 IDE磁盘镜像
-在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件 gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
-fs/fsformat.c
+在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件
+gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
+### fs/fsformat.c
 函数之间的调用关系如下所示——
 
-reverse
+rev
                             
                         </div>
                         <div class="publish-info">
@@ -642,10 +648,12 @@ reverse
                                 实验思考题
 Thinking 4.1
 Q： 思考并回答下面的问题：
-
+-
 内核在保存现场的时候是如何避免破坏通用寄存器的？
+-
 系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？
-我们是怎么做到让
+-
+我们是
                             
                         </div>
                         <div class="publish-info">
@@ -734,7 +742,7 @@ Q： 思考并回答下面的问题：
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             

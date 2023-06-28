@@ -5,15 +5,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」继承, Hyggge&#39;s Blog">
-    <meta name="description" content="
-继承
+    <meta name="description" content="继承
 语法和概念
 修饰符 class 子类名 extends 父类名
 
 子类从它的父类中继承所有的数据域和方法，也可以添加新的数据域和新的方法。
 如果类 B 从类 A 派生，或者说类 B 扩展自类 A，或者说类 B 继承类 A，
 
-称类 ">
+称类 A">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,8 +388,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="继承">继承</h2>
+                <h2 id="继承">继承</h2>
 <h3 id="语法和概念">语法和概念</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">修饰符 <span class="token keyword">class</span> 子类名 <span class="token keyword">extends</span> 父类名<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
@@ -399,30 +397,23 @@
 <ul>
 <li><strong>称类 A 为"父类</strong>"，也称为超类、基类；</li>
 <li><strong>称类 B 为"子类"</strong>，也称为次类、扩展类、派生类。</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <h3 id="继承的注意点"><strong>继承的注意点</strong></h3>
-<ol>
-<li>
-<p>子类不是父类的子集，<strong>子类一般比父类包含更多的数据域和方法</strong>， 子类可以对父类进行扩展，也可以用自己的方式<strong>实现父类的方法</strong>（即下面要讲的重写）</p>
-</li>
-<li>
-<p>子类对象确实拥有父类对象中的所有属性和方法,但是父类对象中的<code>private</code>属性和方法,子类是<strong>无法访问到的</strong>,只是拥有,但不能使用。<br>
-若想访问<code>private</code>属性，则需要在父类中提供用来<strong>访问其私有字段的public或protected方法</strong></p>
-</li>
-<li>
-<p>Java 的继承是<strong>单继承</strong>，但是可以<strong>多层继承</strong>[^1]。Java<strong>不允许多重继承</strong>（和C++不同），即</p>
-   <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//错误写法</span>
+<ol type="1">
+<li><p>子类不是父类的子集，<strong>子类一般比父类包含更多的数据域和方法</strong>，
+子类可以对父类进行扩展，也可以用自己的方式<strong>实现父类的方法</strong>（即下面要讲的重写）</p></li>
+<li><p>子类对象确实拥有父类对象中的所有属性和方法,但是父类对象中的<code>private</code>属性和方法,子类是<strong>无法访问到的</strong>,只是拥有,但不能使用。<br>
+若想访问<code>private</code>属性，则需要在父类中提供用来<strong>访问其私有字段的public或protected方法</strong></p></li>
+<li><p>Java
+的继承是<strong>单继承</strong>，但是可以<strong>多层继承</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。Java<strong>不允许多重继承</strong>（和C++不同），即<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//错误写法</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">B</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">C</span> <span class="token keyword">extends</span> <span class="token class-name">A</span><span class="token punctuation">,</span> <span class="token class-name">B</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li>
-<p>在继承关系之中，如果要实例化子类对象，会默认<strong>先调用父类构造</strong>，为父类之中的属性初始化，之后<strong>再调用子类构造</strong>，为子类之中的属性初始化。<strong>在任何的情况下，子类都逃不出父类构造的调用</strong></p>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">C</span> <span class="token keyword">extends</span> <span class="token class-name">A</span><span class="token punctuation">,</span> <span class="token class-name">B</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p>在继承关系之中，如果要实例化子类对象，会默认<strong>先调用父类构造</strong>，为父类之中的属性初始化，之后<strong>再调用子类构造</strong>，为子类之中的属性初始化。<strong>在任何的情况下，子类都逃不出父类构造的调用</strong></p>
 <ul>
-<li><strong>子类和父类的构造函数均无参数</strong></li>
-</ul>
+<li><strong>子类和父类的构造函数均无参数</strong><br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>         <span class="token comment">// 父类无参构造</span>
@@ -444,10 +435,8 @@
 *************************
 #########################
 */</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ul>
-<li><strong>父类的构造函数有参数，子类无参数</strong></li>
-</ul>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><strong>父类的构造函数有参数，子类无参数</strong><br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token class-name">String</span> msg<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// 父类构造</span>
@@ -471,28 +460,33 @@
 *************************
 #########################
 */</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul></li>
 </ol>
-<hr>
 <h2 id="super-关键字">super 关键字</h2>
 <ul>
-<li>
-<p><code>super</code> 表示使用它的类的父类。<code>super</code> 可用于：</p>
+<li><p><code>super</code> 表示使用它的类的父类。<code>super</code>
+可用于：</p>
 <ul>
 <li><strong>调用父类的构造方法</strong></li>
 <li><strong>调用父类的方法（在子类需要重写父类时使用</strong>）</li>
 <li><strong>访问父类的数据域</strong></li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <h3 id="调用父类的构造方法">调用父类的构造方法</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
 <span class="token keyword">super</span><span class="token punctuation">(</span>参数列表<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
-<li><code>super</code> 语句<strong>必须是子类构造方法的第一条语句</strong>。</li>
-<li>父类的构造方法<strong>不被子类继承</strong>,  <strong>不能</strong>在子类中使用父类构造方法名来调用父类构造方法，调用父类的构造方法的唯一途径是使用 <code>super</code> 关键字。</li>
-<li>如果子类中没显式调用，则编译器自动将 <code>super();</code> 作为子类构造方法的第一条语句。也就是说如果父类构造器没有参数，则在子类的构造方法中不需要使用 <code>super</code> 关键字调用父类构造方法，系统会<strong>自动调用父类的无参构造方法</strong>  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//有参数</span>
+<li><code>super</code>
+语句<strong>必须是子类构造方法的第一条语句</strong>。</li>
+<li>父类的构造方法<strong>不被子类继承</strong>,
+<strong>不能</strong>在子类中使用父类构造方法名来调用父类构造方法，调用父类的构造方法的唯一途径是使用
+<code>super</code> 关键字。</li>
+<li>如果子类中没显式调用，则编译器自动将 <code>super();</code>
+作为子类构造方法的第一条语句。也就是说如果父类构造器没有参数，则在子类的构造方法中不需要使用
+<code>super</code>
+关键字调用父类构造方法，系统会<strong>自动调用父类的无参构造方法</strong><br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//有参数</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
@@ -522,47 +516,42 @@
         <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//也可以不写；</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h3 id="调用父类的实例方法">调用父类的实例方法</h3>
 <ul>
-<li>如果是继承的方法，是<strong>没有必要</strong>使用 <code>super</code> 来调用，直接即可调用。</li>
-<li>如果子类<strong>覆盖或重写了父类的方法</strong>，则只有使用 <code>super</code> 才能在子类中调用父类中的被重写的方法。<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">methodName</span><span class="token punctuation">(</span><span class="token punctuation">[</span>parameter list<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<li>如果是继承的方法，是<strong>没有必要</strong>使用 <code>super</code>
+来调用，直接即可调用。</li>
+<li>如果子类<strong>覆盖或重写了父类的方法</strong>，则只有使用
+<code>super</code> 才能在子类中调用父类中的被重写的方法。<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">methodName</span><span class="token punctuation">(</span><span class="token punctuation">[</span>parameter list<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token comment">//重新定义方法</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h3 id="访问父类的数据域">访问父类的数据域</h3>
 <ul>
-<li>如果是继承的数据，是<strong>没有必要</strong>使用 <code>super</code> 来调用，直接即可调用。</li>
-<li>如果子类<strong>覆盖或重写了父类的数据</strong>，则只有使用 <code>super</code> 才能在子类中调用父类中的被重写的数据。<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">super</span><span class="token punctuation">.</span>variableName<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
+<li>如果是继承的数据，是<strong>没有必要</strong>使用 <code>super</code>
+来调用，直接即可调用。</li>
+<li>如果子类<strong>覆盖或重写了父类的数据</strong>，则只有使用
+<code>super</code> 才能在子类中调用父类中的被重写的数据。<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">super</span><span class="token punctuation">.</span>variableName<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 </ul>
-<hr>
 <h2 id="this-关键字">this 关键字</h2>
-<p><code>this</code> 关键字表示当前<strong>对象</strong>(实例)，可用于：</p>
-<ul>
-<li>调用当前类的<strong>构造方法</strong>（调用类方法不能用<code>this</code>）</li>
-<li>限定当前对象的<strong>数据域变量</strong></li>
-</ul>
-<h3 id="调用当前类的构造方法">调用当前类的<strong>构造方法</strong></h3>
-<p>通过<code>this</code>调用当前类的<strong>构造方法</strong>时必须是<strong>方法的第一条语句</strong>。（和调用父类使用的<code>super</code>用法相似）</p>
-<ul>
-<li><code>this();</code> 调用默认构造方法。</li>
-<li><code>this(参数);</code> 调用带参构造方法。</li>
-<li>使用规则：（参考该<a target="_blank" rel="noopener" href="https://blog.csdn.net/Return_head/article/details/80744056">博客</a>）
-<ul>
-<li>
-<p>假如在一个构造方法中使用了<code>this</code>语句，那么它必须作为构造方法的<strong>第一条语句</strong>。</p>
-</li>
-<li>
-<p>只能在一个<strong>构造方法</strong>中使用<code>this</code>语句来调用类的其他构造方法，而<strong>不能在实例方法</strong>中用<code>this</code>语句来调用类的其他构造方法。</p>
-</li>
-<li>
-<p>只能用<code>this</code>语句来调用其他构造方法，而不能<strong>通过方法名</strong>来直接调用构造方法。</p>
-</li>
-</ul>
+<p><code>this</code>
+关键字表示当前<strong>对象</strong>(实例)，可用于：<br>
+-
+调用当前类的<strong>构造方法</strong>（调用类方法不能用<code>this</code>）<br>
+- 限定当前对象的<strong>数据域变量</strong><br>
+### 调用当前类的<strong>构造方法</strong><br>
+通过<code>this</code>调用当前类的<strong>构造方法</strong>时必须是<strong>方法的第一条语句</strong>。（和调用父类使用的<code>super</code>用法相似）<br>
+- <code>this();</code> 调用默认构造方法。<br>
+- <code>this(参数);</code> 调用带参构造方法。<br>
+- 使用规则：（参考该<a target="_blank" rel="noopener" href="https://blog.csdn.net/Return_head/article/details/80744056">博客</a>）<br>
+-
+假如在一个构造方法中使用了<code>this</code>语句，那么它必须作为构造方法的<strong>第一条语句</strong>。</p>
+<pre><code>- 只能在一个**构造方法**中使用`this`语句来调用类的其他构造方法，而**不能在实例方法**中用`this`语句来调用类的其他构造方法。
+
+- 只能用`this`语句来调用其他构造方法，而不能**通过方法名**来直接调用构造方法。
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> animal<span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
 
@@ -578,33 +567,28 @@
         animal cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></code></pre>
 <h3 id="限定当前对象的数据域变量">限定当前对象的<strong>数据域变量</strong></h3>
 <ul>
-<li>一般用于方法内的局部变量与对象的数据域变量同名的情况，将成员变量和局部变量进行区分（和C++相似）<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<li>一般用于方法内的局部变量与对象的数据域变量同名的情况，将成员变量和局部变量进行区分（和C++相似）<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">//注:可以使用this进行区分成员变量和局部变量</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<hr>
 <h2 id="多态的初步介绍">多态的初步介绍</h2>
-<p>多态是同一个行为具有多个不同表现形式或形态的能力；是同一个接口，使用不同的实例而执行不同操作。多态的好处是——可以使程序有良好的扩展，并可以对所有类的对象进行通用处理。</p>
-<ul>
-<li><strong>多态的必要条件</strong>
-<ul>
-<li><strong>继承</strong></li>
-<li><strong>重写</strong></li>
-<li><strong>父类引用指向子类对象：<code>Parent p = new Child()</code>;</strong></li>
-</ul>
-</li>
-<li><strong>多态调用方法的流程</strong>：当使用多态方式调用方法时，<strong>首先检查父类中是否有该方法</strong>，如果没有，则编译错误；如果有，再去调用子类的同名方法。</li>
-</ul>
-<p>下面我们重点理解一下第三个必要条件—— <strong>父类引用指向子类对象</strong>。例如以下程序——</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
+<p>多态是同一个行为具有多个不同表现形式或形态的能力；是同一个接口，使用不同的实例而执行不同操作。多态的好处是——可以使程序有良好的扩展，并可以对所有类的对象进行通用处理。<br>
+- <strong>多态的必要条件</strong><br>
+- <strong>继承</strong><br>
+- <strong>重写</strong><br>
+-
+<strong>父类引用指向子类对象：<code>Parent p = new Child()</code>;</strong><br>
+-
+<strong>多态调用方法的流程</strong>：当使用多态方式调用方法时，<strong>首先检查父类中是否有该方法</strong>，如果没有，则编译错误；如果有，再去调用子类的同名方法。</p>
+<p>下面我们重点理解一下第三个必要条件——
+<strong>父类引用指向子类对象</strong>。例如以下程序——<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Animal move!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -630,11 +614,18 @@
     b<span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//执行 Dog 类的方法</span>
     b<span class="token punctuation">.</span><span class="token function">bark</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//编译错误!!!!!!!</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>最后一行编译错误原因是——</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+最后一行编译错误原因是——<p></p>
 <p>因为此时<code>Animal b = new Dog();</code>满足<strong>父类引用指向子类对象</strong>的情况，首先检查在父类中是否有该方法。因为父类<code>Animal</code>并没有<code>bark（）</code>方法，因此会报错。</p>
 <p>如果将<code>Animal b = new Dog();</code>改为<code>Dog b = new Dog();</code>的话，以上程序会被正常编译。</p>
-<p>[^1]:<strong>单继承</strong>就是一个子类只能继承一个父类；<strong>多重继承</strong>就是，B 类继承 A 类，C 类继承 B 类，所以按照关系就是 B 类是 C 类的父类，A 类是 B 类的父类。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><strong>单继承</strong>就是一个子类只能继承一个父类；<strong>多重继承</strong>就是，B
+类继承 A 类，C 类继承 B 类，所以按照关系就是 B 类是 C 类的父类，A 类是 B
+类的父类。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
                 
             </div>
@@ -1013,7 +1004,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">169.5k</span>
+                        class="white-color">170.2k</span>
             
             
             
