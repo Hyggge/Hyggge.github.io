@@ -6,7 +6,7 @@
   <link href="http://hyggge.github.io/atom.xml" rel="self"/>
   
   <link href="http://hyggge.github.io/"/>
-  <updated>2023-06-28T09:51:22.004Z</updated>
+  <updated>2023-07-06T10:40:38.581Z</updated>
   <id>http://hyggge.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>「CS229」Lecture6：拉普拉斯平滑和SVM简介</title>
+    <link href="http://hyggge.github.io/2023/07/06/ml/cs229-lecture6/"/>
+    <id>http://hyggge.github.io/2023/07/06/ml/cs229-lecture6/</id>
+    <published>2023-07-06T09:07:01.000Z</published>
+    <updated>2023-07-06T10:40:38.581Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ML" scheme="http://hyggge.github.io/categories/ML/"/>
+    
+    
+    <category term="CS229" scheme="http://hyggge.github.io/tags/CS229/"/>
+    
+    <category term="ML" scheme="http://hyggge.github.io/tags/ML/"/>
+    
+  </entry>
   
   <entry>
     <title>「CS229」Lecture5：生成学习算法、GDA和朴素贝叶斯</title>
@@ -516,33 +543,6 @@
     <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
     
     <category term="操作系统" scheme="http://hyggge.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>「BUAA-OO」第二单元:电梯调度</title>
-    <link href="http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/"/>
-    <id>http://hyggge.github.io/2022/04/29/oo/oo-di-er-dan-yuan-zong-jie/</id>
-    <published>2022-04-29T14:31:57.000Z</published>
-    <updated>2023-06-28T09:42:17.729Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="面向对象" scheme="http://hyggge.github.io/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
-    
-    
-    <category term="BUAA" scheme="http://hyggge.github.io/tags/BUAA/"/>
-    
-    <category term="面向对象" scheme="http://hyggge.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
     
   </entry>
   
