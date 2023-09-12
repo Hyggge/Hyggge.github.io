@@ -694,7 +694,9 @@ margin 定义如下：<br>
 <span class="math display">\[
 \gamma = \min_{i} \gamma^{(i)}
 \]</span><br>
-他的几何意义也很简单，就是“距离超平面最近的数据点”到超平面的距离。为了能够获得一个最优的分类器，我们需要让选择<span class="math inline">\((w, b)\)</span> 让 <span class="math inline">\(\gamma\)</span>
+他的几何意义也很简单，就是“距离超平面最近的数据点”到超平面的距离。为了能够获得一个最佳边际分类器（optimal
+margin classifier），我们需要让选择<span class="math inline">\((w,
+b)\)</span> 让 <span class="math inline">\(\gamma\)</span>
 最大化，也就是让所有数据点尽量离着超平面远一些。下图中，绿线分界线对应的
 <span class="math inline">\(\gamma\)</span>
 显然要大于红线分界线，因此绿色分界线更优。</p>

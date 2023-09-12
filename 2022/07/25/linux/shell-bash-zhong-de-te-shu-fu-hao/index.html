@@ -5,9 +5,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Shell」 Shell中的特殊符号, Hyggge&#39;s Blog">
-    <meta name="description" content="Shell中有一系列诸如${ },$[ ],$( ),[[ ]]这样的特殊符号，它们长相相似但用法却大相径庭，非常容易混淆。笔者在写Shell脚本时也经常将它们的用法弄混，因此特地整理在此，以便日后查阅。
-\({ } 的用法
-在写Shell">
+    <meta name="description" content="Shell中有一系列诸如
+${ },$[ ],$( ),[[ ]]这样的特殊符号，它们长相相似但用法却大相径庭，非常容易混淆。笔者在写Shell脚本时也经常将它们的用法弄混，因此特地整理在此，以便日后查阅。
+$ 的用法
+在写Shell脚本时">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -387,9 +388,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Shell中有一系列诸如<code>${ }</code>,<code>$[ ]</code>,<code>$( )</code>,<code>[[ ]]</code>这样的特殊符号，它们长相相似但用法却大相径庭，非常容易混淆。笔者在写Shell脚本时也经常将它们的用法弄混，因此特地整理在此，以便日后查阅。</p>
-<h2 id="的用法-在写shell脚本时我们经常会定义一些变量如果想要获取变量的值则需要使用变量名当然变量名也是可以的不过能够明确变量的边界可以防止在字符串拼接时出现问题"><span class="math inline">\({ } 的用法
-在写Shell脚本时，我们经常会定义一些变量。如果想要获取变量的值，则需要使用`\)</span>{变量名}<code>。当然，</code><span class="math inline">\(变量名`也是可以的，不过\)</span>{}能够明确变量的边界，可以防止在字符串拼接时出现问题。</h2>
+                <p>Shell中有一系列诸如
+<code>${ }</code>,<code>$[ ]</code>,<code>$( )</code>,<code>[[ ]]</code>这样的特殊符号，它们长相相似但用法却大相径庭，非常容易混淆。笔者在写Shell脚本时也经常将它们的用法弄混，因此特地整理在此，以便日后查阅。</p>
+<h2 id="的用法">$ 的用法</h2>
+<p>在写Shell脚本时，我们经常会定义一些变量。如果想要获取变量的值，则需要使用
+<code>${变量名}</code>。当然，<code>$变量名</code>也是可以的，不过${}能够明确变量的边界，可以防止在字符串拼接时出现问题。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token assign-left variable">var1</span><span class="token operator">=</span><span class="token number">100</span>
@@ -400,9 +403,9 @@
 ------------------------ 运行结果 ------------------------
 <span class="token number">100</span>
 <span class="token number">200</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="和-和code-都用做命令替换能够返回某个命令的运行结果当我们使用这两个符号运行某个命令时实际上就是在当前shell中fork出一个子shell并在子shell中运行命令并将结果返回给父shell"><span class="math inline">\(( ) 和 \` \` `\)</span>(
-)<code>和&lt;code&gt;\</code>
-`都用做<strong>命令替换</strong>，能够返回某个命令的运行结果。当我们使用这两个符号运行某个命令时，实际上就是在当前Shell中fork出一个子Shell，并在子Shell中运行命令，并将结果返回给父Shell。</h2>
+<h2 id="和">$( ) 和 ` `</h2>
+<p><code>$( )</code>和<code>&lt;code&gt;</code>`
+`<code>&lt;/code&gt;</code>都用做<strong>命令替换</strong>，能够返回某个命令的运行结果。当我们使用这两个符号运行某个命令时，实际上就是在当前Shell中fork出一个子Shell，并在子Shell中运行命令，并将结果返回给父Shell。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token builtin class-name">echo</span> <span class="token variable"><span class="token variable">`</span><span class="token function">date</span><span class="token variable">`</span></span>
@@ -411,15 +414,19 @@
 ------------------------ 运行结果 ------------------------
 <span class="token number">2022</span>年 07月 <span class="token number">25</span>日 星期一 <span class="token number">22</span>:06:03 CST
 <span class="token number">2022</span>年 07月 <span class="token number">25</span>日 星期一 <span class="token number">22</span>:06:03 CST<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="和">( ) 和 { }</h2>
-<p><code>( )</code>和<code>{ }</code>作用相似，都是将括号中的所有命令作为一个命令组来顺序执行（括号中不同命令之间需要用分号<code>;</code>来分隔）。但是，二者又有下面几点区别——<br>
--
-<code>( )</code>内部各个命令和左右括号之间不必有空格，而<code>{ }</code>中第一个命令和左括号之间必须要有一个空格。<br>
--
-<code>( )</code>最后一条指令后面可以没有<code>;</code>，而<code>{ }</code>最后一条指令后面必须有<code>;</code><br>
--
-<code>( )</code>中的命令会在新开的一个Shell中运行，而<code>{ }</code>的命令是在当前Shell中运行。<br>
-</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<h2 id="和-1">( ) 和 { }</h2>
+<p><code>( )</code>和
+<code>{ }</code>作用相似，都是将括号中的所有命令作为一个命令组来顺序执行（括号中不同命令之间需要用分号
+<code>;</code>来分隔）。但是，二者又有下面几点区别——</p>
+<ul>
+<li><code>( )</code>内部各个命令和左右括号之间不必有空格，而
+<code>{ }</code>中第一个命令和左括号之间必须要有一个空格。</li>
+<li><code>( )</code>最后一条指令后面可以没有 <code>;</code>，而
+<code>{ }</code>最后一条指令后面必须有 <code>;</code></li>
+<li><code>( )</code>中的命令会在新开的一个Shell中运行，而
+<code>{ }</code>的命令是在当前Shell中运行。</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token punctuation">(</span>echo <span class="token parameter variable">-n</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token parameter variable">-n</span> <span class="token string">" Hyggge"</span><span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">;</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span> <span class="token builtin class-name">echo</span> <span class="token parameter variable">-n</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token parameter variable">-n</span> <span class="token string">"World"</span><span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\n">\n</span>"</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
@@ -427,17 +434,21 @@
 ------------------------ 运行结果 ------------------------
 Hello Hyggge
 
-Hello World<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+Hello World<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="和-test">[ ] 和 test</h2>
-<p><code>[ ]</code>和<code>test</code>命令用法相同，都是用来测试“某个条件是否成立”。<strong>如果成立则返回0（真），否则返回非0值（假）</strong>。<code>test</code>命令的语法格式为
-<code>test &lt;条件&gt;</code>，若使用<code>[ ]</code>则应该写做
-<code>[&lt;条件&gt;]</code>。两者通常需要结合<code>if</code>一起使用</p>
-<p>“测试条件”中支持以下几种表示判断或者关系的运算符——<br>
-- <strong>测试文件</strong>： -e, -f, -d, -r, -w, -x等<br>
-- <strong>字符串比较</strong>： =, !=, -z, -n, $<br>
-- <strong>数值比较</strong>： ==, ！=, -eq, -ne, -gt, -lt, -ge,
--le<br>
-- <strong>布尔运算</strong>： !, -o, -a</p>
+<p><code>[ ]</code>和
+<code>test</code>命令用法相同，都是用来测试“某个条件是否成立”。<strong>如果成立则返回0（真），否则返回非0值（假）</strong>。<code>test</code>命令的语法格式为
+<code>test &lt;条件&gt;</code>，若使用 <code>[ ]</code>则应该写做
+<code>[&lt;条件&gt;]</code>。两者通常需要结合
+<code>if</code>一起使用</p>
+<p>“测试条件”中支持以下几种表示判断或者关系的运算符——</p>
+<ul>
+<li><strong>测试文件</strong>： -e, -f, -d, -r, -w, -x等</li>
+<li><strong>字符串比较</strong>： =, !=, -z, -n, $</li>
+<li><strong>数值比较</strong>： ==, ！=, -eq, -ne, -gt, -lt, -ge,
+-le</li>
+<li><strong>布尔运算</strong>： !, -o, -a</li>
+</ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token number">100</span>
@@ -455,11 +466,13 @@ Hello World<span aria-hidden="true" class="line-numbers-rows"><span></span><span
 a <span class="token operator">&lt;</span> b<span class="token operator">!</span>
 b <span class="token operator">&gt;</span> a<span class="token operator">!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
-<p><strong>需要注意的是</strong>，在使用<code>[ ]</code>时，左右括号和条件之间必须留有空格。</p>
+<p><strong>需要注意的是</strong>，在使用
+<code>[ ]</code>时，左右括号和条件之间必须留有空格。</p>
 </blockquote>
-<h2 id="的用法">[[ ]] 的用法</h2>
-<p><code>[[ ]]</code>可以看做增强版的<code>[ ]</code>，除了可以使用上面提到的运算符，还可以使用<code>&amp;&amp;</code>,
-<code>||</code>, <code>&lt;</code>,
+<h2 id="的用法-1">[[ ]] 的用法</h2>
+<p><code>[[ ]]</code>可以看做增强版的
+<code>[ ]</code>，除了可以使用上面提到的运算符，还可以使用
+<code>&amp;&amp;</code>, <code>||</code>, <code>&lt;</code>,
 <code>&gt;</code>，更加符合我们使用C语言的习惯。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
@@ -469,12 +482,12 @@ b <span class="token operator">&gt;</span> a<span class="token operator">!</span
 
 ------------------------ 运行结果 ------------------------
 yes<span class="token operator">!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="let-和-expr-let-expr都可以用于数值的运算---的括号中可以使用任何符合c语言语法的表达式如果括号中的是数值运算表达式则返回运算结果如果括号中是逻辑判断表达式则返回1或者01表示真0表示假与退出状态码相反">$((
-)), <span class="math inline">\([ ], let 和 expr `\)</span>((
-))<code>,</code><span class="math inline">\([ ]`, `let`,
-`expr`都可以用于数值的运算。 - `\)</span>((
-))`的括号中可以使用任何符合C语言语法的表达式，如果括号中的是数值运算表达式，则返回运算结果；如果括号中是逻辑判断表达式，则返回1或者0（1表示真，0表示假，与退出状态码相反）。</h2>
-<pre><code><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<h2 id="let-和-expr">$(( )), $[ ], let 和 expr</h2>
+<p><code>$(( ))</code>, <code>$[ ]</code>, <code>let</code>,
+<code>expr</code>都可以用于数值的运算。</p>
+<ul>
+<li><p><code>$(( ))</code>的括号中可以使用任何符合C语言语法的表达式，如果括号中的是数值运算表达式，则返回运算结果；如果括号中是逻辑判断表达式，则返回1或者0（1表示真，0表示假，与退出状态码相反）。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token number">100</span>
 <span class="token assign-left variable">b</span><span class="token operator">=</span><span class="token number">200</span>
 <span class="token assign-left variable">c</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$((</span>a <span class="token operator">+</span> b<span class="token variable">))</span></span> <span class="token comment"># c=$(($a + $b))</span>
@@ -483,9 +496,10 @@ yes<span class="token operator">!</span><span aria-hidden="true" class="line-num
 
 ------------------------ 运行结果 ------------------------
 <span class="token number">300</span>
-<span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></code></pre>
-<ul>
-<li>如果<code>(( ))</code>单独使用，则只能用于括号内表达式的运算，而不能将表达式的运算结果返回。此外，<code>(( ))</code>也经常在<code>for</code>循环中使用，用于循环控制，类似C语言。<br>
+<span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>如果
+<code>(( ))</code>单独使用，则只能用于括号内表达式的运算，而不能将表达式的运算结果返回。此外，<code>(( ))</code>也经常在
+<code>for</code>循环中使用，用于循环控制，类似C语言。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token number">100</span>
 <span class="token assign-left variable">b</span><span class="token operator">=</span><span class="token number">200</span>
@@ -501,8 +515,11 @@ yes<span class="token operator">!</span><span aria-hidden="true" class="line-num
 ------------------------ 运行结果 ------------------------
 <span class="token number">300</span>
 <span class="token number">4950</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><code>$[ ]</code>用法和<code>$(( ))</code>基本相同，同样支持任何符合C语言语法的表达式。</li>
-<li><code>expr</code>命令只能用于"数值运算"（例如<code>expr b + c</code>），不能用作"变量赋值"（例如<code>expr a = b + c</code>）。该命令除了能够进行数学运算时，还可与进行字符串比较、字符串匹配、字符串提取、字符串长度计算等功能。<br>
+<li><p><code>$[ ]</code>用法和
+<code>$(( ))</code>基本相同，同样支持任何符合C语言语法的表达式。</p></li>
+<li><p><code>expr</code>命令只能用于"数值运算"（例如
+<code>expr b + c</code>），不能用作"变量赋值"（例如
+<code>expr a = b + c</code>）。该命令除了能够进行数学运算时，还可与进行字符串比较、字符串匹配、字符串提取、字符串长度计算等功能。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token number">100</span>
 <span class="token assign-left variable">b</span><span class="token operator">=</span><span class="token number">200</span>
@@ -511,7 +528,8 @@ yes<span class="token operator">!</span><span aria-hidden="true" class="line-num
 
 ------------------------ 运行结果 ------------------------
 <span class="token number">300</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><code>let</code>命令可以和<code>(( ))</code>进行互换，同样只能进行表达式的运算，而不能将运算结果返回。<br>
+<li><p><code>let</code>命令可以和
+<code>(( ))</code>进行互换，同样只能进行表达式的运算，而不能将运算结果返回。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token number">100</span>
 <span class="token assign-left variable">b</span><span class="token operator">=</span><span class="token number">200</span>
@@ -525,11 +543,16 @@ yes<span class="token operator">!</span><span aria-hidden="true" class="line-num
 <span class="token parameter variable">-100</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <blockquote>
-<p><strong>需要特别注意以下几点：</strong><br>
--
-在使用<code>$(( ))</code>、<code>$[ ]</code>和<code>let</code>时，直接通过变量名即可获得变量所代表的值，不需要使用<code>${ }</code>。<br>
--
-在使用<code>$(( ))</code>和<code>$[ ]</code>时，括号中表达式的任意位置都可以有空格；对于<code>expr</code>命令，运算符两边必须有空格；对于<code>let</code>命令，表达式必须紧凑，不能含有空格，但是如果非要在表达式中加空格，则必须将整个表达式用引号引起来。</p>
+<p><strong>需要特别注意以下几点：</strong></p>
+<ul>
+<li>在使用 <code>$(( ))</code>、<code>$[ ]</code>和
+<code>let</code>时，直接通过变量名即可获得变量所代表的值，不需要使用
+<code>${ }</code>。</li>
+<li>在使用 <code>$(( ))</code>和
+<code>$[ ]</code>时，括号中表达式的任意位置都可以有空格；对于
+<code>expr</code>命令，运算符两边必须有空格；对于
+<code>let</code>命令，表达式必须紧凑，不能含有空格，但是如果非要在表达式中加空格，则必须将整个表达式用引号引起来。</li>
+</ul>
 </blockquote>
 
                 
