@@ -393,12 +393,12 @@ Algorithm），目标是找到一个决策边界或者一个条件概率分布">
                 <h2 id="引入">引入</h2>
 <p>在前面的课程中，我们学会了使用 Logistic 回归来解决二分类问题。</p>
 <ul>
-<li><p>Logistc
+<li>Logistc
 回归本质上是一种<strong>判别学习算法</strong>（Discriminative Learning
-Algorithm），目标是找到一个<strong>决策边界</strong>或者一个<strong>条件概率分布函数</strong>，将输入数据映射到对应的类别或者数值。</p></li>
-<li><p>与此不同，本节课学习的 GDA 和 Naive Bayes
+Algorithm），目标是找到一个<strong>决策边界</strong>或者一个<strong>条件概率分布函数</strong>，将输入数据映射到对应的类别或者数值。</li>
+<li>与此不同，本节课学习的 GDA 和 Naive Bayes
 本质上是<strong>生成学习算法</strong>（Generative Learning
-Algorithm），即通过学习输入数据和标签的<strong>联合概率分布</strong>来进行分类或回归任务。</p></li>
+Algorithm），即通过学习输入数据和标签的<strong>联合概率分布</strong>来进行分类或回归任务。</li>
 </ul>
 <p>上面的说法还是有点抽象，我们以肿瘤性质预测任务为例进行分析。假设输入特征
 <span class="math inline">\(x\)</span> 是肿瘤的大小。</p>
@@ -409,7 +409,7 @@ Algorithm），即通过学习输入数据和标签的<strong>联合概率分布
 。当获得新的输入 <span class="math inline">\(x^*\)</span> 时，只需要计算
 <span class="math inline">\(P(y=1 | x = x^*)\)</span> 和 <span class="math inline">\(P(y = 0 | x = x^*)\)</span>
 ，然后比较两者的大小就能够做出预测。</p></li>
-<li><p>对于判别学习算法来说，我们学到的是 <strong><span class="math inline">\(P(x | y)\)</span> 和 <span class="math inline">\(P(y)\)</span></strong> 。</p>
+<li><p>对于生成学习算法来说，我们学到的是 <strong><span class="math inline">\(P(x | y)\)</span> 和 <span class="math inline">\(P(y)\)</span></strong> 。</p>
 <ul>
 <li><span class="math inline">\(P(x|y)\)</span> 表示给定<span class="math inline">\(y\)</span> 的时候 <span class="math inline">\(x\)</span> 的概率，具体来说<span class="math inline">\(P(x| y=1)\)</span>
 表示恶性肿瘤大小的概率分布，<span class="math inline">\(P(x|
@@ -430,7 +430,7 @@ x)\)</span>。根据贝叶斯公式，我们有</p></li>
 \cdot P(y=0) }
 \end{aligned}
 \]</span></p>
-<p>​对于一个特定输入<span class="math inline">\(x^*\)</span>,
+<p>对于一个特定输入<span class="math inline">\(x^*\)</span>,
 我们只需要比较<span class="math inline">\(P(y = 1 | x = x^*)\)</span> 和
 <span class="math inline">\(P(y = 0 | x = x^*)\)</span>
 的相对大小即可。又因为<span class="math inline">\(P(x)\)</span>
