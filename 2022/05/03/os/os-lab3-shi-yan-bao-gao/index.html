@@ -415,20 +415,20 @@ A：
 <p>如果不判断，则通过最终获得的<code>e</code>可能并不是我们想要的内存控制块，而如果对这个错误的内存控制块操作，则可能会导致内存控制出现混乱（例如获得一个仍在<code>env_free_list</code>中的PCB，然后运行它）。</p>
 <h3 id="thinking-3.2">Thinking 3.2</h3>
 <p><strong>Q：</strong> <strong>结合include/mmu.h
-中的地址空间布局，思考<code>env_setup_vm</code> 函数：</strong><br>
-- <strong><code>UTOP</code>
+中的地址空间布局，思考<code>env_setup_vm</code> 函数：</strong></p>
+<ul>
+<li><strong><code>UTOP</code>
 和<code>ULIM</code>的含义分别是什么，<code>UTOP</code> 和
 <code>ULIM</code>
-之间的区域与UTOP以下的区域相比有什么区别？</strong><br>
--
-<strong>请结合系统自映射机制解释代码中<code>pgdir[PDX(UVPT)]=env_cr3</code>的含义。</strong><br>
-- <strong>谈谈自己对进程中物理地址和虚拟地址的理解。</strong></p>
-<p><strong>A：</strong><br>
--
-<code>ULIM</code>是<code>kseg0</code>和<code>kuseg</code>的分界线，也是内核态虚拟内存区和用户态虚拟内存区的分界线；<code>UTOP</code>是<code>kuseg</code>中只读区和可读写区的分界线。<strong><code>UTOP</code>和<code>ULIM</code>之间是只读区域</strong>，用来存放用户的进程信息和页表信息；<strong><code>UTOP</code>之下的是可读写区域</strong>，用户可以自由读写。</p>
+之间的区域与UTOP以下的区域相比有什么区别？</strong></li>
+<li><strong>请结合系统自映射机制解释代码中<code>pgdir[PDX(UVPT)]=env_cr3</code>的含义。</strong></li>
+<li><strong>谈谈自己对进程中物理地址和虚拟地址的理解。</strong></li>
+</ul>
+<p><strong>A：</strong></p>
 <ul>
-<li><code>UVPT</code>是<code>kuseg</code>中保存用户（当前进程）页表信息的虚拟内存区，大小为4MB（0x7fc00000-0x80000000），<code>env_cr3</code>是进程页目录所在的物理地址。<code>pgdir[PDX(UVPT)]=env_cr3</code>表示页目录中第<code>PDX(UVPT)</code>项映射到页目录本身的物理地址，实现自映射机制。</li>
-<li>在用户进程中使用的是虚拟地址（用户可见），然后MMU通过查询页表得到对应的物理地址（用户不可见），并最终通过物理地址在物理内存中获取值。</li>
+<li><p><code>ULIM</code>是<code>kseg0</code>和<code>kuseg</code>的分界线，也是内核态虚拟内存区和用户态虚拟内存区的分界线；<code>UTOP</code>是<code>kuseg</code>中只读区和可读写区的分界线。<strong><code>UTOP</code>和<code>ULIM</code>之间是只读区域</strong>，用来存放用户的进程信息和页表信息；<strong><code>UTOP</code>之下的是可读写区域</strong>，用户可以自由读写。</p></li>
+<li><p><code>UVPT</code>是<code>kuseg</code>中保存用户（当前进程）页表信息的虚拟内存区，大小为4MB（0x7fc00000-0x80000000），<code>env_cr3</code>是进程页目录所在的物理地址。<code>pgdir[PDX(UVPT)]=env_cr3</code>表示页目录中第<code>PDX(UVPT)</code>项映射到页目录本身的物理地址，实现自映射机制。</p></li>
+<li><p>在用户进程中使用的是虚拟地址（用户可见），然后MMU通过查询页表得到对应的物理地址（用户不可见），并最终通过物理地址在物理内存中获取值。</p></li>
 </ul>
 <h3 id="thinking-3.3">Thinking 3.3</h3>
 <p><strong>Q：</strong> <strong>找到 <code>user_data</code>
@@ -458,11 +458,12 @@ A：
 <p><img src="3.4-2.png"></p>
 <h3 id="thinking-3.5">Thinking 3.5</h3>
 <p><strong>Q：</strong> <strong>思考上面这一段话，并根据自己在lab2
-中的理解，回答：</strong><br>
-- <strong>你认为这里的 <code>env_tf.pc</code>
-存储的是物理地址还是虚拟地址?</strong><br>
--
-<strong>你觉得<code>entry_point</code>其值对于每个进程是否一样？该如何理解这种统一或不同？</strong></p>
+中的理解，回答：</strong></p>
+<ul>
+<li><strong>你认为这里的 <code>env_tf.pc</code>
+存储的是物理地址还是虚拟地址?</strong></li>
+<li><strong>你觉得<code>entry_point</code>其值对于每个进程是否一样？该如何理解这种统一或不同？</strong></li>
+</ul>
 <p><strong>A：</strong>
 env_tf.pc中存储的是虚拟地址。对于每个用户进程来说entry_point都是一样的（如果不手动进行设置的话），这样可使让程序的每次执行都从一个固定的虚拟地址开始，这种统一对CPU是友好的。</p>
 <h3 id="thinking-3.6">Thinking 3.6</h3>
@@ -472,11 +473,13 @@ env_tf.pc中存储的是虚拟地址。对于每个用户进程来说entry_point
 <code>epc</code>是CP0中的一个寄存器（14号），用于保存使该进程出现异常（包括中断）时指令所在的<code>pc</code>。进程因异常被切换时将<code>env_tf.pc</code>设置为<code>epc</code>，实际上就是保存了“该进程运行到了什么地方”。这样就可以使进程在下一次被调度时，<strong>直接从上次出现异常的位置继续向后运行</strong>。</p>
 <h3 id="thinking-3.7">Thinking 3.7</h3>
 <p><strong>Q：</strong> <strong>关于
-<code>TIMESTACK</code>，请思考以下问题：</strong><br>
-- <strong>操作系统在何时将什么内容存到了 <code>TIMESTACK</code>
-区域</strong><br>
-- <strong><code>TIMESTACK</code> 和 <code>env_asm.S</code> 中所定义的
-<code>KERNEL_SP</code> 的含义有何不同</strong></p>
+<code>TIMESTACK</code>，请思考以下问题：</strong></p>
+<ul>
+<li><strong>操作系统在何时将什么内容存到了 <code>TIMESTACK</code>
+区域</strong></li>
+<li><strong><code>TIMESTACK</code> 和 <code>env_asm.S</code> 中所定义的
+<code>KERNEL_SP</code> 的含义有何不同</strong></li>
+</ul>
 <p><strong>A：</strong>
 操作系统在发生时钟中断时时将<strong>原进程</strong>的<code>env_tf</code>中的内容保存到<code>TIMESTACK</code>区域（在<code>handle_int</code>函数中通过<code>SAVE_ALL</code>实现）。
 <code>TIMESTACK</code>时发生时钟中断时的栈顶指针，<code>KERNEL_SP</code>是发生其他中断时的栈顶指针。</p>
@@ -546,15 +549,15 @@ END(set_timer)<span aria-hidden="true" class="line-numbers-rows"><span></span><s
 	nop*/
 	j	ret_from_exception		#跳转到ret_from_exception函数
 	nop
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### Thinking 3.10<br>
-<strong>Q：</strong>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="thinking-3.10">Thinking 3.10</h3>
+<p><strong>Q：</strong>
 <strong>阅读相关代码，思考操作系统是怎么根据时钟周期切换进程的。</strong><br>
 <strong>A：</strong>
 <code>env_sched_list</code>有两个链表存放就绪进程。当进程被创建时，我们将其插入第一个进程调度链表的头部。调用
 <code>sched_yield</code> 函数时,
 先判断当前时间片是否用完。如果用完，则将其插入另一个链表的结尾，之后判断当前就绪状态进程链表是否为空。如果为空,
-将指针切换到另一个就绪状态进程链表。最后从指针指向的链表的头部获取一个就绪进程进行切换。<p></p>
+将指针切换到另一个就绪状态进程链表。最后从指针指向的链表的头部获取一个就绪进程进行切换。</p>
 <h2 id="实验难点图示">实验难点图示</h2>
 <p>我认为该实验的难点在于理解<strong>进程的创建流程</strong>、<strong>时钟中断的处理流程</strong>和<strong>进程的切换流程</strong>。</p>
 <h3 id="进程创建流程">进程创建流程</h3>
@@ -955,7 +958,7 @@ doc），然后再按照一定的逻辑顺序阅读代码，这样就可以达�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -966,7 +969,7 @@ doc），然后再按照一定的逻辑顺序阅读代码，这样就可以达�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

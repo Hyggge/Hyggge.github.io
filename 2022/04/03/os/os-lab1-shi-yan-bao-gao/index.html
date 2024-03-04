@@ -439,14 +439,14 @@ objdump命令的常用参数有以下几个</p>
 </tbody>
 </table>
 <p>因此，指导书上的<code>objdump -DS [executable file]</code>这一命令中<code>-DS</code>表示将所有的<code>section</code>反汇编，并<strong>将反汇编代码和原码交替显示</strong>。<br>
-我们使用MIPS交叉编译器重复指导书上的编译过程——<br>
-- 我们先新建一个C文件<code>main.c</code><br>
-<img src="1.1_code.png"><br>
--
-然后使用交叉编译器<code>mips_4KC-gcc</code>将该文件编译成<code>main.o</code>文件,然后用<code>mips_4KC-objdump</code>将其反汇编。<br>
-<img src="1.1_order.png"><br>
-- 反汇编结果如下所示（截取部分）<br>
-</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">main.o:     <span class="token function">file</span> <span class="token function">format</span> elf32-tradbigmips
+我们使用MIPS交叉编译器重复指导书上的编译过程——</p>
+<ul>
+<li>我们先新建一个C文件<code>main.c</code><br>
+<img src="1.1_code.png"></li>
+<li>然后使用交叉编译器<code>mips_4KC-gcc</code>将该文件编译成<code>main.o</code>文件,然后用<code>mips_4KC-objdump</code>将其反汇编。<br>
+<img src="1.1_order.png"></li>
+<li>反汇编结果如下所示（截取部分）<br>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">main.o:     <span class="token function">file</span> <span class="token function">format</span> elf32-tradbigmips
 
 Disassembly of section .text:
 
@@ -468,7 +468,8 @@ c:   <span class="token number">24020001</span>        li      v0,1
 <span class="token number">38</span>:   27bd0020        addiu   sp,sp,32
 3c:   03e00008        jr      ra
 <span class="token number">40</span>:   00000000        nop
-        <span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+        <span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 <h3 id="thinking-1.2">Thinking 1.2</h3>
 <p><strong>Q：</strong> 也许你会发现我们的 <code>readelf</code>
 程序是不能解析之前生成的内核文件 (内核文件是可执行文件)
@@ -507,21 +508,22 @@ c:   <span class="token number">24020001</span>        li      v0,1
 <p><strong>Q：</strong> 查阅《See MIPS Run Linux》一书相关章节，解释
 boot/start.S 中下面几行对 CP0
 协处理器寄存器进行读写的意义。具体而言，它们分别读/写了哪些寄存器的哪些特定位，从而达到什么目的？<br>
-<img src="1.6.png"><br>
-<strong>A：</strong><br>
--
-<code>mtc0 zero, CP0_STATUS</code>主要是用来将CPO的<code>12</code>号寄存器（即<code>SR</code>寄存器）设置为0，此时全局中断能位<code>IE</code>的值也是<code>0</code>,全局中断使能失效，CPU不对中断进行响应.<br>
-<img src="SR.png"><br>
--
-下面4行代码主要是对CP0的<code>16</code>号寄存器（即<code>Config</code>寄存器）进行操作。使用<code>and</code>和<code>ori</code>指令将该寄存器的<code>K0</code>域（0-2位）域设置为<code>0b010</code>，目的是禁止固定的<code>kseg0</code>经过高速缓存。<br>
-<img src="Config.png"></p>
+<img src="1.6.png"></p>
+<p><strong>A：</strong></p>
+<ul>
+<li><code>mtc0 zero, CP0_STATUS</code>主要是用来将CPO的<code>12</code>号寄存器（即<code>SR</code>寄存器）设置为0，此时全局中断能位<code>IE</code>的值也是<code>0</code>,全局中断使能失效，CPU不对中断进行响应.<br>
+<img src="SR.png"></li>
+<li>下面4行代码主要是对CP0的<code>16</code>号寄存器（即<code>Config</code>寄存器）进行操作。使用<code>and</code>和<code>ori</code>指令将该寄存器的<code>K0</code>域（0-2位）域设置为<code>0b010</code>，目的是禁止固定的<code>kseg0</code>经过高速缓存。<br>
+<img src="Config.png"></li>
+</ul>
 <h2 id="实验难点图示">实验难点图示</h2>
-<p>我认为该实验的难点主要包含以下两个难点——<br>
--
-如何使用指针来获取ELF文件中各个<code>section</code>和<code>segment</code>中的数据<br>
-- printf实现逻辑的梳理<br>
-### ELF的解析<br>
-在这一部分中，我们需要熟悉ELF文件的基本结构，尤其是下面这个图——<br>
+<p>我认为该实验的难点主要包含以下两个难点——</p>
+<ul>
+<li>如何使用指针来获取ELF文件中各个<code>section</code>和<code>segment</code>中的数据</li>
+<li>printf实现逻辑的梳理</li>
+</ul>
+<h3 id="elf的解析">ELF的解析</h3>
+<p>在这一部分中，我们需要熟悉ELF文件的基本结构，尤其是下面这个图——<br>
 <img src="elf.png"></p>
 <p>此外，我们需要学会通过<code>ELF</code>手册来获知各个结构体的内部数据，最后通过指针来将数据获取。无论是解析<code>section</code>还是解析<code>segment</code>，我们都需要从文件头中获得<code>section header table</code>或者<code>segment header table</code>的位置。<br>
 以<code>segment</code>为例，我们需要先从
@@ -938,7 +940,7 @@ shdr <span class="token operator">=</span>  <span class="token punctuation">(</s
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -949,7 +951,7 @@ shdr <span class="token operator">=</span>  <span class="token punctuation">(</s
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

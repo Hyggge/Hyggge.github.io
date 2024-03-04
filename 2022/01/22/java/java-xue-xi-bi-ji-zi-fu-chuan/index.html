@@ -6,16 +6,18 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」字符串, Hyggge&#39;s Blog">
     <meta name="description" content="Java中和字符串相关类有以下3种——
-- String类
-- StringBuild类
-- StringBuffer类
+
+String类
+StringBuild类
+StringBuffer类
+
 String类
 对象创建
 
 例程
 String s_1 = &#34;Hyggge&#34;;
 String s_2 = s_1;
-S">
+Strin">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -391,10 +393,12 @@ S">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Java中和字符串相关类有以下3种——<br>
-- <strong>String类</strong><br>
-- <strong>StringBuild类</strong><br>
-- <strong>StringBuffer类</strong></p>
+                <p>Java中和字符串相关类有以下3种——</p>
+<ul>
+<li><strong>String类</strong></li>
+<li><strong>StringBuild类</strong></li>
+<li><strong>StringBuffer类</strong></li>
+</ul>
 <h2 id="string类">String类</h2>
 <h3 id="对象创建">对象创建</h3>
 <ul>
@@ -413,16 +417,20 @@ S">
 string s_1 <span class="token operator">=</span> <span class="token string">"Hyggge"</span><span class="token punctuation">;</span>
 string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_1<span class="token punctuation">;</span>
 string s_2 <span class="token operator">=</span> <span class="token string">"Czh"</span><span class="token punctuation">;</span>
-string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### 字符串连接</li>
+string <span class="token operator">&amp;</span>a <span class="token operator">=</span> s_2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h3 id="字符串连接">字符串连接</h3>
+<ul>
 <li>第一种方法——使用<code>concat()</code>函数<br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span><span class="token punctuation">;</span>
 <span class="token class-name">String</span> b <span class="token operator">=</span> a<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">"Czh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">String</span> c <span class="token operator">=</span> <span class="token string">"Hyggge is "</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">"Czh"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 <li>第二种方法——使用<code>+</code><br>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span> <span class="token operator">+</span> <span class="token string">"Czh "</span> <span class="token operator">+</span> <span class="token string">"!!!"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
-### 创建格式化字符串</li>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"Hyggge is "</span> <span class="token operator">+</span> <span class="token string">"Czh "</span> <span class="token operator">+</span> <span class="token string">"!!!"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h3 id="创建格式化字符串">创建格式化字符串</h3>
+<ul>
 <li>格式化输出和已通过printf和format实现。其中，format是String类中的静态方法。<br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">int</span> age <span class="token operator">=</span> <span class="token number">19</span><span class="token punctuation">;</span>
 <span class="token comment">//method one</span>
@@ -452,12 +460,14 @@ s <span class="token operator">=</span> <span class="token class-name">String</s
 类</h2>
 <p>和 <code>String</code> 类不同的是，<code>StringBuffer</code> 和
 <code>StringBuilder</code>
-类的对象能够被多次的修改，并且不产生新的未使用对象。他们的区别是——<br>
-- <code>StringBuffer</code> 线程安全 <code>StringBuilder</code>
-线程不安全<br>
-- <code>StringBuilder</code> 相较于 <code>StringBuffer</code>
+类的对象能够被多次的修改，并且不产生新的未使用对象。他们的区别是——</p>
+<ul>
+<li><code>StringBuffer</code> 线程安全 <code>StringBuilder</code>
+线程不安全</li>
+<li><code>StringBuilder</code> 相较于 <code>StringBuffer</code>
 有速度优势（绝大多数情况下使用<code>StringBuilder</code>）<br>
-类</p>
+类</li>
+</ul>
 <h3 id="对象创建以stringbuilder类为例">对象创建（以StringBuilder类为例）</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">StringBuilder</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
 <span class="token class-name">StringBuilder</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//可以显式的规定大小</span>
@@ -850,7 +860,7 @@ str 参数的字符串插入此序列中</li>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -861,7 +871,7 @@ str 参数的字符串插入此序列中</li>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

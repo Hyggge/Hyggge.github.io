@@ -9,7 +9,7 @@
 《Thinking in
 Java》一书在《接口》一节中讲到——“接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法”。我认为接口其实是
 一组抽象方法的集合，是一种极度抽象的类，但是他和类又有许多不同点。
-### 接口">
+接口与类的相">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -388,11 +388,13 @@ Java》一书在《接口》一节中讲到——“接口和内部类为我们�
                 <h2 id="接口和类">接口和类</h2>
 <p>《Thinking in
 Java》一书在《接口》一节中讲到——“<strong>接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法</strong>”。我认为接口其实是
-<strong>一组抽象方法的集合</strong>，是一种<strong>极度抽象的类</strong>，但是他和类又有许多不同点。<br>
-### 接口与类的相似点<br>
-- 接口中可以有多个方法（也仅限于方法）<br>
-- 接口文件保存在 .java
-结尾的文件中，文件名使用接口名，遵循类的命名方法。</p>
+<strong>一组抽象方法的集合</strong>，是一种<strong>极度抽象的类</strong>，但是他和类又有许多不同点。</p>
+<h3 id="接口与类的相似点">接口与类的相似点</h3>
+<ul>
+<li>接口中可以有多个方法（也仅限于方法）</li>
+<li>接口文件保存在 .java
+结尾的文件中，文件名使用接口名，遵循类的命名方法。</li>
+</ul>
 <h3 id="接口与类的不同点">接口与类的不同点</h3>
 <ul>
 <li>接口<strong>不能用于实例化对象</strong>，因此没有且<strong>无法定义构造方法</strong>。但接口中的方法可以被对象实现（类似于继承，但不是继承）。</li>
@@ -418,12 +420,12 @@ Java》一书在《接口》一节中讲到——“<strong>接口和内部类�
     <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">eat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//不需要写{}，可省略abstract</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
--
-<strong>接口</strong>是<strong>隐式抽象</strong>的，当声明一个接口的时候，不必使用<code>abstract</code>关键字。<br>
--
-<strong>接口中每一个方法</strong>也是<strong>隐式抽象</strong>的，声明时同样不需要<code>abstract</code>关键字。<br>
-- 接口中的方法都是<code>public</code><strong>公有的</strong>。<p></p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li><strong>接口</strong>是<strong>隐式抽象</strong>的，当声明一个接口的时候，不必使用<code>abstract</code>关键字。</li>
+<li><strong>接口中每一个方法</strong>也是<strong>隐式抽象</strong>的，声明时同样不需要<code>abstract</code>关键字。</li>
+<li>接口中的方法都是<code>public</code><strong>公有的</strong>。</li>
+</ul>
 <h2 id="接口的实现">接口的实现</h2>
 <p>当一个类实现接口时，需要用<code>implements</code> 关键字。<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token keyword">implements</span> 接口名称<span class="token punctuation">[</span><span class="token punctuation">,</span> 其他接口名称<span class="token punctuation">,</span> 其他接口名称<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -446,14 +448,13 @@ Java》一书在《接口》一节中讲到——“<strong>接口和内部类�
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"fight"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<p>需要注意以下规则——<br>
-- 一个类只能继承一个类，但是能实现多个接口。<br>
--
-当类实现接口的时候，类要实现接口中所有的方法。否则，类必须声明为抽象的类（使用<code>abstract</code>）。<br>
--
-类在重写方法时要<strong>保持一致的方法名</strong>，并且应该保持相同或者相兼容的<strong>返回值类型</strong>。<br>
--
-类在实现接口的方法时，不能抛出强制性异常，只能在接口中，或者继承接口的抽象类中抛出该强制性异常。（暂时还不理解...）</p>
+<p>需要注意以下规则——</p>
+<ul>
+<li>一个类只能继承一个类，但是能实现多个接口。</li>
+<li>当类实现接口的时候，类要实现接口中所有的方法。否则，类必须声明为抽象的类（使用<code>abstract</code>）。</li>
+<li>类在重写方法时要<strong>保持一致的方法名</strong>，并且应该保持相同或者相兼容的<strong>返回值类型</strong>。</li>
+<li>类在实现接口的方法时，不能抛出强制性异常，只能在接口中，或者继承接口的抽象类中抛出该强制性异常。（暂时还不理解...）</li>
+</ul>
 <h2 id="接口的继承">接口的继承</h2>
 <p>一个接口能继承另一个接口，和类之间的继承方式比较相似，使用<code>extends</code>关键字。继承和被继承的两个接口是可以定义相同的抽象方法的（不会报错...）。<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token punctuation">[</span>可见度<span class="token punctuation">]</span> <span class="token keyword">interface</span> 接口名称 <span class="token keyword">extends</span> 其他的接口名 <span class="token punctuation">{</span>
@@ -483,13 +484,14 @@ Java》一书在《接口》一节中讲到——“<strong>接口和内部类�
 <h2 id="标记接口">标记接口</h2>
 <p>我们把<strong>不包含任何方法和变量的接口</strong>定义为<strong>标记接口</strong>。标记接口作用是是给某个对象打个标（盖个戳），<strong>使对象拥有某个或某些特权</strong>。<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Flag</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
-标记接口用于以下两个目的——<br>
-- <strong>建立一个公共的父接口</strong>：正如
+标记接口用于以下两个目的——<p></p>
+<ul>
+<li><strong>建立一个公共的父接口</strong>：正如
 <code>java.util.EventListener</code>
 接口，这是由几十个其他接口扩展的Java
-API，你可以使用一个标记接口来建立一组接口的父接口。例如：当一个接口继承了<code>EventListener</code>接口，Java虚拟机(JVM)就知道该接口将要被用于一个事件的代理方案。<br>
--
-<strong>向一个类添加数据类型</strong>：这种情况是标记接口最初的目的，实现标记接口的类不需要定义任何接口方法(因为标记接口根本就没有方法)，但是该类通过多态性变成一个接口类型。<p></p>
+API，你可以使用一个标记接口来建立一组接口的父接口。例如：当一个接口继承了<code>EventListener</code>接口，Java虚拟机(JVM)就知道该接口将要被用于一个事件的代理方案。</li>
+<li><strong>向一个类添加数据类型</strong>：这种情况是标记接口最初的目的，实现标记接口的类不需要定义任何接口方法(因为标记接口根本就没有方法)，但是该类通过多态性变成一个接口类型。</li>
+</ul>
 <aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -863,7 +865,7 @@ API，你可以使用一个标记接口来建立一组接口的父接口。例�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -874,7 +876,7 @@ API，你可以使用一个标记接口来建立一组接口的父接口。例�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

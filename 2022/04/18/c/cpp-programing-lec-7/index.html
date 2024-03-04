@@ -439,18 +439,19 @@ V”，这在栈的类型较少时是比较适用的，顶多就是代码多了�
 <h2 id="stl">STL</h2>
 <p>像上面<code>Stack</code>这种数据结构（或者称为容器），我们在编程时会大量使用。但是，如果每次使用都定义一次<code>Stack</code>，显然是非常费力的，而且这种重复造轮子的工作也没有什么意义。</p>
 <p>这让我们不禁会想——如果C++能够为我们提供一个写好<code>Stack</code>模板就好了</p>
-<p>幸运的是，C++摸透了我们的小心思，提供了STL（标准模板库）供我们使用。STL中有大量的动态增长的万能容器，像<code>list</code>、<code>vector</code>、<code>queue</code>、<code>stack</code>等等，同时还为我们提供了容器操作（增删改查）的相关操作。<br>
-### list&amp;vector<br>
-我们先简单介绍一下两个常用的容器——<code>list</code>和<code>vector</code>，这两种容器都是线性存储容器，其定义和操作也很相似<br>
+<p>幸运的是，C++摸透了我们的小心思，提供了STL（标准模板库）供我们使用。STL中有大量的动态增长的万能容器，像<code>list</code>、<code>vector</code>、<code>queue</code>、<code>stack</code>等等，同时还为我们提供了容器操作（增删改查）的相关操作。</p>
+<h3 id="listvector">list&amp;vector</h3>
+<p>我们先简单介绍一下两个常用的容器——<code>list</code>和<code>vector</code>，这两种容器都是线性存储容器，其定义和操作也很相似<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> a<span class="token punctuation">;</span>
 a<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//insert element</span>
 
 vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> b<span class="token punctuation">;</span>
 b<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//insert element</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-我们需要关注的是这两者的底层实现原理——<br>
--
-<code>vector</code>类似于我们在c语言中使用的数组，强于随机访问，弱于增删改<br>
-- <code>list</code>类似于我们学过的链表，强于增删改，弱于随机访问<p></p>
+我们需要关注的是这两者的底层实现原理——<p></p>
+<ul>
+<li><code>vector</code>类似于我们在c语言中使用的数组，强于随机访问，弱于增删改</li>
+<li><code>list</code>类似于我们学过的链表，强于增删改，弱于随机访问</li>
+</ul>
 <p>问题来了，前面提到STL中的容器大多都是可以动态增长的，那么<code>vector</code>和<code>list</code>是如何实现动态增长的呢？</p>
 <ul>
 <li><p><code>list</code>比较好理解，毕竟是链表嘛，当需要插入一个新的数据时，直接申请一个新的空间来容纳新的链表项就行。</p></li>
@@ -882,7 +883,7 @@ b<span class="token punctuation">.</span><span class="token function">push_back<
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -893,7 +894,7 @@ b<span class="token punctuation">.</span><span class="token function">push_back<
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

@@ -538,21 +538,21 @@
 </ul>
 <h2 id="this-关键字">this 关键字</h2>
 <p><code>this</code>
-关键字表示当前<strong>对象</strong>(实例)，可用于：<br>
--
-调用当前类的<strong>构造方法</strong>（调用类方法不能用<code>this</code>）<br>
-- 限定当前对象的<strong>数据域变量</strong><br>
+关键字表示当前<strong>对象</strong>(实例)，可用于：</p>
+<ul>
+<li>调用当前类的<strong>构造方法</strong>（调用类方法不能用<code>this</code>）</li>
+<li>限定当前对象的<strong>数据域变量</strong><br>
 ### 调用当前类的<strong>构造方法</strong><br>
-通过<code>this</code>调用当前类的<strong>构造方法</strong>时必须是<strong>方法的第一条语句</strong>。（和调用父类使用的<code>super</code>用法相似）<br>
-- <code>this();</code> 调用默认构造方法。<br>
-- <code>this(参数);</code> 调用带参构造方法。<br>
-- 使用规则：（参考该<a target="_blank" rel="noopener" href="https://blog.csdn.net/Return_head/article/details/80744056">博客</a>）<br>
--
-假如在一个构造方法中使用了<code>this</code>语句，那么它必须作为构造方法的<strong>第一条语句</strong>。</p>
-<pre><code>- 只能在一个**构造方法**中使用`this`语句来调用类的其他构造方法，而**不能在实例方法**中用`this`语句来调用类的其他构造方法。
-
-- 只能用`this`语句来调用其他构造方法，而不能**通过方法名**来直接调用构造方法。
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> animal<span class="token punctuation">{</span>
+通过<code>this</code>调用当前类的<strong>构造方法</strong>时必须是<strong>方法的第一条语句</strong>。（和调用父类使用的<code>super</code>用法相似）
+<ul>
+<li><code>this();</code> 调用默认构造方法。</li>
+<li><code>this(参数);</code> 调用带参构造方法。</li>
+<li>使用规则：（参考该<a target="_blank" rel="noopener" href="https://blog.csdn.net/Return_head/article/details/80744056">博客</a>）
+<ul>
+<li><p>假如在一个构造方法中使用了<code>this</code>语句，那么它必须作为构造方法的<strong>第一条语句</strong>。</p></li>
+<li><p>只能在一个<strong>构造方法</strong>中使用<code>this</code>语句来调用类的其他构造方法，而<strong>不能在实例方法</strong>中用<code>this</code>语句来调用类的其他构造方法。</p></li>
+<li><p>只能用<code>this</code>语句来调用其他构造方法，而不能<strong>通过方法名</strong>来直接调用构造方法。<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> animal<span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
 
     <span class="token keyword">public</span> <span class="token function">animal</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -567,7 +567,10 @@
         animal cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+</ul></li>
+</ul></li>
+</ul>
 <h3 id="限定当前对象的数据域变量">限定当前对象的<strong>数据域变量</strong></h3>
 <ul>
 <li>一般用于方法内的局部变量与对象的数据域变量同名的情况，将成员变量和局部变量进行区分（和C++相似）<br>
@@ -578,14 +581,16 @@
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <h2 id="多态的初步介绍">多态的初步介绍</h2>
-<p>多态是同一个行为具有多个不同表现形式或形态的能力；是同一个接口，使用不同的实例而执行不同操作。多态的好处是——可以使程序有良好的扩展，并可以对所有类的对象进行通用处理。<br>
-- <strong>多态的必要条件</strong><br>
-- <strong>继承</strong><br>
-- <strong>重写</strong><br>
--
-<strong>父类引用指向子类对象：<code>Parent p = new Child()</code>;</strong><br>
--
-<strong>多态调用方法的流程</strong>：当使用多态方式调用方法时，<strong>首先检查父类中是否有该方法</strong>，如果没有，则编译错误；如果有，再去调用子类的同名方法。</p>
+<p>多态是同一个行为具有多个不同表现形式或形态的能力；是同一个接口，使用不同的实例而执行不同操作。多态的好处是——可以使程序有良好的扩展，并可以对所有类的对象进行通用处理。</p>
+<ul>
+<li><strong>多态的必要条件</strong>
+<ul>
+<li><strong>继承</strong></li>
+<li><strong>重写</strong></li>
+<li><strong>父类引用指向子类对象：<code>Parent p = new Child()</code>;</strong></li>
+</ul></li>
+<li><strong>多态调用方法的流程</strong>：当使用多态方式调用方法时，<strong>首先检查父类中是否有该方法</strong>，如果没有，则编译错误；如果有，再去调用子类的同名方法。</li>
+</ul>
 <p>下面我们重点理解一下第三个必要条件——
 <strong>父类引用指向子类对象</strong>。例如以下程序——<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
@@ -993,7 +998,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1004,7 +1009,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

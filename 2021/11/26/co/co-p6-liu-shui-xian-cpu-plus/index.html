@@ -515,25 +515,88 @@ bench）。相关接口如下（在顶层模块mips中定义）</p>
 <h4 id="ifu取指令单元">IFU（取指令单元）</h4>
 <p>该模块相当于程序计数器，在时钟上升沿时将npc写入pc，并具有同步复位的功能。同时，为了配合jal，jalr的链接操作，我们同时输出pc+8的值，在后面的流水寄存器中传递。</p>
 <ul>
-<li><p><strong>端口定义</strong><br>
-| 信号名 | 方向 | 位宽 | 描述 |<br>
-| :----: | :--: | :--: | :--------------------------- |<br>
-| clk | I | 1 | 时钟信号 |<br>
-| reset | I | 1 | 异步复位信号 |<br>
-| en | I | 1 | 使能信号 |<br>
-| npc | I | 32 | 下一条要被执行的指令的地址 |<br>
-| pc | O | 32 | 输出当前正在执行的指令的地址 |<br>
-| pc8 | O | 32 | pc+8 |</p></li>
-<li><p><strong>功能定义</strong><br>
-| 序号 | 功能名称 | 功能描述 |<br>
-| ---- | ---------- |
------------------------------------------------------------- |<br>
-| 1 | 复位 | 当reset信号有效时，将PC寄存器中的值置为0x00003000 |<br>
-| 2 | 停止 | 当en信号失效时，PC寄存器忽略时钟输入，PC当前值保持不变
-|<br>
-| 3 | 写PC寄存器 |
-当en信号失效且时钟上升沿来临时，将下一条指令的地址（next
-PC）写入PC寄存器 |</p></li>
+<li><p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">信号名</th>
+<th style="text-align: center;">方向</th>
+<th style="text-align: center;">位宽</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">clk</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">时钟信号</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">reset</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">异步复位信号</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">en</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">使能信号</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">npc</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">下一条要被执行的指令的地址</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">pc</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">输出当前正在执行的指令的地址</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">pc8</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">pc+8</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>功能定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 81%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>复位</td>
+<td>当reset信号有效时，将PC寄存器中的值置为0x00003000</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>停止</td>
+<td>当en信号失效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>写PC寄存器</td>
+<td>当en信号失效且时钟上升沿来临时，将下一条指令的地址（next
+PC）写入PC寄存器</td>
+</tr>
+</tbody>
+</table></li>
 </ul>
 <h4 id="grf通用寄存器组">GRF（通用寄存器组）</h4>
 <p>该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~
@@ -2695,85 +2758,81 @@ CPU 中，W 级的指令Tnew 恒为 0；对于同一条指令，Tnew@M = max(Tne
 <li><p><strong>当E级延迟槽在进行运算（<code>start | busy</code>）时，D级为md、mt、mf指令</strong></p></li>
 </ul>
 <p>代码如下——</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"> <span class="token keyword">assign</span>   stall_rs_E <span class="token operator">=</span> <span class="token punctuation">(</span>D_A1 <span class="token operator">!=</span> <span class="token number">5'd0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>D_A1 <span class="token operator">==</span> E_A3<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>RFWrite_E<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>Tuse_rs <span class="token operator">&lt;</span> Tnew_E<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+<span class="token keyword">assign</span>   stall_rs_M <span class="token operator">=</span> <span class="token punctuation">(</span>D_A1 <span class="token operator">!=</span> <span class="token number">5'd0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>D_A1 <span class="token operator">==</span> M_A3<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>RFWrite_M<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>Tuse_rs <span class="token operator">&lt;</span> Tnew_M<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">assign</span>   stall_rt_E <span class="token operator">=</span> <span class="token punctuation">(</span>D_A2 <span class="token operator">!=</span> <span class="token number">5'd0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>D_A2 <span class="token operator">==</span> E_A3<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>RFWrite_E<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>Tuse_rt <span class="token operator">&lt;</span> Tnew_E<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">assign</span>   stall_rt_M <span class="token operator">=</span> <span class="token punctuation">(</span>D_A2 <span class="token operator">!=</span> <span class="token number">5'd0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>D_A2 <span class="token operator">==</span> M_A3<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>RFWrite_M<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>Tuse_rt <span class="token operator">&lt;</span> Tnew_M<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">assign</span>   stall_rs   <span class="token operator">=</span> stall_rs_E <span class="token operator">|</span> stall_rs_M<span class="token punctuation">;</span>
+
+<span class="token keyword">assign</span>   stall_rt   <span class="token operator">=</span> stall_rt_E <span class="token operator">|</span> stall_rt_M<span class="token punctuation">;</span> 
+
+<span class="token keyword">assign</span>   stall_md   <span class="token operator">=</span> <span class="token punctuation">(</span>MDUOp_D <span class="token operator">!=</span> <span class="token constant">`MDU_NONE</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token punctuation">(</span>E_start <span class="token operator">|</span> E_busy<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">assign</span>   stall      <span class="token operator">=</span> stall_rs <span class="token operator">|</span> stall_rt <span class="token operator">|</span> stall_md<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>stall为1时执行以下操作——</p>
 <ul>
-<li><p>```verilog<br>
-assign stall_rs_E = (D_A1 != 5'd0) &amp; (D_A1 == E_A3) &amp;
-(RFWrite_E) &amp; (Tuse_rs &lt; Tnew_E);</p>
-<p>assign stall_rs_M = (D_A1 != 5'd0) &amp; (D_A1 == M_A3) &amp;
-(RFWrite_M) &amp; (Tuse_rs &lt; Tnew_M);</p>
-<p>assign stall_rt_E = (D_A2 != 5'd0) &amp; (D_A2 == E_A3) &amp;
-(RFWrite_E) &amp; (Tuse_rt &lt; Tnew_E);</p>
-<p>assign stall_rt_M = (D_A2 != 5'd0) &amp; (D_A2 == M_A3) &amp;
-(RFWrite_M) &amp; (Tuse_rt &lt; Tnew_M);</p>
-<p>assign stall_rs = stall_rs_E | stall_rs_M;</p>
-<p>assign stall_rt = stall_rt_E | stall_rt_M;</p>
-<p>assign stall_md = (MDUOp_D != `MDU_NONE) &amp; (E_start |
-E_busy);</p>
-<p>assign stall = stall_rs | stall_rt | stall_md;<br>
-</p><pre class="line-numbers language-none"><code class="language-none">
-stall为1时执行以下操作——
+<li><strong>冻结PC寄存器（IFU_en = ~stall = 0）</strong></li>
+<li><strong>冻结D级寄存器（D_en = ~stall = 0）</strong></li>
+<li><strong>清空E级寄存器（E_clr = stall = 1）</strong></li>
+</ul>
+<h2 id="测试方案">测试方案</h2>
+<h3 id="典型测试样例">典型测试样例</h3>
+<h4 id="计算访存指令测试">计算、访存指令测试</h4>
+<p>我们先通过对除了分支、跳转之外的计算访存指令进行测试。该部分测试由python代码自动生成，生成思路是，连续枚举4条连续指令，将calc_R(包含shift_v),
+calc_I, LS, shift, md, mt,
+mf七种类型的指令进行排列组合（每一个类型随机取出一条指令），共有2401种排列。为了增加冲突概率，我们将被读写的寄存器范围调整到有限的5个，当测试样例足够多时，基本可以覆盖所有的冲突情况。</p>
+<ul>
+<li><p>生成代码</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">list_R <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"addu"</span><span class="token punctuation">,</span> <span class="token string">"subu"</span><span class="token punctuation">,</span> <span class="token string">"and"</span><span class="token punctuation">,</span> <span class="token string">"or"</span><span class="token punctuation">,</span> <span class="token string">"nor"</span><span class="token punctuation">,</span> <span class="token string">"xor"</span><span class="token punctuation">,</span> <span class="token string">"sltu"</span><span class="token punctuation">,</span> <span class="token string">"slt"</span><span class="token punctuation">,</span> <span class="token string">"sllv"</span><span class="token punctuation">,</span> <span class="token string">"srlv"</span><span class="token punctuation">,</span> <span class="token string">"srav"</span><span class="token punctuation">]</span>
+list_I <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"andi"</span><span class="token punctuation">,</span> <span class="token string">"addiu"</span><span class="token punctuation">,</span> <span class="token string">"ori"</span><span class="token punctuation">,</span> <span class="token string">"xori"</span><span class="token punctuation">,</span> <span class="token string">"lui"</span><span class="token punctuation">,</span> <span class="token string">"slti"</span><span class="token punctuation">,</span> <span class="token string">"sltiu"</span><span class="token punctuation">]</span>
+list_LS <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"lw"</span><span class="token punctuation">,</span> <span class="token string">"sw"</span><span class="token punctuation">,</span> <span class="token string">"lh"</span><span class="token punctuation">,</span> <span class="token string">"lhu"</span><span class="token punctuation">,</span> <span class="token string">"sh"</span><span class="token punctuation">,</span> <span class="token string">"lb"</span><span class="token punctuation">,</span> <span class="token string">"lbu"</span><span class="token punctuation">,</span> <span class="token string">"sb"</span><span class="token punctuation">]</span>
+list_shift <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"sll"</span><span class="token punctuation">,</span> <span class="token string">"srl"</span><span class="token punctuation">,</span> <span class="token string">"sra"</span><span class="token punctuation">]</span>
+list_B <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"bne"</span><span class="token punctuation">,</span> <span class="token string">"beq"</span><span class="token punctuation">,</span><span class="token string">"bgtz"</span><span class="token punctuation">,</span> <span class="token string">"blez"</span><span class="token punctuation">,</span> <span class="token string">"bltz"</span><span class="token punctuation">,</span> <span class="token string">"bgez"</span><span class="token punctuation">]</span>
+list_MD <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"mult"</span><span class="token punctuation">,</span> <span class="token string">"multu"</span><span class="token punctuation">,</span> <span class="token string">"div"</span><span class="token punctuation">,</span> <span class="token string">"divu"</span><span class="token punctuation">]</span>
+list_MT <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"mthi"</span><span class="token punctuation">,</span> <span class="token string">"mtlo"</span><span class="token punctuation">]</span>
+list_MF <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"mfhi"</span><span class="token punctuation">,</span> <span class="token string">"mflo"</span><span class="token punctuation">]</span>
 
-- **冻结PC寄存器（IFU_en = ~stall = 0）**
-- **冻结D级寄存器（D_en = ~stall = 0）**
-- **清空E级寄存器（E_clr = stall = 1）**
+length <span class="token operator">=</span> <span class="token number">8</span>
 
-## 测试方案
+<span class="token keyword">def</span> <span class="token function">R_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">I_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">LS_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">shift_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">MD_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">MT_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+<span class="token keyword">def</span> <span class="token function">MF_test</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token comment">#………………………………</span>
+    
+instr <span class="token operator">=</span> <span class="token punctuation">[</span>R_test<span class="token punctuation">,</span> I_test<span class="token punctuation">,</span> LS_test<span class="token punctuation">,</span> shift_test<span class="token punctuation">,</span> MD_test<span class="token punctuation">,</span> MT_test<span class="token punctuation">,</span> MF_test<span class="token punctuation">]</span>
 
-### 典型测试样例
-
-#### 计算、访存指令测试
-
-我们先通过对除了分支、跳转之外的计算访存指令进行测试。该部分测试由python代码自动生成，生成思路是，连续枚举4条连续指令，将calc_R(包含shift_v), calc_I, LS, shift, md, mt, mf七种类型的指令进行排列组合（每一个类型随机取出一条指令），共有2401种排列。为了增加冲突概率，我们将被读写的寄存器范围调整到有限的5个，当测试样例足够多时，基本可以覆盖所有的冲突情况。
-
-- 生成代码
-
-  ```python
-  list_R = ["addu", "subu", "and", "or", "nor", "xor", "sltu", "slt", "sllv", "srlv", "srav"]
-  list_I = ["andi", "addiu", "ori", "xori", "lui", "slti", "sltiu"]
-  list_LS = ["lw", "sw", "lh", "lhu", "sh", "lb", "lbu", "sb"]
-  list_shift = ["sll", "srl", "sra"]
-  list_B = ["bne", "beq","bgtz", "blez", "bltz", "bgez"]
-  list_MD = ["mult", "multu", "div", "divu"]
-  list_MT = ["mthi", "mtlo"]
-  list_MF = ["mfhi", "mflo"]
-  
-  length = 8
-  
-  def R_test(file, n):
-     #………………………………
-  def I_test(file, n):
-     #………………………………
-  def LS_test(file, n):
-     #………………………………
-  def shift_test(file, n):
-     #………………………………
-  def MD_test(file, n):
-     #………………………………
-  def MT_test(file, n):
-     #………………………………
-  def MF_test(file, n):
-     #………………………………
-      
-  instr = [R_test, I_test, LS_test, shift_test, MD_test, MT_test, MF_test]
-  
-  for i in range(7):
-      f = open("mips_code_{}.asm".format(i), "w")
-      #寄存器随机赋值
-      for x in range(length):
-          temp = random.randint(-2147483648, 2147483648) 
-          s = "li ${} {}\n".format(x, temp)
-          f.write(s)
-      f.write("li $8, {}\n\n".format(random.randint(-2147483648, 2147483648) % 10000 + 1))
-      #排列生成指令
-      for j in range(7):
-          for k in range(7):
-              for m in range(7):
-                  instr[j](f, 1)
-                  instr[k](f, 1)
-                  instr[m](f, 1)
-                  instr[i](f, 1)
-                  f.write('\n')
-  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    f <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"mips_code_{}.asm"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>
+    <span class="token comment">#寄存器随机赋值</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">2147483648</span><span class="token punctuation">,</span> <span class="token number">2147483648</span><span class="token punctuation">)</span> 
+        s <span class="token operator">=</span> <span class="token string">"li ${} {}\n"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> temp<span class="token punctuation">)</span>
+        f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"li $8, {}\n\n"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">2147483648</span><span class="token punctuation">,</span> <span class="token number">2147483648</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">10000</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment">#排列生成指令</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> k <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> m <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                instr<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+                instr<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+                instr<span class="token punctuation">[</span>m<span class="token punctuation">]</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+                instr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+                f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>测试样例</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">li <span class="token kernel-function property">$0</span> <span class="token operator">-</span><span class="token number">1590414783</span>
 li <span class="token kernel-function property">$1</span> <span class="token operator">-</span><span class="token number">1387657999</span>
@@ -3948,7 +4007,7 @@ ALU？为何需要有独立的 HI、LO 寄存器？</strong></p>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -3959,7 +4018,7 @@ ALU？为何需要有独立的 HI、LO 寄存器？</strong></p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

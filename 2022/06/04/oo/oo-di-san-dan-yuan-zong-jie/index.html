@@ -391,16 +391,18 @@
 <p>我相信课程组开设这一单元的主要目的并不是要让我们学会使用JML这一语言（毕竟JML是真的冷门），而是想让我们在“面向规格编程”的过程中感受到“契约式编程”的魅力——<strong>高可靠性、高可复用性、便于测试...</strong></p>
 <h2 id="第一次作业分析">第一次作业分析</h2>
 <p><a href="面向对象第三单元第一次作业指导书.pdf">题目链接</a><br>
-第一次作业比较简单，只需要根据官方提供的Group、NetWork和Person这三个接口进行代码设计，实现简单社交关系的模拟和查询。<br>
-### UML类图<br>
-<img src="1.svg"></p>
+第一次作业比较简单，只需要根据官方提供的Group、NetWork和Person这三个接口进行代码设计，实现简单社交关系的模拟和查询。</p>
+<h3 id="uml类图">UML类图</h3>
+<p><img src="1.svg"></p>
 <h3 id="代码架构分析">代码架构分析</h3>
-<p>这次作业我把重心放在代码效率的优化上，重点关注以下几个问题——<br>
-- <strong>容器的选择</strong><br>
-- <strong>计算类函数的优化</strong><br>
-- <strong>并查集的优化</strong><br>
-#### 容器的选择<br>
-本次作业绝大多数指令都是通过<code>id</code>来寻找对应的<code>Group</code>或者<code>Person</code>。以<code>Person</code>为例，如果把所有的<code>Person</code>都放在一个<code>List</code>容器里，那么我们每次查找都需要遍历一遍容器，算法复杂度为<span class="math inline">\(O(n)\)</span>，很容易出现TLE。</p>
+<p>这次作业我把重心放在代码效率的优化上，重点关注以下几个问题——</p>
+<ul>
+<li><strong>容器的选择</strong></li>
+<li><strong>计算类函数的优化</strong></li>
+<li><strong>并查集的优化</strong></li>
+</ul>
+<h4 id="容器的选择">容器的选择</h4>
+<p>本次作业绝大多数指令都是通过<code>id</code>来寻找对应的<code>Group</code>或者<code>Person</code>。以<code>Person</code>为例，如果把所有的<code>Person</code>都放在一个<code>List</code>容器里，那么我们每次查找都需要遍历一遍容器，算法复杂度为<span class="math inline">\(O(n)\)</span>，很容易出现TLE。</p>
 <p>最终，我选择了<code>HashMap</code>作为存储<code>Group</code>和<code>Person</code>的容器，将<code>id</code>作为键值，这样可以保证每次查询都能以<span class="math inline">\(O(1)\)</span>的复杂度完成，大大降低超时的概率。</p>
 <h4 id="计算类函数的优化">计算类函数的优化</h4>
 <p>本次作业有三个计算类函数——<br>
@@ -452,13 +454,13 @@ ageMean^2}{n}\)</span>，同时，我们还需要设置一个<code>agePowSum</co
     <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">merge</span><span class="token punctuation">(</span><span class="token keyword">int</span> id1<span class="token punctuation">,</span> <span class="token keyword">int</span> id2<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-此外，为了进一步减小复杂度，我对并查集做了两种优化——<br>
-- <strong>路径压缩:</strong><p></p>
-<pre><code>当我们查找一个元素所在集合的代表元时，可以将查找路径上所有元素的直接上级设为代表元。
-![](路径压缩.png)
-
-我们可以直接在`find`函数里实现这个优化
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+此外，为了进一步减小复杂度，我对并查集做了两种优化——<p></p>
+<ul>
+<li><p><strong>路径压缩:</strong></p>
+<p>当我们查找一个元素所在集合的代表元时，可以将查找路径上所有元素的直接上级设为代表元。<br>
+<img src="路径压缩.png"></p>
+<p>我们可以直接在<code>find</code>函数里实现这个优化<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> rep <span class="token operator">=</span> id<span class="token punctuation">;</span> <span class="token comment">//representation element</span>
     <span class="token keyword">while</span> <span class="token punctuation">(</span>rep <span class="token operator">!=</span> pre<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>rep<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         rep <span class="token operator">=</span> pre<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>rep<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -471,9 +473,10 @@ ageMean^2}{n}\)</span>，同时，我们还需要设置一个<code>agePowSum</co
         now <span class="token operator">=</span> fa<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> rep<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-&gt; 注意：不能使用递归的方法来寻找代表元，否则很可能会爆栈。</code></pre>
-<ul>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<blockquote>
+<p>注意：不能使用递归的方法来寻找代表元，否则很可能会爆栈。</p>
+</blockquote></li>
 <li><p><strong>按秩合并:</strong></p>
 <p>由于我们在找出一个元素所在集合的代表元时需要递归地找出它所在的树的根结点，所以为了减短查找路径，在合并两棵树时要尽量使合并后的树的高度降低，所以要将高度低的树指向高度更高的那棵。我们将树的高度称为秩，合并时将
 <strong>“小秩”集合的代表元</strong>的直接上级设为
@@ -502,16 +505,17 @@ ageMean^2}{n}\)</span>，同时，我们还需要设置一个<code>agePowSum</co
 </ul>
 <h2 id="第二次作业分析">第二次作业分析</h2>
 <p><a href="面向对象第三单元第二次作业指导书.pdf">题目链接</a><br>
-第二次作业新增了message类，要求我们根据规格进一步实现消息增加、消息发送等功能。<br>
-### UML类图<br>
-<img src="2.svg"><br>
-### 代码架构分析<br>
-这次作业又增加了几个查询指令，可以直接用第一次作业的方法来减小复杂度（选择map、设置变量维护等等）。除此之外，我们还需要特别关注<code>query_least_connection</code>这个指令。</p>
+第二次作业新增了message类，要求我们根据规格进一步实现消息增加、消息发送等功能。</p>
+<h3 id="uml类图-1">UML类图</h3>
+<p><img src="2.svg"></p>
+<h3 id="代码架构分析-1">代码架构分析</h3>
+<p>这次作业又增加了几个查询指令，可以直接用第一次作业的方法来减小复杂度（选择map、设置变量维护等等）。除此之外，我们还需要特别关注<code>query_least_connection</code>这个指令。</p>
 <p>这个指令的JML描述实在是太冗长了，不过核心思想很简单，就是要求我们得到<strong>person_id所在联通分支的最小生成树</strong>，并算出最小生成树里所有边的权重和。一般来说，最小生成树的计算方法有两种——<strong>Kurskal算法和Prim算法</strong>，因为我在第一次作业已经封装好了并查集类<code>DisjointSet</code>，自然使用<strong>Kurskal算法</strong>会更方便一点。</p>
-<p>选择好了算法，我们还需要关注两个问题——<br>
--
-如何获得<code>person_id</code>所在的连通分支？（只需获得连通分支里所有点和边即可）<br>
-- 如何对算法进行优化？</p>
+<p>选择好了算法，我们还需要关注两个问题——</p>
+<ul>
+<li>如何获得<code>person_id</code>所在的连通分支？（只需获得连通分支里所有点和边即可）</li>
+<li>如何对算法进行优化？</li>
+</ul>
 <h4 id="联通分支的获取">联通分支的获取</h4>
 <p>在第一次作业中，我们已经实现了并查集，并且将<code>Network</code>里所有的点都加入到这个并查集里（我们姑且将这个并查集称为
 <strong>"全局并查集"</strong>，把Kruskal算法实现里的并查集称为
@@ -578,12 +582,12 @@ ageMean^2}{n}\)</span>，同时，我们还需要设置一个<code>agePowSum</co
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h2 id="第三次作业分析">第三次作业分析</h2>
 <p><a href="面向对象第三单元第三次作业指导书.pdf">题目链接</a><br>
-第三次作业将第二次作业中的<code>Message</code>进行了泛化，增加了继承自Message的许多新消息类型——<code>red_envelope_message</code>、<code>notice_message</code>和<code>emoji_message</code>。这些消息的增加和传递方式有所变化，只需要对照JML对代码稍作修改即可<br>
-### UML类图<br>
-<img src="3.svg"><br>
-### 代码架构分析<br>
-#### 迭代器删除<br>
-本次作业中的<code>delete_code_emoji</code>指令涉及到了对容器内容进行删除，如果直接在遍历时删除，很可能会出现意想不到RE错误。但是，使用迭代器对容器内容进行遍历和删除操作则不会出现问题。</p>
+第三次作业将第二次作业中的<code>Message</code>进行了泛化，增加了继承自Message的许多新消息类型——<code>red_envelope_message</code>、<code>notice_message</code>和<code>emoji_message</code>。这些消息的增加和传递方式有所变化，只需要对照JML对代码稍作修改即可</p>
+<h3 id="uml类图-2">UML类图</h3>
+<p><img src="3.svg"></p>
+<h3 id="代码架构分析-2">代码架构分析</h3>
+<h4 id="迭代器删除">迭代器删除</h4>
+<p>本次作业中的<code>delete_code_emoji</code>指令涉及到了对容器内容进行删除，如果直接在遍历时删除，很可能会出现意想不到RE错误。但是，使用迭代器对容器内容进行遍历和删除操作则不会出现问题。</p>
 <p>在前几次作业里，我只用迭代器删除过<code>List</code>和<code>Set</code>里的元素。然而在这次作业里，为了减少时间复杂度我使用了<code>Map</code>作为容器，<strong>Map中键值对的删除操作与List、Set稍有不同</strong>——</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">deleteColdEmoji</span><span class="token punctuation">(</span><span class="token keyword">int</span> limit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -689,8 +693,8 @@ group_map <span class="token operator">=</span> <span class="token punctuation">
 msg_info_map <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>       <span class="token comment"># 记录每个message的相关信息</span>
 emoji_heat_map <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>     <span class="token comment"># 记录所有emoji </span>
 
-max_heat <span class="token operator">=</span> <span class="token number">0</span>            <span class="token comment"># 记录emoji的最大热度</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### 面向JML生成数据<p></p>
+max_heat <span class="token operator">=</span> <span class="token number">0</span>            <span class="token comment"># 记录emoji的最大热度</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="面向jml生成数据">面向JML生成数据</h3>
 <p>JML规格中已经描述了每个方法可能出现的各种正常、异常情况，我们在生成每个方法对应的指令时，一定要为每种情况设置一定的出现概率，而这也需要数据结构来保证。</p>
 <p>举个非常简单的例子，<code>add_person</code>方法要求我们向<code>Network</code>里加入一个<code>Person</code>，JML规格如下所示——<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*@ public normal_behavior
@@ -742,17 +746,21 @@ max_heat <span class="token operator">=</span> <span class="token number">0</spa
 <p>为了更好的实现代码复用，我在数据生成器里设置了<code>get_double_person_id</code>和<code>get_person_group_id</code>两个函数来分别生成
 <strong>"两个person的id"</strong> 或者是
 <strong>"一个person和一个group的id"</strong>。</p>
-<p><code>get_double_person_id</code>中生成的两个personId的关系有以下四种<br>
-- person1和person2都不存在<br>
-- person1和person2只有一个存在<br>
-- person1和person2都存在，且两个person不邻接<br>
-- person1和person2都存在，且两个person邻接</p>
-<p><code>get_person_group_id</code>中生成的personId和groupId的关系有以下五种<br>
-- person不存在，group不存在<br>
-- person不存在，group存在<br>
-- person存在，group不存在<br>
-- person存在，group存在，person在group里面<br>
-- person存在，group存在，person不在在group里面</p>
+<p><code>get_double_person_id</code>中生成的两个personId的关系有以下四种</p>
+<ul>
+<li>person1和person2都不存在</li>
+<li>person1和person2只有一个存在</li>
+<li>person1和person2都存在，且两个person不邻接</li>
+<li>person1和person2都存在，且两个person邻接</li>
+</ul>
+<p><code>get_person_group_id</code>中生成的personId和groupId的关系有以下五种</p>
+<ul>
+<li>person不存在，group不存在</li>
+<li>person不存在，group存在</li>
+<li>person存在，group不存在</li>
+<li>person存在，group存在，person在group里面</li>
+<li>person存在，group存在，person不在在group里面</li>
+</ul>
 <p>我们可以通过查询数据结构来生成不同关系的id，但同样也需要设置概率来保证每一种关系的两个id都有可能被生成。</p>
 <h4 id="数据生成器整体架构">数据生成器整体架构</h4>
 <p>数据生成器的整体架构如下所示——<br>
@@ -830,27 +838,29 @@ if __name__ == '__main__':
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 上面展示的仅仅是一个框架，在真正实现时还有很多细节需要注意。<p></p>
 <h2 id="network扩展">Network扩展</h2>
-<p>假设出现了几种不同的Person<br>
-- <strong>Advertiser</strong>：持续向外发送产品广告<br>
-- <strong>Producer</strong>：产品生产商，通过Advertiser来销售产品<br>
--
-<strong>Customer</strong>：消费者，会关注广告并选择和自己偏好匹配的产品来购买
--- 所谓购买，就是直接通过Advertiser给相应Producer发一个购买消息<br>
-- <strong>Person</strong>：吃瓜群众，不发广告，不买东西，不卖东西</p>
+<p>假设出现了几种不同的Person</p>
+<ul>
+<li><strong>Advertiser</strong>：持续向外发送产品广告</li>
+<li><strong>Producer</strong>：产品生产商，通过Advertiser来销售产品</li>
+<li><strong>Customer</strong>：消费者，会关注广告并选择和自己偏好匹配的产品来购买
+-- 所谓购买，就是直接通过Advertiser给相应Producer发一个购买消息</li>
+<li><strong>Person</strong>：吃瓜群众，不发广告，不买东西，不卖东西</li>
+</ul>
 <p>如此Network可以支持市场营销，并能查询某种商品的销售额和销售路径等
 请讨论如何对Network扩展，给出相关接口方法，并选择3个核心业务功能的接口方法撰写JML规格（借鉴所总结的JML规格模式）</p>
-<p>基于面向对象的思想，我们需要对Advertiser、Producer和Customer分别建类，并且这些类继承自Person。通过分析这几种Person的职责，我们可以发现他们之间有着很强的关联关系，如下所示——<br>
--
-Advertiser可以向Customer发送广告消息，考虑到Advertiser可能和很多的Customer关联（即作为成员变量），我们可以采用观察者模式将信息传递出去。Customer接收到消息后，只需要将这个Advertiser作为自己成员变量即可。<br>
--
-Customer想要购买某个商品时，需要把购买信息传递给Advertiser。在此之前，我们已经将Advertiser作为customer的成员变量了，那么只需调用Advertiser成员的相关方法来完成购买信息的传递。<br>
--
-Advertiser在收到来自于Customer的购买消息时，需要立刻将这些消息传递给Producer。同样，我们可以提前将雇佣Advertiser的Producer作为Advertiser的成员变量，即建立关联关系，这样Advertiser只需要调用Producer的某个方法即可实现消息传递。<br>
-- Producer收到购买消息后，销售额需要减1<br>
-&gt;
-在此我们假定：一个Producer只生产一种产品；一个Advertiser只为一个Producer做广告，但是可以向多个Custormer宣传。</p>
-<p>下面我对三个核心业务功能的接口方法编写JML规格——<br>
-- 查询Producer的销售额——querySale<br>
+<p>基于面向对象的思想，我们需要对Advertiser、Producer和Customer分别建类，并且这些类继承自Person。通过分析这几种Person的职责，我们可以发现他们之间有着很强的关联关系，如下所示——</p>
+<ul>
+<li>Advertiser可以向Customer发送广告消息，考虑到Advertiser可能和很多的Customer关联（即作为成员变量），我们可以采用观察者模式将信息传递出去。Customer接收到消息后，只需要将这个Advertiser作为自己成员变量即可。</li>
+<li>Customer想要购买某个商品时，需要把购买信息传递给Advertiser。在此之前，我们已经将Advertiser作为customer的成员变量了，那么只需调用Advertiser成员的相关方法来完成购买信息的传递。</li>
+<li>Advertiser在收到来自于Customer的购买消息时，需要立刻将这些消息传递给Producer。同样，我们可以提前将雇佣Advertiser的Producer作为Advertiser的成员变量，即建立关联关系，这样Advertiser只需要调用Producer的某个方法即可实现消息传递。</li>
+<li>Producer收到购买消息后，销售额需要减1</li>
+</ul>
+<blockquote>
+<p>在此我们假定：一个Producer只生产一种产品；一个Advertiser只为一个Producer做广告，但是可以向多个Custormer宣传。</p>
+</blockquote>
+<p>下面我对三个核心业务功能的接口方法编写JML规格——</p>
+<ul>
+<li><p>查询Producer的销售额——querySale<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
  @ public normal_behavior
  @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Producer);
@@ -860,9 +870,9 @@ Advertiser在收到来自于Customer的购买消息时，需要立刻将这些�
  @ public exceptional_behavior
  @ signals (PersonIdNotFoundException e) !(\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Producer)
  */</span>
- <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span> <span class="token keyword">int</span> <span class="token function">querySale</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-- 发送广告——sendAllAd<br>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
+ <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span> <span class="token keyword">int</span> <span class="token function">querySale</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p>发送广告——sendAllAd<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
  @ public normal_behavior
  @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser &amp;&amp; 
             (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j].getId() == id &amp;&amp; people[j] instanceof Customer &amp;&amp; 
@@ -881,10 +891,9 @@ Advertiser在收到来自于Customer的购买消息时，需要立刻将这些�
                                      (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people.length; people[j].getId() == id &amp;&amp; people[j] instanceof Customer &amp;&amp; 
                                      (\exists int k; 0 &lt;= k &amp;&amp; k &lt; people[j].ads.length; people[j].ads[k].getId() == people[i].getAdId()))) ;
  */</span>
- <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span>  <span class="token function">sendAd</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">AdIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<ul>
-<li>获得某个消费者收到的所有广告——queryAllAds<br>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
+ <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span>  <span class="token function">sendAd</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">AdIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p>获得某个消费者收到的所有广告——queryAllAds<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
  @ public normal_behavior
  @ requires (\exists int i; 0 &lt;= i &amp;&amp; i &lt; people.length; people[i].getId() == id &amp;&amp; people[i] instanceof Advertiser);
  @ assignable \nothing;
@@ -892,8 +901,10 @@ Advertiser在收到来自于Customer的购买消息时，需要立刻将这些�
             (\result.size() == people[i].ads.length) &amp;&amp;  
             (\forall int j; 0 &lt;= j &amp;&amp; j &lt; people[i].ads.length; people[i].ads[j] == \result.get(j));
  */</span>
- <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Ad</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAllAds</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-## 心得体会</li>
+ <span class="token keyword">public</span> <span class="token comment">/*@ pure @*/</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Ad</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAllAds</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+</ul>
+<h2 id="心得体会">心得体会</h2>
+<ul>
 <li>在本单元，我学会了理解和书写JML规格，并初次接触到了<strong>"契约式编程"</strong>，感受到了按照契约编程的诸多优势——<strong>高可靠性、高可复用性、便于测试</strong>。不过，三次作业能够囊括的知识毕竟很少，我对"契约式编程"也只是浅尝辄止的程度，以后还要多多探索和使用。</li>
 <li>本单元的三次作业帮助我复习了很多图论算法——<strong>并查集、最小生成树、单源最短路径</strong>等等。此外，作业的性能要求也push我学会了很多优化方法，让我进一步体会到了算法的魅力。</li>
 <li>本单元同样也锻炼了我写数据生成器的能力。为了提高数据的强度，我需要一边看JML规格，一边编写数据生成器，而这个过程也让我加深了对JML的理解。</li>
@@ -1284,7 +1295,7 @@ Advertiser在收到来自于Customer的购买消息时，需要立刻将这些�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1295,7 +1306,7 @@ Advertiser在收到来自于Customer的购买消息时，需要立刻将这些�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

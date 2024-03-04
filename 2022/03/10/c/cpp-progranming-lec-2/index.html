@@ -13,8 +13,9 @@
 
 C结构体---&amp;gt;C++类
 C语言只可以封装，struct关键字可以建立结构体
-- 结构体的最小内存单元以内存最大的成员类型为准
-struct Stude">
+
+结构体的最小内存单元以内存最大的成员类型为准
+struct Studen">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -369,7 +370,7 @@ struct Stude">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    877
+                    872
                 </div>
                 
 
@@ -401,16 +402,18 @@ struct Stude">
 <li>多态（行为关系）</li>
 </ul>
 <h2 id="c结构体---c类">C结构体---&gt;C++类</h2>
-<p>C语言<strong>只可以封装</strong>，<code>struct</code>关键字可以建立结构体<br>
-- 结构体的最小内存单元以内存最大的成员类型为准<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
+<p>C语言<strong>只可以封装</strong>，<code>struct</code>关键字可以建立结构体</p>
+<ul>
+<li>结构体的最小内存单元以内存最大的成员类型为准<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> i<span class="token punctuation">;</span>
     <span class="token keyword">int</span> j<span class="token punctuation">;</span>
     <span class="token keyword">double</span> d<span class="token punctuation">;</span>
     <span class="token keyword">char</span> c<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token comment">// sizeof(struct Student) 结果为24</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-- <code>#pragma pack(1)</code>可强制对齐<p></p>
+<span class="token comment">// sizeof(struct Student) 结果为24</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><code>#pragma pack(1)</code>可强制对齐</li>
+</ul>
 <p>C语言中结构<strong>仅包含成员变量</strong>，与结构有关的函数均独立于结构之外（结构很散！<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> age<span class="token punctuation">;</span>
@@ -422,9 +425,10 @@ struct Stude">
     <span class="token function">strcpy</span><span class="token punctuation">(</span>s<span class="token operator">-&gt;</span>name<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 C++在结构体中可以<strong>有成员变量和函数</strong>（attribute data
-member + funct member)<br>
-- <code>this</code>指针永远自动的指向调用对象。<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
+member + funct member)<p></p>
+<ul>
+<li><p><code>this</code>指针永远自动的指向调用对象。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> age<span class="token punctuation">;</span>
     <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -433,10 +437,11 @@ member + funct member)<br>
 <span class="token keyword">void</span> <span class="token class-name">Student</span><span class="token double-colon punctuation">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">this</span><span class="token operator">-&gt;</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token operator">-&gt;</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<p><strong>C++的结构体把<code>struct</code>改为<code>class</code>,
-结构体就变成了类</strong>。<br>
-- 类本身不占用内存空间，只是占用代码空间</p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+<strong>C++的结构体把<code>struct</code>改为<code>class</code>,
+结构体就变成了类</strong>。<p></p></li>
+<li><p>类本身不占用内存空间，只是占用代码空间</p></li>
+</ul>
 <h2 id="c类的特性">C++类的特性</h2>
 <h3 id="访问控制-access-control"><strong>访问控制 </strong>（access
 control）****</h3>
@@ -456,9 +461,11 @@ control）****</h3>
     <span class="token keyword">void</span> <span class="token function">setAge</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-&gt; struct默认全部共有，class默认全部私有</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
+<blockquote>
+<p>struct默认全部共有，class默认全部私有</p>
+</blockquote>
 <h3 id="构造函数constructor">构造函数（<strong>constructor</strong>）</h3>
 <p>初始化尤为重要，每创建一个对象必须初始化；于是我们引入了构造函数;防止调用者不初始化直接调用（constructor），<strong>与类同名，可以传任意参数，没有返回值</strong>。<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
@@ -481,9 +488,10 @@ Student <span class="token operator">*</span>s <span class="token operator">=</s
 一定要注意，如果想要通过默认构造函数或者无参构造函数来实例化对象，以下写法是错误的<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">Student <span class="token function">s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// error</span>
 Student s<span class="token punctuation">;</span> <span class="token comment">// right</span>
-Student <span class="token operator">*</span>s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// right</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
-&gt;
-临时变量和函数参数在桟上，malloc和new建立在堆区，全局变量建立在静态存储区<p></p>
+Student <span class="token operator">*</span>s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// right</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p></p>
+<blockquote>
+<p>临时变量和函数参数在桟上，malloc和new建立在堆区，全局变量建立在静态存储区</p>
+</blockquote>
 <h3 id="析构函数destructor"><strong>析构函数（</strong>destructor<strong>）</strong></h3>
 <p>类中可以定义一个析构函数，开头为<code>~</code>，与类同名,
 无参数，无返回值。一个类中最多<strong>只有一个析构函数</strong>，如果不定义的话，默认调用<strong>缺省析构函数</strong>。<br>
@@ -506,9 +514,9 @@ Student <span class="token operator">*</span>s <span class="token operator">=</s
     <span class="token keyword">delete</span> p<span class="token punctuation">;</span> <span class="token comment">//只有执行了这一句，才会调用析构函数。</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>    
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-当我们在类中有指针变量时，我们需要在自定义的析构函数中<strong>主动为指针变量释放空间</strong>（通过delete实现）。<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">{</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<p>当我们在类中有指针变量时，我们需要在自定义的析构函数中<strong>主动为指针变量释放空间</strong>（通过delete实现）。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">{</span>
     <span class="token keyword">int</span> id<span class="token punctuation">;</span>
     <span class="token keyword">char</span><span class="token operator">*</span> name<span class="token punctuation">;</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
@@ -519,10 +527,11 @@ Student <span class="token operator">*</span>s <span class="token operator">=</s
         <span class="token keyword">delete</span> name<span class="token punctuation">;</span>
         cout <span class="token operator">&lt;&lt;</span> <span class="token string">"disappear"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-&gt; 判断：<br>
-&gt; 析构函数可以有多个版本？ No<br>
-&gt;<p></p>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<blockquote>
+<p>判断：<br>
+析构函数可以有多个版本？ No</p>
+</blockquote>
 <hr>
 <blockquote>
 <p>作业：<br>
@@ -912,7 +921,7 @@ Student <span class="token operator">*</span>s <span class="token operator">=</s
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -923,7 +932,7 @@ Student <span class="token operator">*</span>s <span class="token operator">=</s
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

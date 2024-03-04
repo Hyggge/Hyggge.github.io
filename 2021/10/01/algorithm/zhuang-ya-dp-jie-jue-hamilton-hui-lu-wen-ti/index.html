@@ -394,9 +394,9 @@
 解决，笔者初次就是使用这个方法并结合状态压缩AC了这道题。但是因为要使用递归，“翻译”成MIPS汇编代码的时候需要使用大量堆栈保存返回地址、函数参数、还有在调用过程中使用过的并希望保存的寄存器（笔者曾因为堆栈处理不当陷入了十分抓狂的境地）。</p>
 <p>后来听翔宇哥哥说这个题可以采用 <strong>状压DP</strong>
 的方法解决（xyggyyds！），于是笔者便开始<del>面向百度和CSDN</del>，最后终于用非递归的方法解决了这道题，于是便写了本篇文章分享一下心得。<br>
-*<strong><br>
-## 为什么可以使用</strong>状压DP**？<br>
-首先，本题满足DP算法的三个条件——</p>
+***</p>
+<h2 id="为什么可以使用状压dp">为什么可以使用<strong>状压DP</strong>？</h2>
+<p>首先，本题满足DP算法的三个条件——</p>
 <ul>
 <li>重复子问题</li>
 <li>最优子结构</li>
@@ -562,10 +562,9 @@
 <span class="token punctuation">}</span>
 cout <span class="token operator">&lt;&lt;</span> <span class="token string">"0"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
 <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-思路比较简单，此处不再赘述。<br>
-***<br>
-## 后记<br>
-本题的解题方法也可以用于解决<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42505741/article/details/97788303?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link">最短哈密顿回路</a>问题，有兴趣的同学可以尝试一下。另外，因为笔者之前也没有学过算法，能力也十分有限，如果本篇题解中有纰漏甚至错误之处，还望各位dl不吝赐教！<p></p>
+思路比较简单，此处不再赘述。<p></p>
+<h2 id="后记">后记</h2>
+<p>本题的解题方法也可以用于解决<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42505741/article/details/97788303?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1.no_search_link">最短哈密顿回路</a>问题，有兴趣的同学可以尝试一下。另外，因为笔者之前也没有学过算法，能力也十分有限，如果本篇题解中有纰漏甚至错误之处，还望各位dl不吝赐教！</p>
 
                 
             </div>
@@ -953,7 +952,7 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token string">"0"
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -964,7 +963,7 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token string">"0"
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

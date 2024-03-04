@@ -427,10 +427,10 @@ func <span class="token punctuation">{</span><span class="token operator">|</spa
     <span class="token function">func</span><span class="token punctuation">(</span>block<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### 显式传递<br>
-当然，我们也可以在函数的定义中增加一个形参，该形参用于接收要将要传入的块，这种传递就是“显式传递”。需要注意的是，这个特殊形参的前面需要加一个前缀<code>&amp;</code>。<br>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="显式传递">显式传递</h3>
+<p>当然，我们也可以在函数的定义中增加一个形参，该形参用于接收要将要传入的块，这种传递就是“显式传递”。需要注意的是，这个特殊形参的前面需要加一个前缀<code>&amp;</code>。<br>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span>
     p<span class="token punctuation">.</span>call <span class="token string-literal"><span class="token string">'hyggge'</span></span>
     <span class="token keyword">yield</span> <span class="token string-literal"><span class="token string">'hyggge'</span></span>
 <span class="token keyword">end</span>
@@ -438,9 +438,9 @@ func <span class="token punctuation">{</span><span class="token operator">|</spa
 func <span class="token punctuation">{</span><span class="token operator">|</span>name<span class="token operator">|</span> puts <span class="token string-literal"><span class="token string">"hello </span><span class="token interpolation"><span class="token delimiter punctuation">#{</span><span class="token content">name</span><span class="token delimiter punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 此时，我们既可以用yield关键字来调用块，也可以通过形参p的call方法来调用。<p></p>
 <h2 id="的使用">&amp;的使用</h2>
-<p>在不同的上下文环境下，&amp;的作用和意义也不甚相同，在这里我们只介绍&amp;和Block、Proc相关的一些用法。<br>
-### &amp;作用于Block<br>
-当&amp;作用于Block时，会将Block转化为普通Proc，这其实就是“显式传递”背后的原理。</p>
+<p>在不同的上下文环境下，&amp;的作用和意义也不甚相同，在这里我们只介绍&amp;和Block、Proc相关的一些用法。</p>
+<h3 id="作用于block">&amp;作用于Block</h3>
+<p>当&amp;作用于Block时，会将Block转化为普通Proc，这其实就是“显式传递”背后的原理。</p>
 <pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token method-definition"><span class="token function">func</span></span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">)</span>
     p<span class="token punctuation">.</span>call <span class="token string-literal"><span class="token string">'hyggge'</span></span>
     puts p <span class="token comment"># 输出&lt;Proc:0x000055987014f0b0 /home/hyggge/Desktop/test.rb:6&gt;</span>
@@ -842,7 +842,7 @@ func<span class="token punctuation">(</span><span class="token operator">&amp;</
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -853,7 +853,7 @@ func<span class="token punctuation">(</span><span class="token operator">&amp;</
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

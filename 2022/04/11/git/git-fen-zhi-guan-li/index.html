@@ -5,8 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Git」分支管理, Hyggge&#39;s Blog">
-    <meta name="description" content="
-分支基本操作
+    <meta name="description" content="分支基本操作
 
 
 
@@ -29,7 +28,7 @@ git branch -a
 
 
 git branch -vv
-将所有的本地分支列出来并且包含更多的信息，如每一个分支正在">
+将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -405,8 +404,7 @@ git branch -vv
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="分支基本操作">分支基本操作</h2>
+                <h2 id="分支基本操作">分支基本操作</h2>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -476,15 +474,15 @@ origin/&lt;远程分支名&gt;</strong></td>
 </table>
 <hr>
 <h2 id="分支合并merge">分支合并——merge</h2>
-<p>我们可以通过<code>git merge &lt;name&gt;</code>进行两个分支的合并，其效果是将名为<code>&lt;name&gt;</code>的分支里的内容合并到当前所在的分支上。当我们进行分支合并时，有的时候需要解决冲突，举下面三个例子——<br>
-- <strong>Position 1</strong><br>
+<p>我们可以通过<code>git merge &lt;name&gt;</code>进行两个分支的合并，其效果是将名为<code>&lt;name&gt;</code>的分支里的内容合并到当前所在的分支上。当我们进行分支合并时，有的时候需要解决冲突，举下面三个例子——</p>
+<ul>
+<li><p><strong>Position 1</strong><br>
 如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示<br>
 <img src="2.png"><br>
 此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图<br>
 <img src="1.png"><br>
 这种模式被称作
-<strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
-<ul>
+<strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p></li>
 <li><p><strong>Position 2</strong><br>
 接上例，如果禁用<code>Faster-forward</code>模式会怎样?
 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示<br>
@@ -919,7 +917,7 @@ Git</em>》的相关章节）<br>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -930,7 +928,7 @@ Git</em>》的相关章节）<br>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

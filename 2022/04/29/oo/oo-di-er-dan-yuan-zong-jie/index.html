@@ -406,19 +406,20 @@ OO第二单元的主题是
 <p><a href="面向对象第二单元第一次作业指导书.pdf">题目链接</a></p>
 <p>第一次作业比较简单，每个楼座只对一部电梯进行调度。这次作业主要是让我们熟悉线程创建、运行等基本操作，熟悉多线程的设计方法。</p>
 <h3 id="代码架构分析">代码架构分析</h3>
-<p>本次作业中我们需要关注以下三个问题<br>
-- <strong>如何将"生产者-消费者"模型运用在本次作业中？</strong><br>
-- <strong>如何通过加锁来解决线程安全问题？</strong><br>
-- <strong>电梯调度采用什么样的策略？</strong></p>
+<p>本次作业中我们需要关注以下三个问题</p>
+<ul>
+<li><strong>如何将"生产者-消费者"模型运用在本次作业中？</strong></li>
+<li><strong>如何通过加锁来解决线程安全问题？</strong></li>
+<li><strong>电梯调度采用什么样的策略？</strong></li>
+</ul>
 <p>下面我针对这三个问题进行分析——</p>
 <h4 id="producer-consumer模型">Producer-Consumer模型</h4>
-<p>在使用"生产者-消费者"模型之前我们需要明确——谁是消费者？谁是生产者？经过简单的分析我们不难发现——<br>
--
-<strong>输入线程</strong>（<code>InputHandler</code>）从终端中获取用户的请求，所以输入线程是生产者<br>
--
-<strong>电梯线程</strong>（<code>Elevator</code>）对用户请求进行处理，并将用户运送指定位置，因此电梯线程应该作为消费者。<br>
--
-生产者和消费者中间的托盘是什么呢？很显然，托盘应该是一个用来盛放用户请求的"容器"，于是我设置了<strong>请求队列类</strong>（<code>RequestTable</code>）用来存放请求。</p>
+<p>在使用"生产者-消费者"模型之前我们需要明确——谁是消费者？谁是生产者？经过简单的分析我们不难发现——</p>
+<ul>
+<li><strong>输入线程</strong>（<code>InputHandler</code>）从终端中获取用户的请求，所以输入线程是生产者</li>
+<li><strong>电梯线程</strong>（<code>Elevator</code>）对用户请求进行处理，并将用户运送指定位置，因此电梯线程应该作为消费者。</li>
+<li>生产者和消费者中间的托盘是什么呢？很显然，托盘应该是一个用来盛放用户请求的"容器"，于是我设置了<strong>请求队列类</strong>（<code>RequestTable</code>）用来存放请求。</li>
+</ul>
 <p>在我的设计中，<code>RequestTable</code>类一共实例化了<strong>5个对象</strong>，分别用来储存A、B、C、D、E座发出的请求。<code>InputHandler</code>类同时"拥有"这5个请求队列，在请求输入的时候直接根据<strong>请求发出地</strong>将请求放进对应的请求队列中。每个楼座的<code>Elevator</code>只有拥有本楼座的请求队列，只对该请求队列中的请求进行处理。所以最后的结构就是下面这个样子——<br>
 <img src="HW1结构.png"></p>
 <p>另外，基于封装的思想，我还对用户请求单独建一个类（<code>Person</code>）,在这个类中封装了单个请求的所有信息，包括<strong>请求人id</strong>、<strong>出发地</strong>、<strong>目的地</strong>。<br>
@@ -444,13 +445,14 @@ OO第二单元的主题是
 <p>往届学长大多选择的是
 <strong>LOOK算法</strong>，而且我们日常乘坐的电梯大多数也是采用的这种算法。既然它能被大多数电梯使用，那这种算法一定有它的"过人之处"。因此，最终我选择<strong>LOOK</strong>作为电梯调度的策略。</p>
 <h5 id="look">LOOK</h5>
-<p>下面来简单介绍我在本次作业中使用的调度算法（LOOK）——<br>
-- 首先为电梯规定一个初始方向，然后电梯开始沿着该方向运动。<br>
-- 到达某楼层时，<strong>首先判断是否需要开门</strong><br>
-- 如果发现电梯里有人可以出电梯（到达目的地），则开门让乘客出去；<br>
--
-如果发现该楼层中有人想上电梯，并且目的地方向和电梯方向相同，则开门让这个乘客进入。</p>
+<p>下面来简单介绍我在本次作业中使用的调度算法（LOOK）——</p>
 <ul>
+<li>首先为电梯规定一个初始方向，然后电梯开始沿着该方向运动。</li>
+<li>到达某楼层时，<strong>首先判断是否需要开门</strong>
+<ul>
+<li>如果发现电梯里有人可以出电梯（到达目的地），则开门让乘客出去；</li>
+<li>如果发现该楼层中有人想上电梯，并且目的地方向和电梯方向相同，则开门让这个乘客进入。</li>
+</ul></li>
 <li><strong>接下来，进一步判断电梯里是否有人</strong>。如果电梯里还有人，则沿着当前方向移动到下一层。否则，检查请求队列中是否还有请求（目前其他楼层是否有乘客想要进电梯）——
 <ul>
 <li><p>如果请求队列不为空，且某请求的发出地是电梯"前方"的某楼层，则电梯继续沿着原来的方向运动。</p></li>
@@ -526,10 +528,10 @@ OO第二单元的主题是
 <p><strong>Method Metrics</strong></p>
 <p><img src="1_metrics.png"></p>
 <p>由上面的分析可知，<code>Strategy</code>类中<code>gerAdvice()</code>、<code>hasReqInOrigin()</code>、<code>needAdjustDirection()</code>三个方法的复杂度较高。主要原因是<code>Strategy</code>类需要对电梯和请求队列的状态进行分析，从而为电梯提供建议，而整个判断过程需要较为复杂的逻辑（循环、大量if-else），因此复杂度显著高于其他方法。</p>
-<p>但总体来说，本次作业代码的整体复杂度较为理想。主要是因为有了第一单元的经验，在设计时注意遵循了<strong>单一职责原则</strong>，避免出现较长的方法和类。<br>
-### 代码UML图<br>
-#### 类图<br>
-<img src="1.jpg"></p>
+<p>但总体来说，本次作业代码的整体复杂度较为理想。主要是因为有了第一单元的经验，在设计时注意遵循了<strong>单一职责原则</strong>，避免出现较长的方法和类。</p>
+<h3 id="代码uml图">代码UML图</h3>
+<h4 id="类图">类图</h4>
+<p><img src="1.jpg"></p>
 <h4 id="时序图">时序图</h4>
 <p><img src="1_seq.png"></p>
 <hr>
@@ -608,17 +610,19 @@ OO第二单元的主题是
 <p>和上一次作业相比，这次<code>VerticalElecator</code>和<code>VerticalElevator</code>中<code>run()</code>方法的基本复杂度也显著上升，主要是因为，我们为解决空开门的问题使用了
 <strong>"二次咨询+缓冲队列"</strong>
 的机制，这种机制的引入使判断逻辑变得更加复杂。</p>
-<h3 id="代码uml图">代码UML图</h3>
-<h4 id="类图">类图</h4>
+<h3 id="代码uml图-1">代码UML图</h3>
+<h4 id="类图-1">类图</h4>
 <p><img src="2.jpg"></p>
 <h4 id="时序图-1">时序图</h4>
 <p><img src="2_seq.png"></p>
 <h2 id="第三次作业分析">第三次作业分析</h2>
 <p><a href="面向对象第二单元第三次作业指导书.pdf">题目链接</a></p>
-<p>第三次作业增加了3个新要求——<br>
-- 电梯容量和运行速度可自定义<br>
-- 横向电梯的停靠楼座可自定义<br>
-- 可能会出现乘客换乘问题</p>
+<p>第三次作业增加了3个新要求——</p>
+<ul>
+<li>电梯容量和运行速度可自定义</li>
+<li>横向电梯的停靠楼座可自定义</li>
+<li>可能会出现乘客换乘问题</li>
+</ul>
 <h3 id="代码架构分析-2">代码架构分析</h3>
 <h4 id="电梯类的迭代">电梯类的迭代</h4>
 <p>在本次作业中我们仍然沿用工厂模式。但是，本次电梯的
@@ -651,11 +655,11 @@ A3-&gt;A6"。此时，我们需要对请求类<code>Person</code>进行一定修
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> toFloor<span class="token punctuation">;</span>
     <span class="token comment">//...</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<p>而<strong>请求的分段操作</strong>是在<code>Controller</code>类中完成的。<code>Controller</code>类是一个全局控制器，采用单例模式，它有两个作用——<br>
--
-将<code>InputHandler</code>类输入的乘客请求分成三个流水段，并封装到一个<code>Person</code>类中。<br>
--
-根据<strong>请求当前的执行阶段</strong>将其分配给相应的请求队列，最后由拥有该请求队列的电梯处理。每当电梯完成一个阶段，电梯就会把该请求"扔回到"<code>Controller</code>，并由<code>Controller</code>将请求<strong>再分配</strong>，让其他电梯执行下一阶段的任务。如果控制器发现某请求的所有阶段都已经执行完，则不再将其分配。</p>
+<p>而<strong>请求的分段操作</strong>是在<code>Controller</code>类中完成的。<code>Controller</code>类是一个全局控制器，采用单例模式，它有两个作用——</p>
+<ul>
+<li>将<code>InputHandler</code>类输入的乘客请求分成三个流水段，并封装到一个<code>Person</code>类中。</li>
+<li>根据<strong>请求当前的执行阶段</strong>将其分配给相应的请求队列，最后由拥有该请求队列的电梯处理。每当电梯完成一个阶段，电梯就会把该请求"扔回到"<code>Controller</code>，并由<code>Controller</code>将请求<strong>再分配</strong>，让其他电梯执行下一阶段的任务。如果控制器发现某请求的所有阶段都已经执行完，则不再将其分配。</li>
+</ul>
 <p>最后整个流水线模式的架构如下图所示。<br>
 <img src="HW3结构.png"></p>
 <blockquote>
@@ -665,13 +669,12 @@ A3-&gt;A6"。此时，我们需要对请求类<code>Person</code>进行一定修
 == 2"，且使"|X-m| + |Y-m|"最小的m</p>
 </blockquote>
 <h4 id="电梯结束问题">电梯结束问题</h4>
-<p>设想这样一种情况——<br>
--
-输入线程发现了文件结束符，于是通过<code>Controller</code>给<strong>每个请求队列的<code>EndTag</code>都置为<code>True</code></strong>。<br>
--
-此时电梯A中所有请求都已完成，而且它的策略类发现电梯所在楼层（座）的请求队列的<code>EndTag</code>是真，于是向电梯发出了<code>OVER</code>建议，该电梯线程结束。<br>
--
-此时，另一个楼层（座）中的电梯B正在处理某请求R的第2阶段。不幸的是，R的第3阶段需要A来执行，所以，R请求会永远无法被满足。</p>
+<p>设想这样一种情况——</p>
+<ul>
+<li>输入线程发现了文件结束符，于是通过<code>Controller</code>给<strong>每个请求队列的<code>EndTag</code>都置为<code>True</code></strong>。</li>
+<li>此时电梯A中所有请求都已完成，而且它的策略类发现电梯所在楼层（座）的请求队列的<code>EndTag</code>是真，于是向电梯发出了<code>OVER</code>建议，该电梯线程结束。</li>
+<li>此时，另一个楼层（座）中的电梯B正在处理某请求R的第2阶段。不幸的是，R的第3阶段需要A来执行，所以，R请求会永远无法被满足。</li>
+</ul>
 <p>因此，在本次作业中，我们不能直接根据文件结束符来判断是否应该将请求队列的<code>EndTag</code>置为真，而是<strong>应该等待所有请求都执行完</strong>。这个问题我们可以通过设计<code>RequestCounter</code>类来解决。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*RequestCounter.java*/</span>
 
@@ -702,12 +705,11 @@ A3-&gt;A6"。此时，我们需要对请求类<code>Person</code>进行一定修
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>RequestCounter</code>和我们在OS课上学到的信号量（<code>Samaphore</code>）极为相似，而<code>release()</code>和<code>acquire()</code>两个方法分别对应信号量的
-<strong><code>P</code>操作和<code>V</code>操作</strong>。这两个方法分别在<code>Controller</code>类和<code>InputHandler</code>类中使用——<br>
--
-当一个请求的所有阶段都完成，<code>Controller</code>会调用<code>release()</code>方法，使计数器的值加1。<br>
--
-当输入线程<code>InputHandler</code>获取文件结束符后，会连续调用n次<code>acquire()</code>方法（n表示乘客请求的总个数），每次调用都会使计数器的值减1（如果在减操作之前发现计数器值为0时，则会等待计数器大于0之后再减1）。当n次<code>acquire()</code>都成功执行，则说明所有的乘客请求都已经处理完毕了，然后就可以将所有请求队列的<code>EndTag</code>置为真。<br>
-</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*InputHandler.java*/</span>
+<strong><code>P</code>操作和<code>V</code>操作</strong>。这两个方法分别在<code>Controller</code>类和<code>InputHandler</code>类中使用——</p>
+<ul>
+<li>当一个请求的所有阶段都完成，<code>Controller</code>会调用<code>release()</code>方法，使计数器的值加1。</li>
+<li>当输入线程<code>InputHandler</code>获取文件结束符后，会连续调用n次<code>acquire()</code>方法（n表示乘客请求的总个数），每次调用都会使计数器的值减1（如果在减操作之前发现计数器值为0时，则会等待计数器大于0之后再减1）。当n次<code>acquire()</code>都成功执行，则说明所有的乘客请求都已经处理完毕了，然后就可以将所有请求队列的<code>EndTag</code>置为真。<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*InputHandler.java*/</span>
 
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> personNum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -723,33 +725,38 @@ A3-&gt;A6"。此时，我们需要对请求类<code>Person</code>进行一定修
     <span class="token comment">//所有的请求都已经执行完毕，通过Controller将所有请求队列的`EndTag`置为真</span>
     <span class="token class-name">Controller</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setOver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 <p>这样一来，电梯结束的问题就成功解决了。</p>
 <h3 id="代码复杂度分析-2">代码复杂度分析</h3>
 <p><strong>Method Metrics</strong></p>
 <p><img src="3_metrics.png"></p>
 <p>第三次作业的新增方法<code>pickPeople()</code>和<code>getSwitchFloor()</code>的复杂度也比较高，主要是因为本次作业横向电梯的可停靠楼座可以自定义，导致我们在请求队列中接人时，还需要特判电梯是否可以在该楼座开门，以及电梯能否在乘客的目的楼座开门。因此，方法复杂度高也不足为奇。<br>
-### 代码UML图<br>
-#### 类图<br>
-<img src="3.jpg"></p>
+### 代码UML图</p>
+<h4 id="类图-2">类图</h4>
+<p><img src="3.jpg"></p>
 <h4 id="时序图-2">时序图</h4>
 <p><img src="3_seq.png"></p>
 <h2 id="个人bug分析">个人bug分析</h2>
 <p>前两次作业的强测和互测均没有发现问题，但是在第三次作业的强测中有一个测试点出现了<code>RTLE</code>（运行时间超时）。一开始百思不得其解，后来重读了一遍代码才发现原来是<code>Controller</code>类中<code>setEndTag()</code>方法中少给了一个请求队列加锁，使得程序无法正确地将请求队列中的<code>endTag</code>置为真，最终导致线程无法正常关闭。</p>
 <h2 id="关于测试">关于测试</h2>
-<p>在这一单元我仍然采用<strong>自动化测试</strong>来寻找代码bug，测试程序分为两部分——<br>
-- <strong>数据生成器</strong><br>
-- <strong>输出检查器</strong></p>
+<p>在这一单元我仍然采用<strong>自动化测试</strong>来寻找代码bug，测试程序分为两部分——</p>
+<ul>
+<li><strong>数据生成器</strong></li>
+<li><strong>输出检查器</strong></li>
+</ul>
 <h3 id="数据生成器">数据生成器</h3>
-<p>数据生成是用<strong>随机数</strong>的方式来实现的。为了让数据生成器也有很好的<strong>可扩展性</strong>，我将某些功能封装成了函数，便于在做后面的作业时对数据生成器进行修改和迭代。此外，在设计数据生成器时还需要注意指导书上提到的一些“数据规范”——<br>
-- 电梯系统的指令数：1~70条<br>
-- 不能向没有电梯的楼层或者楼座发起请求<br>
-- 第一条指令的投喂时间在 1s 或 1s 以后<br>
-- 每个楼层（座）的电梯不能超过3个<br>
-- 电梯总数不能超过15个<br>
-- 电梯速度只能是{0.2, 0.4, 0.6}中的一个，电梯容量只能是{4, 6,
-8}中的一个<br>
-- ...</p>
+<p>数据生成是用<strong>随机数</strong>的方式来实现的。为了让数据生成器也有很好的<strong>可扩展性</strong>，我将某些功能封装成了函数，便于在做后面的作业时对数据生成器进行修改和迭代。此外，在设计数据生成器时还需要注意指导书上提到的一些“数据规范”——</p>
+<ul>
+<li>电梯系统的指令数：1~70条</li>
+<li>不能向没有电梯的楼层或者楼座发起请求</li>
+<li>第一条指令的投喂时间在 1s 或 1s 以后</li>
+<li>每个楼层（座）的电梯不能超过3个</li>
+<li>电梯总数不能超过15个</li>
+<li>电梯速度只能是{0.2, 0.4, 0.6}中的一个，电梯容量只能是{4, 6,
+8}中的一个</li>
+<li>...</li>
+</ul>
 <p>整个数据生成器的架构如下所示<br>
 </p><pre class="line-numbers language-python" data-language="python"><code class="language-python">MAX_FLOOR <span class="token operator">=</span> <span class="token number">10</span> 
 MAX_TIME <span class="token operator">=</span> <span class="token number">50</span>
@@ -855,19 +862,17 @@ certain_floor <span class="token operator">=</span> random<span class="token pun
 
 <span class="token comment">#...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="输出检查器">输出检查器</h3>
-<p>在这一部分，我们需要对作业代码的运行结果进行检查。需要检查的内容包括——<br>
-- <strong>输出格式是否正确</strong><br>
-- <strong>电梯是否已经超载</strong><br>
-- <strong>电梯运行速度和开关门速度是否满足要求</strong><br>
--
-<strong>电梯开关门是否符合常理</strong>（电梯不能先关后开，不能在电梯关门后再让乘客进出）<br>
--
-<strong>电梯到达的楼层或者楼座是否真实存在</strong>（电梯不能跑到-18楼...）<br>
--
-<strong>电梯在某楼做是否可以停靠</strong>（主要针对横向电梯，需要结合输入数据进行判断）<br>
--
-<strong>所有乘客的请求是否全部满足</strong>（检查是否出现“电梯吃人”或者“请求饿死”的现象，需要结合输入数据进行判断）<br>
-- <strong>从电梯里出来的乘客是否真实存在</strong>（细思极恐...）</p>
+<p>在这一部分，我们需要对作业代码的运行结果进行检查。需要检查的内容包括——</p>
+<ul>
+<li><strong>输出格式是否正确</strong></li>
+<li><strong>电梯是否已经超载</strong></li>
+<li><strong>电梯运行速度和开关门速度是否满足要求</strong></li>
+<li><strong>电梯开关门是否符合常理</strong>（电梯不能先关后开，不能在电梯关门后再让乘客进出）</li>
+<li><strong>电梯到达的楼层或者楼座是否真实存在</strong>（电梯不能跑到-18楼...）</li>
+<li><strong>电梯在某楼做是否可以停靠</strong>（主要针对横向电梯，需要结合输入数据进行判断）</li>
+<li><strong>所有乘客的请求是否全部满足</strong>（检查是否出现“电梯吃人”或者“请求饿死”的现象，需要结合输入数据进行判断）</li>
+<li><strong>从电梯里出来的乘客是否真实存在</strong>（细思极恐...）</li>
+</ul>
 <h2 id="心得体会">心得体会</h2>
 <ul>
 <li><strong>写代码时注意遵循"SOLID"原则</strong>，这会使我们省去不少debug的麻烦。</li>
@@ -1261,7 +1266,7 @@ certain_floor <span class="token operator">=</span> random<span class="token pun
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1272,7 +1277,7 @@ certain_floor <span class="token operator">=</span> random<span class="token pun
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

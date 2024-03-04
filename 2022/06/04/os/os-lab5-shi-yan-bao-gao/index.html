@@ -416,24 +416,28 @@ IDE
 Unix/Linux 操作系统的 inode
 及相关概念，试述二者的不同之处。</strong></p>
 <p><strong>A：</strong>
-文件控制块和inode都是记录已打开文件的相关信息，但是两者又有很多不同。<br>
-- <strong>存储内容不同</strong>,文件控制块中的内容有——<br>
-- 文件名<br>
-- 文件大小<br>
-- 文件类型<br>
-- 文件数据块的直接指针列表<br>
-- 储存文件数据块指针的间接磁盘块指针<br>
-- 文件所在目录的指针</p>
-<pre><code>而inode中的内容包括——
- - 文件的字节数，块数
- - 文件拥有者的User ID
- - 文件的Group ID
- - 文件的读、写、执行权限
- - 文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。
- - 链接数，即有多少文件名指向这个inode
- - 文件数据block的位置
- - inode编号</code></pre>
+文件控制块和inode都是记录已打开文件的相关信息，但是两者又有很多不同。</p>
 <ul>
+<li><strong>存储内容不同</strong>,文件控制块中的内容有——
+<ul>
+<li>文件名</li>
+<li>文件大小</li>
+<li>文件类型</li>
+<li>文件数据块的直接指针列表</li>
+<li>储存文件数据块指针的间接磁盘块指针</li>
+<li>文件所在目录的指针</li>
+</ul>
+而inode中的内容包括——
+<ul>
+<li>文件的字节数，块数</li>
+<li>文件拥有者的User ID</li>
+<li>文件的Group ID</li>
+<li>文件的读、写、执行权限</li>
+<li>文件的时间戳，共有三个：ctime指inode上一次变动的时间，mtime指文件内容上一次变动的时间，atime指文件上一次打开的时间。</li>
+<li>链接数，即有多少文件名指向这个inode</li>
+<li>文件数据block的位置</li>
+<li>inode编号</li>
+</ul></li>
 <li>文件控制块顺次排列在目录文件中，而在Linux系统中，目录文件是由一系列目录项组成，每个目录项由文件名和指向inode的指针组成，占用空间远远小于文件控制块，查找操作的系统开销也大大减小。</li>
 <li>MOS中的文件控制块仅支持一级间接指针域，也只有一个；而Linux中的inode支持多级间接指针域，可以存储更大的文件。</li>
 </ul>
@@ -453,14 +457,14 @@ Unix/Linux 操作系统的 inode
 	<span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span>f_dir<span class="token punctuation">;</span>		
     <span class="token comment">//BY2FILE = 256</span>
 	u_char f_pad<span class="token punctuation">[</span>BY2FILE <span class="token operator">-</span> MAXNAMELEN <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> NDIRECT <span class="token operator">*</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-- 一个磁盘块的容量为4KB，因此最多可以容纳16个文件控制块。<br>
--
-一个目录文件最多可以使用1024个磁盘块存储数据，因此一个目录下最多1024*16
-= 16384个文件。<br>
--
-一个文件最多可以使用1024个磁盘块存储数据，因此一个文件最大容量为1024*4KB
-= 4MB。<p></p>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li>一个磁盘块的容量为4KB，因此最多可以容纳16个文件控制块。</li>
+<li>一个目录文件最多可以使用1024个磁盘块存储数据，因此一个目录下最多1024*16
+= 16384个文件。</li>
+<li>一个文件最多可以使用1024个磁盘块存储数据，因此一个文件最大容量为1024*4KB
+= 4MB。</li>
+</ul>
 <h3 id="thinking-5.5">Thinking 5.5</h3>
 <p><strong>Q：</strong>
 <strong>请思考，在满足磁盘块缓存的设计的前提下，我们实验使用的内核支持的最大磁盘大小是多少？</strong><br>
@@ -492,15 +496,15 @@ Fd和<code>struct Filefd</code>的大小，因此将<code>struct Fd*</code>强�
 <h3 id="thinking-5.10">Thinking 5.10</h3>
 <p><strong>Q：</strong> <strong>请解释Fd, Filefd, Open
 结构体及其各个域的作用。比如各个结构体会在哪些过程中被使用，是否对应磁盘上的物理实体还是单纯的内存数据等。说明形式自定，要求简洁明了，可大致勾勒出文件系统数据结构与物理实体的对应关系与设计框架。</strong><br>
-<strong>A：</strong><br>
-- <strong>Fd结构体定义及各个域的作用如下所示</strong><br>
+<strong>A：</strong></p>
+<ul>
+<li><p><strong>Fd结构体定义及各个域的作用如下所示</strong><br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token punctuation">{</span>
 	u_int fd_dev_id<span class="token punctuation">;</span>    <span class="token comment">//文件对应的设备id</span>
 	u_int fd_offset<span class="token punctuation">;</span>    <span class="token comment">//文件指针所指向的位置</span>
 	u_int fd_omode<span class="token punctuation">;</span>     <span class="token comment">//文件打开模式</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-该结构体主要用于记录已打开文件的状态，便于用户直接使用文件描述符对文件进行操作、申请服务等等。由于文件描述符主要是为用户所使用，因此它对应的是磁盘映射到内存中的数据。<p></p>
-<ul>
+该结构体主要用于记录已打开文件的状态，便于用户直接使用文件描述符对文件进行操作、申请服务等等。由于文件描述符主要是为用户所使用，因此它对应的是磁盘映射到内存中的数据。<p></p></li>
 <li><p><strong>Filefd的结构体定义及各个域的作用如下所示</strong><br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Filefd</span> <span class="token punctuation">{</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Fd</span> f_fd<span class="token punctuation">;</span>     <span class="token comment">//文件描述符结构体</span>
@@ -578,11 +582,13 @@ Message</strong></td>
 <strong>A：</strong>
 这个死循环并不会导致CPU的轮询，原因是每次循环会调用<code>ipc_recv</code>函数。在这个函数被调用后，文件系统服务进程就会主动让出CPU（进程状态被标记为<code>NOT_RANNABLE</code>），直到用户进程向该进程申请服务（调用<code>ipc_send</code>）时才会被唤醒，进而为用户进程提供服务。因此，循环的次数始终等于文件系统服务进程提供服务的次数，并不会导致内核进入<code>panic</code>状态。</p>
 <h2 id="实验难点图示">实验难点图示</h2>
-<p>我认为本次实验主要包含以下难点——<br>
-- <strong>文件数据块的定位方式</strong><br>
-- <strong>fsformat.c中函数的调用关系</strong><br>
-- <strong>文件系统的地址空间布局</strong><br>
-- <strong>用户进程和文件系统服务进程的交互</strong></p>
+<p>我认为本次实验主要包含以下难点——</p>
+<ul>
+<li><strong>文件数据块的定位方式</strong></li>
+<li><strong>fsformat.c中函数的调用关系</strong></li>
+<li><strong>文件系统的地址空间布局</strong></li>
+<li><strong>用户进程和文件系统服务进程的交互</strong></li>
+</ul>
 <h3 id="文件数据块的定位方式">文件数据块的定位方式</h3>
 <p>每个文件的数据分布在不相邻的一系列磁盘块中，我们可以将其称为文件数据块，每个文件对应的文件控制块里都记录了所有文件数据块的指针（即下标）。文件控制块中有10个直接指针，保存在数组<code>f_direct[10]</code>中，另外还有<code>1014</code>个间接指针（前10个保留不用），这些指针储存在<code>f_indirect</code>所指向的磁盘块中。</p>
 <p>假设某文件是一个目录文件，则其定位数据块的方式如下图所示<br>
@@ -592,17 +598,18 @@ Message</strong></td>
 <code>fsformat.c</code>中函数的调用关系如下所示——</p>
 <p><img src="fsformat.drawio.svg"></p>
 <h3 id="文件系统的地址空间布局">文件系统的地址空间布局</h3>
-<p>文件系统的正常工作也需要占用一定的内存空间。<br>
--
-文件服务进程需要占用<code>[0x10000000, 0x50000000)</code>这一1GB空间作为块缓存。<br>
--
-用户进程还需要占用<code>[0x5fc00000, 0x600000000)</code>这一4MB空间来储存文件描述符。<br>
-&gt;
-因为用户进程最多只能开32个文件描述符，每个文件描述符占用一页，因此实际上这一空间是无法占满的，最多占用32<em>4KB=128KB。<br>
--
-用户进程需要占用<code>[0x60000000, 0x680000000)</code>这一128MB空间作为文件内容缓存区。缓存区的每个页面都和文件服务进程中的对应块缓存映射到同一个物理页，并标记为<code>PTE_LIBARAY</code>。<br>
-&gt;
-因为用户进程最多只能有32个文件描述符，因此只能同时打开32个文件，每个文件最多占用4MB空间，因此用户进程缓存区大小为32</em>4MB=128MB。</p>
+<p>文件系统的正常工作也需要占用一定的内存空间。</p>
+<ul>
+<li><p>文件服务进程需要占用<code>[0x10000000, 0x50000000)</code>这一1GB空间作为块缓存。</p></li>
+<li><p>用户进程还需要占用<code>[0x5fc00000, 0x600000000)</code>这一4MB空间来储存文件描述符。</p>
+<blockquote>
+<p>因为用户进程最多只能开32个文件描述符，每个文件描述符占用一页，因此实际上这一空间是无法占满的，最多占用32*4KB=128KB。</p>
+</blockquote></li>
+<li><p>用户进程需要占用<code>[0x60000000, 0x680000000)</code>这一128MB空间作为文件内容缓存区。缓存区的每个页面都和文件服务进程中的对应块缓存映射到同一个物理页，并标记为<code>PTE_LIBARAY</code>。</p>
+<blockquote>
+<p>因为用户进程最多只能有32个文件描述符，因此只能同时打开32个文件，每个文件最多占用4MB空间，因此用户进程缓存区大小为32*4MB=128MB。</p>
+</blockquote></li>
+</ul>
 <p>地址空间布局如下所示<br>
 <img src="map.drawio.svg"></p>
 <h3 id="用户进程和文件系统服务进程的交互">用户进程和文件系统服务进程的交互</h3>
@@ -999,7 +1006,7 @@ Message</strong></td>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1010,7 +1017,7 @@ Message</strong></td>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

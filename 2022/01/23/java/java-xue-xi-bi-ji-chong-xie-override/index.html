@@ -5,15 +5,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Java SE」重写(Override), Hyggge&#39;s Blog">
-    <meta name="description" content="
-重写是子类对父类的允许访问的方法的实现过程进行重新编写,
+    <meta name="description" content="重写是子类对父类的允许访问的方法的实现过程进行重新编写,
 返回值和形参都不能改变。
 重写的好处在于子类可以根据需要，定义特定于自己的行为。
 也就是说子类能够根据需要实现父类的方法。
-
 重写父类中的方法
 概念
-当一个子类中一个实例方法具有与">
+当一个子类中一个实例方法具有与其父">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,12 +387,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<p><strong>重写</strong>是子类对父类的允许访问的方法的实现过程进行重新编写,
+                <p><strong>重写</strong>是子类对父类的允许访问的方法的实现过程进行重新编写,
 <strong>返回值和形参都不能改变</strong>。</p>
 <p><strong>重写的好处</strong>在于子类可以根据需要，定义特定于自己的行为。
 也就是说子类能够根据需要实现父类的方法。</p>
-<hr>
 <h2 id="重写父类中的方法">重写父类中的方法</h2>
 <h3 id="概念">概念</h3>
 <p>当一个子类中一个实例方法具有与其父类中的一个实例方法相同的签名（指名称、参数个数和类型）和返回值时，称子类中的方法“重写”了父类的方法。例如<br>
@@ -418,10 +414,10 @@
     b<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                               <span class="token comment">//调用子类中重写的方法</span>
     b<span class="token punctuation">.</span><span class="token function">sayBye</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                 <span class="token comment">//调用父类中的方法</span>
     <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### <strong>重写规则</strong><br>
-1. 参数列表与被重写方法的<strong>参数列表必须完全相同</strong>。<p></p>
-<ol start="2" type="1">
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="重写规则"><strong>重写规则</strong></h3>
+<ol type="1">
+<li><p>参数列表与被重写方法的<strong>参数列表必须完全相同</strong>。</p></li>
 <li><p>返回类型与被重写方法的<strong>返回类型可以不相同</strong>，但是必须是父类返回值的派生类（java5
 及更早版本返回类型要一样，java7 及更高版本可以不同）。</p></li>
 <li><p>访问权限<strong>不能比父类中被重写的方法的访问权限更低</strong>。例如：如果父类的一个方法被声明为
@@ -457,10 +453,11 @@ public，那么在子类中重写该方法就不能声明为 protected。</p></l
     <span class="token class-name">B</span> b<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">B</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                <span class="token comment">//创建子类B的一个实例对象，使用默认构造方法</span>
     b<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                               <span class="token comment">//调用子类中重写的方法</span>
     <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-----<br>
-## 隐藏父类中的方法<br>
-如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="隐藏父类中的方法">隐藏父类中的方法</h2>
+<p>如果一个子类定义了一个<strong>静态类方法</strong>，而这个类方法与其父类的一个类方法具有相同的签名（指名称、参数格式和类型）和返回值，则称在子类中的这个类方法“隐藏”了父类中的该类方法。</p>
+<ul>
 <li>当调用被重写的方法时，调用的版本是子类的方法；</li>
 <li>当调用被隐藏的方法时，调用的版本取决于是从父类中调用还是从子类中调用。</li>
 </ul>
@@ -503,15 +500,9 @@ public，那么在子类中重写该方法就不能声明为 protected。</p></l
   大家好，这是B的实例方法
   大家好，这是A中的实例方法
 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<table style="width:6%;">
-<colgroup>
-<col style="width: 5%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>## 覆盖父类的中的变量<br>
-如果子类中重新定义了一个<strong>与父类中已有变量同名</strong>的变量，那么父类中的变量就被“覆盖”。<br>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
+<h2 id="覆盖父类的中的变量">覆盖父类的中的变量</h2>
+<p>如果子类中重新定义了一个<strong>与父类中已有变量同名</strong>的变量，那么父类中的变量就被“覆盖”。<br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">"Name"</span><span class="token punctuation">;</span> 
 <span class="token punctuation">}</span>
 
@@ -525,10 +516,7 @@ public，那么在子类中重写该方法就不能声明为 protected。</p></l
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>cat<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span class="token comment">/*运行结果:cat*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></td>
-</tr>
-</tbody>
-</table>
+<span class="token comment">/*运行结果:cat*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h2 id="关于override">关于<code>@Override</code></h2>
 <p><code>@Override</code>是<strong>伪代码</strong>，表示重写，在“<strong>子类重写父类</strong>”或“<strong>某类实现某接口</strong>”时使用。写上有如下好处:（详见该<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_32885165/article/details/102779323">博客</a>）</p>
 <ul>
@@ -903,7 +891,7 @@ public，那么在子类中重写该方法就不能声明为 protected。</p></l
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -914,7 +902,7 @@ public，那么在子类中重写该方法就不能声明为 protected。</p></l
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

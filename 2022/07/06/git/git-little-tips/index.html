@@ -438,15 +438,14 @@ git commit -a指令可以自动把所有已经跟踪">
 <hr>
 <h3 id="公共祖先">公共祖先</h3>
 <p>在决定是否将两个分支合并前，我们可能需要先寻找两个分支的共同祖先，然后比较这个共同祖先和某一个分支的difference，最后在决定是否合并。</p>
-<p>为进行这样的比较，我们可以采用下面三种方式——<br>
--
-先通过命令<code>git merge-base &lt;branch1&gt; &lt;branch2&gt;</code>获得commit_id，再使用<code>git diff &lt;commit_id&gt;</code><br>
--
-直接使用<code>git diff $(git merge-base &lt;branch1&gt; &lt;branch2&gt;)</code><br>
--
-使用三点语法——<code>git diff &lt;branch1&gt;...&lt;branch2&gt;</code>，结果是
+<p>为进行这样的比较，我们可以采用下面三种方式——</p>
+<ul>
+<li>先通过命令<code>git merge-base &lt;branch1&gt; &lt;branch2&gt;</code>获得commit_id，再使用<code>git diff &lt;commit_id&gt;</code></li>
+<li>直接使用<code>git diff $(git merge-base &lt;branch1&gt; &lt;branch2&gt;)</code></li>
+<li>使用三点语法——<code>git diff &lt;branch1&gt;...&lt;branch2&gt;</code>，结果是
 <strong><code>branch2</code>的最新提交</strong> 和
-<strong>公共祖先</strong> 之间差异。</p>
+<strong>公共祖先</strong> 之间差异。</li>
+</ul>
 
                 
             </div>
@@ -825,7 +824,7 @@ git commit -a指令可以自动把所有已经跟踪">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -836,7 +835,7 @@ git commit -a指令可以自动把所有已经跟踪">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

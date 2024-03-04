@@ -400,44 +400,45 @@ assign ">
 <span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span>A <span class="token operator">&gt;&gt;&gt;</span> <span class="token number">3</span>'sb011<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//右操作数有符号</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 第一、二个例子中，尽管使用了<code>&gt;&gt;&gt;</code>符号，但是<code>A</code>默认是无符号数，因此最终Verilog会默认在A的前面补上0。<br>
 第三个例子中，尽管<code>3'sb011</code>属于符号数，但是算术右移表达式最终结果的符号仅仅与<strong>左操作数</strong>有关，因此仍然是错误的。（实际上，所有的移位运算符的<strong>右操作数</strong>都被当作无符号数处理。)<p></p>
-<h2 id="系统函数-signed-signed作为一个系统函数其作用是执行内部的表达式并将表达式的结果强制转换为有符号数类型值与位宽完全相同吧作为其返回值该函数可以屏蔽外部表达式的符号性传递需要注意的是signed函数仅仅会将括号内表达式的结果强制进行转换而不会影响表达式的执行">系统函数
-<span class="math inline">\(signed( )
-`\)</span>signed()<code>作为一个系统函数，其作用是执行内部的表达式，并将表达式的**结果**强制转换为有符号数类型（值与位宽完全相同吧），作为其返回值。该函数可以屏蔽外部表达式的符号性传递。需要注意的是，</code>$signed()`函数仅仅会将<strong>括号内表达式的结果</strong>强制进行转换,而<strong>不会影响</strong>表达式的执行。</h2>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> A<span class="token punctuation">,</span> B<span class="token punctuation">,</span> C<span class="token punctuation">;</span>
+<h2 id="系统函数-signed">系统函数 $signed( )</h2>
+<p><code>$signed()</code>作为一个系统函数，其作用是执行内部的表达式，并将表达式的<strong>结果</strong>强制转换为有符号数类型（值与位宽完全相同吧），作为其返回值。该函数可以屏蔽外部表达式的符号性传递。需要注意的是，<code>$signed()</code>函数仅仅会将<strong>括号内表达式的结果</strong>强制进行转换,而<strong>不会影响</strong>表达式的执行。<br>
+</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> A<span class="token punctuation">,</span> B<span class="token punctuation">,</span> C<span class="token punctuation">;</span>
 <span class="token keyword">wire</span> <span class="token keyword">signed</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> signA<span class="token punctuation">;</span>
 
 <span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span>signA <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样就可以解释，为什么前三个表达式是正确的的，而最后一个表示式是错误的（在A
-&gt;&gt;&gt; B的执行中，A是作为无符号数进行移位）。</p>
+<span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+这样就可以解释，为什么前三个表达式是正确的的，而最后一个表示式是错误的（在A
+&gt;&gt;&gt; B的执行中，A是作为无符号数进行移位）。<p></p>
 <h2 id="三目运算符">三目运算符<code>? :</code></h2>
 <p>根据verilog的语言特性，如果一个表达式中既存在有符号数又存在无符号数，那么表达式的<strong>结果</strong>就是<strong>无符号数</strong>（即在表达式计算过程中，有符号数当作无符号数参与运算）。</p>
-<p><strong>如果表达式多层嵌套，那么每一个表达式结果的符号性由以下原则决定</strong>：<br>
-- 表达式的结果的符号性，由这个表达式的操作数以及外部影响共同决定<br>
-- 表达式结果的符号性的决定，先于表达式结果的计算</p>
+<p><strong>如果表达式多层嵌套，那么每一个表达式结果的符号性由以下原则决定</strong>：</p>
+<ul>
+<li>表达式的结果的符号性，由这个表达式的操作数以及外部影响共同决定</li>
+<li>表达式结果的符号性的决定，先于表达式结果的计算</li>
+</ul>
 <p>也就是说，Verilog在计算一个表达式时，会先去计算这个表达式的符号性。而在得到表达式整体的符号性之后，整体的符号性会依次向内传递到每个操作数中。而对于任何一个表达式，如果其中有一个操作数的符号性为无符号，则整个表达式的符号性为无符号。（部分操作数不影响，如移位操作的右操作数；也有部分表达式的结果不受外界影响，如比较、位拼接、位截取表达式结果均为无符号数；但大部分表达式满足本规则。）<br>
 三目运算符也是一种表达式，因此遵从以上原则。下面我们结合以下例子进行进一步解释——<br>
 </p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">;</span><span class="token comment">//错误</span>
 <span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span> <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">;</span><span class="token comment">//正确</span>
-<span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$unsigned</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span> <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">;</span><span class="token comment">//正确</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
--
-首先分析第一个表达式。最外层的三目运算符中出现了无符号数<code>A+B</code>,因此这个表达式结果的符号性为<strong>无符号</strong>，并进一步将这个<strong>无符号性</strong>传给了<code>$signed(A) &gt;&gt;&gt; B</code>。对于<code>$signed(A) &gt;&gt;&gt; B</code>这个表达式，整体符号性已经被确定为无符号，因而又进一步传给操作数<code>$signed(A)</code>，尽管<code>$signed(A)</code>的结果是有符号的，但是因为符号性的传递作用，<code>$signed(A)</code>在参与算术右移运算时仍然被当做无符号数，因此不符合预期。<br>
--
-对于第二个表达式，同第一个表达式的分析，<code>$signed($signed(A) &gt;&gt;&gt; B)</code>整体的符号性被确定是无符号，但是由于系统函数的作用，<code>$signed(A) &gt;&gt;&gt; B</code>与外界分割开来，根据<code>$signed</code>函数的运算规则，<code>$signed($signed(A) &gt;&gt;&gt; B)</code>先计算<code>$signed(A) &gt;&gt;&gt; B</code>的值，然后将结果看作有符号数进行返回。<br>
--
-<strong>需要注意是，符号性的传递并没有失效。</strong><code>$signed($signed(A) &gt;&gt;&gt; B)</code>的<strong>有符号结果</strong>最终会被当作无符号数作为整个表达式<code>(1'b1)? $signed($signed(A) &gt;&gt;&gt; B) : A + B</code>的返回值<br>
+<span class="token keyword">assign</span> C <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$unsigned</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span> <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">;</span><span class="token comment">//正确</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li>首先分析第一个表达式。最外层的三目运算符中出现了无符号数<code>A+B</code>,因此这个表达式结果的符号性为<strong>无符号</strong>，并进一步将这个<strong>无符号性</strong>传给了<code>$signed(A) &gt;&gt;&gt; B</code>。对于<code>$signed(A) &gt;&gt;&gt; B</code>这个表达式，整体符号性已经被确定为无符号，因而又进一步传给操作数<code>$signed(A)</code>，尽管<code>$signed(A)</code>的结果是有符号的，但是因为符号性的传递作用，<code>$signed(A)</code>在参与算术右移运算时仍然被当做无符号数，因此不符合预期。</li>
+<li>对于第二个表达式，同第一个表达式的分析，<code>$signed($signed(A) &gt;&gt;&gt; B)</code>整体的符号性被确定是无符号，但是由于系统函数的作用，<code>$signed(A) &gt;&gt;&gt; B</code>与外界分割开来，根据<code>$signed</code>函数的运算规则，<code>$signed($signed(A) &gt;&gt;&gt; B)</code>先计算<code>$signed(A) &gt;&gt;&gt; B</code>的值，然后将结果看作有符号数进行返回。<br>
+</li>
+<li><strong>需要注意是，符号性的传递并没有失效。</strong><code>$signed($signed(A) &gt;&gt;&gt; B)</code>的<strong>有符号结果</strong>最终会被当作无符号数作为整个表达式<code>(1'b1)? $signed($signed(A) &gt;&gt;&gt; B) : A + B</code>的返回值<br>
 从以下实验可以看出<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> flag_1<span class="token punctuation">,</span> flag_2<span class="token punctuation">;</span>
 <span class="token keyword">wire</span> A <span class="token operator">=</span> <span class="token number">32'hf000</span><span class="token punctuation">;</span>
 <span class="token keyword">wire</span> B <span class="token operator">=</span> <span class="token number">32'h0001</span><span class="token punctuation">;</span>
 <span class="token keyword">assign</span> flag_1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span> <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
 <span class="token keyword">assign</span> flag_2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span> <span class="token kernel-function property">$unsigned</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span> <span class="token punctuation">:</span> A <span class="token operator">+</span> B<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token comment">//最终结果flag_1和flag_2都是1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-## 位宽与符号<br>
-表达式的结果除了符号性以外，还有一个特质：位宽。表达式的符号性与等号左侧无关；但表达式的位宽一般来说是<strong>等号左右两侧所有表达式的位宽中最大的一个</strong>。<p></p>
+<span class="token comment">//最终结果flag_1和flag_2都是1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="位宽与符号">位宽与符号</h2>
+<p>表达式的结果除了符号性以外，还有一个特质：位宽。表达式的符号性与等号左侧无关；但表达式的位宽一般来说是<strong>等号左右两侧所有表达式的位宽中最大的一个</strong>。</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>D<span class="token punctuation">;</span>
 <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>A<span class="token punctuation">,</span>B<span class="token punctuation">;</span>
 <span class="token keyword">assign</span> D <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1'b1</span><span class="token punctuation">)</span><span class="token operator">?</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">&gt;&gt;&gt;</span> B<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token operator">{</span>A<span class="token punctuation">,</span>B<span class="token operator">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -857,7 +858,7 @@ assign ">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -868,7 +869,7 @@ assign ">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

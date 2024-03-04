@@ -8,10 +8,10 @@
     <meta name="description" content="IDE磁盘镜像
 在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件
 gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
-### fs/fsformat.c
+fs/fsformat.c
 函数之间的调用关系如下所示——
 
-rev">
+reverse">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -393,9 +393,9 @@ rev">
             <div id="articleContent">
                 <h2 id="ide磁盘镜像">IDE磁盘镜像</h2>
 <p>在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件
-gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。<br>
-### fs/fsformat.c<br>
-函数之间的调用关系如下所示——<br>
+gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。</p>
+<h3 id="fsfsformat.c">fs/fsformat.c</h3>
+<p>函数之间的调用关系如下所示——<br>
 <img src="fsformat.drawio.svg"></p>
 <h4 id="reverse">reverse</h4>
 <p>将指针p所指向的32位无符号数进行大小端转换。<br>
@@ -615,13 +615,13 @@ f_type）。然后将path所定位的文件的内容复制在磁盘中，同时�
         <span class="token function">save_block_link</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> iblk<span class="token operator">++</span><span class="token punctuation">,</span> <span class="token function">next_block</span><span class="token punctuation">(</span>BLOCK_DATA<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Close file descriptor.</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-## 文件系统服务<br>
-文件系统服务进程主要是用来为其他用户进程提供相关服务，fs目录下fs.c、ide.c、serve.c三个文件都是用于文件系统服务进程。<p></p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h2 id="文件系统服务">文件系统服务</h2>
+<p>文件系统服务进程主要是用来为其他用户进程提供相关服务，fs目录下fs.c、ide.c、serve.c三个文件都是用于文件系统服务进程。</p>
 <p>由于fs.c和ide.c的文件结构都比较简单，函数理解的难度不大，因此我们在这里只分析fs.c中的函数。</p>
-<p><img src="fs.drawio.svg"><br>
-### fs/fs.c<br>
-fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完整的画出函数调用链几乎不可能。为了便于理解，我将这33个函数按其调用层次划分为三类——block类、block-file类、file类，只有同一类和相邻类中的函数才可以相互调用。</p>
+<p><img src="fs.drawio.svg"></p>
+<h3 id="fsfs.c">fs/fs.c</h3>
+<p>fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完整的画出函数调用链几乎不可能。为了便于理解，我将这33个函数按其调用层次划分为三类——block类、block-file类、file类，只有同一类和相邻类中的函数才可以相互调用。</p>
 <h4 id="diskaddr">diskaddr</h4>
 <p>计算指定磁盘块（下标为blockno）对应的块缓存虚拟地址。<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">diskaddr</span><span class="token punctuation">(</span>u_int blockno<span class="token punctuation">)</span>
@@ -653,10 +653,10 @@ fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完�
 <span class="token function">va_is_dirty</span><span class="token punctuation">(</span>u_int va<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">*</span> vpt<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token function">VPN</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">&amp;</span> PTE_D<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-#### block_is_dirty<br>
-首先找到指定磁盘块（下标为blockno）在内存中对应的块缓存地址，然后检查该虚拟地址对应的物理内存的数据是否被修改。<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">block_is_dirty</span><span class="token punctuation">(</span>u_int blockno<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="block_is_dirty">block_is_dirty</h4>
+<p>首先找到指定磁盘块（下标为blockno）在内存中对应的块缓存地址，然后检查该虚拟地址对应的物理内存的数据是否被修改。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">block_is_dirty</span><span class="token punctuation">(</span>u_int blockno<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	u_int va <span class="token operator">=</span> <span class="token function">diskaddr</span><span class="token punctuation">(</span>blockno<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">return</span> <span class="token function">va_is_mapped</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">va_is_dirty</span><span class="token punctuation">(</span>va<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -925,9 +925,10 @@ fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完�
 	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h4 id="file_map_blcok">file_map_blcok</h4>
-<p>寻找文件f的第filebno个文件数据块，并将*diskbno赋值为<strong>该文件数据块的块号</strong>。在实现时，该函数需要先调用file_block_walk函数获得指向该文件数据块的块号的指针ptr，然后通过<code>*ptr</code>获得该文件数据块的块号。如果<code>*ptr</code>的值为0，说明我们还没有在磁盘中为该文件数据块分配真正的磁盘块，此时我们需要分配一个新的磁盘块作为该文件数据块（只有alloc值为1的时候才会分配）。<br>
-&gt;
-文件数据块本质上就是磁盘块。一个文件由n个文件数据块组成，而这n个文件数据块由n个不连续的磁盘块来充当。</p>
+<p>寻找文件f的第filebno个文件数据块，并将*diskbno赋值为<strong>该文件数据块的块号</strong>。在实现时，该函数需要先调用file_block_walk函数获得指向该文件数据块的块号的指针ptr，然后通过<code>*ptr</code>获得该文件数据块的块号。如果<code>*ptr</code>的值为0，说明我们还没有在磁盘中为该文件数据块分配真正的磁盘块，此时我们需要分配一个新的磁盘块作为该文件数据块（只有alloc值为1的时候才会分配）。</p>
+<blockquote>
+<p>文件数据块本质上就是磁盘块。一个文件由n个文件数据块组成，而这n个文件数据块由n个不连续的磁盘块来充当。</p>
+</blockquote>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">file_map_block</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span>f<span class="token punctuation">,</span> u_int filebno<span class="token punctuation">,</span> u_int <span class="token operator">*</span>diskbno<span class="token punctuation">,</span> u_int alloc<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">int</span> r<span class="token punctuation">;</span>
@@ -1091,10 +1092,11 @@ fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完�
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="walk_path">walk_path</h4>
 <p>从根目录开始查找路径为path的文件（也可能是目录文件）。如果查到了，则<em>pdir指向是文件所在的最后一级目录，
-</em>pfile指向找到的文件；如果没有查到，<code>*pdir</code>指向的是<strong>可以与path相匹配</strong>的最后一级目录，<code>*pfile</code>的值为0，lastelem指向的是目标文件名。<br>
-&gt;
-如果中间某一级目录的查找出现了错误，则lastelem指向的数据不会被改变。
+</em>pfile指向找到的文件；如果没有查到，<code>*pdir</code>指向的是<strong>可以与path相匹配</strong>的最后一级目录，<code>*pfile</code>的值为0，lastelem指向的是目标文件名。</p>
+<blockquote>
+<p>如果中间某一级目录的查找出现了错误，则lastelem指向的数据不会被改变。
 例如，当前查找的路径为“/root/file/buaa/os/code.c”,如果，目录buaa下没有os这一子目录，则不会对lastelem所指向的内容做任何的修改；只有当os目录存在，而os目录下没有code.c文件时，lastelem才会被指向字符串“code.c”</p>
+</blockquote>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">walk_path</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span><span class="token operator">*</span>pdir<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">File</span> <span class="token operator">*</span><span class="token operator">*</span>pfile<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>lastelem<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">char</span> <span class="token operator">*</span>p<span class="token punctuation">;</span>
@@ -1281,15 +1283,14 @@ fs.c中的函数多达33个，函数之间的调用关系也十分复杂，完�
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="file_remove">file_remove</h4>
-<p>将path所代表的目标文件从它所在的最后一级目录中删除。包括4个步骤——<br>
-- 首先调用walk_path函数找到path所代表的目标文件的文件控制块。<br>
--
-将文件的内容清空，并将文件控制块中f_name清空，表示文件已经不存在。<br>
--
-将目标文件的所有数据从块缓存重写回磁盘（貌似这一步并没有什么用，因为此时文件的size
-== 0）<br>
--
-将目标文件所在的最后一级目录文件的所有数据从块缓存重写回磁盘（这一步比较关键，因为我们已经对目标文件的文件控制块进行了修改）</p>
+<p>将path所代表的目标文件从它所在的最后一级目录中删除。包括4个步骤——</p>
+<ul>
+<li>首先调用walk_path函数找到path所代表的目标文件的文件控制块。</li>
+<li>将文件的内容清空，并将文件控制块中f_name清空，表示文件已经不存在。</li>
+<li>将目标文件的所有数据从块缓存重写回磁盘（貌似这一步并没有什么用，因为此时文件的size
+== 0）</li>
+<li>将目标文件所在的最后一级目录文件的所有数据从块缓存重写回磁盘（这一步比较关键，因为我们已经对目标文件的文件控制块进行了修改）</li>
+</ul>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span>
 <span class="token function">file_remove</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -1388,9 +1389,10 @@ FDTABLE+32*4K)\)</span>这一地址空间，文件描述符的index与被映射�
 	<span class="token keyword">return</span> <span class="token operator">-</span>E_INVAL<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h4 id="fd2data">fd2data</h4>
-<p>获得文件描述符所对应的文件在该进程地址空间中的位置。<br>
-&gt;
-注意这里“在该进程地址空间的位置”并非是块缓存。块缓存是文件服务进程中的概念，在文件服务进程的地址空间中，块缓存位于<span class="math inline">\([0x10000000,0x50000000)\)</span>之间。而在用户进程的地址空间中，文件被映射到<span class="math inline">\([0x60000000,0x67000000]\)</span>之间（用户进程最多开32个文件描述符，每个文件描述符对应一个文件，每个文件最大为4MB，因此只需要在用户进程地址空间中分配0x7000000大小的空间即可）</p>
+<p>获得文件描述符所对应的文件在该进程地址空间中的位置。</p>
+<blockquote>
+<p>注意这里“在该进程地址空间的位置”并非是块缓存。块缓存是文件服务进程中的概念，在文件服务进程的地址空间中，块缓存位于<span class="math inline">\([0x10000000,0x50000000)\)</span>之间。而在用户进程的地址空间中，文件被映射到<span class="math inline">\([0x60000000,0x67000000]\)</span>之间（用户进程最多开32个文件描述符，每个文件描述符对应一个文件，每个文件最大为4MB，因此只需要在用户进程地址空间中分配0x7000000大小的空间即可）</p>
+</blockquote>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">u_int <span class="token function">fd2data</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token operator">*</span>fd<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">return</span> <span class="token function">INDEX2DATA</span><span class="token punctuation">(</span><span class="token function">fd2num</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1482,9 +1484,10 @@ err<span class="token operator">:</span>
 	<span class="token keyword">return</span> r<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h4 id="read">read</h4>
-<p>通过下标fdnum找到对应的文件控制块，然后将该文件前n个字节的数据（已经在本进程地址空间中）拷贝到buf中。返回值是最终实际读取的字节数。<br>
-&gt;
-只要调用open函数（user/file），则文件的内容就从文件服务进程的地址空间中“复制”到用户进程的地址空间中。这里所说的“复制”实际上是将两个地址空间中两个虚拟页面映射到了同一个物理页面。</p>
+<p>通过下标fdnum找到对应的文件控制块，然后将该文件前n个字节的数据（已经在本进程地址空间中）拷贝到buf中。返回值是最终实际读取的字节数。</p>
+<blockquote>
+<p>只要调用open函数（user/file），则文件的内容就从文件服务进程的地址空间中“复制”到用户进程的地址空间中。这里所说的“复制”实际上是将两个地址空间中两个虚拟页面映射到了同一个物理页面。</p>
+</blockquote>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">read</span><span class="token punctuation">(</span><span class="token keyword">int</span> fdnum<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>buf<span class="token punctuation">,</span> u_int n<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">int</span> r<span class="token punctuation">;</span>
@@ -1615,16 +1618,16 @@ err<span class="token operator">:</span>
 	<span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">return</span> r<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### user/file.c<p></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="userfile.c">user/file.c</h3>
 <h4 id="open">open</h4>
-<p>在用户进程中打开path所指定的文件，打开模式指定为mode。函数的主要步骤有三个——<br>
-- 申请一个新的文件描述符<br>
--
-向文件服务进程申请open服务：在文件服务进程中打开path所指定的文件，并将文件控制块的地址等信息追加在用户进程文件描述符的后面。（这也就是问什么struct
-Fd可以强制转换为struct Filefd，并可以获取相关信息）<br>
-- 将文件服务进程中对应块缓存的数据复制到用户进程地址空间中<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">,</span> <span class="token keyword">int</span> mode<span class="token punctuation">)</span>
+<p>在用户进程中打开path所指定的文件，打开模式指定为mode。函数的主要步骤有三个——</p>
+<ul>
+<li>申请一个新的文件描述符</li>
+<li>向文件服务进程申请open服务：在文件服务进程中打开path所指定的文件，并将文件控制块的地址等信息追加在用户进程文件描述符的后面。（这也就是问什么struct
+Fd可以强制转换为struct Filefd，并可以获取相关信息）</li>
+<li>将文件服务进程中对应块缓存的数据复制到用户进程地址空间中<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">,</span> <span class="token keyword">int</span> mode<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token operator">*</span>fd<span class="token punctuation">;</span>
 	<span class="token keyword">struct</span> <span class="token class-name">Filefd</span> <span class="token operator">*</span>ffd<span class="token punctuation">;</span>
@@ -1661,7 +1664,8 @@ Fd可以强制转换为struct Filefd，并可以获取相关信息）<br>
 	<span class="token comment">// Step 5: Return the number of file descriptor.</span>
 	<span class="token keyword">return</span> <span class="token function">fd2num</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 <h4 id="file_close-1">file_close</h4>
 <p>关闭文件，需要调用文件服务进程的相关服务将内存中的“脏”数据重写回磁盘，还需要将用户进程中文件数据所占用的地址空间释放（删去用户页表的映射）。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">file_close</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Fd</span> <span class="token operator">*</span>fd<span class="token punctuation">)</span>
@@ -2243,7 +2247,7 @@ Fd可以强制转换为struct Filefd，并可以获取相关信息）<br>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -2254,7 +2258,7 @@ Fd可以强制转换为struct Filefd，并可以获取相关信息）<br>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

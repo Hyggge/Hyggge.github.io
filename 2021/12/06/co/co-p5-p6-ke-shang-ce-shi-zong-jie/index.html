@@ -393,10 +393,14 @@
 <h3 id="明确指令rtl">明确指令RTL</h3>
 <ul>
 <li>该步骤需要结合题目弄懂指令行为，包括<strong>明确指令类型</strong>（R型？I型？J型？即明确读和写的目标）、<strong>opcode和funct域数据</strong>、<strong>执行功能</strong>（计算？跳转？访存？）</li>
-<li>最好可以先用MARS模拟下，以免对指令行为理解不到位。<br>
-### 明确非转发数据通路</li>
-<li>在该步骤中，可以在<strong>单周期</strong>中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括<strong>使能信号</strong>（P5中的DM和GRF的写使能、P6中的GRF写使能和新加的byteen）、<strong>功能MUX的选择信号</strong>（GRF写入地址的选择、ALU的B端口数据的选择、GRF写入数据的选择等等）和<strong>模块功能的选择信号</strong>（ALU功能选择、NPC功能选择）。<br>
-### 考虑转发</li>
+<li>最好可以先用MARS模拟下，以免对指令行为理解不到位。</li>
+</ul>
+<h3 id="明确非转发数据通路">明确非转发数据通路</h3>
+<ul>
+<li>在该步骤中，可以在<strong>单周期</strong>中思考新指令的行为，构思出该新指令的数据通路，然后修改控制器中的相关控制信号——包括<strong>使能信号</strong>（P5中的DM和GRF的写使能、P6中的GRF写使能和新加的byteen）、<strong>功能MUX的选择信号</strong>（GRF写入地址的选择、ALU的B端口数据的选择、GRF写入数据的选择等等）和<strong>模块功能的选择信号</strong>（ALU功能选择、NPC功能选择）。</li>
+</ul>
+<h3 id="考虑转发">考虑转发</h3>
+<ul>
 <li>考虑新指令作为<strong>提供者</strong>：
 <ul>
 <li>首先考虑它是否及时将<strong>已经计算出来</strong>的<strong>将要被写入GRF</strong>的数据<strong>转发</strong>；
@@ -409,55 +413,58 @@
 <li>一般在第2步已经调整完毕，但是像<code>lwer</code>、<code>lhso</code>等条件存储类指令只有在M级从DM中取出数据后才能明确写入地址，需要在<strong>M级</strong>将GRF写入地址再次修改</li>
 </ul></li>
 </ul></li>
-<li>考虑新指令作为<strong>接受者</strong>：明确需要使用<code>GPR[rs]</code>、<code>GPR[rt]</code>的功能部件和相应接口（CMP的D1和D2？ALU的A和B？乘除模块的A和B？DM的WD？），课上可能需要设置新的接口。<br>
-### 考虑暂停</li>
-<li><h2 id="明确新指令的tuse_rstuse_rt以及在各级流水的tnew直接在主控制器中修改即可千万不要忘记">明确新指令的<code>Tuse_rs</code>、<code>Tuse_rt</code>以及在各级流水的<code>Tnew</code>，直接在主控制器中修改即可（<strong>千万不要忘记</strong>）。</h2></li>
+<li>考虑新指令作为<strong>接受者</strong>：明确需要使用<code>GPR[rs]</code>、<code>GPR[rt]</code>的功能部件和相应接口（CMP的D1和D2？ALU的A和B？乘除模块的A和B？DM的WD？），课上可能需要设置新的接口。</li>
+</ul>
+<h3 id="考虑暂停">考虑暂停</h3>
+<ul>
+<li>明确新指令的<code>Tuse_rs</code>、<code>Tuse_rt</code>以及在各级流水的<code>Tnew</code>，直接在主控制器中修改即可（<strong>千万不要忘记</strong>）。</li>
 </ul>
 <h2 id="课上测试题型分析">课上测试题型分析</h2>
-<p>注：笔者课下cpu设计采用的是<strong>集中式译码</strong>和<strong>暴力转发</strong>。<br>
-### 计算类<br>
-<strong>P5中一般只需要增加ALU的功能，但一定要看清楚新指令的计算行为，最好在MARS里先模拟一下。</strong><br>
--
-一般来说新指令的计算行为会稍微复杂一点，用<code>always @（*）</code>写会比较简单，用<code>assign</code>的话可以定义一个<code>function</code>。<br>
--
-一般情况下，<code>Tnew</code>和<code>Tuse</code>与<strong>calc_R型指令</strong>保持一致即可。<br>
-- 循环移位可以采用以下写法——<br>
-</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//以循环左移为例</span>
+<p>注：笔者课下cpu设计采用的是<strong>集中式译码</strong>和<strong>暴力转发</strong>。</p>
+<h3 id="计算类">计算类</h3>
+<p><strong>P5中一般只需要增加ALU的功能，但一定要看清楚新指令的计算行为，最好在MARS里先模拟一下。</strong></p>
+<ul>
+<li>一般来说新指令的计算行为会稍微复杂一点，用<code>always @（*）</code>写会比较简单，用<code>assign</code>的话可以定义一个<code>function</code>。</li>
+<li>一般情况下，<code>Tnew</code>和<code>Tuse</code>与<strong>calc_R型指令</strong>保持一致即可。</li>
+<li>循环移位可以采用以下写法——<br>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//以循环左移为例</span>
 <span class="token function">if</span><span class="token punctuation">(</span>B<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">5'd0</span><span class="token punctuation">)</span> out <span class="token operator">=</span> A<span class="token punctuation">;</span>
 <span class="token keyword">else</span> out <span class="token operator">=</span> A <span class="token operator">&lt;&lt;</span> B<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">|</span> A <span class="token operator">&gt;&gt;</span> <span class="token punctuation">(</span><span class="token number">5'd31</span> <span class="token operator">-</span> B<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">5'd1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
-<strong>P6的计算会涉及到乘除模块，也相对比较简单。需要注意madd、maddu、msub、msubu等指令（roife博客<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>有讲到）。</strong><br>
--
-以<code>madd</code>为例（将两个数有符号相乘，计算结果与之前的HI、LO寄存器中的值相加，而不是覆盖），如果是以下写法会出现问题<br>
+<strong>P6的计算会涉及到乘除模块，也相对比较简单。需要注意madd、maddu、msub、msubu等指令（roife博客<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>有讲到）。</strong>
+<ul>
+<li>以<code>madd</code>为例（将两个数有符号相乘，计算结果与之前的HI、LO寄存器中的值相加，而不是覆盖），如果是以下写法会出现问题<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//错误写法1</span>
 <span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">//错误写法2</span>
-<span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><br>
-- <strong>错误写法1</strong>出现问题的原因是：
+<span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>错误写法1</strong>出现问题的原因是：
 位拼接<code>{HI, LO}</code>默认被当做无符号数，
-<strong>无符号性</strong>传递到<code>$signed(A) * $signed(B)</code>，因此即使使用了<code>$signed()</code>还是会被当成无符号数进行乘法运算<br>
--
-<strong>错误写法2</strong>出现问题的原因是：虽然使用了<code>$signed()</code>屏蔽了外界符号性的传入，但是也屏蔽了<strong>位宽</strong>信息的传入，所以<code>$signed($signed(A) * $signed(B))</code>的结果实际上是32位(因为<code>$signed(A)</code>和<code>$signed(B)</code>都是32位，又没有外界位宽信息的传入，因此结果被强制规定为32位)，即<strong>高32位的数据被截去</strong>，在参与后续运算时自然会出现问题。<br>
--
-为了避免上述情况，我们需要在<strong>错误写法2</strong>的最外层<code>$signed()</code>中人为传入64位位宽信息，学长博客的写法如下——<br>
+<strong>无符号性</strong>传递到<code>$signed(A) * $signed(B)</code>，因此即使使用了<code>$signed()</code>还是会被当成无符号数进行乘法运算</li>
+<li><strong>错误写法2</strong>出现问题的原因是：虽然使用了<code>$signed()</code>屏蔽了外界符号性的传入，但是也屏蔽了<strong>位宽</strong>信息的传入，所以<code>$signed($signed(A) * $signed(B))</code>的结果实际上是32位(因为<code>$signed(A)</code>和<code>$signed(B)</code>都是32位，又没有外界位宽信息的传入，因此结果被强制规定为32位)，即<strong>高32位的数据被截去</strong>，在参与后续运算时自然会出现问题。</li>
+</ul></li>
+<li>为了避免上述情况，我们需要在<strong>错误写法2</strong>的最外层<code>$signed()</code>中人为传入64位位宽信息，学长博客的写法如下——<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//正确写法1</span>
 <span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token number">64'd0</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">//正确写法2</span>
 <span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token operator">{{</span><span class="token number">32</span><span class="token operator">{</span>A<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> A<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span><span class="token operator">{{</span><span class="token number">32</span><span class="token operator">{</span>B<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}}</span><span class="token punctuation">,</span> B<span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">]</span><span class="token operator">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><br>
 我认为还可以对<strong>错误写法1</strong>进行修改——<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//正确写法3</span>
-<span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token kernel-function property">$sigend</span><span class="token punctuation">(</span><span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
+<span class="token operator">{</span>HI_temp<span class="token punctuation">,</span> LO_temp<span class="token operator">}</span> <span class="token operator">&lt;=</span> <span class="token kernel-function property">$sigend</span><span class="token punctuation">(</span><span class="token operator">{</span>HI<span class="token punctuation">,</span> LO<span class="token operator">}</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul></li>
+</ul>
 <h3 id="条件跳转类">条件跳转类</h3>
-<p>一般跳转类指令有以下几种要求——<br>
-1. <strong>条件跳转+无条件链接</strong><br>
-2. <strong>条件跳转+条件链接</strong><br>
-3. <strong>条件跳转+条件（无条件）链接+不跳转时清空延迟槽</strong><br>
--
-<strong>条件跳转</strong>比较好做，一般只需增加<strong>CMP模块</strong>中的判断功能即可。<br>
--
-如果是<strong>无条件链接</strong>的话也比较简单，可以直接在D级将<code>RFWrite</code>（GRF写入使能）置<strong>1</strong>并让它流水，并更改一下<code>A3</code>(GRF写入地址，一般是要链接到31号寄存器)，最后在W级将GRF写入数据选择成<strong>PC+8</strong>即可。<br>
--
-如果是<strong>条件链接</strong>，则需要在D级根据CMP模块的输出结果判断<code>RFWrite</code>是否有效，写法如下——<br>
-</p><pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//为了确定当前指令是新指令，我们设置一个check信号随新指令一起流水，check有效则表示当前指令是新指令</span>
+<p>一般跳转类指令有以下几种要求——</p>
+<ol type="1">
+<li><strong>条件跳转+无条件链接</strong></li>
+<li><strong>条件跳转+条件链接</strong></li>
+<li><strong>条件跳转+条件（无条件）链接+不跳转时清空延迟槽</strong></li>
+</ol>
+<ul>
+<li><strong>条件跳转</strong>比较好做，一般只需增加<strong>CMP模块</strong>中的判断功能即可。</li>
+<li>如果是<strong>无条件链接</strong>的话也比较简单，可以直接在D级将<code>RFWrite</code>（GRF写入使能）置<strong>1</strong>并让它流水，并更改一下<code>A3</code>(GRF写入地址，一般是要链接到31号寄存器)，最后在W级将GRF写入数据选择成<strong>PC+8</strong>即可。</li>
+<li>如果是<strong>条件链接</strong>，则需要在D级根据CMP模块的输出结果判断<code>RFWrite</code>是否有效，写法如下——<br>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">//为了确定当前指令是新指令，我们设置一个check信号随新指令一起流水，check有效则表示当前指令是新指令</span>
 <span class="token comment">//D_RFWrite是从D级主控制器输出的信号</span>
 <span class="token keyword">wire</span> D_RFWrite_new <span class="token operator">=</span> check_D <span class="token operator">?</span> <span class="token punctuation">(</span>D_CMP_out <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> D_RFWrite<span class="token punctuation">;</span>
 <span class="token comment">//这时我们流水到下一级的就是D_RFWrite_new，而不是D_RFWrite</span>
@@ -468,21 +475,22 @@ E_Reg  u_E_Reg <span class="token punctuation">(</span><span class="token commen
                 <span class="token comment">//output</span>
                 <span class="token comment">//…………………………………………</span>
                 <span class="token punctuation">.</span>RFWrite_E               <span class="token punctuation">(</span> RFWrite_E          <span class="token punctuation">)</span><span class="token punctuation">,</span>
-                <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
--
-如果题目要求<strong>不跳转时清空延迟槽</strong>，则需要根据当前<strong>CMP模块输出结果</strong>判断是否清空<strong>D级流水寄存器</strong>。<strong>需要注意的是</strong>，如果当前正在处于<code>stall</code>状态时，不能清空延迟槽（<code>stall</code>说明前面指令的<code>Tnew</code>大于新指令的<code>Tuse</code>，即需要传入CMP模块的两个值的<strong>最新值</strong>还没有计算出来，因此还无法转发到CMP中）。写法如下——<br>
+                <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>如果题目要求<strong>不跳转时清空延迟槽</strong>，则需要根据当前<strong>CMP模块输出结果</strong>判断是否清空<strong>D级流水寄存器</strong>。<strong>需要注意的是</strong>，如果当前正在处于<code>stall</code>状态时，不能清空延迟槽（<code>stall</code>说明前面指令的<code>Tnew</code>大于新指令的<code>Tuse</code>，即需要传入CMP模块的两个值的<strong>最新值</strong>还没有计算出来，因此还无法转发到CMP中）。写法如下——<br>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> D_Reg_clr <span class="token operator">=</span> check_D <span class="token operator">&amp;</span> <span class="token operator">~</span>D_CMP_out <span class="token operator">&amp;</span> <span class="token operator">~</span>stall<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
 ### 条件存储类<br>
 <strong>条件存储，也就是从DM取出值之后，根据这个值是否满足某个condition，再判断要往哪个寄存器写。</strong>
-和前两种题型相比更复杂，但是总结下来也就只有以下<strong>三种类型</strong>——<br>
-1. <strong>condition成立：</strong>
+和前两种题型相比更复杂，但是总结下来也就只有以下<strong>三种类型</strong>——</li>
+</ul>
+<ol type="1">
+<li><strong>condition成立：</strong>
 将DM中的值写入<strong>A号</strong>寄存器<br>
-<strong>condition不成立：</strong> 写入<strong>B号</strong>寄存器<br>
-2. <strong>condition成立：</strong>
+<strong>condition不成立：</strong> 写入<strong>B号</strong>寄存器</li>
+<li><strong>condition成立：</strong>
 将DM中的值写入<strong>A号</strong>寄存器<br>
-<strong>condition不成立：</strong> 不写入<br>
-3.
-<strong>写入目标完全取决于DM的读取值</strong>（如将DM读取值的低5位作为写入目标）<p></p>
+<strong>condition不成立：</strong> 不写入</li>
+<li><strong>写入目标完全取决于DM的读取值</strong>（如将DM读取值的低5位作为写入目标）</li>
+</ol>
 <p>对于第二种不写入的情况，我们可以将写入地址<strong>设置为0号寄存器</strong>。因此这三种类型本质上是一种。</p>
 <p><strong>对于条件存储类指令，我们只有到M级才知道写入目标是什么</strong>，这对会我们的转发和暂停造成影响。我们需要对
 <strong><code>stall</code>信号的生成逻辑</strong>进行修改，引用学长的话说就是——<strong>“如果
@@ -977,7 +985,7 @@ https://roife.github.io/2021/01/02/buaa-co-lab-p7/<a href="#fnref1" class="footn
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -988,7 +996,7 @@ https://roife.github.io/2021/01/02/buaa-co-lab-p7/<a href="#fnref1" class="footn
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

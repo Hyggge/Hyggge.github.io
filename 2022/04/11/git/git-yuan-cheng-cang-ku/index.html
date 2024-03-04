@@ -496,13 +496,31 @@ origin</strong></td>
 <h2 id="pull命令">pull命令</h2>
 <p><code>git pull</code>表示将远程仓库中某分支下拉并合并到本地某分支，指令基本形式是——<br>
 </p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push <span class="token operator">&lt;</span>远程仓库名<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>远程分支名<span class="token operator">&gt;</span>:<span class="token operator">&lt;</span>本地分支名<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
-该指令有以下几种使用方法——<br>
-|指令|解释|<br>
-|:-:|:-:|<br>
-|<strong>git pull origin
-master:master</strong>|使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上|<br>
-|<strong>git pull origin
-master</strong>|省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）|<p></p>
+该指令有以下几种使用方法——<p></p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">指令</th>
+<th style="text-align: center;">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>git pull origin
+master:master</strong></td>
+<td style="text-align: center;">使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>git pull origin
+master</strong></td>
+<td style="text-align: center;">省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）</td>
+</tr>
+</tbody>
+</table>
 <h2 id="常见问题及解决方式">常见问题及解决方式</h2>
 <p><strong>情景1：</strong>
 假设你刚刚在<code>master</code>分支上干完一部分工作，commit到本地仓库后正准备上传到远程仓库，结果使用<code>push</code>是竟然报错了。原因是和你在同一分支上工作的大兄弟早早的干完活push上去了，而他的最新提交和你的提交是有冲突的。<br>
@@ -890,7 +908,7 @@ master</strong>|省略了远程分支名，表示将远程仓库origin的master�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -901,7 +919,7 @@ master</strong>|省略了远程分支名，表示将远程仓库origin的master�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

@@ -394,11 +394,11 @@
 </ul>
 <h2 id="包的创建package">包的创建（package）</h2>
 <p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。<br>
-</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>test</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
-### 包的命名规范<br>
-本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br>
+</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>test</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p></p>
+<h3 id="包的命名规范">包的命名规范</h3>
+<p>本部分内容参考该<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008711718">博客</a><br>
 Java的包名都有小写单词组成，应该避免使用与系统发生冲突的名字，如java.lang、java.swing等。多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀（如上例）。<br>
-<strong>个人和组织包命名规则如下：</strong><p></p>
+<strong>个人和组织包命名规则如下：</strong></p>
 <ul>
 <li><p><strong>indi</strong>
 ：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。<br>
@@ -422,26 +422,29 @@ Java的包名都有小写单词组成，应该避免使用与系统发生冲突�
 package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
 <h2 id="包的导入import">包的导入（import）</h2>
 <h3 id="不同包之间的导入">不同包之间的导入</h3>
-<p>不同包之间的使用通常有以下3种方法——<br>
-1. 使用全名<br>
-</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>
-1. 导入该类<br>
+<p>不同包之间的使用通常有以下3种方法——</p>
+<ol type="1">
+<li>使用全名<br>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>导入该类<br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token class-name">Animal</span></span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-1. 导入整个包(使用通配符<code>*</code>)<br>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>导入整个包(使用通配符<code>*</code>)<br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-<strong>注意点</strong><br>
-- 如果两个包（<code>com.hyggge</code> 和
+<strong>注意点</strong></li>
+</ol>
+<ul>
+<li>如果两个包（<code>com.hyggge</code> 和
 <code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong><br>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>czh<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
@@ -451,15 +454,17 @@ package）中。这也是为什么即使我们没有在源文件中使用<code>i
     <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span></span>Animal</span> ani <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>czh<span class="token punctuation">.</span></span>Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
--
-使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。<p></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。</li>
+</ul>
 <h3 id="有包的类和无包的类互相访问">有包的类和无包的类互相访问</h3>
-<p>有包的类和无包的类互相访问有以下规则：<br>
-1. <strong>无包的类可以访问有包的类</strong>, 直接导入即可；<br>
-2. 2.有包的类无法访问无包的类, 直接访问是找同一个包中的,
-由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；<br>
-3. 在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</p>
+<p>有包的类和无包的类互相访问有以下规则：</p>
+<ol type="1">
+<li><strong>无包的类可以访问有包的类</strong>, 直接导入即可；</li>
+<li>有包的类无法访问无包的类, 直接访问是找同一个包中的,
+由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；</li>
+<li>在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</li>
+</ol>
 <h3 id="包的无等级性">包的无等级性</h3>
 <p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java">impot com<span class="token punctuation">.</span>hyggge<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
@@ -858,7 +863,7 @@ impot com<span class="token punctuation">.</span>hyggge<span class="token punctu
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -869,7 +874,7 @@ impot com<span class="token punctuation">.</span>hyggge<span class="token punctu
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

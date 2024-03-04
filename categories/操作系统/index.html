@@ -349,29 +349,20 @@
                 
                 
                 
-                <a href="/categories/C/" title="C++: 8">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            style="background-color: #F9EBEA;">C++
-                        <span class="tag-length">8</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/categories/%E7%AE%97%E6%B3%95/" title="算法: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F5EEF8;">算法
+                            style="background-color: #F9EBEA;">算法
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/%E7%BC%96%E8%AF%91/" title="编译: 1">
+                <a href="/categories/C/" title="C++: 8">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #D5F5E3;">编译
-                        <span class="tag-length">1</span>
+                            style="background-color: #F5EEF8;">C++
+                        <span class="tag-length">8</span>
                     </span>
                 </a>
                 
@@ -379,8 +370,17 @@
                 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" title="计算机组成: 15">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #E8F8F5;">计算机组成
+                            style="background-color: #D5F5E3;">计算机组成
                         <span class="tag-length">15</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/%E7%BC%96%E8%AF%91/" title="编译: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #E8F8F5;">编译
+                        <span class="tag-length">1</span>
                     </span>
                 </a>
                 
@@ -669,10 +669,10 @@ A：
                                 IDE磁盘镜像
 在这一部分，我们主要依赖fsformat.c文件创建磁盘镜像文件
 gxemul/fs.img，这个磁盘镜像可以模拟与真实的磁盘文件设备之间的交互。
-### fs/fsformat.c
+fs/fsformat.c
 函数之间的调用关系如下所示——
 
-rev
+reverse
                             
                         </div>
                         <div class="publish-info">
@@ -725,12 +725,10 @@ rev
                                 实验思考题
 Thinking 4.1
 Q： 思考并回答下面的问题：
--
+
 内核在保存现场的时候是如何避免破坏通用寄存器的？
--
 系统陷入内核调用后可以直接从当时的$a0-$a3参数寄存器中得到用户调用msyscall留下的信息吗？
--
-我们是
+我们是怎么做到让
                             
                         </div>
                         <div class="publish-info">
@@ -895,11 +893,13 @@ A：
                         <div class="summary block-with-text">
                             
                                 进程调度实际上就是在就绪进程队列中选择一个进程执行，关于进程的调度我们需要考虑三个问题——
-- 调度的时机：何时进行进程调度
-- 调度的执行：调度时如何进行CPU上下文切换
-- 调度的策略：按照什么原则选择一个就绪进程进行调度
-调度的时机
 
+调度的时机：何时进行进程调度
+调度的执行：调度时如何进行CPU上下文切换
+调度的策略：按照什么原则选择一个就绪进程进行调度
+
+调度的时机
+当遇到下
                             
                         </div>
                         <div class="publish-info">
@@ -1057,7 +1057,7 @@ A：
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1068,7 +1068,7 @@ A：
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

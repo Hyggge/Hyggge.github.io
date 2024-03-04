@@ -10,8 +10,7 @@
 Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是
 “通过pom.xml文件的配置获取jar包不用手动的去添加jar包”。该工具的原理图如下所示——
 
-
-">
+仓">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -392,41 +391,27 @@ Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是
 Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是
 <strong>“通过pom.xml文件的配置获取jar包不用手动的去添加jar包”</strong>。该工具的原理图如下所示——<br>
 <img src="生命周期与插件.png"></p>
-<table style="width:6%;">
-<colgroup>
-<col style="width: 5%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>## 仓库<br>
-仓库可以储存资源，包含各种<code>jar</code>包。仓库分为两种：<strong>本地仓库和远程仓库</strong><br>
--
-<strong>本地仓库</strong>：是在本机电脑上储存资源的仓库，可以从远程仓库中获取资源。<br>
--
-<strong>远程仓库</strong>：非本机仓库，可以为本地仓库获取资源，又包含两种——<strong>中央仓库</strong>（apache公司的开发者维护的资源包）和<strong>私服</strong>（包括从中央仓库）</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>## 坐标<br>
-如果我们本地的maven项目想从远程仓库中获取的maven资源包并使用（也叫<strong>依赖</strong>），需要在<code>pom.xml</code>中提供该资源包的坐标，坐标至少包括三个内容——<code>groupId</code>
+<h2 id="仓库">仓库</h2>
+<p>仓库可以储存资源，包含各种<code>jar</code>包。仓库分为两种：<strong>本地仓库和远程仓库</strong></p>
+<ul>
+<li><strong>本地仓库</strong>：是在本机电脑上储存资源的仓库，可以从远程仓库中获取资源。</li>
+<li><strong>远程仓库</strong>：非本机仓库，可以为本地仓库获取资源，又包含两种——<strong>中央仓库</strong>（apache公司的开发者维护的资源包）和<strong>私服</strong>（包括从中央仓库）</li>
+</ul>
+<h2 id="坐标">坐标</h2>
+<p>如果我们本地的maven项目想从远程仓库中获取的maven资源包并使用（也叫<strong>依赖</strong>），需要在<code>pom.xml</code>中提供该资源包的坐标，坐标至少包括三个内容——<code>groupId</code>
 <code>artifactId</code> <code>version</code>，可以直接在<a target="_blank" rel="noopener" href="https://mvnrepository.com/">官网</a>中查找。<br>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!--依赖所属群组id--&gt;</span>
+</p><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!--依赖所属群组id--&gt;</span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>junit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
 <span class="token comment">&lt;!--依赖所属项目id--&gt;</span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>junit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
 <span class="token comment">&lt;!--依赖版本号--&gt;</span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>4.12<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-我们在本地新建maven项目时也需要在<code>pom.xml</code>中提供该项目的坐标，以方便其他人使用我们的项目成果（准确来说，是使用该<strong>项目打包后形成<code>jar</code>包</strong>）。</td>
-</tr>
-</tbody>
-</table>
+我们在本地新建maven项目时也需要在<code>pom.xml</code>中提供该项目的坐标，以方便其他人使用我们的项目成果（准确来说，是使用该<strong>项目打包后形成<code>jar</code>包</strong>）。<p></p>
 <h2 id="maven项目的工程目录">maven项目的工程目录</h2>
 <p>maven项目的<strong>java工程</strong>目录如下所示——<br>
 <img src="maven工程目录.png"></p>
 <p>如果这是一个<strong>web工程</strong>，则需要在main中增加一个文件夹<code>webapp</code>，如下图——<br>
 <img src="web工程目录.png"></p>
-<hr>
 <h2 id="pom.xml写法">pom.xml写法</h2>
 <p><code>pom.xml</code>在项目的根目录下（例如上文中的<code>java01</code>文件夹），作用是<strong>对maven项目进行配置</strong>。必须包括<strong>maven的版本号</strong>，<strong>当前项目的坐标</strong>，还可以包含<strong>依赖</strong>（<code>dependencies</code>）、<strong>插</strong>件（<code>plugins</code>）等等。<br>
 </p><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
@@ -845,7 +830,7 @@ Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -856,7 +841,7 @@ Maven的核心功能是合理叙述项目间的依赖关系，通俗点 就是
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

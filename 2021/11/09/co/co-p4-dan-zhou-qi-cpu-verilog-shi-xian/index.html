@@ -394,25 +394,31 @@ Cont">
 Control等关键模块。整个搭建过程通过自下而上的方式完成——先根据应实现的指令对功能部件进行设计与搭建，然后对各个功能部件进行连接，形成完整的数据通路。</p>
 <p><img src="CPU.png"></p>
 <h3 id="实现指令说明">实现指令说明</h3>
-<p> 本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。<br>
-#### R型指令<br>
-- 算数/位运算指令：add, addu, sub, subu, and, or, nor, xor<br>
-- 移位指令：sll, srl, sra, sllv, srlv, srav<br>
-- 置位指令：slt, sltu<br>
-- 跳转指令：jr, jalr<br>
-#### J型指令<br>
-- 跳转指令：j, jal<br>
-#### I型指令<br>
-- 算数/位运算指令： addi, andi, addiu, ori, xori, lui<br>
-- B类指令：beq, bne, bgtz, bgez, blez, bltz<br>
-- 置位指令：slti, sltiu<br>
-- 访存指令：lw, sw, lh, lhu, lb, lbu, sh, sb<br>
--<br>
-### 数据通路模块定义<br>
-#### IFU（取指令单元）</p>
+<p> 本CPU支持43条指令，包括19条R型指令，2条J型指令，22条I型指令。</p>
+<h4 id="r型指令">R型指令</h4>
+<ul>
+<li>算数/位运算指令：add, addu, sub, subu, and, or, nor, xor</li>
+<li>移位指令：sll, srl, sra, sllv, srlv, srav</li>
+<li>置位指令：slt, sltu</li>
+<li>跳转指令：jr, jalr</li>
+</ul>
+<h4 id="j型指令">J型指令</h4>
+<ul>
+<li>跳转指令：j, jal</li>
+</ul>
+<h4 id="i型指令">I型指令</h4>
+<ul>
+<li>算数/位运算指令： addi, andi, addiu, ori, xori, lui</li>
+<li>B类指令：beq, bne, bgtz, bgez, blez, bltz</li>
+<li>置位指令：slti, sltiu</li>
+<li>访存指令：lw, sw, lh, lhu, lb, lbu, sh, sb</li>
+</ul>
+<h3 id="数据通路模块定义">数据通路模块定义</h3>
+<h4 id="ifu取指令单元">IFU（取指令单元）</h4>
 <p>  该模块内部包含PC（程序计数器）和IM（指令存储器容量为32*1024
-bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。<br>
-- <strong>端口定义</strong></p>
+bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
+<ul>
+<li><p><strong>端口定义</strong></p>
 <table>
 <thead>
 <tr class="header">
@@ -460,8 +466,7 @@ bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位�
 <td>输出当前正在执行的指令</td>
 </tr>
 </tbody>
-</table>
-<ul>
+</table></li>
 <li><p><strong>功能定义</strong></p>
 <table>
 <colgroup>
@@ -504,32 +509,117 @@ bit）。可以根据PC的值从IM取出对应的指令，并具有同步复位�
 <p>该模块内部包含32个具有写使能32位寄存器，分别对应MIPS架构中$0 ~
 $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能）。GRF可以实现异步复位，同时可以根据输入的5位地址（0~31）向寄存器堆存取数据，实现定向访存寄存器。</p>
 <ul>
-<li><p><strong>端口定义</strong><br>
-|信号名|方向|位宽|描述|<br>
-|----|----|----|----|<br>
-| clk | I | 1 | 时钟信号 |<br>
-| pc | I | 1 | 当前指令地址 |<br>
-| reset | I | 1 | 同步复位信号 1：复位信号有效 0：复位信号无效 |<br>
-| read_addr_1 | I | 5 |
-地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1 |<br>
-| read_addr_2 | I | 5 |
-地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2 |<br>
-| write_addr | I | 5 |
-地址输入信号，指定32个寄存器中的一个，将其作为写入目标 |<br>
-| write_data | I | 32 | 数据输入信号 |<br>
-| RegWrite | I | 1 | 写使能信号 1：写入有效 0：写入失效 |<br>
-| read_data_1 | O | 32 | 输出A1指定的寄存器中的32位数据 |<br>
-| read_data_2 | O | 32 | 输出A2指定的寄存器中的32位数据 |</p></li>
-<li><p><strong>功能定义</strong><br>
-|序号|功能名称|功能描述|<br>
-|--|--|--|<br>
-| 1 | 复位 | reset信号有效时，所有寄存器中储存的值均被清零 |<br>
-| 2 | 读数据 |
-读出read_addr_1，read_addr_2地址对应的寄存器中储存的数据，将其加载到read_data_1和read_data_2
-|<br>
-| 3 | 写数据 |
-当RegWrite信号有效且时钟上升沿来临时，将write_data中的数据写入到write_addr地址对应的寄存器
-|</p></li>
+<li><p><strong>端口定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr class="even">
+<td>pc</td>
+<td>I</td>
+<td>1</td>
+<td>当前指令地址</td>
+</tr>
+<tr class="odd">
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号 1：复位信号有效 0：复位信号无效</td>
+</tr>
+<tr class="even">
+<td>read_addr_1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
+</tr>
+<tr class="odd">
+<td>read_addr_2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
+</tr>
+<tr class="even">
+<td>write_addr</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr class="odd">
+<td>write_data</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr class="even">
+<td>RegWrite</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号 1：写入有效 0：写入失效</td>
+</tr>
+<tr class="odd">
+<td>read_data_1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的32位数据</td>
+</tr>
+<tr class="even">
+<td>read_data_2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的32位数据</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>功能定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>复位</td>
+<td>reset信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>读数据</td>
+<td>读出read_addr_1，read_addr_2地址对应的寄存器中储存的数据，将其加载到read_data_1和read_data_2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>写数据</td>
+<td>当RegWrite信号有效且时钟上升沿来临时，将write_data中的数据写入到write_addr地址对应的寄存器</td>
+</tr>
+</tbody>
+</table></li>
 </ul>
 <h4 id="npc下一指令计算单元">NPC（下一指令计算单元）</h4>
 <p>该模块根据当前指令地址和控制信号，计算出下一指令所在的地址。<br>
@@ -605,94 +695,412 @@ $31通用寄存器（其中0号寄存器中的值恒为0，即不具备写使能
 </table>
 <h4 id="alu逻辑运算单元">ALU（逻辑运算单元）</h4>
 <p> 
-该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。<br>
-- <strong>端口定义</strong><br>
-| <strong>信号名</strong> | <strong>方向</strong> |
-<strong>位宽</strong> | <strong>描述</strong> |<br>
-|----|----|----|----|<br>
-| ALUOp | I | 4 | ALU功能选择信号 |<br>
-| src_A | I | 32 | 参与ALU计算的第一个值 |<br>
-| src_B | I | 32 | 参与ALU计算的第二个值 |<br>
-| shamt | I | 5 | 移位数输入 |<br>
-| FlowJudge | I | 1 | 溢出判断信号 1：进行溢出判断 0：不进行溢出判断
-|<br>
-| equal | O | 1 | 相等判断信号 1：src_A和src_B相等 0：src_A和src_B不相等
-|<br>
-| ALU_result | O | 32 | 输出ALU计算结果 |<br>
-| flow_result | O | 1 |
-输出ALU计算结果的溢出情况（add，sub，addi等指令有效） |<br>
-- <strong>功能定义</strong><br>
-|序号|功能名称|ALU_Op|功能描述|<br>
-|--|--|--|------|<br>
-| 1 | 加 | 0b0000 | ALU_result = src_A + src_B |<br>
-| 2 | 减 | 0b0001 | ALU_result = src_A - src_B |<br>
-| 3 | 按位与 | 0b0010 | ALU_result = src_A &amp; src_B |<br>
-| 4 | 按位或 | 0b0011 | ALU_result = src_A | src_B |<br>
-| 5 | 按位异或 | 0b0100 | ALU_result = src_A ⊕ src_B |<br>
-| 6 | 按位或非 | 0b0101 | ALU_result = ~(src_A | src_B) |<br>
-| 7 | 逻辑左移 | 0b0110 | ALU_result = src_B &lt;&lt; shamt |<br>
-| 8 | 逻辑右移 | 0b0111 | ALU_result = src_B &gt;&gt; shamt |<br>
-| 9 | 算术右移 | 0b1000 | ALU_result = src_B &gt;&gt;&gt; shamt |<br>
-| 10 | 带符号比较 | 0b1001 | ALU_result = (src_A &gt; src_B) ? 1 :
-0（带符号比较） |<br>
-| 11 | 无符号比较 | 0b1010 | ALU_result = (src_A &gt; src_B) ? 1 :
-0（无符号比较） |<br>
-#### DM （数据存储器）<br>
-该模块可以实现对数据的存储与访问（包括对字、半字、字节的各种访存操作），还可以实现同步复位。<br>
-- <strong>端口定义</strong><br>
-|信号名|方向|位宽|描述|<br>
-|----|----|----|----|<br>
-| pc | I | 32 | 当前指令的地址 |<br>
-| clk | I | 1 | 时钟信号 |<br>
-| reset | I | 1 | 同步复位信号 |<br>
-| MemWrite | I | 1 | 储存器写入使能信号 1：写入有效 0：写入失效 |<br>
-| addr | I | 32 | 储存器写入地址 |<br>
-| write_data | I | 32 | 储存器写入数据 |<br>
-| LSOp | I | 3 | 访存功能选择 <br>0b000:lw <br>0b001:sw
-<br>0b010:lh <br>0b011:lhu <br>0b100:sh <br>0b101:lb
-<br>0b110:lbu <br>0b111:sb |<br>
-| read_data | O | 32 | 储存器读出数据 |<br>
-#### Branch Control（B类指令控制模块）<br>
-该模块跟据当前所执行的分支指令类型进行相应判断，并将判断结果输出。<br>
-- <strong>端口定义</strong><br>
-| cmp_data | I | 32 |
-输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz） |<br>
-|----|----|----|----|<br>
-| equal | I | 1 |
-相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne） |<br>
-| BranchOp | I | 3 | B类指令选择指令 0b000：beq指令 0b001：bgez，bltz
-0b010：bgtz 0b011：blez 0b100：bne |<br>
-| judge | I | 1 | 区别bgez，bltz两个指令 |<br>
-| result | O | 1 | 输出判断结果 1：B类指令转移条件成立
-0：B类指令转移条件不成立 |</p>
+该模块可实现加，减，按位与，按位或等11种运算，并根据ALUOP信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断。</p>
+<ul>
+<li><p><strong>端口定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>信号名</strong></th>
+<th><strong>方向</strong></th>
+<th><strong>位宽</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ALUOp</td>
+<td>I</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+</tr>
+<tr class="even">
+<td>src_A</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第一个值</td>
+</tr>
+<tr class="odd">
+<td>src_B</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第二个值</td>
+</tr>
+<tr class="even">
+<td>shamt</td>
+<td>I</td>
+<td>5</td>
+<td>移位数输入</td>
+</tr>
+<tr class="odd">
+<td>FlowJudge</td>
+<td>I</td>
+<td>1</td>
+<td>溢出判断信号 1：进行溢出判断 0：不进行溢出判断</td>
+</tr>
+<tr class="even">
+<td>equal</td>
+<td>O</td>
+<td>1</td>
+<td>相等判断信号 1：src_A和src_B相等 0：src_A和src_B不相等</td>
+</tr>
+<tr class="odd">
+<td>ALU_result</td>
+<td>O</td>
+<td>32</td>
+<td>输出ALU计算结果</td>
+</tr>
+<tr class="even">
+<td>flow_result</td>
+<td>O</td>
+<td>1</td>
+<td>输出ALU计算结果的溢出情况（add，sub，addi等指令有效）</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>功能定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>功能名称</th>
+<th>ALU_Op</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>加</td>
+<td>0b0000</td>
+<td>ALU_result = src_A + src_B</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>减</td>
+<td>0b0001</td>
+<td>ALU_result = src_A - src_B</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>按位与</td>
+<td>0b0010</td>
+<td>ALU_result = src_A &amp; src_B</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>按位或</td>
+<td>0b0011</td>
+<td>ALU_result = src_A | src_B</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>按位异或</td>
+<td>0b0100</td>
+<td>ALU_result = src_A ⊕ src_B</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>按位或非</td>
+<td>0b0101</td>
+<td>ALU_result = ~(src_A | src_B)</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>逻辑左移</td>
+<td>0b0110</td>
+<td>ALU_result = src_B &lt;&lt; shamt</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>逻辑右移</td>
+<td>0b0111</td>
+<td>ALU_result = src_B &gt;&gt; shamt</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>算术右移</td>
+<td>0b1000</td>
+<td>ALU_result = src_B &gt;&gt;&gt; shamt</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>带符号比较</td>
+<td>0b1001</td>
+<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（带符号比较）</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>无符号比较</td>
+<td>0b1010</td>
+<td>ALU_result = (src_A &gt; src_B) ? 1 : 0（无符号比较）</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h4 id="dm-数据存储器">DM （数据存储器）</h4>
+<p>该模块可以实现对数据的存储与访问（包括对字、半字、字节的各种访存操作），还可以实现同步复位。</p>
+<ul>
+<li><p><strong>端口定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令的地址</td>
+</tr>
+<tr class="even">
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr class="odd">
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>同步复位信号</td>
+</tr>
+<tr class="even">
+<td>MemWrite</td>
+<td>I</td>
+<td>1</td>
+<td>储存器写入使能信号 1：写入有效 0：写入失效</td>
+</tr>
+<tr class="odd">
+<td>addr</td>
+<td>I</td>
+<td>32</td>
+<td>储存器写入地址</td>
+</tr>
+<tr class="even">
+<td>write_data</td>
+<td>I</td>
+<td>32</td>
+<td>储存器写入数据</td>
+</tr>
+<tr class="odd">
+<td>LSOp</td>
+<td>I</td>
+<td>3</td>
+<td>访存功能选择 <br>0b000:lw <br>0b001:sw <br>0b010:lh
+<br>0b011:lhu <br>0b100:sh <br>0b101:lb <br>0b110:lbu
+<br>0b111:sb</td>
+</tr>
+<tr class="even">
+<td>read_data</td>
+<td>O</td>
+<td>32</td>
+<td>储存器读出数据</td>
+</tr>
+</tbody>
+</table>
+<h4 id="branch-controlb类指令控制模块">Branch
+Control（B类指令控制模块）</h4>
+<p>该模块跟据当前所执行的分支指令类型进行相应判断，并将判断结果输出。</p></li>
+<li><p><strong>端口定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>cmp_data</th>
+<th>I</th>
+<th>32</th>
+<th>输入32位数据，用于和0进行比较（实现blez，bgez，bltz，bgtz）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>equal</td>
+<td>I</td>
+<td>1</td>
+<td>相等判断信号，即ALU模块中Src_A和Src_B的比较结果（实现beq，bne）</td>
+</tr>
+<tr class="even">
+<td>BranchOp</td>
+<td>I</td>
+<td>3</td>
+<td>B类指令选择指令 0b000：beq指令 0b001：bgez，bltz 0b010：bgtz
+0b011：blez 0b100：bne</td>
+</tr>
+<tr class="odd">
+<td>judge</td>
+<td>I</td>
+<td>1</td>
+<td>区别bgez，bltz两个指令</td>
+</tr>
+<tr class="even">
+<td>result</td>
+<td>O</td>
+<td>1</td>
+<td>输出判断结果 1：B类指令转移条件成立 0：B类指令转移条件不成立</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
 <h3 id="控制模块定义">控制模块定义</h3>
 <p>在控制模块中，我们对指令中Opcode域和Funct域中的数据进行解码，输出ALUOp,MemtoReg等15条控制指令，从而对数据通路进行调整，满足不同指令的需求。为实现该模块，我们又在内部设计了两个子模块——和逻辑（AND
 Logic）和或逻辑（OR
-Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。<br>
-- <strong>控制信号定义</strong><br>
-|序号|信号名|位宽|描述|触发指令（信号为1）|<br>
-|---|-----|---|----|-------------|<br>
-| 1 | MemToReg | 1 | GRF中WD接口输入数据选择 | |<br>
-| 2 | MemWrite | 1 | DM写入使能信号 | |<br>
-| 3 | ALUSrc | 1 | ALU中Src_B接口输入数据选择 | |<br>
-| 4 | RegWrite | 1 | GRF写入使能信号 | |<br>
-| 5 | SYSCALL | 1 | syscall指令译码信号，GRF中A1接口输入数据选择 |
-|<br>
-| 6 | SignedExt | 1 | 立即数符号扩展选择 | |<br>
-| 7 | RegDst | 1 | GRF中A3接口输入数据选择 | |<br>
-| 8 | AddrToReg | 1 | 指令地址传递信号，选择是否将PC+4输入到GRF的WD端口
-| |<br>
-| 9 | RaLink | 1 | <span class="math inline">\(ra寄存器写入选择信号，选择是否将\)</span>ra作为GRF的写入对象
-| |<br>
-| 10 | VarShift | 1 |
-可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口 |
-|<br>
-| 11 | FlowJudge | 1 | 溢出判断选择信号 | |<br>
-| 12 | BranchOp | 3 | B类指令选择信号 | |<br>
-| 13 | LSOp | 3 | 访存操作选择信号 | |<br>
-| 14 | NPCOp | 3 | next_pc输出选择信号 | |<br>
-| 15 | ALUOp | 4 | ALU功能选择信号 | |</p>
+Logic）。前者的功能是识别，将输入的Opcode和Funct数据识别为对应的指令，后者的功能是生成，根据输入指令的不同产生不同的控制信号。</p>
 <ul>
+<li><p><strong>控制信号定义</strong></p>
+<table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>信号名</th>
+<th>位宽</th>
+<th>描述</th>
+<th>触发指令（信号为1）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>MemToReg</td>
+<td>1</td>
+<td>GRF中WD接口输入数据选择</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>MemWrite</td>
+<td>1</td>
+<td>DM写入使能信号</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>ALUSrc</td>
+<td>1</td>
+<td>ALU中Src_B接口输入数据选择</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>RegWrite</td>
+<td>1</td>
+<td>GRF写入使能信号</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>SYSCALL</td>
+<td>1</td>
+<td>syscall指令译码信号，GRF中A1接口输入数据选择</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>SignedExt</td>
+<td>1</td>
+<td>立即数符号扩展选择</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>RegDst</td>
+<td>1</td>
+<td>GRF中A3接口输入数据选择</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>AddrToReg</td>
+<td>1</td>
+<td>指令地址传递信号，选择是否将PC+4输入到GRF的WD端口</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>RaLink</td>
+<td>1</td>
+<td><span class="math inline">\(ra寄存器写入选择信号，选择是否将\)</span>ra作为GRF的写入对象</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>VarShift</td>
+<td>1</td>
+<td>可变移位选择信号，选择是否将指令rs域的五位数据写入ALU的Shift接口</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>FlowJudge</td>
+<td>1</td>
+<td>溢出判断选择信号</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>BranchOp</td>
+<td>3</td>
+<td>B类指令选择信号</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>LSOp</td>
+<td>3</td>
+<td>访存操作选择信号</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>NPCOp</td>
+<td>3</td>
+<td>next_pc输出选择信号</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>ALUOp</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
 <li><p>生成代码</p>
 <pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">   <span class="token keyword">assign</span> MemToReg       <span class="token operator">=</span> _lw <span class="token operator">|</span> _lh <span class="token operator">|</span> _lhu <span class="token operator">|</span> _lb <span class="token operator">|</span> _lbu<span class="token punctuation">;</span>
     <span class="token keyword">assign</span> MemWrite       <span class="token operator">=</span> _sw <span class="token operator">|</span> _sh <span class="token operator">|</span> _sb<span class="token punctuation">;</span>
@@ -1561,7 +1969,7 @@ overflow,也就是说，add和addu仅有溢出检测的区别。在忽略溢出�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1572,7 +1980,7 @@ overflow,也就是说，add和addu仅有溢出检测的区别。在忽略溢出�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

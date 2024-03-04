@@ -416,16 +416,61 @@ sltiu</p></li>
 该模块内部包含PC（程序计数器）和IM（指令存储器）。IM的容量为<strong>16KB</strong>(32bit/word×<strong>4096word</strong>)，
 可以根据PC的值从IM取出对应的指令，并具有同步复位的功能。</p>
 <ul>
-<li><p><strong>端口定义</strong><br>
-| 信号名 | 方向 | 位宽 | 描述 |<br>
-| :----: | :--: | :--: | :--------------------------- |<br>
-| clk | I | 1 | 时钟信号 |<br>
-| reset | I | 1 | 异步复位信号 |<br>
-| en | I | 1 | 使能信号(stall信号取反) |<br>
-| npc | I | 32 | 下一条要被执行的指令的地址 |<br>
-| pc | O | 32 | 输出当前正在执行的指令的地址 |<br>
-| instr | O | 32 | 输出当前正在执行的指令 |<br>
-| pc8 | O | 32 | pc+8 |</p></li>
+<li><p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">信号名</th>
+<th style="text-align: center;">方向</th>
+<th style="text-align: center;">位宽</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">clk</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">时钟信号</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">reset</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">异步复位信号</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">en</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">使能信号(stall信号取反)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">npc</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">下一条要被执行的指令的地址</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">pc</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">输出当前正在执行的指令的地址</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">instr</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">输出当前正在执行的指令</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">pc8</td>
+<td style="text-align: center;">O</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: left;">pc+8</td>
+</tr>
+</tbody>
+</table></li>
 <li><p><strong>功能定义</strong></p>
 <table>
 <colgroup>
@@ -3477,7 +3522,7 @@ CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。�
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -3488,7 +3533,7 @@ CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。�
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

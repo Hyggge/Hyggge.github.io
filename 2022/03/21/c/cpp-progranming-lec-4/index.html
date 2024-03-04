@@ -421,10 +421,12 @@ void func() {
     <span class="token function">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//报错！！！</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-&gt;函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>，这也就说明为什么我们在使用外部变量（定义在其他文件的变量）前需要用
-<code>extern</code>进行声明，而使用外部函数是不需要(当然也是可以的)</li>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
+<blockquote>
+<p>函数默认是<strong>全局域</strong>，全局变量默认是<strong>文件域</strong>，这也就说明为什么我们在使用外部变量（定义在其他文件的变量）前需要用
+<code>extern</code>进行声明，而使用外部函数是不需要(当然也是可以的)</p>
+</blockquote>
 <h3 id="static-data-member">static data member</h3>
 <ul>
 <li>类中可以定义静态变量，一次性初始化，所有对象共享。</li>
@@ -452,12 +454,12 @@ void func() {
 <li>类中的静态函数，<strong>既可以通过对象访问，也可以通过类名访问</strong></li>
 <li>静态函数中没有this指针</li>
 <li>静态函数只能访问类中的静态变量，不能访问类的对象。<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">    <span class="token keyword">class</span> <span class="token class-name">Static</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span><span class="token operator">:</span>
-        <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            cout <span class="token operator">&lt;&lt;</span> <span class="token string">"static!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Static</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"static!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">//通过对象调用</span>
@@ -978,7 +980,7 @@ ORMapping</p>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -989,7 +991,7 @@ ORMapping</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

@@ -12,8 +12,10 @@ SR锁存器
 
 缺点：没有时间上的同步关系
  
-### D锁存器
-功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多">
+
+D锁存器
+
+功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -399,21 +401,27 @@ SR锁存器
 <li>功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）<br>
 </li>
 <li>缺点：没有时间上的同步关系<br>
-<img src="SR锁存器原理图.png"> <img src="SR锁存器真值表.png"><br>
-### D锁存器</li>
+<img src="SR锁存器原理图.png"> <img src="SR锁存器真值表.png"></li>
+</ul>
+<h3 id="d锁存器">D锁存器</h3>
+<ul>
 <li>功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转<br>
 </li>
 <li>缺点：无法实现时钟沿储存</li>
 </ul>
-<p><img src="D锁存器.png"><br>
-### D触发器<br>
-- 功能：时钟沿上升时储存<br>
-<img src="D触发器_1.png"> <img src="D触发器_2.png"></p>
+<p><img src="D锁存器.png"></p>
+<h3 id="d触发器">D触发器</h3>
+<ul>
+<li>功能：时钟沿上升时储存<br>
+<img src="D触发器_1.png"> <img src="D触发器_2.png"></li>
+</ul>
 <h3 id="带使能端的d触发器">带使能端的D触发器</h3>
 <ul>
 <li>功能：若使能信号有效则可以正常读入，否则保存当前值而不读入<br>
-<img src="带使能端的D触发器.png"><br>
-### 可置位的D触发器</li>
+<img src="带使能端的D触发器.png"></li>
+</ul>
+<h3 id="可置位的d触发器">可置位的D触发器</h3>
+<ul>
 <li>功能：若置位信号有效，则下一个时钟沿到来时触发器只更新为0</li>
 </ul>
 <p><img src="置位_1.png"><img src="置位_2.png"></p>
@@ -453,18 +461,22 @@ Encoding）：N个触发器表示这N个状态,资源消耗多，但无毛刺,�
 </ul>
 <h2 id="logisim中有限状态机的实现">logisim中有限状态机的实现</h2>
 <p>总体来说，使用 Logism
-设计有限状态机的过程基本上可以分为三个步骤：<br>
-- 设计实现状态存储模块<br>
-- 设计实现状态转移模块<br>
-- 设计实现输出模块</p>
+设计有限状态机的过程基本上可以分为三个步骤：</p>
+<ul>
+<li>设计实现状态存储模块</li>
+<li>设计实现状态转移模块</li>
+<li>设计实现输出模块</li>
+</ul>
 <p>其中，状态转移模块和输出模块内是纯组合逻辑，不涉及时序逻辑；状态存储模块则需要存储每个周期有限状态机的具体状态。</p>
 <p><strong>两种状态机的状态转移和状态存储模块的设计方法基本一致</strong>：<br>
 状态转移模块根据当前有限状态机的状态(即状态存储模块所存储的值)和当前的输入计算出有限状态机的下一状态值，当时钟上升沿到来时，这个新的状态值被存入状态存储模块中。</p>
-<p><strong>两种状态机的不同之处在于输出模块对输入数据的要求</strong>：<br>
-- more型有限状态机的设计<br>
-<img src="moore.png"><br>
-- mealy型有限状态机的设计<br>
-<img src="mealy.PNG"></p>
+<p><strong>两种状态机的不同之处在于输出模块对输入数据的要求</strong>：</p>
+<ul>
+<li>more型有限状态机的设计<br>
+<img src="moore.png"></li>
+<li>mealy型有限状态机的设计<br>
+<img src="mealy.PNG"></li>
+</ul>
 <h3 id="verilog中有限状态机的实现">verilog中有限状态机的实现</h3>
 <p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用
 always 语句和 case 语句。下面具体说明用 Verilog
@@ -479,9 +491,9 @@ FPGA
 <li><p>根据状态转移图得出次态逻辑和输出逻辑。</p></li>
 <li><p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。
 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else
-语句描述出状态的转移。<br>
-#### 设计建议</p></li>
+语句描述出状态的转移。</p></li>
 </ul>
+<h4 id="设计建议">设计建议</h4>
 <ol type="1">
 <li>一般用case、casez 或 casex语句进行状态判断，比用 if-else
 语句更加清晰明了。</li>
@@ -876,7 +888,7 @@ FPGA
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -887,7 +899,7 @@ FPGA
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

@@ -407,34 +407,35 @@ a<span class="token punctuation">,</span> b <span class="token operator">=</span
 puts a <span class="token operator">==</span> b             <span class="token comment"># output: false</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <p>不过这种用法不常见，毕竟能写<code>==</code>为什么要大费周章地写<code>===</code>呢？</p>
 <h2 id="不同类型对象比较">不同类型对象比较</h2>
-<p>当我们比较两个不同类型的对象时，<code>===</code>的用法便随着对象类型的不同而不同了——<br>
--
-当左侧是整数，右侧是浮点数，如果两数的值相等，则表达式会返回true，否则返回false
+<p>当我们比较两个不同类型的对象时，<code>===</code>的用法便随着对象类型的不同而不同了——</p>
+<ul>
+<li><p>当左侧是整数，右侧是浮点数，如果两数的值相等，则表达式会返回true，否则返回false
 (其实就是引言中的例子)。此时，<code>===</code>相当于<code>==</code>。<br>
 </p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token number">1</span> <span class="token operator">===</span> <span class="token number">1.0</span>               <span class="token comment"># output: true</span>
-<span class="token number">6.0</span> <span class="token operator">===</span> <span class="token number">6</span>              <span class="token comment"># output: true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
-<ul>
-<li>当左侧是类名，右侧是某个对象时，如果该对象是左侧的类的实例，则表达式会返回true，否则返回false。此时，<code>===</code>
+<span class="token number">6.0</span> <span class="token operator">===</span> <span class="token number">6</span>              <span class="token comment"># output: true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
+<li><p>当左侧是类名，右侧是某个对象时，如果该对象是左侧的类的实例，则表达式会返回true，否则返回false。此时，<code>===</code>
 相当于 <code>is_a?</code>。<br>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token builtin">String</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"hyggge"</span></span>     <span class="token comment"># output: true</span>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token builtin">String</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"hyggge"</span></span>     <span class="token comment"># output: true</span>
 <span class="token builtin">Range</span> <span class="token operator">===</span> <span class="token punctuation">(</span><span class="token number">1.</span><span class="token number">.2</span><span class="token punctuation">)</span>        <span class="token comment"># output: true</span>
 <span class="token builtin">Array</span> <span class="token operator">===</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>     <span class="token comment"># output: true</span>
-<span class="token builtin">Integer</span> <span class="token operator">===</span> <span class="token number">2</span>           <span class="token comment"># output: true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li>当左侧是范围，右侧是某个值时，如果该值落在左侧的范围中，
+<span class="token builtin">Integer</span> <span class="token operator">===</span> <span class="token number">2</span>           <span class="token comment"># output: true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p>当左侧是范围，右侧是某个值时，如果该值落在左侧的范围中，
 则表达式会返回true，否则返回false。此时，<code>===</code> 相当于
 <code>include?</code>。<br>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">.</span><span class="token number">.5</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token number">2</span>           <span class="token comment"># output: true</span>
-<span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"a"</span></span><span class="token operator">...</span><span class="token string-literal"><span class="token string">"g"</span></span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"c"</span></span>     <span class="token comment"># output: true </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>当左侧是正则表达式，右侧是某个字符串对象时，如果该字符串能够匹配上左侧的正则表达式，则会返回true，否则返回false。此时，<code>===</code>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">.</span><span class="token number">.5</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token number">2</span>           <span class="token comment"># output: true</span>
+<span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"a"</span></span><span class="token operator">...</span><span class="token string-literal"><span class="token string">"g"</span></span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"c"</span></span>     <span class="token comment"># output: true </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
+<li><p>当左侧是正则表达式，右侧是某个字符串对象时，如果该字符串能够匹配上左侧的正则表达式，则会返回true，否则返回false。此时，<code>===</code>
 相当于 <code>=~</code>。<br>
-<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token operator">/</span><span class="token operator">^</span><span class="token punctuation">[</span><span class="token constant">A</span><span class="token operator">-</span><span class="token constant">Z</span><span class="token punctuation">]</span><span class="token operator">*</span>$<span class="token operator">/</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"HELLO"</span></span>  <span class="token comment"># output：true</span>
-<span class="token operator">/</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token operator">-</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token operator">+</span><span class="token operator">/</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"12"</span></span>       <span class="token comment"># output：true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token operator">/</span><span class="token operator">^</span><span class="token punctuation">[</span><span class="token constant">A</span><span class="token operator">-</span><span class="token constant">Z</span><span class="token punctuation">]</span><span class="token operator">*</span>$<span class="token operator">/</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"HELLO"</span></span>  <span class="token comment"># output：true</span>
+<span class="token operator">/</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token operator">-</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token operator">+</span><span class="token operator">/</span> <span class="token operator">===</span> <span class="token string-literal"><span class="token string">"12"</span></span>       <span class="token comment"># output：true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 <h2 id="内在联系">内在联系</h2>
 <p>以上各个用法看上去不尽相同，但它们之间实际上是有一定联系的。在Stack
-Overflow上有人这样描述[1]——<br>
-&gt; The best way to describe a === b is "if I have a drawer labeled a,
+Overflow上有人这样描述[1]——</p>
+<blockquote>
+<p>The best way to describe a === b is "if I have a drawer labeled a,
 does it make sense to put b in it?"</p>
+</blockquote>
 <p>也就是说，我们可以<code>===</code>的左边看做一个容器，如果<code>===</code>右边的对象放在该容器中有意义，那么整个表达式的返回值就是true,否则就返回false。</p>
 <p><strong>对于两个不同的对象来说，这种判断方式是很显然的。</strong>
 以<code>String === "hyggge"</code>为例，<code>"hyggge"</code>是一个字符串对象，是<code>String</code>类的一个实例，如果我们把<code>===</code>左边的<code>String</code>看做所有字符串对象组成的集合，<code>"hyggge"</code>放在这个集合中显然是有意义的，因此返回值是true。再以<code>(1..5) === 3</code>
@@ -841,7 +842,7 @@ does it make sense to put b in it?"</p>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -852,7 +853,7 @@ does it make sense to put b in it?"</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

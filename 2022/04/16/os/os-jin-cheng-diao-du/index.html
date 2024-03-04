@@ -6,11 +6,13 @@
     <meta charset="utf-8">
     <meta name="keywords" content="「操作系统」进程调度, Hyggge&#39;s Blog">
     <meta name="description" content="进程调度实际上就是在就绪进程队列中选择一个进程执行，关于进程的调度我们需要考虑三个问题——
-- 调度的时机：何时进行进程调度
-- 调度的执行：调度时如何进行CPU上下文切换
-- 调度的策略：按照什么原则选择一个就绪进程进行调度
+
+调度的时机：何时进行进程调度
+调度的执行：调度时如何进行CPU上下文切换
+调度的策略：按照什么原则选择一个就绪进程进行调度
+
 调度的时机
-">
+当遇到下">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -386,86 +388,101 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>进程调度实际上就是在<strong>就绪进程队列</strong>中选择一个进程执行，关于进程的调度我们需要考虑三个问题——<br>
-- <strong>调度的时机</strong>：何时进行进程调度<br>
-- <strong>调度的执行</strong>：调度时如何进行CPU上下文切换<br>
-- <strong>调度的策略</strong>：按照什么原则选择一个就绪进程进行调度</p>
+                <p>进程调度实际上就是在<strong>就绪进程队列</strong>中选择一个进程执行，关于进程的调度我们需要考虑三个问题——</p>
+<ul>
+<li><strong>调度的时机</strong>：何时进行进程调度</li>
+<li><strong>调度的执行</strong>：调度时如何进行CPU上下文切换</li>
+<li><strong>调度的策略</strong>：按照什么原则选择一个就绪进程进行调度</li>
+</ul>
 <h2 id="调度的时机">调度的时机</h2>
-<p>当遇到下面几种情况时，可能会发生进程的调度——<br>
-- <strong>当一个新的进程被创建时</strong><br>
-- <strong>当一个进程运行完毕时</strong><br>
-- <strong>当一个进程由于I/O、信号量或其他原因被阻塞时</strong><br>
--
-<strong>当一个I/O中断发生时（表明某个I/O操作已经完成，而等待该I/O操作的进程转入就绪状态）</strong><br>
-- <strong>在分时系统中，当一个时钟中断发生时</strong><br>
--
-<strong>当OS取得对CPU的控制时（例如用户系统调用、中断、陷阱）</strong></p>
+<p>当遇到下面几种情况时，可能会发生进程的调度——</p>
+<ul>
+<li><strong>当一个新的进程被创建时</strong></li>
+<li><strong>当一个进程运行完毕时</strong></li>
+<li><strong>当一个进程由于I/O、信号量或其他原因被阻塞时</strong></li>
+<li><strong>当一个I/O中断发生时（表明某个I/O操作已经完成，而等待该I/O操作的进程转入就绪状态）</strong></li>
+<li><strong>在分时系统中，当一个时钟中断发生时</strong></li>
+<li><strong>当OS取得对CPU的控制时（例如用户系统调用、中断、陷阱）</strong></li>
+</ul>
 <h2 id="调度的执行">调度的执行</h2>
-<p>在进程上下文切换时，会执行以下步骤——<br>
-1.
-<strong>保存处理器的上下文，包括程序计数器（PC）和其它寄存器；保存内存镜像（页表信息）</strong><br>
-1. <strong>用新状态和其它相关信息更新正在运行进程的PCB</strong><br>
-1. <strong>把进程移至合适的队列-就绪或阻塞</strong><br>
-1. <strong>选择另一个要执行的进程，更新进程的PCB</strong><br>
-1. <strong>从被选中进程中重装入CPU上下文和内存镜像</strong></p>
-<p>CPU调度按调度层次的不同可以划分为三级——<br>
-- <strong>高级调度：</strong>
-作业层面，即从用户工作流程的角度，对用户提交到每个作业进行调度，时间上通常是分钟、小时或天<br>
-- <strong>中级调度：</strong>
-储存器资源层面，即将进程的部分或全部换出到外存上，将当前所需部分换入到内存<br>
-- <strong>低级调度：</strong>
-CPU资源层面，即对CPU计算资源（ALU等）进行分配，时间上通常是毫秒。</p>
+<p>在进程上下文切换时，会执行以下步骤——</p>
+<ol type="1">
+<li><strong>保存处理器的上下文，包括程序计数器（PC）和其它寄存器；保存内存镜像（页表信息）</strong></li>
+<li><strong>用新状态和其它相关信息更新正在运行进程的PCB</strong></li>
+<li><strong>把进程移至合适的队列-就绪或阻塞</strong></li>
+<li><strong>选择另一个要执行的进程，更新进程的PCB</strong></li>
+<li><strong>从被选中进程中重装入CPU上下文和内存镜像</strong></li>
+</ol>
+<p>CPU调度按调度层次的不同可以划分为三级——</p>
+<ul>
+<li><strong>高级调度：</strong>
+作业层面，即从用户工作流程的角度，对用户提交到每个作业进行调度，时间上通常是分钟、小时或天</li>
+<li><strong>中级调度：</strong>
+储存器资源层面，即将进程的部分或全部换出到外存上，将当前所需部分换入到内存</li>
+<li><strong>低级调度：</strong>
+CPU资源层面，即对CPU计算资源（ALU等）进行分配，时间上通常是毫秒。</li>
+</ul>
 <h2 id="调度的策略">调度的策略</h2>
 <h3 id="调度策略的度量指标">调度策略的度量指标</h3>
-<p>衡量调度策略时通常采用以下几个常用的度量指标——<br>
-- <strong>吞吐量：</strong> <span class="math inline">\(作业数/总执行时间\)</span><br>
-- <strong>周转时间：</strong> <span class="math inline">\(完成时间-提交时间\)</span><br>
-- <strong>带权周转时间：</strong> <span class="math inline">\(周转时间/服务时间（执行时间\)</span>）<br>
-- <strong>平均周转时间：</strong> <span class="math inline">\(一组作业周转时间之和/作业数\)</span><br>
-- <strong>平均带权周转时间：</strong> <span class="math inline">\(一组作业带权周转时间之和/作业数\)</span></p>
+<p>衡量调度策略时通常采用以下几个常用的度量指标——</p>
+<ul>
+<li><strong>吞吐量：</strong> <span class="math inline">\(作业数/总执行时间\)</span></li>
+<li><strong>周转时间：</strong> <span class="math inline">\(完成时间-提交时间\)</span></li>
+<li><strong>带权周转时间：</strong> <span class="math inline">\(周转时间/服务时间（执行时间\)</span>）</li>
+<li><strong>平均周转时间：</strong> <span class="math inline">\(一组作业周转时间之和/作业数\)</span></li>
+<li><strong>平均带权周转时间：</strong> <span class="math inline">\(一组作业带权周转时间之和/作业数\)</span></li>
+</ul>
 <h3 id="调度策略的选择">调度策略的选择</h3>
 <p>根据进程对CPU计算资源和I/O设备的使用情况，我们可以将进程分为两种——<strong>I/O密集型</strong>和<strong>CPU密集型</strong>。前者会频繁地进行I/O，通常会花费很多时间等待I/O操作完成，而计算时间相对I/O时间短；后者计算量大，进程会花费大量的时间在计算上。</p>
 <p>对于不同特性的进程，我们通常会采用不同的调度算法。</p>
 <p>根据
-<strong>”是否在时钟中断作出调度决策“</strong>，我们将进程的调度分为<strong>非抢占式和抢占式</strong>。<br>
-- <strong>非抢占式：</strong>
-被调度进程会一直执行<strong>直到阻塞或主动放弃CPU</strong>，时钟中断时不会做调度决策<br>
-- <strong>抢占式：</strong>
-被调度程序运行一个固定的最大时间段（时间片），如果时间结束进程还在执行，挂起进程并进行切换（时钟中断时做调度决策）。</p>
+<strong>”是否在时钟中断作出调度决策“</strong>，我们将进程的调度分为<strong>非抢占式和抢占式</strong>。</p>
+<ul>
+<li><strong>非抢占式：</strong>
+被调度进程会一直执行<strong>直到阻塞或主动放弃CPU</strong>，时钟中断时不会做调度决策</li>
+<li><strong>抢占式：</strong>
+被调度程序运行一个固定的最大时间段（时间片），如果时间结束进程还在执行，挂起进程并进行切换（时钟中断时做调度决策）。</li>
+</ul>
 <p>对于不同的应用领域，我们会采用不同的调度策略，而这些策略也都离不开非抢占式和抢占式两种基本算法。常见的应用领域包括<strong>批处理系统、交互式系统、实时系统、多处理系统</strong>。<br>
-<img src="进程调度.jpg"><br>
-#### <strong>批处理系统</strong><br>
-批处理是指用户将一批作业提交给操作系统后就不再干预。在批处理系统中，一个作业需要长时间的占用CPU，因此我们一般采用<strong>非抢占式算法或分配长时间周期的抢占算法</strong>。</p>
-<p>在策略选择时，我们主要关注<strong>吞吐量和周转时间</strong>这两个指标。常用策略——<br>
-- 先来先服务（FCFS：First Come First Serve)<br>
-- 最短作业优先（SJF：Shortest Job First)<br>
-- 最短剩余时间优先（SRTN：Shortest Remaining&nbsp;Time&nbsp;Next）<br>
-- 最高响应比优先（HRRN：Highest&nbsp;Response Ratio&nbsp;Next）<br>
-#### <strong>交互式系统</strong><br>
-交互式计算机系统与操作人员以人机对话的方式一问一答，直至获得最后处理结果。这种系统服务于多个用户的环境，例如分时系统、手机系统，因此需要避免一个进程霸占CPU，一般使用<strong>抢占式算法</strong>。</p>
-<p>在策略选择时，我们主要关注<strong>响应时间</strong>这个指标，并希望任务花费时间随着其复杂度应该线性增长。常用策略——<br>
-- 时间片轮转(RR：Round Robin）<br>
-- 优先级调度(Priority Scheduling)<br>
-- 多级队列（MQ：Multi-level Queue）<br>
-- 多级反馈队列（MFQ：Multi-level&nbsp;Feedback Queue&nbsp;）<br>
-- 彩票调度（Lottery Scheduling）</p>
+<img src="进程调度.jpg"></p>
+<h4 id="批处理系统"><strong>批处理系统</strong></h4>
+<p>批处理是指用户将一批作业提交给操作系统后就不再干预。在批处理系统中，一个作业需要长时间的占用CPU，因此我们一般采用<strong>非抢占式算法或分配长时间周期的抢占算法</strong>。</p>
+<p>在策略选择时，我们主要关注<strong>吞吐量和周转时间</strong>这两个指标。常用策略——</p>
+<ul>
+<li>先来先服务（FCFS：First Come First Serve)</li>
+<li>最短作业优先（SJF：Shortest Job First)</li>
+<li>最短剩余时间优先（SRTN：Shortest Remaining&nbsp;Time&nbsp;Next）</li>
+<li>最高响应比优先（HRRN：Highest&nbsp;Response Ratio&nbsp;Next）</li>
+</ul>
+<h4 id="交互式系统"><strong>交互式系统</strong></h4>
+<p>交互式计算机系统与操作人员以人机对话的方式一问一答，直至获得最后处理结果。这种系统服务于多个用户的环境，例如分时系统、手机系统，因此需要避免一个进程霸占CPU，一般使用<strong>抢占式算法</strong>。</p>
+<p>在策略选择时，我们主要关注<strong>响应时间</strong>这个指标，并希望任务花费时间随着其复杂度应该线性增长。常用策略——</p>
+<ul>
+<li>时间片轮转(RR：Round Robin）</li>
+<li>优先级调度(Priority Scheduling)</li>
+<li>多级队列（MQ：Multi-level Queue）</li>
+<li>多级反馈队列（MFQ：Multi-level&nbsp;Feedback Queue&nbsp;）</li>
+<li>彩票调度（Lottery Scheduling）</li>
+</ul>
 <h4 id="实时系统"><strong>实时系统</strong></h4>
 <p>实时系统是指计算的正确性不仅取决于程序的逻辑正确性，也取决于结果产生的时间。如果不满足确定性的截止时间需求，将会发生系统出错。因此我们<strong>主要采用抢占式算法，也可能非抢占式</strong>。</p>
 <p>在策略选择时，我们主要关注
-<strong>"截止时间是否可以得到满足"</strong>，并希望策略有一定可预测性和规律性。常用策略——<br>
-- 静态表调度（Static table-driven scheduling）<br>
-- 单调速率调度（RMS：Rate&nbsp;Monotonic Scheduling）<br>
-- 最早截止时间优先算法（EDF：Earliest Deadline&nbsp;First）</p>
+<strong>"截止时间是否可以得到满足"</strong>，并希望策略有一定可预测性和规律性。常用策略——</p>
+<ul>
+<li>静态表调度（Static table-driven scheduling）</li>
+<li>单调速率调度（RMS：Rate&nbsp;Monotonic Scheduling）</li>
+<li>最早截止时间优先算法（EDF：Earliest Deadline&nbsp;First）</li>
+</ul>
 <h4 id="多处理系统"><strong>多处理系统</strong></h4>
 <p>多处理系统指系统中有多个处理机同时进行工作，这种系统的调度更需要关注于系统整体的运行效率，调度单位广泛采用线程。</p>
-<p>多处理系统有两种，包括<strong>非对称式多处理系统(AMP)</strong>和<strong>对称式多处理系统(SMP)</strong>。<br>
--
-AMP中各个处理器的地位不同，有“主从”之分——由主处理机管理一个公共就绪队列，并分派进程给从处理机执行，每个处理机都有固定的分工（执行OS的系统功能？处理I/O？）<br>
--
-SMP中各个处理器的地位是相同的。根据控制的方式的不同，SMP调度算法可分为集中控制和分散控制，前者主要包括<strong>静态分配(static
+<p>多处理系统有两种，包括<strong>非对称式多处理系统(AMP)</strong>和<strong>对称式多处理系统(SMP)</strong>。</p>
+<ul>
+<li><p>AMP中各个处理器的地位不同，有“主从”之分——由主处理机管理一个公共就绪队列，并分派进程给从处理机执行，每个处理机都有固定的分工（执行OS的系统功能？处理I/O？）</p></li>
+<li><p>SMP中各个处理器的地位是相同的。根据控制的方式的不同，SMP调度算法可分为集中控制和分散控制，前者主要包括<strong>静态分配(static
 assignment)</strong>和<strong>动态分配(dynamic
 assignment)</strong>，后者主要包括<strong>自调度（Self
-Scheduling）</strong>。</p>
+Scheduling）</strong>。</p></li>
+</ul>
 
                 
             </div>
@@ -848,7 +865,7 @@ Scheduling）</strong>。</p>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -859,7 +876,7 @@ Scheduling）</strong>。</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

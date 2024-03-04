@@ -5,11 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="「Cpp」引用和指针, Hyggge&#39;s Blog">
-    <meta name="description" content="## 序言
+    <meta name="description" content="序言
 本文介绍C++中引用，指针，const限定符和常量表达式等几个部分的内容。对应原书45页——60页。
-## 引用
+引用
 
-引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;amp;d的形式来定义引用">
+引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;amp;d的形式来定义引用类型，其中d">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -385,31 +385,33 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="序言">## 序言</h2>
+                <h2 id="序言">序言</h2>
 <p>本文介绍C++中<strong>引用</strong>，<strong>指针</strong>，<strong>const限定符</strong>和<strong>常量表达式</strong>等几个部分的内容。对应原书<strong>45页——60页</strong>。</p>
-<h2 id="引用">## 引用</h2>
+<h2 id="引用">引用</h2>
 <blockquote>
-<p>引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。<br>
-- 举例如下<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token operator">&amp;</span>b <span class="token operator">=</span> a<span class="token punctuation">;</span> <span class="token comment">//b是a的引用，需要在b前加引用符&amp;</span>
-<span class="token keyword">int</span> <span class="token operator">&amp;</span>c<span class="token punctuation">;</span>     <span class="token comment">//错误，没有初始化！！！</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
--
-引用的实质：<strong>引用并不是对象，而是对象的一个新名字，所有对引用的操作实际是都是在对源对象进行操作</strong>。<br>
--
-引用的定义：允许在一行中定义多个引用但是每个引用前必须有&amp;限定，例如<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token operator">&amp;</span>c <span class="token operator">=</span> a<span class="token punctuation">,</span> <span class="token operator">&amp;</span>d <span class="token operator">=</span> b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p>
+<p>引用为对象起了另外一个名字，引用类型可以引用另外一种类型。通常情况下可以将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名。</p>
 </blockquote>
-<h2 id="指针">## 指针</h2>
+<ul>
+<li>举例如下<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">&amp;</span>b <span class="token operator">=</span> a<span class="token punctuation">;</span> <span class="token comment">//b是a的引用，需要在b前加引用符&amp;</span>
+<span class="token keyword">int</span> <span class="token operator">&amp;</span>c<span class="token punctuation">;</span>     <span class="token comment">//错误，没有初始化！！！</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li>引用的实质：<strong>引用并不是对象，而是对象的一个新名字，所有对引用的操作实际是都是在对源对象进行操作</strong>。</li>
+<li>引用的定义：允许在一行中定义多个引用但是每个引用前必须有&amp;限定，例如<br>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">&amp;</span>c <span class="token operator">=</span> a<span class="token punctuation">,</span> <span class="token operator">&amp;</span>d <span class="token operator">=</span> b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="指针">指针</h2>
 <blockquote>
 <p>指针是“指向”另外一种类型的复合类型，可以像引用一样实现对其他对象的间接引用。但是它有两点和引用不同——<br>
 -
 指针本身是对象，可以对指针本身进行赋值和访问，而且可以在指针的生命周期内先后指向不同的对象<br>
 -
-指针在定义的时候无需赋初值。和其他类型相似，如果在快作用域中的指针没有被初始化，则会拥有一个不确定的值。<br>
-### 指针基础知识<br>
-1. <strong>举例如下</strong><br>
+指针在定义的时候无需赋初值。和其他类型相似，如果在快作用域中的指针没有被初始化，则会拥有一个不确定的值。</p>
+</blockquote>
+<h3 id="指针基础知识">指针基础知识</h3>
+<ol type="1">
+<li><p><strong>举例如下</strong><br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//指针定义</span>
 <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> <span class="token operator">*</span>b <span class="token operator">=</span> <span class="token operator">&amp;</span>a<span class="token punctuation">;</span>  <span class="token comment">//用取地址符&amp;取得a的地址，并将地址赋值给b</span>
@@ -417,9 +419,7 @@
   
 <span class="token comment">//用指针访问对象（仅适用于有效指针）</span>
 cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>   <span class="token comment">//用解引用符*得到原指针指向的对象的值</span>
-<span class="token operator">*</span>b <span class="token operator">=</span> <span class="token number">0x7fff</span><span class="token punctuation">;</span>  <span class="token comment">//此时a的值被赋成0x7fff</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-</blockquote>
-<ol start="2" type="1">
+<span class="token operator">*</span>b <span class="token operator">=</span> <span class="token number">0x7fff</span><span class="token punctuation">;</span>  <span class="token comment">//此时a的值被赋成0x7fff</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 <li><p><strong>指针的定义</strong>：允许一行对多个指针类型进行声明和定义<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> <span class="token operator">*</span>c <span class="token operator">=</span> <span class="token operator">&amp;</span>a<span class="token punctuation">,</span> <span class="token operator">*</span>d <span class="token operator">=</span> <span class="token operator">&amp;</span>b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
@@ -441,8 +441,10 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*
 <li><p><strong>对指针的引用</strong><br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> <span class="token operator">*</span>p <span class="token operator">=</span> <span class="token operator">&amp;</span>i<span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token operator">*</span><span class="token operator">&amp;</span>r <span class="token operator">=</span> p<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
-### 指针数组和数组指针<p></p></li>
+<span class="token keyword">int</span> <span class="token operator">*</span><span class="token operator">&amp;</span>r <span class="token operator">=</span> p<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p></p></li>
+</ol>
+<h3 id="指针数组和数组指针">指针数组和数组指针</h3>
+<ol type="1">
 <li><p><strong>基本解释</strong>（参考这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/men_wen/article/details/52694069">博客</a>)</p>
 <blockquote>
 <p><strong>指针数组</strong>：指针数组可以说成是”指针的数组”，首先这个变量是一个数组，其次，”指针”修饰这个数组，意思是说这个数组的所有元素都是指针类型，在32位系统中，指针占四个字节。</p>
@@ -938,7 +940,7 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -949,7 +951,7 @@ cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

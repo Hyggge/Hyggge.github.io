@@ -410,18 +410,20 @@ message的集合"等等。为了让自建类可以包含官方包已经封装好
     <span class="token keyword">private</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allClasses<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allInterfaces<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> allAttributes<span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-### 层次化建模<br>
-因为输入的json字符串的顺序无法得到保证，所以可能出现<code>UMLGeneration</code>和<code>UMLInterfaceRealization</code>等元模型的出现时间要早于<code>UMLClass</code>和<code>UMLInterface</code>和其他类似的情况，这给我们封装自建类带来的困难。一个比较好的解决办法是多次遍历<code>elements</code>，根据不同元模型之间的依赖关系来先后解析不同的<code>UMLElement</code>、并封装成<code>MyElement</code>。<p></p>
-<p>经过三次作业的迭代，我们最终可以通过5次遍历来解析所有的元模型——<br>
-- <strong>Loop1:
-UMLClass、UMLInterface、UMLStateMachine、UMLCollaboration</strong><br>
-- <strong>Loop2:
-UMLOperation、UMLAttribute、UMLGeneralization、UMLInterfaceRealization、UMLAssociation、UMLInteraction、UMLRegion</strong><br>
-- <strong>Loop3:
-UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPseudostate、UMLFinalState</strong><br>
-- <strong>Loop4: UMLMessage、UMLTransition</strong><br>
-- <strong>Loop5: UMLEvent、UMLOpaqueBehavior</strong></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h3 id="层次化建模">层次化建模</h3>
+<p>因为输入的json字符串的顺序无法得到保证，所以可能出现<code>UMLGeneration</code>和<code>UMLInterfaceRealization</code>等元模型的出现时间要早于<code>UMLClass</code>和<code>UMLInterface</code>和其他类似的情况，这给我们封装自建类带来的困难。一个比较好的解决办法是多次遍历<code>elements</code>，根据不同元模型之间的依赖关系来先后解析不同的<code>UMLElement</code>、并封装成<code>MyElement</code>。</p>
+<p>经过三次作业的迭代，我们最终可以通过5次遍历来解析所有的元模型——</p>
+<ul>
+<li><strong>Loop1:
+UMLClass、UMLInterface、UMLStateMachine、UMLCollaboration</strong></li>
+<li><strong>Loop2:
+UMLOperation、UMLAttribute、UMLGeneralization、UMLInterfaceRealization、UMLAssociation、UMLInteraction、UMLRegion</strong></li>
+<li><strong>Loop3:
+UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPseudostate、UMLFinalState</strong></li>
+<li><strong>Loop4: UMLMessage、UMLTransition</strong></li>
+<li><strong>Loop5: UMLEvent、UMLOpaqueBehavior</strong></li>
+</ul>
 <p>这5次遍历可以直接在<code>MyImplementation</code>里进行。而为了防止因为行数过长而被StyleChecker制裁，我单独设置了一个<code>Loop</code>类来封装所有的遍历过程。·<br>
 </p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MyImplementation</span><span class="token punctuation">(</span><span class="token class-name">UmlElement</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> elements<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">Dict</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -507,11 +509,11 @@ UMLParameter、UMLAssociationEnd、UMLLifeline、UMLEndpoint、UMLState、UMLPse
 </ul>
 <h2 id="测试的理解和实践">测试的理解和实践</h2>
 <p>在这四个单元中我都是采用了
-<strong>"单元测试+随机测试+边缘数据测试"</strong> 的测试流程。<br>
-- <strong>单元测试主要是在 "coding" 阶段进行的。</strong>
-每当写完一个(或几个)可以实现特定功能的类后，我会先在test文件夹下新建一个测试类，然后使用junit对这个（或这些）类的各个方法进行测试。如果测试没有问题，再去实现其他功能。这是以前用SprintBoot开发后端时养成的习惯，这样做可以尽早将一些不必要的bug定位出来，减轻后期整体测试时的工作量。<br>
--
-<strong>当我们将整个项目写完后，需要对其进行完整、系统的测试，以确定我们的设计是否符合要求，输出是否合法。</strong>
+<strong>"单元测试+随机测试+边缘数据测试"</strong> 的测试流程。</p>
+<ul>
+<li><p><strong>单元测试主要是在 "coding" 阶段进行的。</strong>
+每当写完一个(或几个)可以实现特定功能的类后，我会先在test文件夹下新建一个测试类，然后使用junit对这个（或这些）类的各个方法进行测试。如果测试没有问题，再去实现其他功能。这是以前用SprintBoot开发后端时养成的习惯，这样做可以尽早将一些不必要的bug定位出来，减轻后期整体测试时的工作量。</p></li>
+<li><p><strong>当我们将整个项目写完后，需要对其进行完整、系统的测试，以确定我们的设计是否符合要求，输出是否合法。</strong>
 我主要采用了自动化随机测试的方法进行整体测试，而这就需要评测机来发挥作用了。整个评测机主要包含两个部分——数据生成器和正确性检查，这样进行分离可以使得评测机拥有很好的可扩展性，降低迭代时的复杂度。<br>
  <br>
 <strong>在第一单元，我仍然是按照作业中"递归下降"的思想来生成数据，并设置变量对递归次数、系数大小进行控制，从而保证可以生成不同复杂度的数据，提高覆盖率。</strong>
@@ -530,10 +532,9 @@ subprocess
 <strong>在第四单元</strong>涉及到了不同元模型之间的复杂关系，我们同样可以通过设置数据结构来保证数据的强度。<strong>但是，由于和作业相关的元模型数量很多，关系也错综复杂，如何仍然采用面向过程来设计数据生成器，将会使复杂度变得不可控，同时也会影响生成数据的正确性和强度。因此，本单元我主要采用了面向对象的思维来设计数据生成器。</strong>
 尽管代码行数显著增多（迭代到第三次作业时已经达到1300余行），但是设计和实现的过程并不复杂，同时还能在
 coding 的过程中加深对UML元模型及其关系的理解。<br>
- </p>
-<ul>
-<li><strong>边缘化数据测试是整个测试过程中最关键、也是最容易发现bug的阶段。</strong>
-受限于随机数的偶然性和数据生成器的生成算法，自动化随机测试不能够保证能够覆盖到所有的情况。对于一些特殊的情况，我们还是需要采取"手撸"的方式构造一些有针对性的、刁钻的数据，从而弥补随机测试的短板，提高测试的全面性。</li>
+ </p></li>
+<li><p><strong>边缘化数据测试是整个测试过程中最关键、也是最容易发现bug的阶段。</strong>
+受限于随机数的偶然性和数据生成器的生成算法，自动化随机测试不能够保证能够覆盖到所有的情况。对于一些特殊的情况，我们还是需要采取"手撸"的方式构造一些有针对性的、刁钻的数据，从而弥补随机测试的短板，提高测试的全面性。</p></li>
 </ul>
 <h2 id="课程收获">课程收获</h2>
 <ul>
@@ -934,7 +935,7 @@ coding 的过程中加深对UML元模型及其关系的理解。<br>
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -945,7 +946,7 @@ coding 的过程中加深对UML元模型及其关系的理解。<br>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             

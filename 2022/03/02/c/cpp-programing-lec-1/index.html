@@ -427,18 +427,17 @@ vo">
 </ol></li>
 </ul>
 <h3 id="占位参数">占位参数</h3>
-<p>占位参数就是，函数<strong>声明或定义</strong>时，某个形参只有类型声明，而没有参数名。<br>
--
-一种情况是，<strong>函数在声明时有占位参数，而定义时补全了这个占位参数的名字</strong>，这样函数体内部时可以使用这个参数的。<br>
+<p>占位参数就是，函数<strong>声明或定义</strong>时，某个形参只有类型声明，而没有参数名。</p>
+<ul>
+<li><p>一种情况是，<strong>函数在声明时有占位参数，而定义时补全了这个占位参数的名字</strong>，这样函数体内部时可以使用这个参数的。<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//声明</span>
 <span class="token keyword">int</span> <span class="token function">funct</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token punctuation">)</span>
 <span class="token comment">//定义</span>
 <span class="token keyword">int</span> <span class="token function">funct</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<ul>
-<li>另一种情况是，函数的定义中仍然有占位参数，那么<strong>函数体内部是无法使用占位参数的</strong>（没有名字怎么使用？）。但即使不能使用，在函数调用是占位参数也必须填补（<del>流氓行为</del>）。<br>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">funct</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
+<li><p>另一种情况是，函数的定义中仍然有占位参数，那么<strong>函数体内部是无法使用占位参数的</strong>（没有名字怎么使用？）。但即使不能使用，在函数调用是占位参数也必须填补（<del>流氓行为</del>）。<br>
+</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">funct</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
@@ -452,7 +451,7 @@ vo">
 
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     cout <span class="token operator">&lt;&lt;</span> <span class="token function">funct</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//虽然这个3没有什么用，但是也要加上</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p></li>
 </ul>
 <h2 id="宏macro">宏(macro)</h2>
 <ul>
@@ -859,7 +858,7 @@ vo">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2024</span>
             
             <a href="/about" target="_blank">Hyggge</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -870,7 +869,7 @@ vo">
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">165.5k</span>
+                        class="white-color">165.4k</span>
             
             
             
