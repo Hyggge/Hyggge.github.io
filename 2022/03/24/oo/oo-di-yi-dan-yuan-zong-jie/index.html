@@ -489,7 +489,8 @@
 <span class="token keyword">public</span> <span class="token class-name">Poly</span> <span class="token function">powPoly</span><span class="token punctuation">(</span><span class="token class-name">Poly</span> other<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
 
 <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toStirng</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-这样之后，我们就可以在<code>Expr</code>、<code>Term</code>、<code>Factor</code>等类中都写一个<code>toPoly()</code>方法，将类中的内容转化为多项式。然后从<code>factor.toPoly()</code>一步步向上转化，那么最终可以通过<code>expr.toPoly()</code>来获得结果。具体的转化过程如下——<p></p></li>
+这样之后，我们就可以在<code>Expr</code>、<code>Term</code>、<code>Factor</code>等类中都写一个<code>toPoly()</code>方法，将类中的内容转化为多项式。然后从<code>factor.toPoly()</code>一步步向上转化，那么最终可以通过<code>expr.toPoly()</code>来获得结果。具体的转化过程如下——<p></p>
+<ul>
 <li><p><code>numFactor</code>(数字因子)和<code>powerFactor</code>（幂函数因子）的<code>toPoly</code>方法很简单，直接转化为
 <strong>只含有一个<code>Mono</code>的<code>Poly</code></strong>
 即可。<strong>例如</strong>，因子<code>5</code>可以转化为一个只含有单项式<code>5*x**0</code>的多项式，因子<code>x**2</code>一个只含有单项式<code>1*x**2</code>的多项式。</p></li>
@@ -525,6 +526,7 @@
     <span class="token keyword">return</span> poly<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 这样，我们就可以通过在每个类中定义的<code>toPoly()</code>方法<strong>自底向上</strong>地得到<strong>表达式的多项式形式</strong>。最后，我们再通过Poly中的<code>toString()</code>方法就可以获得最终展开后的结果。<p></p></li>
+</ul></li>
 </ul>
 <h4 id="其他细节">其他细节</h4>
 <ol type="1">
