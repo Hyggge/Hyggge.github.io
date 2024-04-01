@@ -467,7 +467,7 @@
 
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Dog dog<span class="token punctuation">;</span>
-    <span class="token function">listen</span><span class="token punctuation">(</span>dog<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//此时输出就变成了</span>
+    <span class="token function">listen</span><span class="token punctuation">(</span>dog<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 我们希望的是调用<code>Dog</code>类中重写后的<code>speak()</code>函数，即希望输出
 <strong>"dog::speak"</strong>, 但最终输出的却是
@@ -496,18 +496,16 @@
 <li>若父类中某函数被定义为虚函数，子类在继承该函数的同时，<strong>也继承了<code>virtual</code>关键字</strong>。</li>
 <li>当子类的某函数重写了父类的一个虚函数，则它的<strong>形参类型</strong>必须与被它覆盖的父类函数完全一致</li>
 <li><strong>构造函数一般不能被定义为虚函数</strong>，即不存在多态性。<strong>析构函数一般是多态的</strong>，多用<code>virtual</code>来修饰。此外，<strong>静态函数也不能是多态的</strong>。</li>
-<li><code>laler binding</code>
+<li><code>later binding</code>
 称运行时绑定，函数调用时跟据当前对象的状态决定函数的运行状况<br>
-使用<code>virtual</code>来限定父类中的函数，该关键词自动继承，
-<ul>
+使用<code>virtual</code>来限定父类中的函数，该关键词自动继承，</li>
 <li>虚指针<code>V-Ptr</code></li>
 <li>虚列表<code>V-table</code><br>
 每个类都有一个<code>V-table</code>，并在每个对象的初始部分多出四个字节储存<code>V-Ptr</code>指向这个<code>V-table</code>，这样保证了upcasting行为的正确性。虚指针的初始化是在构造函数中默认完成的</li>
-</ul></li>
 </ul>
 <blockquote>
 <p><strong>补充：override和final的使用</strong><br>
-当子类对父类中的某<strong>虚函数</strong>进行重写是，我们可以在子类的对应函数后面写上override关键字，表示该函数是重写父类的。如果被override修饰的函数在父类中没有同名同参的函数，编译器会报错。使用该关键字可以让编译器帮助我们检查子类在重写父类函数时是否发生了错误，类似于JAVA中的@Override注解<br>
+当子类对父类中的某<strong>虚函数</strong>进行重写时，我们可以在子类的对应函数后面写上override关键字，表示该函数是重写父类的。如果被override修饰的函数在父类中没有同名同参的函数，编译器会报错。使用该关键字可以让编译器帮助我们检查子类在重写父类函数时是否发生了错误，类似于JAVA中的@Override注解<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">speak</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>

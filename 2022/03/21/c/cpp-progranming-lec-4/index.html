@@ -514,10 +514,12 @@ Single<span class="token operator">*</span> <span class="token class-name">Singl
 <li>不能在构造函数和其他成员函数内部对<code>const</code>数据成员进行赋值！<br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span><span class="token punctuation">{</span>
     <span class="token keyword">const</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br>
-&gt;早期C++中没有const data
-member这种语法，党史如果要在类中定义常量，一般需要用枚举型<code>enum</code>。</li>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 </ul>
+<blockquote>
+<p>早期C++中没有const data
+member这种语法，党史如果要在类中定义常量，一般需要用枚举型<code>enum</code>。</p>
+</blockquote>
 <h3 id="const-function-member">const function member</h3>
 <ul>
 <li>一般来说，<code>const</code>对象是不可以调用函数的，这是为了防止函数会修改<code>const</code>对象中的值。但是如果真的需要其调用函数怎么办（前提是被调用的函数不能修改对象的值）？</li>

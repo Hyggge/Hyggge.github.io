@@ -417,8 +417,9 @@
 
 <span class="token keyword">class</span> <span class="token class-name">Dervied</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Base</span></span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
-    <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+    <span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"dervied func()"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"dervied func(int)"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
 <h3 id="构造函数的调用问题">构造函数的调用问题</h3>
 <p>在调用子类构造函数时，会默认调用父类的<strong>无参构造函数</strong>调用顺序是——
 <strong>先父类，后子类</strong>。（在调用子类析构函数时，顺序是<strong>先子类，后父类</strong>）<br>
@@ -520,7 +521,7 @@
     d<span class="token punctuation">.</span><span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//error!!!</span>
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-当然这个问题也是能解决的。我们可以<strong>用组合消除多重继承</strong>，即可以将<code>Base2</code>作为子类的一个组成部分（即属性），
+当然这个问题也是能解决的。我们可以<strong>用组合消除多重继承</strong>，即可以将<code>Base2</code>作为子类的一个组成部分，
 然后在子类中重写父类<code>Base1</code>的<code>g()</code>函数，重写后的函数内容为——<strong>调用数据成员<code>Base2</code>的<code>g()</code>函数。</strong><br>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Derived</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Base1</span></span><span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span> 
@@ -606,7 +607,7 @@
 <blockquote>
 <p>因为<code>const</code>对象或引用类型只能初始化，不能二次赋值，也不能在构造函数中进行赋值，所以他们只能通过<strong>构造初始化列表的方式进行赋初值（初始化）</strong>。</p>
 </blockquote>
-<p>需要注意的是，初始化顺序与构造初始化列表中的顺序无关，<strong>只与类中变量被定义的顺序有关</strong>。在下面这个例子中，无论构造初始化列表中的顺序怎样，首先被初始化的都是<code>j</code>,而因为用来初始化<code>j</code>的<code>i</code>是未定义的，所以最后<code>j</code>的值一个
+<p>需要注意的是，初始化顺序与构造初始化列表中的顺序无关，<strong>只与类中变量被定义的顺序有关</strong>。在下面这个例子中，无论构造初始化列表中的顺序怎样，首先被初始化的都是<code>i</code>,而因为用来初始化<code>i</code>的<code>j</code>是未定义的，所以最后<code>i</code>的值一个
 <strong>“垃圾数”</strong><br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
 <span class="token keyword">public</span><span class="token operator">:</span>
