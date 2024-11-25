@@ -370,7 +370,7 @@ struct Studen">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    872
+                    882
                 </div>
                 
 
@@ -422,10 +422,11 @@ struct Studen">
 
 <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span>Student <span class="token operator">*</span>s<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     s<span class="token operator">-&gt;</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    s<span class="token operator">-&gt;</span>name <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">strlen</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">strcpy</span><span class="token punctuation">(</span>s<span class="token operator">-&gt;</span>name<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
 C++在结构体中可以<strong>有成员变量和函数</strong>（attribute data
-member + funct member)<p></p>
+member + func member)<p></p>
 <ul>
 <li><p><code>this</code>指针永远自动的指向调用对象。<br>
 </p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>

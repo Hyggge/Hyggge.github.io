@@ -7,12 +7,13 @@
     <meta name="keywords" content="「BUAA-C++」Lec3:引用和拷贝构造, Hyggge&#39;s Blog">
     <meta name="description" content="引用（reference）
 
-引用是一个更安全的指针（a safe pointer),
-借值之名，行指针之实，实际上表示的是地址。
+
+引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。
+
+
 引用必须初始化, 和C语言中野指针不同
-int b = 0;
-int &amp;amp;a; //error
-int">
+  int b = 0;
+int &amp;amp;a; //erro">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -392,18 +393,25 @@ int">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="引用reference">引用（reference）</h2>
+                <h2 id="引用（reference）">引用（reference）</h2>
 <ul>
-<li><p>引用是一个更安全的指针（a safe pointer),
-借值之名，行指针之实，实际上表示的是地址。</p></li>
-<li><p>引用必须初始化, 和C语言中<strong>野指针</strong>不同</p>
-<p></p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<li>
+<p>引用是一个更安全的指针（a safe pointer), 借值之名，行指针之实，实际上表示的是地址。</p>
+</li>
+<li>
+<p>引用必须初始化, 和C语言中<strong>野指针</strong>不同</p>
+  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> <span class="token operator">&amp;</span>a<span class="token punctuation">;</span> <span class="token comment">//error</span>
-<span class="token keyword">int</span> <span class="token operator">&amp;</span>a <span class="token operator">=</span> b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p></p></li>
-<li><p>引用是常量，一旦定义，不可以再修改。与之不同，指针可以先后指向不同对象。<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token operator">&amp;</span>a <span class="token operator">=</span> b<span class="token punctuation">;</span>
-a <span class="token operator">=</span> c<span class="token punctuation">;</span> <span class="token comment">//error</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p></p></li>
-<li><p>引用不可以完全取代指针，例如在<code>malloc</code>和<code>new</code>中返回值只能是指针。</p></li>
+<span class="token keyword">int</span> <span class="token operator">&amp;</span>a <span class="token operator">=</span> b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>引用一旦定义，不可以再修改指向。与之不同，指针可以先后指向不同对象。</p>
+  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token operator">&amp;</span>a <span class="token operator">=</span> b<span class="token punctuation">;</span>
+a <span class="token operator">=</span> c<span class="token punctuation">;</span> <span class="token comment">// assign the value of c to a</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>引用不可以完全取代指针，例如在<code>malloc</code>和<code>new</code>中返回值只能是指针。</p>
+</li>
 </ul>
 <blockquote>
 <p><strong>补充：内存分区问题</strong></p>
@@ -415,22 +423,24 @@ a <span class="token operator">=</span> c<span class="token punctuation">;</span
 <li>栈区：用于局部变量
 <ul>
 <li>栈区内存是连续的</li>
-</ul></li>
+</ul>
+</li>
 <li>堆区：用于动态内存分配（<code>malloc</code>和<code>new</code>时）。
 <ul>
 <li>堆区内存是离散的，理论上来无限次使用<code>malloc</code>会导致程序崩溃</li>
-<li>应用场景：1.不能确定内存分配大小需要在运行时确定（例如链表
-建立）；2.需要人为控制变量的生命周期。</li>
-</ul></li>
-</ul></li>
+<li>应用场景：1.不能确定内存分配大小需要在运行时确定（例如链表            建立）；2.需要人为控制变量的生命周期。</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </blockquote>
 <h2 id="拷贝构造">拷贝构造</h2>
-<p>C++的类默认支持用一个已存在的类初始化一个新建的类。<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>C++的类默认支持用一个已存在的类初始化一个新建的类。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">struct</span> <span class="token class-name">Student</span><span class="token operator">*</span> a <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">struct</span> <span class="token class-name">Student</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token operator">*</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>C++中有拷贝有两种类型——</p>
 <ul>
 <li><code>bitwise copy</code>（浅拷贝）</li>
@@ -454,9 +464,8 @@ a <span class="token operator">=</span> c<span class="token punctuation">;</span
     Student <span class="token function">mem2</span><span class="token punctuation">(</span>mem1<span class="token punctuation">)</span><span class="token punctuation">;</span>
     cout <span class="token operator">&lt;&lt;</span> mem1<span class="token punctuation">.</span>b <span class="token operator">&lt;&lt;</span> <span class="token string">"\n"</span> <span class="token operator">&lt;&lt;</span> mem2<span class="token punctuation">.</span>b <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token comment">//两者指针值值一样的，即值指向同一块内存</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>为了避免这种情况，我们需要自定义一个拷贝构造函数从而实现
-<strong>深拷贝</strong>，主要写法为<code>Object::Object(const Object &amp;a) {}</code>,具体例子如下所示<br>
-</p><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
+<p>为了避免这种情况，我们需要自定义一个拷贝构造函数从而实现 <strong>深拷贝</strong>，主要写法为<code>Object::Object(const Object &amp;a) {}</code>,具体例子如下所示</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span>
     <span class="token keyword">int</span> a<span class="token punctuation">;</span>
     <span class="token keyword">int</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>
@@ -476,8 +485,8 @@ a <span class="token operator">=</span> c<span class="token punctuation">;</span
     cout <span class="token operator">&lt;&lt;</span> mem1<span class="token punctuation">.</span>b <span class="token operator">&lt;&lt;</span> <span class="token string">"\n"</span> <span class="token operator">&lt;&lt;</span> mem2<span class="token punctuation">.</span>b <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token comment">//这样两者指针值就是不一样的了</span>
     <span class="token function">func</span><span class="token punctuation">(</span>mem1<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>
-在C/C++中，“<strong>只要传值，就是一次拷贝构造</strong>”，当我们向一个函数传递<strong>实参</strong>，且这个函数的<strong>形参不是引用类型</strong>，此时程序会自动调用<strong>实参类型的拷贝构造函数</strong>。例如<br>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在C/C++中，“<strong>只要传值，就是一次拷贝构造</strong>”，当我们向一个函数传递<strong>实参</strong>，且这个函数的<strong>形参不是引用类型</strong>，此时程序会自动调用<strong>实参类型的拷贝构造函数</strong>。例如</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Student</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span><span class="token operator">:</span>
     <span class="token keyword">int</span> a<span class="token punctuation">;</span>
@@ -505,7 +514,7 @@ a <span class="token operator">=</span> c<span class="token punctuation">;</span
 以上程序执行结果为——
 调用自定义拷贝构造函数
 实参调用
-/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p><strong>什么使用需要深拷贝？？？</strong></p>
 <ul>
@@ -520,33 +529,28 @@ a <span class="token operator">=</span> c<span class="token punctuation">;</span
 </ul>
 <p>传值和传地址在功能、性能和其他方面的比较如下——</p>
 <table>
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
-<tr class="header">
-<th style="text-align: center;">Item</th>
-<th style="text-align: center;">传值</th>
-<th style="text-align: center;">传地址</th>
+<tr>
+<th style="text-align:center">Item</th>
+<th style="text-align:center">传值</th>
+<th style="text-align:center">传地址</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: center;"><strong>功能</strong></td>
-<td style="text-align: center;">函数只能input，即只能使用实参的值，不能改变实参的值</td>
-<td style="text-align: center;">函数既能input也能output，即不仅可以使用实参的值，也可以改变实参的值</td>
+<tr>
+<td style="text-align:center"><strong>功能</strong></td>
+<td style="text-align:center">函数只能input，即只能使用实参的值，不能改变实参的值</td>
+<td style="text-align:center">函数既能input也能output，即不仅可以使用实参的值，也可以改变实参的值</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;"><strong>性能</strong></td>
-<td style="text-align: center;">需要传递<code>sizeof(value)</code>大小的数据</td>
-<td style="text-align: center;">只需要传递<code>sizeof(int)</code>大小的数据</td>
+<tr>
+<td style="text-align:center"><strong>性能</strong></td>
+<td style="text-align:center">需要传递<code>sizeof(value)</code>大小的数据</td>
+<td style="text-align:center">只需要传递<code>sizeof(int)</code>大小的数据</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>其他</strong></td>
-<td style="text-align: center;">只要传值，就需要调用一次拷贝构造</td>
-<td style="text-align: center;">无</td>
+<tr>
+<td style="text-align:center"><strong>其他</strong></td>
+<td style="text-align:center">只要传值，就需要调用一次拷贝构造</td>
+<td style="text-align:center">无</td>
 </tr>
 </tbody>
 </table>
