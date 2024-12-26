@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
+  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Valley </title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/valley_logo.jpg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title"> Valley 2.0: Multimodal Assistant with Large Language Model Enhanced ability </h1>
+          <!-- <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://hyggge.github.io"> xxx </a><sup>1</sup>,</span>
+            
+          </div> -->
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup></sup> ByteDance Inc. </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2306.07207"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2306.07207"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/bytedance/Valley"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/bytedance-research/Valley-Eagle-7B"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <p style="font-size:18px">🤗</p>
+                  </span>
+                  <span> Model </span>
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop"></div>
+    <div class="columns is-centered has-text-centered">
+      <img src="./static/images/valley_logo.jpg" width="500">
+    </div>
+  </div>
+
+  <div class="container is-max-desktop" style="padding-top: 30px;">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3"> Introduction </h2>
+        <div class="content has-text-justified">
+          Valley is a cutting-edge multimodal large model (MLLM) designed to handle a variety of tasks involving text, images, and video data, which is developed by ByteDance.
+          Our model achieved the best results in the inhouse e-commerce and short-video benchmarks, much better then other SOTA opensource models.
+          And it has also demonstrated comparatively outstanding performance on OpenCompass, a renowned multimodal model evaluation leaderboard. 
+          With a average score of <b>67.40</b>, it ranks top2 among the known open-source MLLMs.
+      </div>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop" style="padding-top: 30px;"></div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3"> Performance </h2>
+        <div class="content has-text-justified">
+          <img src="./static/images/img1.jpg">
+        </div>
+        <div class="content has-text-justified"></div>
+        <table border="1" style="font-size: 10px;">
+          <thead>
+              <tr>
+                  <th style="width:150px; text-align: center; vertical-align: middle;">Models</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">AVerage</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">MMBench</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">MMStar</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">MMMU</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">MathVista</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">Hallusion<br>Bench</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">AI2D</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">OCRBench</th>
+                  <th style="width:80px; text-align: center; vertical-align: middle;">MMVet</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td colspan="11" style="text-align: center; font-weight: bold;">Proprietary models</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">SenseNova</td>
+                  <td>77.4</td>
+                  <td>85.7</td>
+                  <td>72.7</td>
+                  <td>69.6</td>
+                  <td>78.4</td>
+                  <td>57.4</td>
+                  <td>87.8</td>
+                  <td>894</td>
+                  <td>78.2</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">GPT-4o-20241120</td>
+                  <td>72</td>
+                  <td>84.3</td>
+                  <td>65.1</td>
+                  <td>70.7</td>
+                  <td>59.9</td>
+                  <td>56.2</td>
+                  <td>84.9</td>
+                  <td>806</td>
+                  <td>74.5</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">Gemini-1.5-Pro-002</td>
+                  <td>68.9</td>
+                  <td>82.8</td>
+                  <td>67.1</td>
+                  <td>68.6</td>
+                  <td>67.8</td>
+                  <td>55.9</td>
+                  <td>83.3</td>
+                  <td>770</td>
+                  <td>74.6</td>
+              </tr>
+              <tr>
+                  <td colspan="11" style="text-align: center; font-weight: bold;">Open-source models</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">InternVL2.5-8B</td>
+                  <td>68.1</td>
+                  <td>82.5</td>
+                  <td>63.2</td>
+                  <td>56.2</td>
+                  <td>64.5</td>
+                  <td>49</td>
+                  <td>84.6</td>
+                  <td>821</td>
+                  <td>62.8</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">POINTS1.5-Qwen2.5-7B</td>
+                  <td>67.35</td>
+                  <td>80.7</td>
+                  <td>61.1</td>
+                  <td>53.8</td>
+                  <td>66.4</td>
+                  <td>50</td>
+                  <td>81.4</td>
+                  <td>832</td>
+                  <td>62.2</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">BlueLM-V-3B</td>
+                  <td>66.1</td>
+                  <td>82.7</td>
+                  <td>62.3</td>
+                  <td>45.1</td>
+                  <td>60.8</td>
+                  <td>48</td>
+                  <td>85.3</td>
+                  <td>829</td>
+                  <td>61.8</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">MiniCPM-V-2.6</td>
+                  <td>65.2</td>
+                  <td>78</td>
+                  <td>57.5</td>
+                  <td>49.8</td>
+                  <td>60.6</td>
+                  <td>48.1</td>
+                  <td>82.1</td>
+                  <td>852</td>
+                  <td>60</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">Ovis1.5-Llama3-8B</td>
+                  <td>62.2</td>
+                  <td>76.6</td>
+                  <td>57.3</td>
+                  <td>48.3</td>
+                  <td>63</td>
+                  <td>45</td>
+                  <td>82.5</td>
+                  <td>744</td>
+                  <td>50.9</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">LLaVA-OneVision-7B (SI)</td>
+                  <td>61.2</td>
+                  <td>76.8</td>
+                  <td>56.7</td>
+                  <td>46.8</td>
+                  <td>58.5</td>
+                  <td>47.5</td>
+                  <td>82.8</td>
+                  <td>697</td>
+                  <td>50.6</td>
+              </tr>
+              <tr>
+                  <td colspan="11" style="text-align: center; font-weight: bold;">Ours</td>
+              </tr>
+              <tr>
+                  <td style="font-weight: bold;">Valley</td>
+                  <td>67.40</td>
+                  <td>80.68</td>
+                  <td>60.93</td>
+                  <td>57.00</td>
+                  <td>64.6</td>
+                  <td>48.03</td>
+                  <td>82.48</td>
+                  <td>842</td>
+                  <td>61.28</td>
+              </tr>
+          </tbody>
+      </table>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container is-max-desktop"  style="padding-top: 60px;">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3"> Overview</h2>
+        <div class="content has-text-justified">
+          <img src="./static/images/overview.jpeg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop content" style="padding-top: 30px;">
+    <div class="columns is-centered has-text-left">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3 has-text-centered"> BibTeX </h2>
+       <pre><code>Comming soon ... </code></pre>
+      
+       <!-- <pre><code>@article{xxx,
+    author    = {xxx},
+    title     = {Valley},
+    journal   = {ICCV},
+    year      = {2025},
+}</code></pre> -->
+    </div>
+    
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://github.com/hyggge" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
