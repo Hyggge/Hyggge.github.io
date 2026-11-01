@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="用实例区分 Bash 的变量展开、命令替换、子 Shell、条件测试和算术运算，辨析括号与特殊符号的用法。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Shell」 Shell中的特殊符号 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#-的用法" data-toc-link="-的用法">$ 的用法</a><a class="article-toc-link depth-2" href="#--和-" data-toc-link="--和-">$( ) 和 ` `</a><a class="article-toc-link depth-2" href="#--和---1" data-toc-link="--和---1">( ) 和 ${ }</a><a class="article-toc-link depth-2" href="#--和-test" data-toc-link="--和-test">[ ] 和 test</a><a class="article-toc-link depth-2" href="#--的用法" data-toc-link="--的用法">[[ ]] 的用法</a><a class="article-toc-link depth-2" href="#----let-和-expr" data-toc-link="----let-和-expr">$(( )), $[ ], let 和 expr</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Shell」 Shell中的特殊符号</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Linux/">Linux</a><a class="tag" href="/blog/tags/Shell%E7%BC%96%E7%A8%8B/">Shell Scripting</a> </div> <span class="article-date">Date: <time datetime="2022-07-25T14:24:49.000Z">2022/07/25</time></span> </div> </header> <div class="article-content"> <p>Shell中有一系列诸如 <code>${ }</code>,<code>$[ ]</code>,<code>$( )</code>,<code>[[ ]]</code>这样的特殊符号，它们长相相似但用法却大相径庭，非常容易混淆。笔者在写Shell脚本时也经常将它们的用法弄混，因此特地整理在此，以便日后查阅。</p>
+<h2 id="-的用法">$ 的用法</h2>
+<p>在写Shell脚本时，我们经常会定义一些变量。如果想要获取变量的值，则需要使用 <code>${变量名}</code>。当然，<code>$变量名</code>也是可以的，不过${}能够明确变量的边界，可以防止在字符串拼接时出现问题。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">var1</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">var2</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ${var1}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $var2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">100</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">200</span></span></code></pre>
+<h2 id="--和-">$( ) 和 ` `</h2>
+<p><code>$( )</code>和<code>&lt;code&gt;</code>` `<code>&lt;/code&gt;</code>都用做<strong>命令替换</strong>，能够返回某个命令的运行结果。当我们使用这两个符号运行某个命令时，实际上就是在当前Shell中fork出一个子Shell，并在子Shell中运行命令，并将结果返回给父Shell。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `</span><span style="color:#6F42C1;--shiki-dark:#B392F0">date</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">2022年</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 07月</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 25日</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 星期一</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 22:06:03</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> CST</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">2022年</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 07月</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 25日</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 星期一</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 22:06:03</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> CST</span></span></code></pre>
+<h2 id="--和---1">( ) 和 { }</h2>
+<p><code>( )</code>和 <code>{ }</code>作用相似，都是将括号中的所有命令作为一个命令组来顺序执行（括号中不同命令之间需要用分号 <code>;</code>来分隔）。但是，二者又有下面几点区别——</p>
+<ul>
+<li><code>( )</code>内部各个命令和左右括号之间不必有空格，而 <code>{ }</code>中第一个命令和左括号之间必须要有一个空格。</li>
+<li><code>( )</code>最后一条指令后面可以没有 <code>;</code>，而 <code>{ }</code>最后一条指令后面必须有 <code>;</code></li>
+<li><code>( )</code>中的命令会在新开的一个Shell中运行，而 <code>{ }</code>的命令是在当前Shell中运行。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -n</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "Hello"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -n</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> " Hyggge"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -e</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "\n"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">{ </span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -n</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "Hello"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -n</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "World"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -e</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "\n"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">Hello</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> Hyggge</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">Hello</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> World</span></span></code></pre>
+<h2 id="--和-test">[ ] 和 test</h2>
+<p><code>[ ]</code>和 <code>test</code>命令用法相同，都是用来测试“某个条件是否成立”。<strong>如果成立则返回0（真），否则返回非0值（假）</strong>。<code>test</code>命令的语法格式为 <code>test &lt;条件&gt;</code>，若使用 <code>[ ]</code>则应该写做 <code>[&lt;条件&gt;]</code>。两者通常需要结合 <code>if</code>一起使用</p>
+<p>“测试条件”中支持以下几种表示判断或者关系的运算符——</p>
+<ul>
+<li><strong>测试文件</strong>： -e, -f, -d, -r, -w, -x等</li>
+<li><strong>字符串比较</strong>： =, !=, -z, -n, $</li>
+<li><strong>数值比较</strong>： ==, ！=, -eq, -ne, -gt, -lt, -ge, -le</li>
+<li><strong>布尔运算</strong>： !, -o, -a</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">a</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">b</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> test</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $a </span><span style="color:#005CC5;--shiki-dark:#79B8FF">-lt</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $b;</span><span style="color:#D73A49;--shiki-dark:#F97583">then</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    echo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "a &lt; b!"</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [ $b </span><span style="color:#D73A49;--shiki-dark:#F97583">-gt</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $a ]; </span><span style="color:#D73A49;--shiki-dark:#F97583">then</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    echo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "b &gt; a!"</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">fi</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">a</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> b!</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">b</span><span style="color:#D73A49;--shiki-dark:#F97583"> &gt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> a!</span></span></code></pre>
+<blockquote>
+<p><strong>需要注意的是</strong>，在使用 <code>[ ]</code>时，左右括号和条件之间必须留有空格。</p>
+</blockquote>
+<h2 id="--的用法">[[ ]] 的用法</h2>
+<p><code>[[ ]]</code>可以看做增强版的 <code>[ ]</code>，除了可以使用上面提到的运算符，还可以使用 <code>&amp;&amp;</code>, <code>||</code>, <code>&lt;</code>, <code>&gt;</code>，更加符合我们使用C语言的习惯。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [[ </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span><span style="color:#D73A49;--shiki-dark:#F97583"> &gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ]];</span><span style="color:#D73A49;--shiki-dark:#F97583">then</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    echo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "yes!"</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">yes!</span></span></code></pre>
+<h2 id="----let-和-expr">$(( )), $[ ], let 和 expr</h2>
+<p><code>$(( ))</code>, <code>$[ ]</code>, <code>let</code>, <code>expr</code>都可以用于数值的运算。</p>
+<ul>
+<li>
+<p><code>$(( ))</code>的括号中可以使用任何符合C语言语法的表达式，如果括号中的是数值运算表达式，则返回运算结果；如果括号中是逻辑判断表达式，则返回1或者0（1表示真，0表示假，与退出状态码相反）。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">a</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">b</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">c</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">$((</span><span style="color:#6F42C1;--shiki-dark:#B392F0">a</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> +</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) </span><span style="color:#6A737D;--shiki-dark:#6A737D"># c=$(($a + $b))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $c</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $((</span><span style="color:#6F42C1;--shiki-dark:#B392F0">a</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> +</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> b</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">300</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">1</span></span></code></pre>
+</li>
+<li>
+<p>如果 <code>(( ))</code>单独使用，则只能用于括号内表达式的运算，而不能将表达式的运算结果返回。此外，<code>(( ))</code>也经常在 <code>for</code>循环中使用，用于循环控制，类似C语言。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">a</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">b</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">((c </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $c</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sum</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">));</span><span style="color:#D73A49;--shiki-dark:#F97583">do</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ((sum </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">done</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $sum</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">300</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">4950</span></span></code></pre>
+</li>
+<li>
+<p><code>$[ ]</code>用法和 <code>$(( ))</code>基本相同，同样支持任何符合C语言语法的表达式。</p>
+</li>
+<li>
+<p><code>expr</code>命令只能用于”数值运算”（例如 <code>expr b + c</code>），不能用作”变量赋值”（例如 <code>expr a = b + c</code>）。该命令除了能够进行数学运算时，还可与进行字符串比较、字符串匹配、字符串提取、字符串长度计算等功能。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">a</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">b</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">c</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`</span><span style="color:#6F42C1;--shiki-dark:#B392F0">expr</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $a</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> + </span><span style="color:#24292E;--shiki-dark:#E1E4E8">$b</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $c</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">300</span></span></code></pre>
+</li>
+<li>
+<p><code>let</code>命令可以和 <code>(( ))</code>进行互换，同样只能进行表达式的运算，而不能将运算结果返回。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">a</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">b</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">200</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">let</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> c=a+b</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $c</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">let</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "c = a - b"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">echo</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $c</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">------------------------</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 运行结果</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ------------------------</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">300</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">-100</span></span></code></pre>
+</li>
+</ul>
+<blockquote>
+<p><strong>需要特别注意以下几点：</strong></p>
+<ul>
+<li>在使用 <code>$(( ))</code>、<code>$[ ]</code>和 <code>let</code>时，直接通过变量名即可获得变量所代表的值，不需要使用 <code>${ }</code>。</li>
+<li>在使用 <code>$(( ))</code>和 <code>$[ ]</code>时，括号中表达式的任意位置都可以有空格；对于 <code>expr</code>命令，运算符两边必须有空格；对于 <code>let</code>命令，表达式必须紧凑，不能含有空格，但是如果非要在表达式中加空格，则必须将整个表达式用引号引起来。</li>
+</ul>
+</blockquote> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

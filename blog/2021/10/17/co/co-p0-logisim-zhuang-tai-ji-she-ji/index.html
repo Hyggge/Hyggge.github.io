@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="从锁存器和触发器理解时序电路，整理 Moore、Mealy 状态机的编码、转移逻辑及 Logisim 实现。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-CO」P0_logisim状态机设计 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#时序逻辑电路的基本元件" data-toc-link="时序逻辑电路的基本元件">时序逻辑电路的基本元件</a><a class="article-toc-link depth-3" href="#sr锁存器" data-toc-link="sr锁存器">SR锁存器</a><a class="article-toc-link depth-3" href="#d锁存器" data-toc-link="d锁存器">D锁存器</a><a class="article-toc-link depth-3" href="#d触发器" data-toc-link="d触发器">D触发器</a><a class="article-toc-link depth-3" href="#带使能端的d触发器" data-toc-link="带使能端的d触发器">带使能端的D触发器</a><a class="article-toc-link depth-3" href="#可置位的d触发器" data-toc-link="可置位的d触发器">可置位的D触发器</a><a class="article-toc-link depth-3" href="#多路选择器" data-toc-link="多路选择器">多路选择器</a><a class="article-toc-link depth-2" href="#有限状态机基本知识" data-toc-link="有限状态机基本知识">有限状态机基本知识</a><a class="article-toc-link depth-3" href="#状态机类型" data-toc-link="状态机类型">状态机类型</a><a class="article-toc-link depth-3" href="#设计步骤" data-toc-link="设计步骤">设计步骤</a><a class="article-toc-link depth-3" href="#设计要点" data-toc-link="设计要点">设计要点</a><a class="article-toc-link depth-2" href="#logisim中有限状态机的实现" data-toc-link="logisim中有限状态机的实现">logisim中有限状态机的实现</a><a class="article-toc-link depth-3" href="#verilog中有限状态机的实现" data-toc-link="verilog中有限状态机的实现">verilog中有限状态机的实现</a><a class="article-toc-link depth-4" href="#设计建议" data-toc-link="设计建议">设计建议</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-CO」P0_logisim状态机设计</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">Computer Architecture</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2021-10-16T18:34:17.000Z">2021/10/17</time></span> </div> </header> <div class="article-content"> <h2 id="时序逻辑电路的基本元件">时序逻辑电路的基本元件</h2>
+<h3 id="sr锁存器">SR锁存器</h3>
+<ul>
+<li>功能：清除（R = 1）、置位（S = 1）、保持（R = 0， S = 0）</li>
+<li>缺点：没有时间上的同步关系<br>
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/SR%E9%94%81%E5%AD%98%E5%99%A8%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt=""> <img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/SR%E9%94%81%E5%AD%98%E5%99%A8%E7%9C%9F%E5%80%BC%E8%A1%A8.png" alt=""></li>
+</ul>
+<h3 id="d锁存器">D锁存器</h3>
+<ul>
+<li>功能：高电平时进行储存。本质是电平缓冲器，在一个时钟周期内Q可以随D多次翻转</li>
+<li>缺点：无法实现时钟沿储存</li>
+</ul>
+<p><img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/D%E9%94%81%E5%AD%98%E5%99%A8.png" alt=""></p>
+<h3 id="d触发器">D触发器</h3>
+<ul>
+<li>功能：时钟沿上升时储存
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/D%E8%A7%A6%E5%8F%91%E5%99%A8_1.png" alt=""> <img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/D%E8%A7%A6%E5%8F%91%E5%99%A8_2.png" alt=""></li>
+</ul>
+<h3 id="带使能端的d触发器">带使能端的D触发器</h3>
+<ul>
+<li>功能：若使能信号有效则可以正常读入，否则保存当前值而不读入
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/%E5%B8%A6%E4%BD%BF%E8%83%BD%E7%AB%AF%E7%9A%84D%E8%A7%A6%E5%8F%91%E5%99%A8.png" alt=""></li>
+</ul>
+<h3 id="可置位的d触发器">可置位的D触发器</h3>
+<ul>
+<li>功能：若置位信号有效，则下一个时钟沿到来时触发器只更新为0</li>
+</ul>
+<p><img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/%E7%BD%AE%E4%BD%8D_1.png" alt=""><img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/%E7%BD%AE%E4%BD%8D_2.png" alt=""></p>
+<h3 id="多路选择器">多路选择器</h3>
+<ul>
+<li>功能：根据S的值选的输出D0还是D1<br>
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8.png" alt=""></li>
+</ul>
+<h2 id="有限状态机基本知识">有限状态机基本知识</h2>
+<h3 id="状态机类型">状态机类型</h3>
+<ul>
+<li>Moore型：输出信号仅为状态的函数，与输入信号无关（输出晚，有效周期是circle的整数倍）</li>
+<li>Meely型：输出信号是状态与输入信号的函数（输出早，有效时间可能更短）</li>
+</ul>
+<h3 id="设计步骤">设计步骤</h3>
+<ul>
+<li><strong>确定输入和输出</strong></li>
+<li><strong>画出状态转移图</strong>（注意所有可能的情况以及复位操作）</li>
+<li><strong>为状态编码</strong>（独热码or二进制码）</li>
+<li><strong>列出状态转移表和输出表</strong></li>
+<li><strong>将真值表转化为表达式</strong></li>
+<li><strong>连接电路</strong></li>
+</ul>
+<h3 id="设计要点">设计要点</h3>
+<ul>
+<li>
+<p><strong>初始状态</strong>
+状态机必须指定一个初始状态，以确保系统在上电后处于确定的状态</p>
+</li>
+<li>
+<p><strong>复位信号</strong>
+复位信号的作用是将状态机强制初始化为初始状态,包括同步复位和异步复位。</p>
+</li>
+<li>
+<p><strong>状态编码方式</strong></p>
+<ul>
+<li>二进制编码：log2𝑁个触发器表示N个状态,节省逻辑资源，但可能产生毛刺</li>
+<li>格雷编码：log2𝑁个触发器表示N个状态，但相邻状态编码值只有1位不同,节省逻辑资源,又避免产生毛刺（状态顺序的转换中有效）</li>
+<li>一位热码编码（One-Hot Encoding）：N个触发器表示这N个状态,资源消耗多，但无毛刺,降低次态逻辑和输出逻辑复杂度，有利于提高时钟频</li>
+</ul>
+</li>
+</ul>
+<h2 id="logisim中有限状态机的实现">logisim中有限状态机的实现</h2>
+<p>总体来说，使用 Logism 设计有限状态机的过程基本上可以分为三个步骤：</p>
+<ul>
+<li>设计实现状态存储模块</li>
+<li>设计实现状态转移模块</li>
+<li>设计实现输出模块</li>
+</ul>
+<p>其中，状态转移模块和输出模块内是纯组合逻辑，不涉及时序逻辑；状态存储模块则需要存储每个周期有限状态机的具体状态。</p>
+<p><strong>两种状态机的状态转移和状态存储模块的设计方法基本一致</strong>：<br>
+状态转移模块根据当前有限状态机的状态(即状态存储模块所存储的值)和当前的输入计算出有限状态机的下一状态值，当时钟上升沿到来时，这个新的状态值被存入状态存储模块中。</p>
+<p><strong>两种状态机的不同之处在于输出模块对输入数据的要求</strong>：</p>
+<ul>
+<li>more型有限状态机的设计
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/moore.png" alt=""></li>
+<li>mealy型有限状态机的设计
+<img src="/homepage/blog-assets/2021/10/17/co/co-p0-logisim-zhuang-tai-ji-she-ji/mealy.PNG" alt=""></li>
+</ul>
+<h3 id="verilog中有限状态机的实现">verilog中有限状态机的实现</h3>
+<p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：</p>
+<ul>
+<li>
+<p>逻辑抽象，得出状态转换图。</p>
+</li>
+<li>
+<p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p>
+</li>
+<li>
+<p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray 编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为 FPGA 有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p>
+</li>
+<li>
+<p>根据状态转移图得出次态逻辑和输出逻辑。</p>
+</li>
+<li>
+<p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else 语句描述出状态的转移。</p>
+</li>
+</ul>
+<h4 id="设计建议">设计建议</h4>
+<ol>
+<li>一般用case、casez 或 casex语句进行状态判断，比用 if-else 语句更加清晰明了。</li>
+<li>在 case 语句的最后，要加上 default 分支语句，以避免锁存器的产生。</li>
+<li>状态机一般应设计为同步方式，并由一个时钟信号来触发。</li>
+<li>实用的状态机都应设计为由唯一的时钟边沿触发的同步运行方式。</li>
+</ol> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

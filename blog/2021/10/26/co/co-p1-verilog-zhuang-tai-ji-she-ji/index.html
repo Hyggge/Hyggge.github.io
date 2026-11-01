@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="从状态转移图实现 Verilog 有限状态机，比较状态编码，整理同步复位、组合逻辑与状态判断的写法。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-CO」P1_Verilog状态机设计 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-4" href="#设计建议" data-toc-link="设计建议">设计建议</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-CO」P1_Verilog状态机设计</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">Computer Architecture</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2021-10-26T01:34:17.000Z">2021/10/26</time></span> </div> </header> <div class="article-content"> <p>在 Verilog HDL 中可以用许多种方法来描述有限状态机，最常用的方法是用 always 语句和 case 语句。下面具体说明用 Verilog 设计有限状态机的一般步骤：</p>
+<ul>
+<li>
+<p>逻辑抽象，得出状态转换图。</p>
+</li>
+<li>
+<p>状态化简（该步骤可以省略），如果在状态转换图中出现两个一样的状态则需要将其合并为一个状态，以得到最简的状态转换图。</p>
+</li>
+<li>
+<p>状态分配，也就是状态编码。通常有很多种编码方式，比如 <strong>Gray 编码</strong>、<strong>独热编码</strong>等。在实际电路中，需综合考虑电路复杂度与电路性能之间的折中。这里的设计没有用到特别复杂的电路逻辑，所以大家可以自行决定用哪种编码方式。（<strong>不过，对于需要在FPGA上运行的电路，推荐使用独热编码方式。因为 FPGA 有丰富的寄存器资源，门逻辑相对缺乏，采用独热编码可以有效提高电路的速度和可靠性，也有利于提高器件资源的利用率。</strong>）</p>
+</li>
+<li>
+<p>根据状态转移图得出次态逻辑和输出逻辑。</p>
+</li>
+<li>
+<p>按照相应逻辑，用 Verilog HDL 来描述有限状态机状态转移的情况。 要注意同步复位和异步复位的不同， 尽量用 case 或 if-else 语句描述出状态的转移。</p>
+</li>
+</ul>
+<h4 id="设计建议">设计建议</h4>
+<ol>
+<li>一般用case、casez 或 casex语句进行状态判断，比用 if-else 语句更加清晰明了。</li>
+<li>在 case 语句的最后，要加上 default 分支语句，以避免锁存器的产生。</li>
+<li>状态机一般应设计为同步方式，并由一个时钟信号来触发。</li>
+<li>实用的状态机都应设计为由唯一的时钟边沿触发的同步运行方式。</li>
+</ol> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

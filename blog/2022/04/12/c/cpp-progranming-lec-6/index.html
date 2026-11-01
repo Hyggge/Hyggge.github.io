@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="从向上转型理解 C++ 动态绑定，说明虚函数、纯虚函数及通过基类接口调用派生类行为的机制。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-C++」Lec6:多态 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#向上转型upcasting" data-toc-link="向上转型upcasting">向上转型upcasting</a><a class="article-toc-link depth-2" href="#动态绑定" data-toc-link="动态绑定">动态绑定</a><a class="article-toc-link depth-2" href="#虚函数" data-toc-link="虚函数">虚函数</a><a class="article-toc-link depth-2" href="#纯虚函数" data-toc-link="纯虚函数">纯虚函数</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-C++」Lec6:多态</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/C%2B%2B/">C++</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2022-04-12T07:10:57.000Z">2022/04/12</time></span> </div> </header> <div class="article-content"> <p>C++中的多态是继数据抽象(封装)和继承之后第三个重要的面向对象的特性，<strong>所谓多态是指用一个名字定义不同的函数，这些函数执行不同但又类似的操作，这样就可以用同一个函数名调用不同内容的函数</strong>。C++中多态主要依靠<strong>向上转型、动态绑定、虚函数</strong>等机制实现。</p>
+<h2 id="向上转型upcasting">向上转型upcasting</h2>
+<p>我们定义的类是一种数据类型，既然是数据类型，就可以发生数据类型的转换，但是这种转换仅限于在父类和子类之间。父类和子类之间的转换并不是双向的，而是只能从子类向父类进行转换，这种转换叫做 <strong>“向上转型”</strong>。 向上转型有下面两种方式——</p>
+<ul>
+<li>用父类的引用类型来引用子类对象</li>
+<li>用父类的指针类型来指向子类对象</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Child</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //第一种转换</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Child a;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Father</span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //第二种转换</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Child </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">a </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Child</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Father </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">b </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<blockquote>
+<p>向上转型由编译器自动完成，是十分安全的。向下转型也不是不可以，但是这样做会有风险，并且需要程序员根据需要手动强制转换。</p>
+</blockquote>
+<p>向上转型后<strong>可以直接由父类的指针或引用来调用子类对象中的数据成员</strong>（只能是子类从父类中继承来的数据成员）, 考虑下面的例子——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> father_id;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) : </span><span style="color:#6F42C1;--shiki-dark:#B392F0">father_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(a) {}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Child</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> child_id;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    Child</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) : </span><span style="color:#6F42C1;--shiki-dark:#B392F0">Father</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(a), </span><span style="color:#6F42C1;--shiki-dark:#B392F0">child_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b) {}</span><span style="color:#6A737D;--shiki-dark:#6A737D">//Father(a)是调用父类有参构造，child_id(b)是初始化列表</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Child </span><span style="color:#6F42C1;--shiki-dark:#B392F0">c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	Father </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">f </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> c;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> f.father_id </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span><span style="color:#6A737D;--shiki-dark:#6A737D"> //输出1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> f.child_id </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span><span style="color:#6A737D;--shiki-dark:#6A737D"> //error！child_id不是子类从父类中继承来的数据成员！</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>当某一个场景（如函数）需要传入父类的指针或者引用时，我们仍然可以传入子类对象的指针或引用，这样<strong>编译器会自动帮我们实现向上转型</strong>。如我们在上述程序中再定义一个<code>get_father_id(Father &amp;f)</code>函数， 调用该函数时我们可以传入一个子类对象。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_father_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Father</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;</span><span style="color:#E36209;--shiki-dark:#FFAB70">f</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> f.father_id;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Child </span><span style="color:#6F42C1;--shiki-dark:#B392F0">c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_father_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(c) </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span><span style="color:#6A737D;--shiki-dark:#6A737D"> //输出仍然是1</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    /*上述代码相当于\</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    Child c(1, 2);</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    Father&amp; f = c;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    cout &lt;&lt; get_father_id(f) &lt;&lt; endl;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">}</span></span></code></pre>
+<h2 id="动态绑定">动态绑定</h2>
+<p><strong>父类的指针或引用类型能不能调用调用子类对象中的的函数</strong>呢（只能是子类从父类中继承来的函数）？答案当然是可以的，但是并不像调用数据成员那样简单。可以看下面的例子——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Pet</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> speak</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "pet::speak"</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Dog</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Pet</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> speak</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "dog::speak"</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> listen</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Pet</span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#E36209;--shiki-dark:#FFAB70"> pet</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    pet.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">speak</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Dog dog;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    listen</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(dog);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>我们希望的是调用<code>Dog</code>类中重写后的<code>speak()</code>函数，即希望输出 <strong>“dog::speak”</strong>, 但最终输出的却是 <strong>“pet::speak”</strong>。这是为什么呢？解答这个问题就需要涉及<strong>绑定</strong>的概念了——</p>
+<p><strong>绑定（<code>binding</code>）是指将函数的一次调用与函数对应入口相对应的过程</strong>，绑定分为两种——</p>
+<ul>
+<li><strong>前绑定（<code>early binding</code>）</strong>，是指函数运行前就决定好了函数的运行的状态。我们遇到的大多数函数都是前绑定，例如上边的例子中<code>listen</code>函数中调用了<code>pet.speak()</code>，后者在运行前就决定好了要运行父类<code>Pet</code>中的<code>speak()</code>函数，因此即使传进来的是子类，仍然调用父类的函数。</li>
+<li><strong>后绑定（<code>later binfing</code>）</strong>，也称为运行时绑定、动态绑定，是指函数调用是根据调用者（对象）的状态来决定函数的运行状况。</li>
+</ul>
+<p>所以我们如何将<code>speak()</code>函数设置为后绑定呢？只需要在父类的函数声明前加入<code>virtual</code>关键字即可。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Pet</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    virtual</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> speak</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		cout </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;&lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "pet::speak"</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;&lt;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> endl;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//....</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Dog dog;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    listen</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(dog);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>再次运行程序，输出结果就变成了 <strong>“dog::speak”</strong>！！！</p>
+<h2 id="虚函数">虚函数</h2>
+<p>上面<strong>用<code>virtual</code>声明的函数被称为虚函数</strong>。当某个虚函数通过指针或者引用被调用时，编译器产生的代码直到运行时才能确定该调用哪个版本的函数，这就是上面所说的<strong>运行时调用</strong>。虚函数的使用要注意以下几点——</p>
+<ul>
+<li>若父类中某函数被定义为虚函数，子类在继承该函数的同时，<strong>也继承了<code>virtual</code>关键字</strong>。</li>
+<li>当子类的某函数重写了父类的一个虚函数，则它的<strong>形参类型</strong>必须与被它覆盖的父类函数完全一致</li>
+<li><strong>构造函数一般不能被定义为虚函数</strong>，即不存在多态性。<strong>析构函数一般是多态的</strong>，多用<code>virtual</code>来修饰。此外，<strong>静态函数也不能是多态的</strong>。</li>
+<li><code>later binding</code> 称运行时绑定，函数调用时跟据当前对象的状态决定函数的运行状况
+使用<code>virtual</code>来限定父类中的函数，该关键词自动继承，</li>
+<li>虚指针<code>V-Ptr</code></li>
+<li>虚列表<code>V-table</code>
+每个类都有一个<code>V-table</code>，并在每个对象的初始部分多出四个字节储存<code>V-Ptr</code>指向这个<code>V-table</code>，这样保证了upcasting行为的正确性。虚指针的初始化是在构造函数中默认完成的</li>
+</ul>
+<blockquote>
+<p><strong>补充：override和final的使用</strong>
+当子类对父类中的某<strong>虚函数</strong>进行重写时，我们可以在子类的对应函数后面写上override关键字，表示该函数是重写父类的。如果被override修饰的函数在父类中没有同名同参的函数，编译器会报错。使用该关键字可以让编译器帮助我们检查子类在重写父类函数时是否发生了错误，类似于JAVA中的@Override注解</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"></span></code></pre>
+</blockquote>
+<p>class Base {
+public:
+virtual void speak(int);
+};</p>
+<p>class Derived : public Base{
+public:
+void speak(int) override;
+};</p>
+<blockquote>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>父类中有某个函数，他只想让子类继承而不想让子类重写，这样我们可以在该函数后面加上final关键字。一旦子类重写了父类中被final修饰的函数，那么编译器就会报错。</span></span>
+<span class="line"><span>```cpp</span></span></code></pre>
+</blockquote>
+<p>class Base {
+public:
+virtual void speak(int) final;//无法被子类修改
+};
+//Base::speak(int a) {…};</p>
+<p>class Derived : public Base{
+public:
+void speak(int) override; //error!!!
+};
+//Derived::speak(int a) {…};</p>
+<blockquote>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span></code></pre>
+</blockquote>
+<h2 id="纯虚函数">纯虚函数</h2>
+<p>在父类中有一种<strong>虚函数</strong>，在父类中没有必要将他定义，只有子类才能根据具体情况实现它，这种函数称为<strong>纯虚函数</strong>。纯虚函数的定义方式为——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">virtual</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> func</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<p>纯虚函数只能声明，不能定义。<strong>拥有纯虚函数的类被称为抽象类</strong>，而因为纯虚函数是不能被定义的，<strong>所以抽象类不能用来创建对象</strong>。如果父类是抽象类，则子类应该重写父类中的纯虚函数，<strong>不重写纯虚函数的子类仍然是抽象类</strong>。</p>
+<p><strong>抽象类有以下两个作用：</strong></p>
+<ul>
+<li><strong>规定一个类家族所有的共性行为。</strong> 这种抽象类既可以有纯虚函数，也可以有定义好的函数（包括虚函数和一般函数），相当于JAVA中的<strong>抽象类（<code>abstract class</code>）</strong>。</li>
+<li><strong>链接本不相关的多个类家族。</strong> 这种抽象类只能由纯虚函数组成，相当于JAVA中的<strong>接口（interface）</strong>。</li>
+</ul> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="梳理 MOS 进程创建、调度和上下文切换的流程，分析进程控制块、时钟中断及运行状态管理。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-OS」 Lab3：进程调度 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#实验思考题" data-toc-link="实验思考题">实验思考题</a><a class="article-toc-link depth-3" href="#thinking-31" data-toc-link="thinking-31">Thinking 3.1</a><a class="article-toc-link depth-3" href="#thinking-32" data-toc-link="thinking-32">Thinking 3.2</a><a class="article-toc-link depth-3" href="#thinking-33" data-toc-link="thinking-33">Thinking 3.3</a><a class="article-toc-link depth-3" href="#thinking-34" data-toc-link="thinking-34">Thinking 3.4</a><a class="article-toc-link depth-3" href="#thinking-35" data-toc-link="thinking-35">Thinking 3.5</a><a class="article-toc-link depth-3" href="#thinking-36" data-toc-link="thinking-36">Thinking 3.6</a><a class="article-toc-link depth-3" href="#thinking-37" data-toc-link="thinking-37">Thinking 3.7</a><a class="article-toc-link depth-3" href="#thinking-38" data-toc-link="thinking-38">Thinking 3.8</a><a class="article-toc-link depth-3" href="#thinking-39" data-toc-link="thinking-39">Thinking 3.9</a><a class="article-toc-link depth-3" href="#thinking-310" data-toc-link="thinking-310">Thinking 3.10</a><a class="article-toc-link depth-2" href="#实验难点图示" data-toc-link="实验难点图示">实验难点图示</a><a class="article-toc-link depth-3" href="#进程创建流程" data-toc-link="进程创建流程">进程创建流程</a><a class="article-toc-link depth-3" href="#时钟中断的处理流程" data-toc-link="时钟中断的处理流程">时钟中断的处理流程</a><a class="article-toc-link depth-3" href="#进程切换流程" data-toc-link="进程切换流程">进程切换流程</a><a class="article-toc-link depth-2" href="#体会与感想" data-toc-link="体会与感想">体会与感想</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-OS」 Lab3：进程调度</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">Operating Systems</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2022-05-03T03:13:40.000Z">2022/05/03</time></span> </div> </header> <div class="article-content"> <h1 id="lab3-实验报告">Lab3 实验报告</h1>
+<h2 id="实验思考题">实验思考题</h2>
+<h3 id="thinking-31">Thinking 3.1</h3>
+<p><strong>Q：</strong> <strong>思考<code>envid2env</code> 函数:为什么<code>envid2env</code>中需要判断<code>e-&gt;env_id != envid</code> 的情况？如果没有这步判断会发生什么情况？</strong></p>
+<p><strong>A：</strong> 通过阅读该函数的代码，我们能知道，<code>e</code>是根据<code>envid</code>的后10位从<code>envs</code>数组中获得的。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> envid2env</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">u_int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> envid</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">struct</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Env</span><span style="color:#D73A49;--shiki-dark:#F97583"> **</span><span style="color:#E36209;--shiki-dark:#FFAB70">penv</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> checkperm</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    struct</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Env</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8">e;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (envid </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">penv </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> curenv;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	} </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		e </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> envs </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ENVX</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(envid);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	} e </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> envs </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ENVX</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(envid);</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}	</span></span></code></pre>
+<p>但是这样获得的<code>e</code>的<code>envid</code>不一定和<code>envid</code>相同，因为<code>envid</code>中还有<code>ASID</code>字段（11-16位），当<code>envs</code>中的某一个进程控制块被替换，新生成的<code>envid</code>的后10不变，但是<code>ASID</code>字段会改变。所以我们需要进一步判断<code>e-&gt;env_id != envid</code>是否成立。</p>
+<p>如果不判断，则通过最终获得的<code>e</code>可能并不是我们想要的内存控制块，而如果对这个错误的内存控制块操作，则可能会导致内存控制出现混乱（例如获得一个仍在<code>env_free_list</code>中的PCB，然后运行它）。</p>
+<h3 id="thinking-32">Thinking 3.2</h3>
+<p><strong>Q：</strong> <strong>结合include/mmu.h 中的地址空间布局，思考<code>env_setup_vm</code> 函数：</strong></p>
+<ul>
+<li><strong><code>UTOP</code> 和<code>ULIM</code>的含义分别是什么，<code>UTOP</code> 和 <code>ULIM</code> 之间的区域与UTOP以下的区域相比有什么区别？</strong></li>
+<li><strong>请结合系统自映射机制解释代码中<code>pgdir[PDX(UVPT)]=env_cr3</code>的含义。</strong></li>
+<li><strong>谈谈自己对进程中物理地址和虚拟地址的理解。</strong></li>
+</ul>
+<p><strong>A：</strong></p>
+<ul>
+<li>
+<p><code>ULIM</code>是<code>kseg0</code>和<code>kuseg</code>的分界线，也是内核态虚拟内存区和用户态虚拟内存区的分界线；<code>UTOP</code>是<code>kuseg</code>中只读区和可读写区的分界线。<strong><code>UTOP</code>和<code>ULIM</code>之间是只读区域</strong>，用来存放用户的进程信息和页表信息；<strong><code>UTOP</code>之下的是可读写区域</strong>，用户可以自由读写。</p>
+</li>
+<li>
+<p><code>UVPT</code>是<code>kuseg</code>中保存用户（当前进程）页表信息的虚拟内存区，大小为4MB（0x7fc00000-0x80000000），<code>env_cr3</code>是进程页目录所在的物理地址。<code>pgdir[PDX(UVPT)]=env_cr3</code>表示页目录中第<code>PDX(UVPT)</code>项映射到页目录本身的物理地址，实现自映射机制。</p>
+</li>
+<li>
+<p>在用户进程中使用的是虚拟地址（用户可见），然后MMU通过查询页表得到对应的物理地址（用户不可见），并最终通过物理地址在物理内存中获取值。</p>
+</li>
+</ul>
+<h3 id="thinking-33">Thinking 3.3</h3>
+<p><strong>Q：</strong> <strong>找到 <code>user_data</code> 这一参数的来源，思考它的作用。没有这个参数可不可以？为什么？（可以尝试说明实际的应用场景，举一个实际的库中的例子）</strong></p>
+<p><strong>A：</strong> <code>user_data</code> 在 <code>load_elf</code> 和 <code>load_icode_mapper</code> 两个函数中用到。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//env.c</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">static</span><span style="color:#D73A49;--shiki-dark:#F97583"> int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> load_icode_mapper</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">u_long</span><span style="color:#E36209;--shiki-dark:#FFAB70"> va</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">u_int32_t</span><span style="color:#E36209;--shiki-dark:#FFAB70"> sgsize</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                             u_char</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">bin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">u_int32_t</span><span style="color:#E36209;--shiki-dark:#FFAB70"> bin_size</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">user_data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//kernel_elfloader.c</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> load_elf</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">u_char</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">binary</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> size</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">u_long</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">entry_point</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">user_data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			 int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (*</span><span style="color:#E36209;--shiki-dark:#FFAB70">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)(</span><span style="color:#D73A49;--shiki-dark:#F97583">u_long</span><span style="color:#E36209;--shiki-dark:#FFAB70"> va</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">u_int32_t</span><span style="color:#E36209;--shiki-dark:#FFAB70"> sgsize</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			 	u_char</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">bin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">u_int32_t</span><span style="color:#E36209;--shiki-dark:#FFAB70"> bin_size</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#E36209;--shiki-dark:#FFAB70">user_data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ret </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(phdr-&gt;p_vaddr, phdr-&gt;p_memsz, binary </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> phdr-&gt;p_offset, phdr-&gt;p_filesz, user_data);</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>不可以没有这个参数，因为在<code>load_elf</code>函数中需要进一步将这个参数传递给函数指针<code>map</code>（实际上指向的是<code>load_icode_mapper</code>）。</p>
+<h3 id="thinking-34">Thinking 3.4</h3>
+<p><strong>Q：</strong> <strong>结合<code>load_icode_mapper</code> 的参数以及二进制镜像的大小，考虑该函数可能会面临哪几种复制的情况？你是否都考虑到了？</strong>
+<strong>A：</strong> <code>va</code>和<code>va+bin_size</code>的相对位置有以下6种</p>
+<p><img src="/homepage/blog-assets/2022/05/03/os/os-lab3-shi-yan-bao-gao/3.4-1.png" alt=""></p>
+<p><code>va+bin_size</code>和<code>va+sg_size</code>的相对位置有以下6种</p>
+<p><img src="/homepage/blog-assets/2022/05/03/os/os-lab3-shi-yan-bao-gao/3.4-2.png" alt=""></p>
+<h3 id="thinking-35">Thinking 3.5</h3>
+<p><strong>Q：</strong> <strong>思考上面这一段话，并根据自己在lab2 中的理解，回答：</strong></p>
+<ul>
+<li><strong>你认为这里的 <code>env_tf.pc</code> 存储的是物理地址还是虚拟地址?</strong></li>
+<li><strong>你觉得<code>entry_point</code>其值对于每个进程是否一样？该如何理解这种统一或不同？</strong></li>
+</ul>
+<p><strong>A：</strong> env_tf.pc中存储的是虚拟地址。对于每个用户进程来说entry_point都是一样的（如果不手动进行设置的话），这样可使让程序的每次执行都从一个固定的虚拟地址开始，这种统一对CPU是友好的。</p>
+<h3 id="thinking-36">Thinking 3.6</h3>
+<p><strong>Q：</strong> <strong>请查阅相关资料解释，上面提到的<code>epc</code>是什么？为什么要将<code>env_tf.pc</code>设置为<code>epc</code>呢？</strong></p>
+<p><strong>A：</strong> <code>epc</code>是CP0中的一个寄存器（14号），用于保存使该进程出现异常（包括中断）时指令所在的<code>pc</code>。进程因异常被切换时将<code>env_tf.pc</code>设置为<code>epc</code>，实际上就是保存了“该进程运行到了什么地方”。这样就可以使进程在下一次被调度时，<strong>直接从上次出现异常的位置继续向后运行</strong>。</p>
+<h3 id="thinking-37">Thinking 3.7</h3>
+<p><strong>Q：</strong>  <strong>关于 <code>TIMESTACK</code>，请思考以下问题：</strong></p>
+<ul>
+<li><strong>操作系统在何时将什么内容存到了 <code>TIMESTACK</code> 区域</strong></li>
+<li><strong><code>TIMESTACK</code> 和 <code>env_asm.S</code> 中所定义的 <code>KERNEL_SP</code> 的含义有何不同</strong></li>
+</ul>
+<p><strong>A：</strong> 操作系统在发生时钟中断时时将<strong>原进程</strong>的<code>env_tf</code>中的内容保存到<code>TIMESTACK</code>区域（在<code>handle_int</code>函数中通过<code>SAVE_ALL</code>实现）。 <code>TIMESTACK</code>时发生时钟中断时的栈顶指针，<code>KERNEL_SP</code>是发生其他中断时的栈顶指针。</p>
+<h3 id="thinking-38">Thinking 3.8</h3>
+<p><strong>Q：</strong> <strong>试找出上述 4 个异常处理函数的具体实现位置</strong>
+<strong>A：</strong> <code>handle_int</code>和<code>handle_sys</code>的实现位置比较容易找到，前者在<code>genex.S</code>文件中，后者在<code>syscall.S</code>文件中。而<code>handle_mod</code>和<code>handle_tlb</code>藏得比较深，两者都是通过<code>genex.S</code>文件中的宏函数<code>BUILD_HANDLER</code>实现的。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">#宏函数</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.macro	BUILD_HANDLER exception handler clear</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	.align	</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	NESTED(handle_\exception, TF_SIZE, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">sp</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	.set	noat</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">nop</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	SAVE_ALL				</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	__build_clear_\clear</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	.set	at</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	move	a0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">sp</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	jal	\handler</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	j	ret_from_exception</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	END(handle_\exception)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.endm</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">#具体实现</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">BUILD_HANDLER reserved do_reserved </span><span style="color:#D73A49;--shiki-dark:#F97583">cli</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">BUILD_HANDLER tlb	do_refill	</span><span style="color:#D73A49;--shiki-dark:#F97583">cli</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">BUILD_HANDLER mod	page_fault_handler </span><span style="color:#D73A49;--shiki-dark:#F97583">cli</span></span>
+<span class="line"></span></code></pre>
+<h3 id="thinking-39">Thinking 3.9</h3>
+<p><strong>Q：</strong> <strong>阅读 <code>kclock_asm.S</code> 和 <code>genex.S</code> 两个文件，并尝试说出 <code>set_timer</code> 和 <code>timer_irq</code> 函数中每行汇编代码的作用</strong>
+<strong>A：</strong> <code>set_time</code>函数的分析如下</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.macro	setup_c0_status set clr</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	.set	</span><span style="color:#D73A49;--shiki-dark:#F97583">push</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mfc0	t0, CP0_STATUS</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	or</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	t0, \set|\clr</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	xor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	t0, \clr</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mtc0	t0, CP0_STATUS			</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	.set	</span><span style="color:#D73A49;--shiki-dark:#F97583">pop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.endm</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">LEAF(set_timer)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	li t0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0xc8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">							</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	sb t0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0xb5000100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">			#在地址0xb5000100中写入0xc8，使时钟频率设为200</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	sw	</span><span style="color:#005CC5;--shiki-dark:#79B8FF">sp</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, KERNEL_SP			#将sp寄存器中的值存入地址KERNEL_SP中</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">setup_c0_status STATUS_CU0|</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0x1001</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">		#将CP0的SR寄存器中第1、</span><span style="color:#005CC5;--shiki-dark:#79B8FF">12</span><span style="color:#24292E;--shiki-dark:#E1E4E8">、28位 置为1，作用是开启全局中断使能和始终中断使能，并允许用户态使用CP0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	jr ra					#函数返回</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">END(set_timer)</span></span></code></pre>
+<p><code>time_irq</code>函数的分析如下</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">timer_irq:</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	sb zero, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0xb5000110</span><span style="color:#24292E;--shiki-dark:#E1E4E8">			#在地址0xb0000110中写入0，响应时钟中断</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:	j	sched_yield			#跳转到sched_yield函数，进行进程切换</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	nop</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	/*li t1, 0xff</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	lw    t0, delay</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	addu  t0, 1</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	sw	t0, delay</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	beq	t0,t1,1f	</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	nop*/</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	j	ret_from_exception		#跳转到ret_from_exception函数</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	nop</span></span>
+<span class="line"></span></code></pre>
+<h3 id="thinking-310">Thinking 3.10</h3>
+<p><strong>Q：</strong> <strong>阅读相关代码，思考操作系统是怎么根据时钟周期切换进程的。</strong>
+<strong>A：</strong> <code>env_sched_list</code>有两个链表存放就绪进程。当进程被创建时，我们将其插入第一个进程调度链表的头部。调用 <code>sched_yield</code> 函数时, 先判断当前时间片是否用完。如果用完，则将其插入另一个链表的结尾，之后判断当前就绪状态进程链表是否为空。如果为空, 将指针切换到另一个就绪状态进程链表。最后从指针指向的链表的头部获取一个就绪进程进行切换。</p>
+<h2 id="实验难点图示">实验难点图示</h2>
+<p>我认为该实验的难点在于理解<strong>进程的创建流程</strong>、<strong>时钟中断的处理流程</strong>和<strong>进程的切换流程</strong>。</p>
+<h3 id="进程创建流程">进程创建流程</h3>
+<p><img src="/homepage/blog-assets/2022/05/03/os/os-lab3-shi-yan-bao-gao/create.png" alt=""></p>
+<h3 id="时钟中断的处理流程">时钟中断的处理流程</h3>
+<p><img src="/homepage/blog-assets/2022/05/03/os/os-lab3-shi-yan-bao-gao/irq.png" alt=""></p>
+<h3 id="进程切换流程">进程切换流程</h3>
+<p><img src="/homepage/blog-assets/2022/05/03/os/os-lab3-shi-yan-bao-gao/run.png" alt=""></p>
+<h2 id="体会与感想">体会与感想</h2>
+<p>Lab3要求我们实现<strong>进程的创建、切换和调度</strong>，其中进程的调度主要是通过设置异常处理机制来实现。</p>
+<p>本次实验的难度比Lab2稍稍低一些，主要原因是本次lab中各个函数之间的联系比较紧密。虽然某些复杂函数理解起来还是有些困难，但是如果在宏观上把握这些函数的关系，那么对于单个函数的理解就变得相对容易了。</p>
+<p>所以，在阅读复杂工程的代码时，不要急于阅读每一个函数的细节，而是应该首先搞清楚<strong>工程的文件结构</strong>（by makefile）和<strong>不同函数之间的关系</strong>（by doc），然后再按照一定的逻辑顺序阅读代码，这样就可以达到事半功倍的效果。</p> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

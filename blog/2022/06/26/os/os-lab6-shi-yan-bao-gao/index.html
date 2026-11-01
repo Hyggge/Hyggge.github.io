@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="围绕管道与 Shell 实验，分析文件描述符共享、引用计数和进程竞争，结合管道内存布局与 spawn 流程理解进程间通信。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-OS」 Lab6：管道和shell | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#实验思考题" data-toc-link="实验思考题">实验思考题</a><a class="article-toc-link depth-3" href="#thinking-61" data-toc-link="thinking-61">Thinking 6.1</a><a class="article-toc-link depth-3" href="#thinking-62" data-toc-link="thinking-62">Thinking 6.2</a><a class="article-toc-link depth-3" href="#thinking-63" data-toc-link="thinking-63">Thinking 6.3</a><a class="article-toc-link depth-3" href="#thinking-64" data-toc-link="thinking-64">Thinking 6.4</a><a class="article-toc-link depth-3" href="#thinking-65" data-toc-link="thinking-65">Thinking 6.5</a><a class="article-toc-link depth-3" href="#thinking-66" data-toc-link="thinking-66">Thinking 6.6</a><a class="article-toc-link depth-3" href="#thinking-67" data-toc-link="thinking-67">Thinking 6.7</a><a class="article-toc-link depth-3" href="#thinking-68" data-toc-link="thinking-68">Thinking 6.8</a><a class="article-toc-link depth-3" href="#thinking-69" data-toc-link="thinking-69">Thinking 6.9</a><a class="article-toc-link depth-2" href="#实验难点图示" data-toc-link="实验难点图示">实验难点图示</a><a class="article-toc-link depth-3" href="#和管道相关的内存分配" data-toc-link="和管道相关的内存分配">和管道相关的内存分配</a><a class="article-toc-link depth-3" href="#spawn函数的处理流程" data-toc-link="spawn函数的处理流程">spawn函数的处理流程</a><a class="article-toc-link depth-2" href="#体会与感想" data-toc-link="体会与感想">体会与感想</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-OS」 Lab6：管道和shell</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">Operating Systems</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2022-06-26T13:59:08.000Z">2022/06/26</time></span> </div> </header> <div class="article-content"> <h2 id="实验思考题">实验思考题</h2>
+<h3 id="thinking-61">Thinking 6.1</h3>
+<p><strong>Q：</strong> <strong>示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</strong>
+<strong>A：</strong> 只需要调换父子进程操作的内容即可——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    //...</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    switch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        case</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        case</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Read end is unused */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            write</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"Hello world</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">12</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Write data on pipe */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Child will see EOF */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            exit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(EXIT_SUCCESS);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        default</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Write end is unused */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], buf, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Get data from pipe */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            printf</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"child-process read:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">%s</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,buf);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Print the data */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fildes[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]);</span><span style="color:#6A737D;--shiki-dark:#6A737D"> /* Finished with pipe */</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            exit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(EXIT_SUCCESS);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h3 id="thinking-62">Thinking 6.2</h3>
+<p><strong>Q：</strong> <strong>上面这种不同步修改 pp_ref 而导致的进程竞争问题在 user/fd.c 中的 dup 函数中也存在。请结合代码模仿上述情景，分析一下我们的 dup 函数中为什么会出现预想之外的情况？</strong>
+<strong>A：</strong> <code>dup</code>函数的作用时将<code>oldfdnum</code>所代表的文件描述符的指向的数据完全复制给<code>newfdnum</code>文件描述符，一共包含两个过程——</p>
+<ul>
+<li>将<code>newfd</code>所在的虚拟页映射到<code>oldfd</code>所在的物理页</li>
+<li>将<code>newfd</code>的数据所在的虚拟页映射到<code>oldfd</code>的数据所在的物理页</li>
+</ul>
+<p>考虑如下代码段</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 子进程</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(p[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], buf, </span><span style="color:#D73A49;--shiki-dark:#F97583">sizeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(buf));</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 父进程    </span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    dup</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(p[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], newfd);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    write</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(p[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"Hello"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+<p>分析过程如下：</p>
+<ul>
+<li>fork结束后，子进程先进行。但是在<code>read</code>之前发生了时钟中断，此时父进程开始进行进行。</li>
+<li>父进程在<code>dup(p[0])</code>中，已经完成了对<code>p[0</code>]的映射，这个时候发生了中断，还没有来得及完成对<code>pipe</code>的映射。</li>
+<li>此时回到子进程，进入<code>read</code>函数，结果发现<code>ref(p[0]) == ref(pipe) == 2</code>, 认为此时写进程关闭。</li>
+</ul>
+<h3 id="thinking-63">Thinking 6.3</h3>
+<p><strong>Q：</strong> <strong>阅读上述材料并思考：为什么系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。希望能结合相关代码进行分析。</strong>
+<strong>A：</strong> 在 <code>syscall</code> 对应的异常处理程序 <code>handle_sys</code> 中，我们使用了汇编宏 <code>CLI</code> 来禁用全局中断，因此系统调用时不会被中断，是原子操作。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">NESTED</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(handle_sys,TF_SIZE, sp)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    SAVE_ALL</span><span style="color:#6A737D;--shiki-dark:#6A737D">                            // Macro used to save trapframe</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    CLI</span><span style="color:#6A737D;--shiki-dark:#6A737D">                                 // Clean Interrupt Mask</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .set at</span><span style="color:#6A737D;--shiki-dark:#6A737D">                             // Resume use of $at</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    // ...</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">END</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(handle_sys)</span></span></code></pre>
+<h3 id="thinking-64">Thinking 6.4</h3>
+<p><strong>Q：</strong> <strong>仔细阅读上面这段话，并思考下列问题</strong></p>
+<ul>
+<li><strong>按照上述说法控制 pipeclose 中 fd 和 pipe unmap 的顺序，是否可以解决上述场景的进程竞争问题？给出你的分析过程。</strong></li>
+<li><strong>我们只分析了 close 时的情形，在 fd.c 中有一个 dup 函数，用于复制文件内容。试想，如果要复制的是一个管道，那么是否会出现与 close 类似的问题？请模仿上述材料写写你的理解。</strong></li>
+</ul>
+<p><strong>A：</strong> 分析如下</p>
+<ul>
+<li>可以解决。由于<code>ref(p[0])</code>始终小于<code>ref(pipe)</code>, 因此如果先解除<code>p[0]</code>的映射，则<code>ref(p[0])</code>更要小于<code>ref(pipe)</code>，永远不会出现<code>ref(p[0]) == ref(pipe)</code>。</li>
+<li><code>dup</code>函数也会出现与<code>close</code>类似的问题，<code>pipe</code>的引用次数总比<code>fd</code>要高。当管道的<code>dup</code>进行到一半时， 若先映射<code>fd</code>，再映射 <code>pipe</code> ，就会使得<code>fd</code>的引用次数的+1先于<code>pipe</code>。这就导致在两个<code>map</code>的间隙，会出现<code>pageref(pipe) == pageref(fd)</code>的情况。这个问题也可以通过调换两个map的顺序来解决。</li>
+</ul>
+<h3 id="thinking-65">Thinking 6.5</h3>
+<p><strong>Q：</strong> <strong>bss 在 ELF 中并不占空间，但 ELF 加载进内存后， bss 段的数据占据了空间，并且初始值都是 0。请回答你设计的函数是如何实现上面这点的？</strong>
+<strong>A：</strong> 对于bss段中和text&amp;data段共同占据一个页面的部分，就使用<code>user_bzero</code>将这一部分置零；对于bss段其它部分，仅使用<code>syscall_mem_malloc</code>分配页面而不映射到任何内容。</p>
+<h3 id="thinking-66">Thinking 6.6</h3>
+<p><strong>Q：为什么我们的 *.b 的 text 段偏移值都是一样的，为固定值？</strong>
+<strong>A：</strong> 因为在<code>user.lds</code>文件中将所有.b文件的text段偏移量都设置为0x00400000。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">. </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00400000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">_text </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> .;</span><span style="color:#6A737D;--shiki-dark:#6A737D">			/* Text and read-only data */</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.text : {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(.text)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(.fixup)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(.gnu.warning)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	}</span></span></code></pre>
+<h3 id="thinking-67">Thinking 6.7</h3>
+<p><strong>Q：</strong>  <strong>在 shell 中执行的命令分为内置命令和外部命令。在执行内置命令时 shell 不需要 fork 一个子 shell，如 Linux 系统中的 cd 指令。在执行外部命令时 shell需要 fork 一个子 shell，然后子 shell 去执行这条命令。据此判断，在 MOS 中我们用到的 shell 命令是内置命令还是外部命令？请思考为什么 Linux 的 cd 指令是内部指令而不是外部指令？</strong>
+<strong>A：</strong> 分析如下</p>
+<ul>
+<li>shell命令是外部命令，因为在执行shell命令时，当前进程通过<code>fork</code>产生一个子进程，也就是子shell，然后这个子shell来运行该命令所对应的可执行文件。</li>
+<li>linux中的内部命令实际上是shell程序的一部分，其中包含的是一些比较简单的linux系统命令，这些命令由shell程序识别并在shell程序内部完成运行，通常在linux系统加载运行时shell就被加载并驻留在系统内存中。因为<code>cd</code>指令非常简单，将其作为内部命令写在bashy源码里面的，可以避免每次执行都需要fork并加载程序，提高执行效率。</li>
+</ul>
+<h3 id="thinking-68">Thinking 6.8</h3>
+<p><strong>Q：</strong> <strong>在哪步， 0 和 1 被 “安排” 为标准输入和标准输出？请分析代码执行流程，给出答案。</strong>
+<strong>A：</strong> 在<code>init.c</code>的<code>umain</code>函数中将0和1分别被设置为了标准输入和标准输出。相关代码如下</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//将0关闭，随后使用opencons函数打开的文件描述符编号就被设置为零为0</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">); </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((r </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> opencons</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    user_panic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"opencons: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">%e</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, r);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (r </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    user_panic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"first opencons used fd </span><span style="color:#005CC5;--shiki-dark:#79B8FF">%d</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, r);</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 然后通过dup函数把1设置为标准输出</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((r </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> dup</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    user_panic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"dup: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">%d</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, r);</span></span></code></pre>
+<h3 id="thinking-69">Thinking 6.9</h3>
+<p><strong>Q：</strong>  <strong>在你的 shell 中输入指令 ls.b | cat.b &gt; motd。</strong></p>
+<ul>
+<li><strong>请问你可以在你的 shell 中观察到几次 spawn？分别对应哪个进程？</strong></li>
+<li><strong>请问你可以在你的 shell 中观察到几次进程销毁？分别对应哪个进程？</strong></li>
+</ul>
+<p><strong>A：</strong> 通过增加调试信息可以看出</p>
+<ul>
+<li>shell中进行了2次<code>spawn</code>，这两次生成的子进程分别用于执行<code>ls.b</code>和<code>cat.b</code></li>
+<li>shell中进行了2次进程销毁，这2个进程分别是shell执行<code>ls.b</code>和<code>cat.b</code>时通过<code>spawn</code>生成的子进程。</li>
+</ul>
+<h2 id="实验难点图示">实验难点图示</h2>
+<p>我认为该实验的难点主要包含两个难点——和管道相关的内存分配、spawn函数的处理流程</p>
+<h3 id="和管道相关的内存分配">和管道相关的内存分配</h3>
+<p>子进程和父进程的内存空间中都分为写端fd和读端fd分配了一个虚拟页，但是子进程和父进程的读端所在的虚拟页映射到了同一个物理页，同样他们的写端所在的虚拟也也都映射到了同一个物理页。</p>
+<p>此外，父子进程中这四个fd所对应的文件数据都位于同一个物理页。所以，一个管道实际上只需要占用3个物理页。图示如下——
+<img src="/homepage/blog-assets/2022/06/26/os/os-lab6-shi-yan-bao-gao/mm.svg" alt=""></p>
+<h3 id="spawn函数的处理流程">spawn函数的处理流程</h3>
+<p><code>spawn</code>函数的处理流程如下图所示
+<img src="/homepage/blog-assets/2022/06/26/os/os-lab6-shi-yan-bao-gao/spwan.svg" alt=""></p>
+<h2 id="体会与感想">体会与感想</h2>
+<p>Lab6要求我们完成pipe机制和实现一个简单的shell，实验任务比较简单，但是与之相关的很多函数理解起来还是有点困难。不过，OS实验课总算是告一段落了，通过自己动手实现一个简单的操作系统，不仅让我们收获了很多成就感，同时也让我们对理论课知识有了更深刻的理解。</p> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

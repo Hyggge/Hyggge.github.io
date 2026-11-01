@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="按文件状态整理 Git 的重命名、撤销、删除与版本回退命令，区分工作区、暂存区和历史提交中的变化。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Git」撤销、删除与版本回退 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#查看修改" data-toc-link="查看修改">查看修改</a><a class="article-toc-link depth-2" href="#重命名指令" data-toc-link="重命名指令">重命名指令</a><a class="article-toc-link depth-2" href="#撤销指令" data-toc-link="撤销指令">撤销指令</a><a class="article-toc-link depth-2" href="#删除指令" data-toc-link="删除指令">删除指令</a><a class="article-toc-link depth-2" href="#版本回退" data-toc-link="版本回退">版本回退</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Git」撤销、删除与版本回退</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Git/">Git</a> </div> <span class="article-date">Date: <time datetime="2022-04-11T01:05:10.000Z">2022/04/11</time></span> </div> </header> <div class="article-content"> <h2 id="查看修改">查看修改</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><strong>git diff &lt;file&gt;</strong></td><td align="center">查看工作区中某文件的修改。</td></tr><tr><td align="center"><strong>git diff —cached &lt;file&gt;</strong> 或<br>  <strong>git diff staged &lt;file&gt;</strong></td><td align="center">显示暂存区(已add但未commit文件)和最后一次commit(HEAD)之间的所有不相同文件的增删改</td></tr><tr><td align="center"><strong>git diff HEAD — &lt;file&gt;</strong></td><td align="center">查看工作区文件（没有add到暂存区）和版本库最后一次commit之间的区别</td></tr><tr><td align="center"><strong>git diff HEAD~X — &lt;file&gt;</strong></td><td align="center">查看最近一次提交的版本与往过去时间线前数<code>X</code>个的版本之间的差别</td></tr><tr><td align="center"><strong>git diff &lt;branch1&gt; &lt;branch2&gt;</strong></td><td align="center">比较两个分支最后一次commit的内容的差别</td></tr></tbody></table>
+<ul>
+<li>对<code>git diff &lt;file&gt;</code>指令：当工作区有改动、暂存区为空时，比较的是工作区和最后一次commit提交；当工作区有改动、暂存区不为空时，比较的是工作区和暂存区。</li>
+</ul>
+<h2 id="重命名指令">重命名指令</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><strong>git mv &lt;name1&gt; &lt;name2&gt;</strong></td><td align="center">将名为<code>name1</code>的文件重命名为<code>name2</code></td></tr></tbody></table>
+<ul>
+<li>使用<code>git mv</code>指令后，工作区和暂存区的文件名都被修改。以<code>git mv file1.txt file2.txt</code>为例，它其实相当于三条指令——<code>mv file1.txt file2.txt</code>、<code>git rm file1.txt</code>、<code>git add file2.txt</code></li>
+</ul>
+<h2 id="撤销指令">撤销指令</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><strong>git checkout — &lt;file&gt;</strong></td><td align="center">将工作区中该文件的修改撤销，该文件此时应没有提交到暂存区</td></tr><tr><td align="center"><strong>git checkout HEAD — &lt;file&gt;</strong></td><td align="center">将工作区、暂存区和HEAD的提交保持一致</td></tr><tr><td align="center"><strong>git reset HEAD &lt;file&gt;</strong></td><td align="center">将暂存区和HEAD的提交保持一致（达到取消暂存的效果）</td></tr><tr><td align="center"><strong>git reset —hard HEAD</strong></td><td align="center">将工作区、暂存区和HEAD的提交保持一致</td></tr><tr><td align="center"><strong>git commit —amend</strong></td><td align="center">如果提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了， 可以用该命令来重新提交将暂存区中的文件提交，并覆盖上一次提交信息。</td></tr></tbody></table>
+<ul>
+<li>需要注意的是<code>git checkout -- &lt;file&gt;</code>指令应该是从<strong>先从缓存区中拉取版本还原</strong>，如果没有<strong>再到版本库中拉取还原</strong>。用廖神的话来说就是——“<strong>总之，将这个文件回到最近一次<code>git commit</code>或者<code>git add</code>时的状态</strong>”</li>
+<li><code>git checkout HEAD -- &lt;file&gt;</code>和<code>git reset --hard HEAD &lt;file&gt;</code> 作用相似，都是可以使”工作区、暂存区和HEAD的提交保持一致”。但是两者并不完全一样：
+<ul>
+<li>首先，<code>git checkout HEAD -- &lt;file&gt;</code>可以指定文件，但是<code>git reset -- hard HEAD</code>指令会作用于所有的文件。</li>
+<li>其次，如果使用<code>git checkout HEAD -- .</code>时，不会对没有commit的新增文件起作用；但如果我们使用的是<code>git reset --head HEAD</code>，因为新增文件没有commit，即在版本库中找不到，所以执行该命令后未commmit新文件会消失（相比<code>git checkouit HEAD -- .</code>更加彻底）。具体示例可参考这篇<a href="https://stackoverflow.com/questions/59339986/is-there-a-difference-between-git-checkout-head-and-git-reset-hard-head">博客</a>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除指令">删除指令</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><strong>git rm &lt;file&gt;</strong></td><td align="center">工作区和暂存区的该文件都会被删除。<br>再使用<code>git commit</code>就可以将该文件从版本库中删除</td></tr><tr><td align="center"><strong>git rm —cached &lt;file&gt;</strong></td><td align="center">从暂存区删去该文件，而工作区不删除。<br>此时使用<code>git commit</code>可以将该文件从版本库中删除，但工作区不会被删</td></tr><tr><td align="center"><strong>git clean &lt;file&gt; -f</strong></td><td align="center">删除工作区中没有被追踪的文件</td></tr></tbody></table>
+<h2 id="版本回退">版本回退</h2>
+<p>在版本回退操作之前，我们可以通过<code>git log</code>指令来查看提交历史记录，进而确定自己想要回退的版本。（加入<code>--pretty=oneline</code>参数后可以让输出信息更加简洁。）确定了想回退的版本后，可以使用下面三个指令中的一个进行回滚——</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><strong>git reset —hard HEAD^</strong></td><td align="center">回退到上一个版本，<code>^</code>的个数表示回滚的次数</td></tr><tr><td align="center"><strong>git reset —hard HEAD~100</strong></td><td align="center">回滚100次，<code>~</code>后的数字表示回滚的次数</td></tr><tr><td align="center"><strong>git reset —hard &lt;hashcode&gt;</strong></td><td align="center">回滚到<code>&lt;hashcode&gt;</code>表示的版本</td></tr></tbody></table>
+<p>如果想要重返未来，则需要先使用<code>git reflog</code>来查看历次<code>commit</code>和<code>reset</code>的记录，找到对应版本的<code>hashcode</code>，再使用<code>git reset --hard [hashcode]</code>进行重返。</p>
+<blockquote>
+<p>执行回退指令之后，不仅HEAD指针发生了变化，而且工作区和暂存区也都和指定版本保持一致，类似于<code>git reset --hard HEAD &lt;file&gt;</code>指令</p>
+</blockquote> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

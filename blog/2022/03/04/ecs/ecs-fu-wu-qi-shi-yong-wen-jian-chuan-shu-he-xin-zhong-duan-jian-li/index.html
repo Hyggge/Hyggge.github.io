@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="记录将本地评测程序迁移到 ECS 的过程，介绍 Windows 下用 pscp 传输文件、目录和建立独立终端的方法。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「ECS服务器」文件传输和新终端建立 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#前言" data-toc-link="前言">前言</a><a class="article-toc-link depth-2" href="#文件的传输" data-toc-link="文件的传输">文件的传输</a><a class="article-toc-link depth-3" href="#软件的安装" data-toc-link="软件的安装">软件的安装</a><a class="article-toc-link depth-3" href="#常用命令" data-toc-link="常用命令">常用命令</a><a class="article-toc-link depth-4" href="#将本地文件复制到服务器" data-toc-link="将本地文件复制到服务器">将本地文件复制到服务器</a><a class="article-toc-link depth-4" href="#将本地文件夹和文件夹下的文件复制到服务器" data-toc-link="将本地文件夹和文件夹下的文件复制到服务器">将本地文件夹和文件夹下的文件复制到服务器</a><a class="article-toc-link depth-4" href="#将远程服务器中的文件复制到本地" data-toc-link="将远程服务器中的文件复制到本地">将远程服务器中的文件复制到本地</a><a class="article-toc-link depth-4" href="#将远程服务器中的文件夹和文件夹下的文件复制到本地" data-toc-link="将远程服务器中的文件夹和文件夹下的文件复制到本地">将远程服务器中的文件夹和文件夹下的文件复制到本地</a><a class="article-toc-link depth-2" href="#建立新终端" data-toc-link="建立新终端">建立新终端</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「ECS服务器」文件传输和新终端建立</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/ECS/">ECS</a> </div> <span class="article-date">Date: <time datetime="2022-03-04T11:47:32.000Z">2022/03/04</time></span> </div> </header> <div class="article-content"> <p>本篇博客介绍一下如何使用<strong>pscp</strong>在本地（Windows）和ECS服务器之间进行文件传输，以及如何在服务器中建立新终端。</p>
+<h2 id="前言">前言</h2>
+<p>今天想把OO第一次作业的自动评测程序放到在阿里云ECS服务器上运行，以减轻笔记本CPU的压力（<del>避免过早更换电脑</del>）。但是理想很丰满，现实很骨感，在一开始便遇到了两个问题——</p>
+<ul>
+<li><strong>如何将本地的文件传到服务器上？</strong></li>
+<li><strong>如何使程序在服务器后台运行？</strong>（一旦关闭服务器前端网页，在当前终端中运行的程序会被中断）</li>
+</ul>
+<p>通过查找资料和请教同学，最终让我找到了解决方案，用本篇博客记录一下。</p>
+<h2 id="文件的传输">文件的传输</h2>
+<p>ECS服务器和本地进行文件传输的方法有很多，主要有以下几种——</p>
+<ul>
+<li><strong>使用Windows中自带的“远程桌面连接”</strong></li>
+<li><strong>通过QQ软件，邮箱等第三方工具进行间接传输</strong></li>
+<li><strong>pscp</strong></li>
+</ul>
+<p>前两种方法相对比较复杂，第三种较为简单，只需要安装pscp软件，即可在cmd中通过命令实现两者之间的文件传输。</p>
+<h3 id="软件的安装">软件的安装</h3>
+<p>在一般情况下，pscp会和putty软件捆绑安装，我们可以直接在putty的安装目录下找到<code>pscp.exe</code>文件。此外，我们还可以在putty官网中单独下载pscp(<a href="https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe">下载地址</a>)。</p>
+<p>接下来，我们需要将<code>pscp.exe</code>文件放在 <code>C:\Windows\system32\</code>路径下。然后在命令行中运行命令<code>pscp</code>,如果终端有以下输出，就说明pscp配置成功了。</p>
+<p><img src="/homepage/blog-assets/2022/03/04/ecs/ecs-fu-wu-qi-shi-yong-wen-jian-chuan-shu-he-xin-zhong-duan-jian-li/pscp.png" alt="">
+接下来，我们就可以快乐地<strong>通过命令行使用pscp</strong>了。（所以是不是很简单？</p>
+<h3 id="常用命令">常用命令</h3>
+<p>只需要掌握以下pscp命令，即可实现一般的文件传输需求</p>
+<h4 id="将本地文件复制到服务器">将本地文件复制到服务器</h4>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp [file_path] [ECS_user_name]@[ECS_ip]:[target_path]</span></span></code></pre>
+<p>如果想把桌面上的<code>test.txt</code>传到服务器<code>root/file</code>文件夹下，命令可以写为</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp C:\Users\dell\Desktop\test.txt root@</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10.10.10.10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:/root/file/</span></span></code></pre>
+<h4 id="将本地文件夹和文件夹下的文件复制到服务器">将本地文件夹和文件夹下的文件复制到服务器</h4>
+<p>只需要在<code>pscp</code>后面加入<code>-r</code>即可</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r [dir_path] [ECS_user_name]@[ECS_ip]:[target_path]</span></span></code></pre>
+<p>如果想把桌面上的<code>test</code>文件夹传到服务器<code>root/file</code>文件夹下，命令可以写为</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r C:\Users\dell\Desktop\test root@</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10.10.10.10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:/root/file/</span></span></code></pre>
+<h4 id="将远程服务器中的文件复制到本地">将远程服务器中的文件复制到本地</h4>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]</span></span></code></pre>
+<p>如果想把服务器<code>root/file</code>文件夹中<code>test.txt</code>传到本地<code>desktop</code>上，命令可以写为</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp root@</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10.10.10.10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:/root/file/test.txt C:\Users\dell\Desktop\</span></span></code></pre>
+<h4 id="将远程服务器中的文件夹和文件夹下的文件复制到本地">将远程服务器中的文件夹和文件夹下的文件复制到本地</h4>
+<p>同样，只需要在<code>pscp</code>后面加入<code>-r</code>即可</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r [ECS_user_name]@[ECS_ip] [ECS_file_path] [targt_path]</span></span></code></pre>
+<p>如果想把服务器<code>root/file</code>文件夹传到本地<code>desktop</code>上，命令可以写为</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pscp </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r root@</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10.10.10.10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:/root/file/ C:\Users\dell\Desktop\</span></span></code></pre>
+<hr>
+<p>补充：后来我又发现了一个<strong>有UI界面</strong>的文件传输软件——<code>WinSCP</code>（<a href="https://winscp.net/eng/docs/lang:chs">下载地址</a>）这个软件可以直接通过鼠标拖动来复制文件，比命令行快太多了，效果如下图所示。
+<img src="/homepage/blog-assets/2022/03/04/ecs/ecs-fu-wu-qi-shi-yong-wen-jian-chuan-shu-he-xin-zhong-duan-jian-li/WinSCP.png" alt=""></p>
+<h2 id="建立新终端">建立新终端</h2>
+<p>为了使程序能够在服务器后台运行，我们可以先建立一个新终端，在这个新终端下运行我们的程序，然后暂时退出该终端即可。这样，即使服务器前端网页关闭，我们建立的新终端也不会被中断，我们的程序也会正常运行。常用命令如下——</p>
+<ul>
+<li>建立新终端 <code>screen -S [terminal_name]</code></li>
+<li>暂时退出新终端 <code>Ctrl+A+D</code></li>
+<li>查看已经创建的终端 <code>screen -ls</code></li>
+<li>进入已创建的终端 <code>screen -r [terminal_id]</code> (中端的id可以在<code>screen -ls</code> 中看到)</li>
+<li>关闭新终端 <code>exit</code></li>
+</ul>
+<p>如果shell提示<code>screen</code>命令不存在，可以输入下面的命令进行安装</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="cmd"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">//第一种方法</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">yum install screen</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">//第二种方法</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">apt install screen</span></span></code></pre> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

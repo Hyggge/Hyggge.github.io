@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="区分 Maven 的 clean、default、site 生命周期，说明执行阶段与插件目标的关系，梳理构建命令的触发顺序。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Maven」生命周期与插件 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#maven项目构建的生命周期" data-toc-link="maven项目构建的生命周期">Maven项目构建的生命周期</a><a class="article-toc-link depth-3" href="#clean生命周期" data-toc-link="clean生命周期">clean生命周期</a><a class="article-toc-link depth-3" href="#default生命周期" data-toc-link="default生命周期">default生命周期</a><a class="article-toc-link depth-3" href="#site生命周期" data-toc-link="site生命周期">site生命周期</a><a class="article-toc-link depth-2" href="#插件" data-toc-link="插件">插件</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Maven」生命周期与插件</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Maven/">Maven</a> </div> <span class="article-date">Date: <time datetime="2022-01-25T15:29:01.000Z">2022/01/25</time></span> </div> </header> <div class="article-content"> <p><img src="/homepage/blog-assets/2022/01/25/maven/maven-sheng-ming-zhou-qi-yu-cha-jian/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8F%92%E4%BB%B6.png" alt=""></p>
+<hr>
+<h2 id="maven项目构建的生命周期">Maven项目构建的生命周期</h2>
+<p>Maven的生命周期就是为<strong>了对所有的构建过程进行抽象和统一</strong>，这个生命周期包含了项目的<strong>清理，初始化，编译，测试，打包，集成测试，验证，部署和站点生成</strong>等几乎所有构建步骤，由相互独立三套生命周期组成——</p>
+<ul>
+<li><strong>clean</strong>：清理项目</li>
+<li><strong>default</strong>：构建项目</li>
+<li><strong>site</strong>：构建项目站点</li>
+</ul>
+<p>当执行某一独立的生命周期的一个阶段时，实际上<strong>在该阶段之间</strong>的、<strong>和该阶段在同一生命周期</strong>的<strong>其他阶段</strong>也会被执行。</p>
+<h3 id="clean生命周期">clean生命周期</h3>
+<p>clean生命周期包含<strong>三个阶段</strong>：</p>
+<ul>
+<li><strong>pre-clean</strong>：执行一些清理前需要完成的工作；</li>
+<li><strong>clean</strong>：清理上一次构建生成的文件；</li>
+<li><strong>post-clean</strong>：执行一些清理后需要完成的工作；</li>
+</ul>
+<h3 id="default生命周期">default生命周期</h3>
+<p><code>default</code>生命周期定义了真正构建项目需要执行的所有步骤，它是所有生命周期中最核心的部分</p>
+<ul>
+<li>validate（校验）</li>
+<li>initializer（初始化）</li>
+<li>generate-sources（生成源代码）</li>
+<li>process-sources（处理源代码）</li>
+<li>generate-resources（生成资源文件）</li>
+<li>process-resources（处理资源文件）</li>
+<li><strong>compile（编译项目的源码，一般来说编译的是src/main/java目录下的java文件至项目输出的主classpath目录中）</strong></li>
+<li>process-classes（处理类文件）</li>
+<li>generate-test-sources（生成测试源代码）</li>
+<li>process-test-sources（处理测试源代码）</li>
+<li>generate-test-resources（生成测试资源文件）</li>
+<li>process-test-resources（处理测试资源文件）</li>
+<li><strong>test-compile（编译测试源代码到目标目录）</strong></li>
+<li>process-test-classes（处理测试类文件）</li>
+<li><strong>test（测试）</strong></li>
+<li>prepare-package（准备打包）</li>
+<li><strong>package（打包，	把编译好的代码打包成可发布的格式，如 JAR，WAR，EAR）</strong></li>
+<li>pre-integration-test（集成测试前）</li>
+<li>integration-test（集成测试）</li>
+<li>post-integration-test（集成测试后）</li>
+<li>verify（验证）</li>
+<li><strong>install（安装项目包本地仓库，这样项目包可以做其他本地项目的依赖）</strong></li>
+<li>deploy（部署，将最终的包复制到远程的仓库，以让其它开发人员与项目共享。）</li>
+</ul>
+<h3 id="site生命周期">site生命周期</h3>
+<p><code>site</code>生命周期的目的是建立和发布项目站点，maven能够基于pom文件所包含的项目信息，自动生成一个友好站点，方便团队交流和发布项目信息。</p>
+<ul>
+<li><strong>pre-site</strong>：执行一些需要在生成站点文档之后完成的工作</li>
+<li><strong>site</strong>：生成项目的站点文档</li>
+<li><strong>post-site</strong>：执行一些需要在生成站点文档之后完成的工作，并为部署作准备</li>
+<li><strong>site-deploy</strong>：将生成的站点文档部署到特定服务器上</li>
+</ul>
+<h2 id="插件">插件</h2>
+<p><strong>插件与生命周期内的阶段相绑定</strong>，到执行对应的生命周期时执行对应的插件功能（<strong>每个生命周期的行为靠插件实现</strong>）。在默认情况下，maven在各个生命周期上绑定有预设的功能，我们也可以<strong>使用插件自定义其他的功能</strong>，使用插件需要在<code>pom.xml</code>中做以下配置</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">build</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">plugins</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">plugin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">groupId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;org.apache.maven.plugins&lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">groupId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;maven-site-plugin&lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;3.7.1&lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        &lt;!-- 执行行为的配置 --&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">executions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">execution</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">            &lt;!-- 执行的工作/目标 --&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">goals</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">goal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;jar&lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">goal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">goals</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">            &lt;!-- 执行的生命周期 --&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            &lt;</span><span style="color:#22863A;--shiki-dark:#85E89D">phase</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;generate-test-resources&lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">phase</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">execution</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">executions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">plugin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">plugins</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &lt;/</span><span style="color:#22863A;--shiki-dark:#85E89D">build</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&gt;</span></span>
+<span class="line"></span></code></pre>
+<p>查找插件的<a href="https://maven.apache.org/plugins/index.html">官网</a>为：<a href="https://maven.apache.org/plugins/index.html">https://maven.apache.org/plugins/index.html</a></p> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="整理分支的创建、切换和跟踪操作，对比 merge、rebase 与 cherry-pick 的用途，帮助理解提交历史如何合并、重放和拣选。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Git」分支管理 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#分支基本操作" data-toc-link="分支基本操作">分支基本操作</a><a class="article-toc-link depth-2" href="#分支合并merge" data-toc-link="分支合并merge">分支合并——merge</a><a class="article-toc-link depth-2" href="#分支变基rebase" data-toc-link="分支变基rebase">分支变基——rebase</a><a class="article-toc-link depth-3" href="#命令格式" data-toc-link="命令格式">命令格式</a><a class="article-toc-link depth-3" href="#用法解释" data-toc-link="用法解释">用法解释</a><a class="article-toc-link depth-2" href="#分支拣选cherry-pick" data-toc-link="分支拣选cherry-pick">分支拣选——cherry-pick</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Git」分支管理</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Git/">Git</a> </div> <span class="article-date">Date: <time datetime="2022-04-11T08:24:41.000Z">2022/04/11</time></span> </div> </header> <div class="article-content"> <h2 id="分支基本操作">分支基本操作</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">解释</th></tr></thead><tbody><tr><td align="center"><strong>git branch</strong></td><td align="center">查看本地分支</td></tr><tr><td align="center"><strong>git branch -a</strong></td><td align="center">可以查看本地和远程仓库的分支</td></tr><tr><td align="center"><strong>git branch -vv</strong></td><td align="center">将所有的本地分支列出来并且包含更多的信息，如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。一般需要先<code>git fetch --all</code>更新远程数据</td></tr><tr><td align="center"><strong>git branch &lt;name&gt;</strong></td><td align="center">创建分支</td></tr><tr><td align="center"><strong>git checkout &lt;name&gt;</strong><br><strong>git switch&lt;name&gt;</strong></td><td align="center">切换到已有的分支</td></tr><tr><td align="center"><strong>git checkout -b &lt;name&gt;</strong><br><strong>git switch -c &lt;name&gt;</strong></td><td align="center">创建并切换分支</td></tr><tr><td align="center"><strong>git merge &lt;name&gt;</strong></td><td align="center">将某个分支合并到当前的分支</td></tr><tr><td align="center"><strong>git branch -d &lt;name&gt;</strong></td><td align="center">删除分支</td></tr><tr><td align="center"><strong>git branch -D &lt;name&gt;</strong></td><td align="center">强制删除分支（如果删除一个没有被合并的分支，只能用该指令而不能用-d）</td></tr><tr><td align="center"><strong>git checkout -b &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td><td align="center">在本地创建一个和远程仓库origin中某分支相关联的分支（名字最好是一样的）</td></tr><tr><td align="center"><strong>git branch —set-upstream &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</strong></td><td align="center">将本地已经存在的某分支和远程库的某分支建立关联</td></tr></tbody></table>
+<hr>
+<h2 id="分支合并merge">分支合并——merge</h2>
+<p>我们可以通过<code>git merge &lt;name&gt;</code>进行两个分支的合并，其效果是将名为<code>&lt;name&gt;</code>的分支里的内容合并到当前所在的分支上。当我们进行分支合并时，有的时候需要解决冲突，举下面三个例子——</p>
+<ul>
+<li>
+<p><strong>Position 1</strong>
+如果我们在master分支上新建了一个dev分支，并在dev上修改了一个文件并提交，这样dev分支就比master分支提前一步，如下图所示
+<img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/2.png" alt="">
+此时我们切换到<code>master</code>分支，并使用指令<code>git merge dev</code>，此时git就直接将master的指针移动到了dev上，如图
+<img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/1.png" alt="">
+这种模式被称作 <strong>快进模式</strong>（<code>Fast-forward</code>）,仅仅通过移动指针即可完成，不需要我们进行冲突合并。</p>
+</li>
+<li>
+<p><strong>Position 2</strong>
+接上例，如果禁用<code>Faster-forward</code>模式会怎样? 答：Git会自动在master上生成一个新的提交，该提交是两者合并后的结果，然后master指向该次提交，如下图所示
+<img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/3.png" alt="">
+如何禁用<code>Faster-forward</code>模式呢？我们只需要在当前分支切换到<code>master</code>后，使用。因为这种合并方式需要在<code>master</code>上创建一个新的提交，所以需要输入提交描述信息。</p>
+</li>
+<li>
+<p><strong>Position 3</strong>
+我们再换一个例子。假设<code>master</code>分支上有一个空文件<code>readme.txt</code>（已经提交到版本库）, 然后我们在<code>master</code>分支上新建一个<code>dev</code>分支，这样两个分支都有空文件<code>readme.txt</code>了</p>
+<ul>
+<li>之后我们切换到在<code>dev</code>分支上，在<code>readme.txt</code>的第一行添加了一句 <strong>“dev modify it!”</strong>, 保存之后commit到本地仓库。</li>
+<li>然后我们在切换到<code>master</code>分支上，此时<code>readme.txt</code>还是一个空文件。我们在<code>readme.txt</code>的第一行添加了一句 <strong>“master modify it!”</strong>, 保存之后也commit到本地仓库</li>
+</ul>
+<p>此时，<code>master</code>和<code>dev</code>两个分支是真的分道扬镳了！如下图所示——
+<img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/4.png" alt=""></p>
+<p>这种情况下，如果在<code>master</code>分支中使用指令<code>git merge dev</code>，则可能产生冲突。因为我们在两个分支上同时对<code>readme.txt</code>加了一行，但是内容不同，Git并不知道该保存哪个。此时使用<code>merge</code>命令后，Git会提示我们 <strong>“Automatic merge failed; fix conflicts and then commit the result.”</strong> 也就是说自动给合并失败了，需要我们手动结局冲突后再次提交。</p>
+<p>我们打开<code>readme.txt</code>,会发现内容变成了</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span></span>
+<span class="line"><span>master modify it！</span></span>
+<span class="line"><span>=======</span></span>
+<span class="line"><span>dev modify it！</span></span>
+<span class="line"><span>&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span></span></code></pre>
+<p>此时我们手动修改之后再<code>commit</code>即可。</p>
+</li>
+</ul>
+<p>此外，如果在手动合并时出现了失误，我们可以通过<code>git merge --abort</code>回到合并前的状态。</p>
+<hr>
+<h2 id="分支变基rebase">分支变基——rebase</h2>
+<h3 id="命令格式">命令格式</h3>
+<p>变基命令的一般格式为——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">git</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> rebase</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">basebranc</span><span style="color:#24292E;--shiki-dark:#E1E4E8">h</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">topicbranc</span><span style="color:#24292E;--shiki-dark:#E1E4E8">h</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+<p>其中<code>basebranch</code>是作为新基底的分支，<code>topicbranch</code>是待变基的分支。当然，如果你想让当前所在的分支作为<code>topicbranch</code>，可以直接使用<code>git rebase &lt;basebranch&gt;</code>。</p>
+<h3 id="用法解释">用法解释</h3>
+<p><code>git rebase</code>的官方解释是——“<strong>当执行rebase操作时，git会从两个分支的共同祖先开始提取待变基分支上的修改，然后将待变基分支指向基分支的最新提交，最后将刚才提取的修改应用到基分支的最新提交的后面。</strong>“我们用下面的例子来分析</p>
+<p><img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/%E5%90%88%E5%B9%B6%E5%89%8D.jpg" alt=""></p>
+<p>此时<code>master</code>指向的是<code>C4</code>，<code>dev</code>指向的是<code>C6</code>，它们的公共祖先是<code>C2</code>。此时我们在<code>dev</code>分支上调用命令<code>git rebase master</code>，Git就会比较<code>C5</code>、<code>C6</code>和<code>C2</code>之间的区别，然后将<code>C5</code>、<code>C6</code>较<code>C2</code>的修改应用在<code>C4</code>上（即<code>C4</code>作为新的基底），形成新的提交<code>C5'</code>和<code>C6'</code>，最后再将原先的<code>C5</code>和<code>C6</code>删掉。其效果相当于将<code>dev</code>上的两个提交记录（<code>C5</code>和<code>C6</code>）拿下来，安到master的最新提交（<code>C4</code>）上。</p>
+<p>操作结果如下图所示——</p>
+<p><img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/%E5%8F%98%E5%9F%BA%E5%90%8E.jpg" alt=""></p>
+<p>可以发现，变基实际上就是更改历史，使得提交历史成为一条直线而没有分叉。这样做的好处是能够保持提交历史的整洁性，但是缺点也很明显——丢弃了一些提交记录，如果你的同伴是基于这些记录进行开发，那就会使事情变得很麻烦。</p>
+<p>因此，如果正在和同伴协作开发，应该尽量避免使用<code>rebase</code>。如果真出现了”<strong>有人推送了经过变基的提交，并丢弃了你的本地开发所基于的一些提交</strong>”,我们可以通过两种方法解决（具体可参见《<em>Pro Git</em>》的相关章节）</p>
+<ul>
+<li><strong>第一种</strong>：先使用<code>get fetch --all</code>获取同伴使用变基后的提交记录，然后使用<code>get rebase origin/master</code>（也就是用变基解决变基）。</li>
+<li><strong>第二种</strong>：在下拉时使用<code>git pull --rebase</code>，而不是使用<code>git pull</code>。</li>
+</ul>
+<hr>
+<h2 id="分支拣选cherry-pick">分支拣选——cherry-pick</h2>
+<p>Git 中的拣选类似于对特定的某次提交的变基。 它会提取该提交的补丁，之后尝试将其重新应用到当前分支上。 这种方式在你只想引入<strong>某个分支中的某个提交</strong>，或者<strong>某个分支中只有一个提交，而你不想运行变基</strong>时很有用。假设你的项目提交历史如下图所示——</p>
+<p><img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/%E6%8B%A3%E9%80%89%E5%89%8D.jpg" alt=""></p>
+<p>此时如果想要将提交<code>e43a6</code>拉去到<code>master</code>分支，我们可以先切换到<code>master</code>分支，然后使用命令<code>git cherry-pick e43a6</code>。这样一来，<code>master</code>分支会新增一个提交，结果如下——</p>
+<p><img src="/homepage/blog-assets/2022/04/11/git/git-fen-zhi-guan-li/%E6%8B%A3%E9%80%89%E5%90%8E.jpg" alt=""></p> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="整理 Java 包的命名、创建和导入，说明访问权限、静态导入、同名类区分及包名与目录路径的关系。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Java SE」包(Package) | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#包的定义" data-toc-link="包的定义">包的定义</a><a class="article-toc-link depth-2" href="#包的创建package" data-toc-link="包的创建package">包的创建（package）</a><a class="article-toc-link depth-3" href="#包的命名规范" data-toc-link="包的命名规范">包的命名规范</a><a class="article-toc-link depth-3" href="#空包" data-toc-link="空包">空包</a><a class="article-toc-link depth-2" href="#包的导入import" data-toc-link="包的导入import">包的导入（import）</a><a class="article-toc-link depth-3" href="#不同包之间的导入" data-toc-link="不同包之间的导入">不同包之间的导入</a><a class="article-toc-link depth-3" href="#有包的类和无包的类互相访问" data-toc-link="有包的类和无包的类互相访问">有包的类和无包的类互相访问</a><a class="article-toc-link depth-3" href="#包的无等级性" data-toc-link="包的无等级性">包的无等级性</a><a class="article-toc-link depth-3" href="#静态导入" data-toc-link="静态导入">静态导入</a><a class="article-toc-link depth-2" href="#包的路径" data-toc-link="包的路径">包的路径</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Java SE」包(Package)</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Java/">Java</a> </div> <span class="article-date">Date: <time datetime="2022-01-24T02:04:25.000Z">2022/01/24</time></span> </div> </header> <div class="article-content"> <h2 id="包的定义">包的定义</h2>
+<ul>
+<li>在笔者看来，包其实就是一个 <strong>文件夹</strong>，包含者我们定义的<strong>功能相似或相关</strong>的<strong>类、接口、枚举和注释</strong>，可以看成一种<strong>特殊的封装</strong>。</li>
+<li>一个包中的类名字是<strong>不同的</strong>，不同的包中的类的名字是可以<strong>相同的</strong>，当同时调用两个不同包中相同类名的类时，应该加上包名加以区别。</li>
+<li><strong>包的作用</strong>：防止命名冲突，访问控制，提供搜索和定位类（<code>class</code>）、接口(<code>interface</code>)、枚举（<code>enumerations</code>）和注释（<code>annotation</code>）等。</li>
+</ul>
+<h2 id="包的创建package">包的创建（package）</h2>
+<p>包的创建需要使用<code>package</code>关键词，在源文件的第一行进行声明。需要注意的是，每个源文件只能有一个包声明。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    package</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.sun.test;</span></span></code></pre>
+<h3 id="包的命名规范">包的命名规范</h3>
+<p>本部分内容参考该<a href="https://segmentfault.com/a/1190000008711718">博客</a>
+Java的包名都有小写单词组成，应该避免使用与系统发生冲突的名字，如java.lang、java.swing等。多数开发人员采用自己公司在互联网上的域名称作为自己程序包的唯一前缀（如上例）。
+<strong>个人和组织包命名规则如下：</strong></p>
+<ul>
+<li>
+<p><strong>indi</strong> ：个体项目，指个人发起，但非自己独自完成的项目，可公开或私有项目，copyright主要属于发起者。
+包名为“indi.发起者名.项目名.模块名.……”。</p>
+</li>
+<li>
+<p><strong>pers</strong> ：个人项目，指个人发起，独自完成，可分享的项目，copyright主要属于个人。
+包名为“pers.个人名.项目名.模块名.……”。</p>
+</li>
+<li>
+<p><strong>priv</strong> ：私有项目，指个人发起，独自完成，非公开的私人使用的项目，copyright属于个人。
+包名为“priv.个人名.项目名.模块名.……”。</p>
+</li>
+<li>
+<p><strong>onem</strong> ：与“indi”相同，推荐使用“indi”。</p>
+</li>
+<li>
+<p><strong>team</strong> ：团队项目，指由团队发起，并由该团队开发的项目，copyright属于该团队所有。
+包名为“team.团队名.项目名.模块名.……”。</p>
+</li>
+<li>
+<p><strong>com</strong> ：公司项目，copyright由项目发起的公司所有。
+包名为“com.公司名.项目名.模块名.……”。</p>
+</li>
+</ul>
+<h3 id="空包">空包</h3>
+<p>如果一个源文件中没有使用包声明，那么其中的类，函数，枚举，注释等将被放在一个无名的包（unnamed package）中。这也是为什么即使我们没有在源文件中使用<code>import</code>,也能调用相同路径下的其他源文件。</p>
+<h2 id="包的导入import">包的导入（import）</h2>
+<h3 id="不同包之间的导入">不同包之间的导入</h3>
+<p>不同包之间的使用通常有以下3种方法——</p>
+<ol>
+<li>使用全名
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">com.hyggge.Animal ani </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.hyggge.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Animal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span></code></pre>
+</li>
+<li>导入该类
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.hyggge.Animal;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Test</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Animal ani </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Animal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>导入整个包(使用通配符<code>*</code>)
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.hyggge.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Test</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Animal ani </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Animal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</li>
+</ol>
+<p><strong>注意点</strong></p>
+<ul>
+<li>如果两个包（<code>com.hyggge</code> 和 <code>com.czh</code>）都有<code>Animal</code>类，即使把两个包都导入，访问<code>Animal</code>类时仍然需要<strong>使用全名</strong>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.hyggge.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.czh.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Test</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">public</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    com.hyggge.Animal ani </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.hyggge.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Animal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    com.Animal ani </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> com.czh.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Animal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>使用通配符<code>*</code>并不意味者将把包下的类、接口等都导入，而是按需求导入，即“用则导，不用则不导”。</li>
+</ul>
+<h3 id="有包的类和无包的类互相访问">有包的类和无包的类互相访问</h3>
+<p>有包的类和无包的类互相访问有以下规则：</p>
+<ol>
+<li><strong>无包的类可以访问有包的类</strong>, 直接导入即可；</li>
+<li>有包的类无法访问无包的类, 直接访问是找同一个包中的, 由于不同包需要导入, 而无包的类无法导入（包的类属于无名包）；</li>
+<li>在定义类的时候, 为了让别人都能使用到, 所以一定要定义一个包。</li>
+</ol>
+<h3 id="包的无等级性">包的无等级性</h3>
+<p>例如我们现在有两个包<code>com.hyggge</code>和<code>com.hyggge.czh</code>。从路径上看，这两个包时有等级的，但是实际上包和包之间没有包含关系。当需要使用这两个包中的类时，需要同时导入——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    impot com.hyggge.</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    impot com.hyggge.czh.</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<h3 id="静态导入">静态导入</h3>
+<p>当我们需要频繁的访问某个类的常量或静态方法时，可以采用静态导入，即使用<code>import static</code>将类中的常量和静态方法导入。见下例（摘自该<a href="https://blog.csdn.net/sinat_30973431/article/details/82386978?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164298826316780265425850%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164298826316780265425850&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-6-82386978.pc_search_result_cache&amp;utm_term=Java%E5%8C%85&amp;spm=1018.2226.3001.4187">博客</a>）</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    import</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> java.lang.Math.PI;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    import</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> java.lang.Math.cos;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    public</span><span style="color:#D73A49;--shiki-dark:#F97583"> class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ImportTest</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        public</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#D73A49;--shiki-dark:#F97583"> void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            double</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">cos</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(Math.PI </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            double</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r1 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">cos</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(PI </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            double</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r2 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> cos</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(PI </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">println</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(r</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#032F62;--shiki-dark:#9ECBFF">" "</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r1</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#032F62;--shiki-dark:#9ECBFF">" "</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r2);    </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span></code></pre>
+<p>也可以使用通配符<code>*</code></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    import</span><span style="color:#D73A49;--shiki-dark:#F97583"> static</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> java.lang.Math.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<h2 id="包的路径">包的路径</h2>
+<ul>
+<li>
+<p>包的中<strong>java源文件的目录</strong>和<strong>编译后class文件的目录</strong>应该和包的名字对应起来，但是并不要求两者路径一样，可以分开来安排。如下所示——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&lt;path-one&gt;\sources\com\runoob\test\Runoob.java</span></span>
+<span class="line"><span>&lt;path-two&gt;\classes\com\runoob\test\Google.class</span></span></code></pre>
+</li>
+<li>
+<p>类的目录的绝对路径叫做 <code>class path</code>。设置在系统变量 <code>CLASSPATH</code> 中。编辑器和java虚拟机将 <code>package</code> 名字加到<code> class path</code> 后来构造 .class 文件的路径</p>
+</li>
+<li>
+<p>设置CLASSPATT系统变量，方法见该<a href="https://blog.csdn.net/weixin_42361112/article/details/114421658?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164299544416780264048339%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=164299544416780264048339&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-1-114421658.pc_search_result_cache&amp;utm_term=%E8%AE%BE%E7%BD%AE+CLASSPATH+%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8Fjavaa&amp;spm=1018.2226.3001.4187">博客</a></p>
+</li>
+<li>
+<p>如果我们的文件都在运行目录下时，也可以不设置<code>CLASSPATH</code>。也就是说在没有配置<code>CLASSPATH</code>环境变量时，java命令在找class文件时是默认在当前目录下寻找的。</p>
+</li>
+</ul> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

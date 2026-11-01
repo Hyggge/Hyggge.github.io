@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="介绍本地分支与远程仓库的关联方式，梳理 push、pull 和分支跟踪关系，并记录远程协作中常见问题的排查与处理方法。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「Git」远程仓库 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#远程仓库操作" data-toc-link="远程仓库操作">远程仓库操作</a><a class="article-toc-link depth-2" href="#push命令" data-toc-link="push命令">push命令</a><a class="article-toc-link depth-2" href="#pull命令" data-toc-link="pull命令">pull命令</a><a class="article-toc-link depth-2" href="#常见问题及解决方式" data-toc-link="常见问题及解决方式">常见问题及解决方式</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「Git」远程仓库</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/Git/">Git</a> </div> <span class="article-date">Date: <time datetime="2022-04-11T02:44:45.000Z">2022/04/11</time></span> </div> </header> <div class="article-content"> <h2 id="远程仓库操作">远程仓库操作</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">解释</th></tr></thead><tbody><tr><td align="center"><strong>git remote add origin &lt;ssh&gt;</strong></td><td align="center">将远程仓库关联到本地版本库,并将<code>origin</code>作为远程库的名字</td></tr><tr><td align="center"><strong>git clone &lt;ssh&gt;</strong></td><td align="center">直接将远程仓库克隆到本地</td></tr><tr><td align="center"><strong>git remote rm origin</strong></td><td align="center">删除<code>origin</code>代表的远程库（只是解除了关联，并不是真正的删除远程库），可以提前使用<code>git remote -v</code>来查看远程库的信息</td></tr><tr><td align="center"><strong>git remote rename &lt;name1&gt; &lt;name2&gt;</strong></td><td align="center">远程仓库重命名</td></tr></tbody></table>
+<h2 id="push命令">push命令</h2>
+<p><code>git push</code>时使用本地分支来更新远程分支，基本形式是——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">git</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> push</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">远程仓库</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">本地分支</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">:</span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">远程分支</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+<p><strong>本地分支名</strong>为要被推送的分支，<strong>远程分支名</strong>是远程仓库中要被更新的分支。该指令有以下几种使用方法——</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">解释</th></tr></thead><tbody><tr><td align="center"><strong>git push origin master:master</strong></td><td align="center">使用完整性形式，表示用本地master分支来更新远程仓库origin的master分支</td></tr><tr><td align="center"><strong>git push origin master</strong></td><td align="center">省略了远程分支名，表示将本地master本支推送到origin的master分支，如果后者不存在，则会被新建</td></tr><tr><td align="center"><strong>git push -u origin master</strong></td><td align="center">作用同<code>git push origin master</code>，同时指定origin为默认远程仓库，以后就可以直接使用<code>git push</code>而不用带其他参数了</td></tr><tr><td align="center"><strong>git push origin :master</strong></td><td align="center">省略了本地分支名，表示用空分支来跟新origin的master分支，其实是删除了远程origin的master分支。该指令相当于<code>git push origin --delete master</code></td></tr><tr><td align="center"><strong>git push origin</strong></td><td align="center">省略了远程分支名和本地分支名，只有在当前分支（HEAD指向的分支）和远程仓库中某分支存在追踪关系的时候才可以使用（一般是分支名相同）</td></tr><tr><td align="center"><strong>git push</strong></td><td align="center">不带任何参数，默认只推送当前分支到默认远程仓库</td></tr><tr><td align="center"><strong>git push —all origin</strong></td><td align="center">将所有的本地分支都推送到origin远程仓库</td></tr><tr><td align="center"><strong>git push —force origin</strong></td><td align="center">如果远程仓库的版本比本地新，git会报错，如果一定要推送，则可以使用该指令强制推送</td></tr></tbody></table>
+<h2 id="pull命令">pull命令</h2>
+<p><code>git pull</code>表示将远程仓库中某分支下拉并合并到本地某分支，指令基本形式是——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">git</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> push</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">远程仓库</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">远程分支</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">:</span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#032F62;--shiki-dark:#9ECBFF">本地分支</span><span style="color:#24292E;--shiki-dark:#E1E4E8">名</span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span></span></code></pre>
+<p>该指令有以下几种使用方法——</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">指令</th><th align="center">解释</th></tr></thead><tbody><tr><td align="center"><strong>git pull origin master:master</strong></td><td align="center">使用完整性形式，表示将远程仓库origin的master分支下拉并合并到本地master分支上</td></tr><tr><td align="center"><strong>git pull origin master</strong></td><td align="center">省略了远程分支名，表示将远程仓库origin的master分支下拉并合并到当前分支上（HEAD指向的分支）</td></tr></tbody></table>
+<h2 id="常见问题及解决方式">常见问题及解决方式</h2>
+<p><strong>情景1：</strong> 假设你刚刚在<code>master</code>分支上干完一部分工作，commit到本地仓库后正准备上传到远程仓库，结果使用<code>push</code>是竟然报错了。原因是和你在同一分支上工作的大兄弟早早的干完活push上去了，而他的最新提交和你的提交是有冲突的。
+<strong>解决方法：</strong> 先<code>git pull origin master:master</code>把最新的<code>origin/master</code>下并合并到本地<code>master</code>，当然此时会提示“合并有冲突”。我们手动解决冲突后再次commit，这时push就没有什么问题了。</p>
+<p><strong>情景2：</strong> 假设你对<code>master</code>进行了版本回退，在该回退版本上修改了一些问题后想要上传到远程分支，结果发现直接push也有问题。此时不可以先pull在push，因为pull之后代码就和远程仓库一样了。
+<strong>解决方法：</strong> 我们可以先使用<code>git branch a</code>新建一个分支a，然后回到版本回退前的最新一次commit，使用<code>git merge a</code>即可将该修改合并到最新的分支。</p>
+<p><strong>情景3：</strong> 假设你正在<code>master</code>分支上工作，并已经对<code>master</code>分支上的内容进行了修改。此时你的同事已经将他的修改上传到远程仓库里，而你想将他的修改和你的修改合并在一起，如果此时直接pull也会出现错误。
+<strong>解决方法：</strong> 先用<code>git stash</code>将本地的修改暂存，然后<code>git pull</code>拉取同事修改后的版本，最后<code>git stash pop</code>将自己的修改恢复。此时可能会有冲突，需要手动进行解决。</p> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

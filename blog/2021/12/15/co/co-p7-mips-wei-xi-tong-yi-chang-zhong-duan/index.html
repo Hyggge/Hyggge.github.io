@@ -1,0 +1,933 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="为流水线 CPU 加入 CP0、系统桥和定时器，分析 MIPS 微系统的异常识别、中断响应与 handler 测试。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-CO」P7_MIPS微系统（异常中断） | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#mips微系统设计方案" data-toc-link="mips微系统设计方案">MIPS微系统设计方案</a><a class="article-toc-link depth-3" href="#设计概述" data-toc-link="设计概述">设计概述</a><a class="article-toc-link depth-3" href="#实现指令说明" data-toc-link="实现指令说明">实现指令说明</a><a class="article-toc-link depth-2" href="#工程模块定义" data-toc-link="工程模块定义">工程模块定义</a><a class="article-toc-link depth-3" href="#cpu模块" data-toc-link="cpu模块">CPU模块</a><a class="article-toc-link depth-3" href="#cp0模块" data-toc-link="cp0模块">CP0模块</a><a class="article-toc-link depth-3" href="#bridge模块" data-toc-link="bridge模块">Bridge模块</a><a class="article-toc-link depth-3" href="#tc模块" data-toc-link="tc模块">TC模块</a><a class="article-toc-link depth-2" href="#重要机制实现方法" data-toc-link="重要机制实现方法">重要机制实现方法</a><a class="article-toc-link depth-3" href="#cp0响应机制" data-toc-link="cp0响应机制">CP0响应机制</a><a class="article-toc-link depth-3" href="#系统桥设计" data-toc-link="系统桥设计">系统桥设计</a><a class="article-toc-link depth-3" href="#异常识别" data-toc-link="异常识别">异常识别</a><a class="article-toc-link depth-2" href="#测试方案" data-toc-link="测试方案">测试方案</a><a class="article-toc-link depth-3" href="#handler设计" data-toc-link="handler设计">handler设计</a><a class="article-toc-link depth-3" href="#测试数据样例" data-toc-link="测试数据样例">测试数据样例</a><a class="article-toc-link depth-2" href="#思考题" data-toc-link="思考题">思考题</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-CO」P7_MIPS微系统（异常中断）</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">Computer Architecture</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2021-12-15T01:34:17.000Z">2021/12/15</time></span> </div> </header> <div class="article-content"> <h2 id="mips微系统设计方案">MIPS微系统设计方案</h2>
+<h3 id="设计概述">设计概述</h3>
+<p>​		本文设计的是由Verilog实现的MIPS微系统，该微系统支持53条MIPS汇编指令，为了实现该功能，笔者设计了IFU，GRF，NPC，CMP，EXT，ALU，D_Reg，E_Reg，M_Reg，W_Reg，MCU， HCU，MDU，BE，DE，CP0，Bridge，TC等关键模块。为实现微系统，我们需要对P6中CPU的结构层次进行一定的调整——将P6设计的CPU单独封装成一个模块，然后再设计Bridge、Timer0、Timer1三个外设，和CPU处于同一层次上。此外我们还需要在CPU的M流水级设计一个CP0模块用于中断异常处理。结构层次如下所示——</p>
+<p><img src="/homepage/blog-assets/2021/12/15/co/co-p7-mips-wei-xi-tong-yi-chang-zhong-duan/%E5%BE%AE%E7%B3%BB%E7%BB%9F.png" alt=""></p>
+<h3 id="实现指令说明">实现指令说明</h3>
+<p>我们将本CPU实现的指令分为以下几类：</p>
+<ul>
+<li>
+<p><strong>calc_R</strong>: add,sub,addu, subu, and, or, nor, xor, slt, sltu</p>
+</li>
+<li>
+<p><strong>calc_I</strong>: addi,addiu, andi, ori, xori, slti, sltiu</p>
+</li>
+<li>
+<p><strong>shift</strong>: sll, sra, srl</p>
+</li>
+<li>
+<p><strong>shiftv</strong>: sllv, srav, srlv</p>
+</li>
+<li>
+<p><strong>load</strong>: lw, lh, lhu, lb, lbu</p>
+</li>
+<li>
+<p><strong>store</strong>: sw, sh, sb</p>
+</li>
+<li>
+<p><strong>B类</strong>：beq,bne,bgtz,blez,bgez,bltz</p>
+</li>
+<li>
+<p><strong>J类</strong>：j, jal, jr, jalr</p>
+</li>
+<li>
+<p><strong>特殊</strong>：lui</p>
+</li>
+<li>
+<p><strong>md类</strong>：mult, multu, div, divu</p>
+</li>
+<li>
+<p><strong>mf类</strong>：mfhi, mflo</p>
+</li>
+<li>
+<p><strong>mt类</strong>：mthi, mtlo</p>
+</li>
+<li>
+<p><strong>CP0相关指令</strong>：mfc0，mtc0</p>
+</li>
+<li>
+<p><strong>异常中断返回：</strong> eret</p>
+</li>
+</ul>
+<h2 id="工程模块定义">工程模块定义</h2>
+<p>该部分我们不再介绍P6中已经实现的模块，只介绍新增模块CPU（封装P6CPU），CP0，Bridge，TC（用于实例化Timer1，Timer0）。但是原有模块需要根据异常处理的实现需要进行微调。</p>
+<h3 id="cpu模块">CPU模块</h3>
+<p>该模块用于封装P6中的已经设计好的CPU（包括新模块CP0）</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>信号名</th><th>方向</th><th>位宽</th><th>描述</th></tr></thead><tbody><tr><td>lk</td><td>I</td><td>1</td><td>时钟信号</td></tr><tr><td>reset</td><td>I</td><td>1</td><td>同步复位信号</td></tr><tr><td>inter_out</td><td>I</td><td>1</td><td>外部输入的中断信号</td></tr><tr><td>inter_T0</td><td>I</td><td>1</td><td>Timer0产生的中断信号</td></tr><tr><td>inter_T1</td><td>I</td><td>1</td><td>Timer1产生的中断信号</td></tr><tr><td>i_inst_rdata</td><td>I</td><td>32</td><td>i_inst_addr队形的32位指令</td></tr><tr><td>m_data_addr</td><td>I</td><td>32</td><td>m_data_addr 对应的 32 位数据</td></tr><tr><td>i_inst_addr</td><td>O</td><td>32</td><td>需要进行取指操作的流水级 PC（一般为 F 级）</td></tr><tr><td>m_data_addr</td><td>O</td><td>32</td><td>数据存储器待写入地址</td></tr><tr><td>m_data_wdata</td><td>O</td><td>32</td><td>数据存储器待写入数据</td></tr><tr><td>m_data_byteen</td><td>O</td><td>4</td><td>字节使能信号（相当于之前的MenWrite信号）</td></tr><tr><td>m_inst_addr</td><td>O</td><td>32</td><td>M级PC</td></tr><tr><td>w_grf_we</td><td>O</td><td>1</td><td>grf 写使能信号</td></tr><tr><td>w_grf_addr</td><td>O</td><td>5</td><td>grf 中待写入寄存器编号</td></tr><tr><td>w_grf_wdata</td><td>O</td><td>32</td><td>grf 中待写入数据</td></tr><tr><td>w_inst_addr</td><td>O</td><td>32</td><td>W 级 PC</td></tr><tr><td>spj_7f20</td><td>O</td><td>32</td><td>响应外部中断的标记寄存器</td></tr></tbody></table>
+<h3 id="cp0模块">CP0模块</h3>
+<p>该模块位于CPU模块中，主要用于获取外部中断信息和内部异常信息，进行判断后输出异常/中断请求。同时该模块中设有四个寄存器——SR，Cause，EPC和PRIP。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>信号名</th><th>方向</th><th>位宽</th><th>描述</th><th>产生来源和机制</th></tr></thead><tbody><tr><td>clk</td><td>I</td><td>1</td><td>时钟信号</td><td></td></tr><tr><td>reset</td><td>I</td><td>1</td><td>复位信号</td><td></td></tr><tr><td>A1</td><td>I</td><td>5</td><td>读 CP0 寄存器编号</td><td>执行 <code>mfc0</code> 指令时产生</td></tr><tr><td>A2</td><td>I</td><td>5</td><td>写 CP0 寄存器编号</td><td>执行 <code>mtc0</code> 指令时产生</td></tr><tr><td>D_in</td><td>I</td><td>32</td><td>CP0 寄存器的写入数据</td><td>执行 <code>mtc0</code> 指令时产生</td></tr><tr><td>pc</td><td>I</td><td>32</td><td>中断/异常时的 PC(M级pc)</td><td></td></tr><tr><td>ExcCode_in</td><td>I</td><td>5</td><td>中断/异常的类型</td><td>异常功能部件</td></tr><tr><td>BD_in</td><td>I</td><td>1</td><td>分支延迟槽指令标志</td><td>M_BD输入</td></tr><tr><td>HWInt</td><td>I</td><td>6([7:2])</td><td>6 个设备中断</td><td>外部设备</td></tr><tr><td>WE</td><td>I</td><td>1</td><td>CP0 寄存器写使能</td><td>执行 <code>mtc0</code> 指令时产生</td></tr><tr><td>EXLClr</td><td>I</td><td>1</td><td>置 0 SR 的EXL 位</td><td>Eret_M控制信号输入</td></tr><tr><td>req</td><td>O</td><td>1</td><td>异常/中断请求</td><td>由 CP0 模块确认响应异常/中断</td></tr><tr><td>EPC_out</td><td>O</td><td>32</td><td>EXC 寄存器输出</td><td>CP0 模块中的EPC寄存器</td></tr><tr><td>D_out</td><td>O</td><td>32</td><td>CP0 寄存器的输出数据</td><td>执行 <code>mfc0</code> 指令时产生</td></tr></tbody></table>
+<h3 id="bridge模块">Bridge模块</h3>
+<p>该模块为系统桥，实际上是区分地址的组合逻辑模块，用于CPU和DM、Timer1、Timer0之间的的数据交换。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>信号名</th><th>方向</th><th>位宽</th><th>描述</th></tr></thead><tbody><tr><td>A_in</td><td>I</td><td>32</td><td>写入/读取的外设单元的地址</td></tr><tr><td>WD_in</td><td>I</td><td>32</td><td>写入外设单元的数据</td></tr><tr><td>byteen</td><td>I</td><td>4</td><td>写入外设单元的使能</td></tr><tr><td>DM_RD</td><td>I</td><td>32</td><td>DM读取值的输入</td></tr><tr><td>T1_RD</td><td>I</td><td>32</td><td>Timer1读取值的输入</td></tr><tr><td>T0_RD</td><td>I</td><td>32</td><td>Timer0读取值的输入</td></tr><tr><td>A_out</td><td>O</td><td>32</td><td>写入/读取的外设单元的地址</td></tr><tr><td>WD_out</td><td>O</td><td>32</td><td>写入外设单元的数据</td></tr><tr><td>RD_out</td><td>O</td><td>32</td><td>外设单元的读取值输出</td></tr><tr><td>DM_WE</td><td>O</td><td>4</td><td>DM写入使能</td></tr><tr><td>T1_WE</td><td>O</td><td>1</td><td>Timer1写入使能</td></tr><tr><td>T0_WE</td><td>O</td><td>1</td><td>Timer2写入使能</td></tr></tbody></table>
+<h3 id="tc模块">TC模块</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>信号名</th><th>方向</th><th>位宽</th><th>描述</th></tr></thead><tbody><tr><td>clk</td><td>I</td><td>1</td><td>时钟信号</td></tr><tr><td>reset</td><td>I</td><td>1</td><td>复位信号</td></tr><tr><td>addr</td><td>I</td><td>30（[31:2]）</td><td>Timer写入地址</td></tr><tr><td>WE</td><td>I</td><td>1</td><td>Timer写入使能</td></tr><tr><td>Din</td><td>I</td><td>32</td><td>Timer写入数据</td></tr><tr><td>Dout</td><td>O</td><td>32</td><td>Timer读取数据</td></tr><tr><td>IRQ</td><td>O</td><td>1</td><td>中断请求</td></tr></tbody></table>
+<h2 id="重要机制实现方法">重要机制实现方法</h2>
+<h3 id="cp0响应机制">CP0响应机制</h3>
+<p>CP0是检测异常和中断的重要部件，异常和中断通过以下接口传入——</p>
+<ul>
+<li>
+<p><strong>中断信息</strong>通过 <strong>HWInt[7:2]</strong> 接口进入，其中HWInt[2]连接Timer0的终端请求，HWInt[3]连接Timer1的终端请求，HWInt[4]连接外部的中断请求。</p>
+</li>
+<li>
+<p><strong>异常信息</strong>通过<strong>ExcCode_in</strong>和<strong>BD_in</strong>两个接口传入，ExcCode_in传入的是异常代码（ADEL，ADES，RI，OV），BD_in传入的是延迟槽指令标志（有效则表示当前指令为延迟槽指令）。</p>
+</li>
+</ul>
+<p>检测到中断或者异常时，CP0会进行判断并响应，决定是否将req(<strong>CP0向CPU发出的中断请求</strong>)置1。判断逻辑如下——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inter_req  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(HWInt </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> IM)) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> IE </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">EXL);</span><span style="color:#6A737D;--shiki-dark:#6A737D">//中断有效判断</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> exc_req    </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (ExcCode_in </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">EXL);</span><span style="color:#6A737D;--shiki-dark:#6A737D">//异常有效判断</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> req      </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inter_req </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> exc_req;</span><span style="color:#6A737D;--shiki-dark:#6A737D">//</span></span></code></pre>
+<p>当req有效，CP0还需要完成以下任务——</p>
+<ul>
+<li>EXL置1</li>
+<li>将M级PC存入EPC（延迟槽指令中存入EPC-4）</li>
+<li>如果当前响应中断，ExcCode寄存器写入0；若响应异常，ExcCode寄存器写入外部传入的异常代码ExcCode_in</li>
+<li>BD寄存器写入外部传入的BD_in信号</li>
+</ul>
+<p>代码如下——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583"> always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">posedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(reset) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        //………………………………………………………… </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        end</span><span style="color:#24292E;--shiki-dark:#E1E4E8">   </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        else</span><span style="color:#D73A49;--shiki-dark:#F97583"> if</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(req) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            EXL </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1'b1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            EPC </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> BD_in ? (pc </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) : pc; </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            ExcCode </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inter_req ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : ExcCode_in;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            BD </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> BD_in;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        end</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">     	//…………………………………………</span></span></code></pre>
+<p>此外，无论是否发出中断请求，在每一周期均需要将HWInt[6:2]写入Cause寄存器中的的IP域</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583"> always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">posedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(reset) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">       		//………………………………………………………… </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        end</span><span style="color:#24292E;--shiki-dark:#E1E4E8">   </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">     	else</span><span style="color:#D73A49;--shiki-dark:#F97583"> begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            IP </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> HWInt;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">            //…………………………………………………………</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        end</span></span></code></pre>
+<h3 id="系统桥设计">系统桥设计</h3>
+<p>系统桥其实是充当一个“交换机”的角色，将CPU传来的地址写入相应的外设（DM、Timer0、Timer1），只需要组合逻辑便可实现。代码如下——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_out  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in;   </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> WD_out </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> WD_in;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DM_WE  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h0</span><span style="color:#D73A49;--shiki-dark:#F97583">    &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h2fff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? byteen  : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> T0_WE  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f00</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f0b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">byteen : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> T1_WE  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f10</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f1b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">byteen : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> RD_out </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h0</span><span style="color:#D73A49;--shiki-dark:#F97583">    &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h2fff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? DM_RD   :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f00</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f0b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? T0_RD   :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                (A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f10</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> A_in </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f1b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? T1_RD   :</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                                                         32'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+<h3 id="异常识别">异常识别</h3>
+<p>P7中我们考虑的异常情况有以下几种——</p>
+<ul>
+<li>
+<p>F级异常：</p>
+<ul>
+<li>PC地址没有字对齐（AdEL）</li>
+<li>PC地址超过0x3000 ~ 0x6ffc（AdEL）</li>
+</ul>
+</li>
+<li>
+<p>D级异常：</p>
+<ul>
+<li>未知的指令码（RI）</li>
+</ul>
+</li>
+<li>
+<p>E级异常：</p>
+<ul>
+<li>addi、add、sub计算溢出（Ov）</li>
+<li>load类指令计算地址时加法溢出（AdEL）</li>
+<li>store类指令计算地址时加法溢出（AdES）</li>
+</ul>
+</li>
+<li>
+<p>M级异常：</p>
+<ul>
+<li>lw取数地址未 4 字节对齐（AdEL）</li>
+<li>lh、lhu取数地址未与 2 字节对齐（AdEL）</li>
+<li>lh、lhu、lb、lbu取 Timer 寄存器的值（AdEL）</li>
+<li>load型指令取数地址超出 DM、Timer0、Timer1 的范围（AdEL）</li>
+<li>sw存数地址未 4 字节对齐（AdES）</li>
+<li>sh存数地址未 2 字节对齐（AdES）</li>
+<li>sh、sb存 Timer 寄存器的值（AdES）</li>
+<li>sw向计时器的 Count 寄存器存值（AdES）</li>
+<li>store型指令存数地址超出 DM、Timer0、Timer1 的范围（AdES）</li>
+</ul>
+</li>
+</ul>
+<p>针对以上列出的异常情况，我们在每一个流水级对异常进行检测。由于教程提出了以下要求——</p>
+<ul>
+<li>
+<p>发生取指异常后视为 <code>nop</code> 直至提交到 CP0。</p>
+</li>
+<li>
+<p>发生 <code>RI</code> 异常后视为 <code>nop</code> 直至提交到 CP0。</p>
+</li>
+<li>
+<p><code>load</code> 与 <code>store</code> 类算址溢出按照 <code>AdEL</code> 与 <code>AdES</code> 处理。</p>
+</li>
+</ul>
+<p>因此不会出现<strong>一个指令在多级出现异常</strong>的情况。如果某个流水级出现了新的异常，我们将这个异常流水到下一级即可，而不是流水上一级传来的异常；如果这个流水级没有出现新的异常，则将上一级传来的异常继续流水给下一级即可。代码如下——</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//F级异常检测</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> F_ExcCode </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (F_pc[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2'b00</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> F_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3000</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> F_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h6ffc</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5'd0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//D级异常检测（Invalid_D有效表示当前指令非法）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] D_ExcCode_fixed </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (Invalid_D) ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`RI</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : D_ExcCode;  </span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//E级异常检测（IsAriOv_E表示当前指令是addi、add、sub中的一种，E_overflow表示ALU出现溢出）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] E_ExcCode_fixed </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">    (E_overflow </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LW</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LHU</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LB</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LBU</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                    (E_overflow </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SW</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_E </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SB</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))                                           ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                    (E_overflow </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> IsAriOv_E)     </span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//M级异常检测 </span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lhlb_tag   </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LHU</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LB</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LBU</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> load_tag   </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LHU</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LB</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LBU</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LW</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> store_tag  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SW</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SH</span><span style="color:#D73A49;--shiki-dark:#F97583">  ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SB</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> );</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> timer_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f00</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f0b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f10</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7f1b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DM_addr    </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h0</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> M_AO </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h2fff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">//Excption</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] M_ExcCode_fixed  </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">   ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LW</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2'b0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))                    ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_LHU</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1'b0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                (lhlb_tag </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> timer_addr)                                       ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                (load_tag </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#D73A49;--shiki-dark:#F97583"> !</span><span style="color:#24292E;--shiki-dark:#E1E4E8">timer_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#D73A49;--shiki-dark:#F97583"> !</span><span style="color:#24292E;--shiki-dark:#E1E4E8">DM_addr)                          ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADEL</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SW</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2'b0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))                    ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SH</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1'b0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))                      ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SH</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SB</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> timer_addr)         ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                ((LSOp_M </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> `LS_SW</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> timer_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (M_AO[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4'h8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))      ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                (store_tag </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#D73A49;--shiki-dark:#F97583"> !</span><span style="color:#24292E;--shiki-dark:#E1E4E8">timer_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#D73A49;--shiki-dark:#F97583"> !</span><span style="color:#24292E;--shiki-dark:#E1E4E8">DM_addr)                         ? </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`ADES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                                                                                                 M_ExcCode;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">           </span></span></code></pre>
+<h2 id="测试方案">测试方案</h2>
+<h3 id="handler设计">handler设计</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.ktext 0x4180</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">_main_handler:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mfc0 	$k0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">13</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mfc0 	$k1, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">14</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	ori 	$k1, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, 0x007c</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$k0, $k1, $k0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	beq 	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $k0, _return</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mfc0	$k0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">14</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	addu	$k0, $k0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	mtc0	$k0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">14</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	j	_return </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	nop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">_return:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	eret</span></span></code></pre>
+<h3 id="测试数据样例">测试数据样例</h3>
+<ul>
+<li>
+<p><strong>MIPS机器码样例</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">text</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">la	$ra, pos_1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi	$ra, $ra, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">jr	$ra</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori	$s0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori	$s0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> #invalid</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">pos_1: </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi	$s1, $s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> #invalid</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi	$s1, $s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">50</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">     	             #F_exc_AdEL</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">nop                  #you can change it 0xf000000f</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$t0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">13</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">mfc0	$t0, $t1     #D_exc_RI</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lui	$s2, 0x7fff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lui	$s3, 0x7fff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add	$s4, $s2, $s3</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #E_exc_Ov_add</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s2, $s3</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lui	$s2, 0x7fff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi	$s3, $s2, 0x7fffffff  </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #E_exc_Ov_addi</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s2, $s3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lui	$s2, 0x7fff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lui	$s3, 0x8fff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sub	$s4, $s3, $s2</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #E_exc_Ov_sub</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s2, $s3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x12345678</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lw	$s2, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s2, $s3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x8fffffff</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lh	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lh	$s2, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s2, $s3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x80000000</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lhu	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lhu	$s2, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x7f00</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lh	$s2, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lw	$s3, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x7010</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x2800</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x12ab34cd</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0xabcd</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sh	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sh	$s0, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x7f10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sh	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x7f10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s0, 0x8ff0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">li	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sh	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sh	$s1, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">($s0)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">   #D_exc_AdEL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8">	$</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $s1, $s2</span></span></code></pre>
+</li>
+<li>
+<p><strong>testbench样例</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">`timescale</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 1ns</span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">1ps</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">`include</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "mips.v"</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">module</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> mips_txt_int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> reset;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> interrupt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] macroscopic_pc;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] i_inst_addr;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] i_inst_rdata;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] m_data_addr;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] m_data_rdata;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] m_data_wdata;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] m_data_byteen;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] m_inst_addr;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8">		w_grf_we;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] w_grf_addr;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] w_grf_wdata;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] w_inst_addr;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">	mips</span><span style="color:#22863A;--shiki-dark:#85E89D"> uut</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.clk(clk),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.reset(reset),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.interrupt(interrupt),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.macroscopic_pc(macroscopic_pc),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.i_inst_addr(i_inst_addr),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.i_inst_rdata(i_inst_rdata),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.m_data_addr(m_data_addr),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.m_data_rdata(m_data_rdata),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.m_data_wdata(m_data_wdata),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.m_data_byteen(m_data_byteen),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.m_inst_addr(m_inst_addr),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.w_grf_we(w_grf_we),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.w_grf_addr(w_grf_addr),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.w_grf_wdata(w_grf_wdata),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		.w_inst_addr(w_inst_addr)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">	);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	initial</span><span style="color:#D73A49;--shiki-dark:#F97583"> begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		clk </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		reset </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">		#20</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> reset </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	integer</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] fixed_addr;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] fixed_wdata;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] data[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4095</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] inst[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5119</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	// ----------- For Instructions -----------</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_rdata </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data[(m_data_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5120</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i_inst_rdata </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inst[((i_inst_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5120</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	initial</span><span style="color:#D73A49;--shiki-dark:#F97583"> begin</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">		$readmemh</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"code.txt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, inst);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5120</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) data[i] </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	// ----------- For Data Memory -----------</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		fixed_wdata </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data[(m_data_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4095</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">		fixed_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'hfffffffc</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (m_data_byteen[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) fixed_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">24</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">24</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (m_data_byteen[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) fixed_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">23</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">16</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">23</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">16</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (m_data_byteen[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) fixed_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">15</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">15</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (m_data_byteen[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) fixed_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m_data_wdata[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">posedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (reset) </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4096</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) data[i] </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		else</span><span style="color:#D73A49;--shiki-dark:#F97583"> if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8">m_data_byteen </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> &lt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4096</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">			data[fixed_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">&gt;&gt;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_wdata;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">			$display</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"%d@%h: *%h &lt;= %h"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">$time</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, m_inst_addr, fixed_addr, fixed_wdata);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	// ----------- For Registers -----------</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">posedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">~</span><span style="color:#24292E;--shiki-dark:#E1E4E8">reset) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (w_grf_we </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (w_grf_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">				$display</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"%d@%h: $%d &lt;= %h"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">$time</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, w_inst_addr, w_grf_addr, w_grf_wdata);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">	// ----------- For Interrupt -----------</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	wire</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] fixed_macroscopic_pc;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'hfffffffc</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">posedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (reset) interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">negedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">~</span><span style="color:#24292E;--shiki-dark:#E1E4E8">reset </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&amp;&amp;</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#24292E;--shiki-dark:#E1E4E8">m_data_byteen) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (fixed_addr </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h7F20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">				interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	reg</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">31</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">	always</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> @(</span><span style="color:#D73A49;--shiki-dark:#F97583">negedge</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clk) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">		if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">~</span><span style="color:#24292E;--shiki-dark:#E1E4E8">reset) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd100</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3010</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd99</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3014</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd98</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3018</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd97</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h301c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd96</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3020</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd95</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd94</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3028</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd93</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h302c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd92</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3030</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd91</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3034</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd90</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3038</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd89</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h303c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd87</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3044</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd86</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3048</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd85</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h304c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'd84</span><span style="color:#D73A49;--shiki-dark:#F97583"> &amp;&amp;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixed_macroscopic_pc </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 32'h3050</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">begin</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">					need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">&lt;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> need_interrupt </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">			end</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">            //………………………………………………</span></span></code></pre>
+</li>
+</ul>
+<h2 id="思考题">思考题</h2>
+<ul>
+<li>
+<p><strong>Q：我们计组课程一本参考书目标题中有“硬件/软件接口”接口字样，那么到底什么是“硬件/软件接口”？(Tips：什么是接口？和我们到现在为止所学的有什么联系？)</strong></p>
+<p><strong>A：</strong> 硬件/软件接口是指软件和硬件之间数据交互的接口。在我看来，这个应该指的是操作系统，操作系统将外部软件程序的机器码传入core，由core执行；而core执行后产生的数据又通过操作系统传给软件。</p>
+</li>
+<li>
+<p><strong>Q：BE 部件对所有的外设都是必要的吗？</strong></p>
+<p><strong>A：</strong> 我认为没有必要，BE部件是为了实现DM按字节访存设置的，而其他的部件例如Timer仅仅支持按字访存，因此不需要BE部件。</p>
+</li>
+<li>
+<p><strong>Q：请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU 知晓的？</strong></p>
+<p><strong>A：</strong> 鼠标和键盘等外设并不是直接与CPU相连的，中间需要通过软件来连接，这个软件也就是我们熟知的驱动。驱动和硬件之间通过操作系统进行处理。</p>
+</li>
+<li>
+<p>**Q:**请开发一个主程序以及定时器的 exception handler。整个系统完成如下功能：</p>
+<p>（1）定时器在主程序中被初始化为模式 0；</p>
+<p>（2）定时器倒计数至 0 产生中断；</p>
+<p>（3）handler 设置使能 Enable 为 1 从而再次启动定时器的计数器。(2) 及 (3) 被无限重复。</p>
+<p>（4）主程序在初始化时将定时器初始化为模式 0，设定初值寄存器的初值为某个值，如 100 或 1000。（注意，主程序可能需要涉及对 CP0.SR 的编程，推荐阅读过后文后再进行。）</p>
+<p><strong>A:</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="verilog"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">主程序:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.text</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $t0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, 0xfc01</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">mtc0 $t0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">12</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $t0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0x0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw $t0, 0x7f00</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $t0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">288</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw $t0, 0x7f04</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $t0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, 0x9</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw $t0, 0x7f00</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi $t1, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">loop:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add $s0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add $s1, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add $s2, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add $s3, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">j loop</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">异常处理程序:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">.ktext 0x00004180</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $k0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0x1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ori $k1, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, 0x9</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw $k0, 0x7f00</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sw $k1, 0x7f00</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">eret</span></span></code></pre>
+</li>
+</ul> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>

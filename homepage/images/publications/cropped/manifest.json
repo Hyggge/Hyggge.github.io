@@ -1,0 +1,100 @@
+[
+  {
+    "source": "/images/publications/egomind.webp",
+    "output": "/images/publications/cropped/egomind.png",
+    "original": {
+      "width": 1200,
+      "height": 624
+    },
+    "crop": {
+      "left": 3,
+      "top": 0,
+      "width": 1190,
+      "height": 624
+    }
+  },
+  {
+    "source": "/images/publications/gthinker.webp",
+    "output": "/images/publications/cropped/gthinker.png",
+    "original": {
+      "width": 1200,
+      "height": 417
+    },
+    "crop": {
+      "left": 4,
+      "top": 11,
+      "width": 1196,
+      "height": 390
+    }
+  },
+  {
+    "source": "/images/publications/ocr-hallucinations.webp",
+    "output": "/images/publications/cropped/ocr-hallucinations.png",
+    "original": {
+      "width": 1200,
+      "height": 619
+    },
+    "crop": {
+      "left": 0,
+      "top": 4,
+      "width": 1200,
+      "height": 615
+    }
+  },
+  {
+    "source": "/images/publications/perception-time-scaling.webp",
+    "output": "/images/publications/cropped/perception-time-scaling.png",
+    "original": {
+      "width": 1200,
+      "height": 422
+    },
+    "crop": {
+      "left": 0,
+      "top": 8,
+      "width": 1200,
+      "height": 414
+    }
+  },
+  {
+    "source": "/images/publications/seedrealtime.jpg",
+    "output": "/images/publications/cropped/seedrealtime.png",
+    "original": {
+      "width": 1024,
+      "height": 576
+    },
+    "crop": {
+      "left": 0,
+      "top": 0,
+      "width": 1024,
+      "height": 576
+    }
+  },
+  {
+    "source": "/images/publications/valley2.webp",
+    "output": "/images/publications/cropped/valley2.png",
+    "original": {
+      "width": 1200,
+      "height": 834
+    },
+    "crop": {
+      "left": 6,
+      "top": 8,
+      "width": 1188,
+      "height": 820
+    }
+  },
+  {
+    "source": "/images/publications/valley25.webp",
+    "output": "/images/publications/cropped/valley25.png",
+    "original": {
+      "width": 1200,
+      "height": 720
+    },
+    "crop": {
+      "left": 12,
+      "top": 11,
+      "width": 1176,
+      "height": 699
+    }
+  }
+]

@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="整理 MIPS 的 RISC 架构、寄存器、寻址方式和常用指令，并说明函数调用与现场保存的实现。"><meta name="theme-color" content="#fdfdfc"><script id="theme-init">
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem("hyggge-theme");
+        } catch {}
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1e20" : "#fdfdfc");
+      })();
+    </script><title>「BUAA-CO」P2_MIPS汇编程序设计 | Hyggge</title><link rel="icon" href="/homepage/favicon.png"><link rel="stylesheet" href="/homepage/_astro/_post_.Cwqs69BW.css"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"></head> <body class="article-layout has-toc"> <header class="site-header"> <div class="site-shell nav"> <a class="brand" href="/homepage/">Hyggge</a> <nav class="nav-links" aria-label="Primary navigation"> <a href="/homepage/">Home</a> <a href="/blog/">Blog</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-icon-moon" aria-hidden="true"> <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>  </svg> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-icon-sun" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>  </svg> </button> <script type="module">const d=document.documentElement,r=document.getElementById("theme-toggle"),l=matchMedia("(prefers-color-scheme: dark)");function o(){try{const e=localStorage.getItem("hyggge-theme");return e==="light"||e==="dark"?e:null}catch{return null}}let t=o();function a(e){d.dataset.theme=e;const n=e==="dark",c=n?"Switch to light mode":"Switch to dark mode";r?.setAttribute("aria-label",c),r?.setAttribute("title",c),r?.setAttribute("aria-pressed",String(n)),document.querySelector('meta[name="theme-color"]')?.setAttribute("content",n?"#1d1e20":"#fdfdfc")}a(d.dataset.theme==="dark"?"dark":"light");r?.addEventListener("click",()=>{t=d.dataset.theme==="dark"?"light":"dark",a(t);try{localStorage.setItem("hyggge-theme",t)}catch{}});l.addEventListener("change",e=>{t===null&&a(e.matches?"dark":"light")});window.addEventListener("storage",e=>{e.key!=="hyggge-theme"&&e.key!==null||(t=o(),a(t??(l.matches?"dark":"light")))});</script> </nav> </div> </header> <main>  <div class="site-shell article-frame has-toc"> <aside class="article-toc" aria-label="Article table of contents"><div class="article-toc-inner"><div class="article-toc-heading"><span class="article-toc-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="article-toc-title">Navigator</span></div><nav class="article-toc-nav"><a class="article-toc-link depth-2" href="#mips架构risc" data-toc-link="mips架构risc">MIPS架构（RISC）</a><a class="article-toc-link depth-3" href="#cpu执行程序的过程" data-toc-link="cpu执行程序的过程">CPU执行程序的过程</a><a class="article-toc-link depth-3" href="#risc的设计思想" data-toc-link="risc的设计思想">RISC的设计思想：</a><a class="article-toc-link depth-3" href="#risc的设计策略" data-toc-link="risc的设计策略">RISC的设计策略</a><a class="article-toc-link depth-2" href="#mips的寄存器" data-toc-link="mips的寄存器">MIPS的寄存器</a><a class="article-toc-link depth-2" href="#mips中主存地址的表示和主存数据的存储" data-toc-link="mips中主存地址的表示和主存数据的存储">MIPS中主存地址的表示和主存数据的存储</a><a class="article-toc-link depth-3" href="#地址表示方式" data-toc-link="地址表示方式">地址表示方式：</a><a class="article-toc-link depth-3" href="#指令存储方式" data-toc-link="指令存储方式">指令存储方式：</a><a class="article-toc-link depth-2" href="#mips的指令集按功能分类" data-toc-link="mips的指令集按功能分类">MIPS的指令集（按功能分类）</a><a class="article-toc-link depth-3" href="#加载指令" data-toc-link="加载指令">加载指令</a><a class="article-toc-link depth-3" href="#保存指令" data-toc-link="保存指令">保存指令</a><a class="article-toc-link depth-3" href="#r-r运算指令" data-toc-link="r-r运算指令">R-R运算指令</a><a class="article-toc-link depth-3" href="#r-i运算指令" data-toc-link="r-i运算指令">R-I运算指令</a><a class="article-toc-link depth-3" href="#分支指令" data-toc-link="分支指令">分支指令</a><a class="article-toc-link depth-3" href="#跳转指令" data-toc-link="跳转指令">跳转指令</a><a class="article-toc-link depth-3" href="#传输指令" data-toc-link="传输指令">传输指令</a><a class="article-toc-link depth-3" href="#特权指令" data-toc-link="特权指令">特权指令</a><a class="article-toc-link depth-3" href="#陷阱指令" data-toc-link="陷阱指令">陷阱指令</a><a class="article-toc-link depth-3" href="#tips1-mips指令判断溢出的方法" data-toc-link="tips1-mips指令判断溢出的方法">tips1: MIPS指令判断溢出的方法</a><a class="article-toc-link depth-3" href="#tips2-lo和hi寄存器中保存的值" data-toc-link="tips2-lo和hi寄存器中保存的值">tips2: LO和HI寄存器中保存的值</a><a class="article-toc-link depth-3" href="#tips3-mips指令中u的含义" data-toc-link="tips3-mips指令中u的含义">tips3: MIPS指令中“u”的含义</a><a class="article-toc-link depth-3" href="#伪指令" data-toc-link="伪指令">伪指令</a><a class="article-toc-link depth-2" href="#mips中函数的实现" data-toc-link="mips中函数的实现">MIPS中函数的实现</a><a class="article-toc-link depth-3" href="#函数实现的步骤" data-toc-link="函数实现的步骤">函数实现的步骤</a><a class="article-toc-link depth-3" href="#函数相关的寄存器" data-toc-link="函数相关的寄存器">函数相关的寄存器</a><a class="article-toc-link depth-3" href="#保存和恢复寄存器" data-toc-link="保存和恢复寄存器">保存和恢复寄存器</a><a class="article-toc-link depth-2" href="#mips指令格式" data-toc-link="mips指令格式">MIPS指令格式</a><a class="article-toc-link depth-3" href="#r型指令" data-toc-link="r型指令">R型指令</a><a class="article-toc-link depth-3" href="#i型指令" data-toc-link="i型指令">I型指令</a><a class="article-toc-link depth-3" href="#j型指令" data-toc-link="j型指令">J型指令</a><a class="article-toc-link depth-3" href="#指令格式总结" data-toc-link="指令格式总结">指令格式总结</a></nav></div></aside><script type="module">const o=Array.from(document.querySelectorAll("[data-toc-link]")),i=o.map(t=>document.getElementById(t.getAttribute("data-toc-link")||"")).filter(Boolean),a=t=>{o.forEach(e=>{const c=e.getAttribute("data-toc-link")===t;e.classList.toggle("is-active",c),c?e.setAttribute("aria-current","location"):e.removeAttribute("aria-current")})},n=()=>{const t=[...i].reverse().find(e=>e.getBoundingClientRect().top<=132)??i[0];t&&a(t.id)};n();document.addEventListener("scroll",n,{passive:!0});</script> <article class="article article-main"> <header class="article-header"> <h1>「BUAA-CO」P2_MIPS汇编程序设计</h1> <div class="article-meta"> <div class="tag-row"> <a class="tag" href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">Computer Architecture</a><a class="tag" href="/blog/tags/BUAA/">BUAA</a> </div> <span class="article-date">Date: <time datetime="2021-10-30T01:34:17.000Z">2021/10/30</time></span> </div> </header> <div class="article-content"> <h2 id="mips架构risc">MIPS架构（RISC）</h2>
+<h3 id="cpu执行程序的过程">CPU执行程序的过程</h3>
+<ul>
+<li>读取指令</li>
+<li>分析指令</li>
+<li>执行指令</li>
+</ul>
+<h3 id="risc的设计思想">RISC的设计思想：</h3>
+<p>CPU越简单则性能越高，即目标为减少指令数量， 去除复杂指令</p>
+<ul>
+<li>加速大概率事件</li>
+<li>简单意味着更容易设计、电路频率更高</li>
+<li>简单功能由硬件实现；复杂功能（由大量小功能组成）交给软件处理（复杂功能是小概率的）</li>
+</ul>
+<h3 id="risc的设计策略">RISC的设计策略</h3>
+<ul>
+<li>指令定长：所有指令都占用32位（1个字）
+降低了从存储器中读取指令的复杂度</li>
+<li>简化指令寻址模式：以基地址+偏移为主
+降低了从主存中读取操作数的复杂度</li>
+<li>ISA的指令不仅数量少，而且简单
+降低了指令执行的复杂度</li>
+<li>只有load与store两类指令能够访存
+例如，不允许寄存器+存储器或存储器+存储器</li>
+<li>把复杂留给编译
+编译器将高层语言复杂语句转换为若干简单的汇编指令</li>
+</ul>
+<h2 id="mips的寄存器">MIPS的寄存器</h2>
+<p>MIPS共有32个一般寄存器（标号为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mtext>&nbsp;</mtext></mrow><annotation encoding="application/x-tex">0 ~ </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span><span class="mspace nobreak">&nbsp;</span></span></span></span>31),不区别正负。还有pc、hi、lo等特殊寄存器</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>寄存器名</th><th>序号</th><th>作用</th></tr></thead><tbody><tr><td>$zero</td><td>0</td><td>储存常量0，不支持修改</td></tr><tr><td>$v0 ~ $v1</td><td>2~3</td><td>函数返回值</td></tr><tr><td>$a0 ~ $a3</td><td>4~7</td><td>函数参数</td></tr><tr><td>$t0 ~ $t9</td><td>8<del>15, 24</del>25</td><td>临时变量</td></tr><tr><td>$s0 ~ $s7</td><td>16~23</td><td>程序员变量（全局变量）</td></tr><tr><td>$k0 ~ $k1</td><td>26~27</td><td>操作系统使用</td></tr><tr><td>$gp</td><td>28</td><td>在生成复杂的存储布局时使用（属于编译范畴）</td></tr><tr><td>$sp</td><td>29</td><td>栈顶指针</td></tr><tr><td>$fp</td><td>30</td><td>在生成复杂的存储布局时使用（属于编译范畴）</td></tr><tr><td>$ra</td><td>31</td><td>函数返回值</td></tr><tr><td>pc</td><td>无</td><td>程序计数器（冯诺依曼计算机）</td></tr><tr><td>hi</td><td>无</td><td>储存乘法运算结果的高32位和除法运算的余数</td></tr><tr><td>lo</td><td>无</td><td>储存乘法运算结果的低32位和除法运算的商</td></tr></tbody></table>
+<h2 id="mips中主存地址的表示和主存数据的存储">MIPS中主存地址的表示和主存数据的存储</h2>
+<h3 id="地址表示方式">地址表示方式：</h3>
+<ul>
+<li>绝对地址
+主存单元的地址直接用具体的数值来表示</li>
+<li>相对地址
+采用“基地址+偏移”的方式，优点如下
+<ul>
+<li>一致性：与数据结构的访问方式高度一致</li>
+<li>统一性：可以用某个固定base与不同的offset计算得到任意地址</li>
+<li>灵活性： 不同的{base,offset}组合可以对应同一个地址，为软件编程带来很大的灵活性</li>
+</ul>
+</li>
+</ul>
+<h3 id="指令存储方式">指令存储方式：</h3>
+<ul>
+<li>大端存储：最高有效字节在字内的最低地址</li>
+<li>小端存储：最高有效字节在字内的最高地址</li>
+</ul>
+<h2 id="mips的指令集按功能分类">MIPS的指令集（按功能分类）</h2>
+<h3 id="加载指令">加载指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lb, lbu, lh, lhu, lw</span></span></code></pre>
+<h3 id="保存指令">保存指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sb, sh, sw</span></span></code></pre>
+<h3 id="r-r运算指令">R-R运算指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">add, addu, sub, subu, mult, multu, div, divu</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">slt, sltu</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sll, srl, sra, sllv, srlv, srav </span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">and, or, xor, nor</span></span></code></pre>
+<h3 id="r-i运算指令">R-I运算指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">addi, addiu, andi, ori, xori, lui</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">slti, sltiu</span></span></code></pre>
+<h3 id="分支指令">分支指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">beq, bne, blez, bltz, bgez, bgtz</span></span></code></pre>
+<h3 id="跳转指令">跳转指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">j, jal, jr, jalr</span></span></code></pre>
+<h3 id="传输指令">传输指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">mfhi, mflo, mthi, mflo</span></span></code></pre>
+<h3 id="特权指令">特权指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">eret</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(异常返回)， </span><span style="color:#6F42C1;--shiki-dark:#B392F0">mfc0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(读CP0寄存器)， </span><span style="color:#6F42C1;--shiki-dark:#B392F0">mtc0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(写CP0寄存器)</span></span></code></pre>
+<h3 id="陷阱指令">陷阱指令</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(断点异常)， </span><span style="color:#6F42C1;--shiki-dark:#B392F0">syscall</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(系统调用异常)</span></span></code></pre>
+<h3 id="tips1-mips指令判断溢出的方法">tips1: MIPS指令判断溢出的方法</h3>
+<ul>
+<li>以add指令为例：
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/add%E5%88%A4%E6%96%AD%E6%BA%A2%E5%87%BA.png" alt=""></li>
+</ul>
+<h3 id="tips2-lo和hi寄存器中保存的值">tips2: LO和HI寄存器中保存的值</h3>
+<ul>
+<li>在乘法指令中， LO保存运算结果的低32位，HI保存运算结果的高32位；</li>
+<li>在除法指令中， LO保存商，HI保存余数；</li>
+</ul>
+<h3 id="tips3-mips指令中u的含义">tips3: MIPS指令中“u”的含义</h3>
+<p>signed 和 unsigned 有三种不同的含义</p>
+<ul>
+<li>符号位扩展
+<ul>
+<li>lb, lh  符号扩展</li>
+<li>lbu, lhu 零扩展</li>
+</ul>
+</li>
+<li>溢出检测
+<ul>
+<li>add, addi, sub, mult, div 检测溢出</li>
+<li>addu, addiu, subu, multu, divu 不检测溢出</li>
+</ul>
+</li>
+<li>比较对象的符号性
+<ul>
+<li>slt, slti     和符号数比较</li>
+<li>sltu, sltiu  和无符号数比较</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪指令">伪指令</h3>
+<ul>
+<li>为了使程序更可读更易编写，MIPS定义了一组伪指令，例如常用的<code>move</code>,<code>la</code>,<code>li</code>等等。</li>
+<li>伪指令并不是真正的指令， 在汇编时汇编器会将其转化为实际指令
+例如<code>move dst, src</code>会被转化为<code>addi dst, src, 0</code></li>
+<li>伪指令通常会转化为多条真实指令，因此这组真实指令之间必须通过某个寄存器（<code>$at</code>）来传递信息。因此<code>$at</code>为汇编器专属寄存器，不能被程序员修改（约定）。</li>
+</ul>
+<h2 id="mips中函数的实现">MIPS中函数的实现</h2>
+<h3 id="函数实现的步骤">函数实现的步骤</h3>
+<ul>
+<li>调用者把参数放置在某个地方以便函数能访问（<code>$a0</code>, <code>$a1</code>, <code>$a2</code>, <code>$a3</code>）</li>
+<li>调用者转移控制给被调用的函数(<code>jal</code>指令)</li>
+<li>函数获取局部变量对应的空间(通过桟操作)</li>
+<li>函数执行具体功能</li>
+<li>函数把返回值放置在某个地方，然后恢复使用的资源(<code>v0</code>, <code>v1</code>)</li>
+<li>返回控制给调用者(<code>jr</code>指令)</li>
+</ul>
+<h3 id="函数相关的寄存器">函数相关的寄存器</h3>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mn>0</mn><mtext>&nbsp;</mtext></mrow><annotation encoding="application/x-tex">a0 ~ </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord mathnormal">a</span><span class="mord">0</span><span class="mspace nobreak">&nbsp;</span></span></span></span>a3：4个传递参数的寄存器</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mn>0</mn><mtext>&nbsp;</mtext></mrow><annotation encoding="application/x-tex">v0 ~ </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mord">0</span><span class="mspace nobreak">&nbsp;</span></span></span></span>v1：2个传递返回值的寄存器</li>
+<li>$ra：返回地址寄存器，保存着调用者的地址用到的寄存器</li>
+</ul>
+<h3 id="保存和恢复寄存器">保存和恢复寄存器</h3>
+<ul>
+<li>因为寄存器数量较少，因此需要桟将寄存器中的数据保存在内存中，防止调用函数的过程中某些需要保存的值被覆盖。此时我们需要对保存栈顶地址的寄存器<code>$sp</code>进行操作：<strong>申请桟帧-&gt;储存寄存器的值-&gt;调用函数-&gt;将桟中的值返回寄存器-&gt;释放桟帧</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/%E6%A1%9F%E6%93%8D%E4%BD%9C%E7%A4%BA%E4%BE%8B.png" alt=""></li>
+<li>根据寄存器受保护的程度,可以将寄存器分为<strong>强保护</strong>和<strong>弱保护</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/%E5%AF%84%E5%AD%98%E5%99%A8%E4%BF%9D%E6%8A%A4%E5%88%86%E6%9E%90.png" alt="">
+注意，强保护寄存器为<strong>被调用者</strong>保存（进入函数时保存，退出函数前恢复）；弱保护寄存器由<strong>调用者</strong>保存（调用子函数前保存，子函数返回后恢复）。</li>
+</ul>
+<h2 id="mips指令格式">MIPS指令格式</h2>
+<p>MIPS指令的32位被划分为若干个域，代表特定含义，每一个域在不同指令的含义大体是相同的。</p>
+<h3 id="r型指令">R型指令</h3>
+<p><strong>域的分块</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/R%E5%9E%8B%E5%88%86%E5%9D%97.png" alt="">
+<strong>域的命名</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/R%E5%9E%8B.png" alt=""></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>域名</th><th>含义</th></tr></thead><tbody><tr><td>opcode</td><td>代表指令的操作，R型指令的opcode固定为0b000000</td></tr><tr><td>funct</td><td>与opcode指令配合，精确定义指令的具体操作，主要用于服务R型指令</td></tr><tr><td>rs</td><td>指定第一个操作数（source寄存器）</td></tr><tr><td>rt</td><td>指定第二个操作数（target寄存器）</td></tr><tr><td>rd</td><td>指定结果回写的寄存器（destination寄存器）</td></tr><tr><td>shamt</td><td>移位指令（sll， sra， srl）中的移位位数，其他指令中该域固定为0</td></tr><tr><td><strong>注意</strong>：</td><td></td></tr></tbody></table>
+<ul>
+<li><code>nop</code>是一条特殊指令（0x00000000）， 对应的指令为<code>sll $0, $0, 0</code>,主要用于解决流水线冲突。</li>
+</ul>
+<h3 id="i型指令">I型指令</h3>
+<p><strong>域的分块</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/I%E5%9E%8B%E5%88%86%E5%9D%97.png" alt="">
+<strong>域的命名</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/I%E5%9E%8B%E5%91%BD%E5%90%8D.png" alt=""></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>域名</th><th>含义</th></tr></thead><tbody><tr><td>opcode</td><td>代表指令的操作， I型中opcode为非零编码，一共可以编码64条指令</td></tr><tr><td>rs</td><td>指定第一个操作数（source操作数）</td></tr><tr><td>rt</td><td>指定第二个操作数（target操作数）</td></tr><tr><td>immediate</td><td>表示16位立即数</td></tr></tbody></table>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>立即数（immediate）分为<strong>有符号立即数</strong>和<strong>无符号立即数</strong>
+<ul>
+<li>无符号立即数的指令包括：<strong>位运算</strong>指令(and, or, nor等)和<strong>小于置位</strong>指令（slti等）
+<strong>zero_ext()</strong>：运算前需要进行无符号扩展</li>
+<li>有符号立即数的指令包括：<strong>分支</strong>指令（如beq， bne等），<strong>访存</strong>指令（lw， sw等）
+<strong>sign_ext()</strong>：运算前需要进行符号扩展</li>
+</ul>
+</li>
+<li>如何计算32位立即数？
+<ul>
+<li>解决方案：<strong>结合使用lui和ori两个指令</strong></li>
+<li>例如伪指令<code>addi $t0, $t0, 0xABABCDCD</code> 可以转化为以下三条指令
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  lui $at,</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">ABAB</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> # 高16位</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ori $at,$at,</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">CDCD</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> # 低16位</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  add $t0,$t0,$at # 赋值</span></span></code></pre>
+</li>
+</ul>
+</li>
+<li>关于跳转指令（B类指令）的跳转范围
+<ul>
+<li>指令都是32位长，且指令是字对齐，这意味着最低2位恒为0。因此immediate没有必要记录最低2位，乘以4后就得到了对应字节地址！immediate为16位符号数，其表示范围是正负±<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>1</mn></msup><mn>5</mn></mrow><annotation encoding="application/x-tex">2^15</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mord">5</span></span></span></span></li>
+<li>如果跳转的目的地址超过了<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>1</mn></msup><mn>5</mn></mrow><annotation encoding="application/x-tex">2^15</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mord">5</span></span></span></span>条指令可以将<code>beq $s0, $0, far</code>改写为
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  bne $s0, $</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, next</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  j far</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  next: #next instruction</span></span></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="j型指令">J型指令</h3>
+<p><strong>域的分块和命名</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/J%E5%9E%8B.png" alt="">
+<strong>PC地址的计算方法</strong>
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/PC%E7%9A%84%E8%AE%A1%E7%AE%97.png" alt="">
+由于PC的值始终是4的倍数，因此最后两位都是零，没有必要存储；PC的高四位来自当前指令的高四位，意味着目的地址与当前指令必在同一区段 <strong>{X000_0000，XFFF_FFFF}</strong>,因此<code>j</code>指令的跳转范围是<strong>256MB</strong>，只有jr指令（R型）才可以跳转到<strong>4GB</strong>内的任意地址。</p>
+<h3 id="指令格式总结">指令格式总结</h3>
+<ul>
+<li>三类指令格式对比
+<img src="/homepage/blog-assets/2021/10/30/co/co-p2-mips-hui-bian-cheng-xu-she-ji/%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F%E6%80%BB%E7%BB%93.png" alt=""></li>
+<li>B类指令(<strong>I型</strong>)使用<strong>PC相对寻址</strong>，J指令(<strong>J型</strong>)使用<strong>绝对地址寻址</strong></li>
+</ul> </div> </article> </div>  </main> <footer class="site-footer"> <div class="site-shell">
+© 2026 Zhenghao Chen
+</div> </footer> </body></html>
